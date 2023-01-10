@@ -1,0 +1,13 @@
+version: '3'
+services:
+  license-fe:
+    image: synapsisid/patronpolitik:${DOCKER_IMG_TAG}
+    container_name: patronpolitik_fe
+    restart: always
+    ports:
+      - '3004:3000'
+
+networks:
+  default:
+    external:
+      name: gateway_proxymanager
