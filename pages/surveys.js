@@ -1,16 +1,64 @@
 import axios from 'axios';
+import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
+
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
-  const [searchList, setSearchList] = useState([]);
   const [search, setSearch] = useState('');
+  const [filterActive, setFilterActive] = useState(-1);
+  const [filterDate, setFilterDate] = useState('');
+
+  // console.log(surveysList);
 
   useEffect(() => {
+    const surveys = [];
     pageProps.surveys.forEach((element, index) => {
-      setSurveysList((prev) => [...prev, { no: index + 1, ...element }]);
+      surveys.push({ no: index + 1, ...element });
     });
+    setSurveysList([...surveys]);
+  }, []);
+
+  const filteredSurveys = useMemo(() => {
+    const filteredSearch =
+      search === ''
+        ? surveysList
+        : surveysList.filter((survey) => {
+            return survey.survey_name
+              .toLowerCase()
+              .includes(search.toLowerCase());
+          });
+
+    const filteredActive =
+      filterActive === -1
+        ? filteredSearch
+        : filteredSearch.filter((survey) => survey.status === filterActive);
+
+    const dateInput = new Date(filterDate);
+    const filteredDate =
+      filterDate === ''
+        ? filteredActive
+        : filteredActive.filter((survey) => {
+            const date = new Date(survey.created_at);
+            console.log('date', date.toISOString());
+
+            return (
+              date.getFullYear() === dateInput.getFullYear() &&
+              date.getMonth() === dateInput.getMonth() &&
+              date.getDate() === dateInput.getDate()
+            );
+          });
+
+    return filteredDate;
+  }, [surveysList, search, filterActive, filterDate]);
+
+  const searchDebounceHandler = useCallback((e) => {
+    console.log(e.target.value);
+    debounce(() => {
+      console.log(1111);
+      setSearch(e.target.value);
+    }, 1000);
   }, []);
 
   const columns = [
@@ -49,19 +97,43 @@ export default function Surveys(pageProps) {
     },
     {
       name: 'Responden',
-      selector: (row) => row?.total_respondent,
+      selector: (row) => row?.total_respondent + ' orang',
       width: '150px',
       sortable: true,
+      right: true,
     },
     {
       name: 'Status',
-      selector: (row) => row?.status,
-      width: '150px',
+      selector: (row) => (
+        <div className="form-check form-switch d-flex align-items-center">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            checked={row?.status}
+            // style={{ height: '20px', width: '36px' }}
+          />
+          <span className="ml-8">{row?.status ? 'Aktif' : 'Tidak aktif'}</span>
+        </div>
+      ),
+      width: '130px',
       sortable: true,
     },
     {
       name: 'Aksi',
-      selector: (row) => '',
+      selector: (row) => (
+        <div className="d-flex">
+          <div className="bg-primary" style={{ width: '16px', height: '16px' }}>
+            1
+          </div>
+          <div
+            className="bg-secondary ml-8"
+            style={{ width: '16px', height: '16px' }}
+          >
+            2
+          </div>
+        </div>
+      ),
       width: '220px',
       center: true,
       sortable: true,
@@ -74,17 +146,6 @@ export default function Surveys(pageProps) {
         backgroundColor: '#fafafa',
       },
     },
-  };
-
-  const handleSearch = (search) => {
-    setSearch(search);
-    let getlist = surveysList.filter((x) =>
-      x.name.toLowerCase().includes(search.toLowerCase())
-    );
-    getlist.forEach((element, index) => {
-      getlist[index].no = index + 1;
-    });
-    setSearchList(getlist);
   };
 
   return (
@@ -102,20 +163,25 @@ export default function Surveys(pageProps) {
               className="form-control"
               placeholder="Pencarian"
               aria-label="Pencarian"
+              onChange={debounce((e) => {
+                setSearch(e.target.value);
+              }, 1000)}
             />
           </div>
           <div className="col-3">
             <select
               className="form-select"
               aria-label="Default select example"
+              defaultValue="-1"
               style={{ height: '36px' }}
+              onChange={(e) => {
+                console.log(e.target);
+                setFilterActive(Number(e.target.value));
+              }}
             >
-              <option selected disabled>
-                Status
-              </option>
-              <option value="1">One</option>
-              <option value="2">Two</option>
-              <option value="3">Three</option>
+              <option value="-1">Aktif dan tidak aktif</option>
+              <option value="1">Aktif</option>
+              <option value="0">Tidak aktif</option>
             </select>
           </div>
           <div className="col-3">
@@ -124,6 +190,7 @@ export default function Surveys(pageProps) {
               className="form-control"
               placeholder="Tanggal rilis"
               aria-label="Tanggal rilis"
+              onChange={(e) => setFilterDate(e.target.value)}
             />
             {/* <DatePicker
               placeholder="Tanggal rilis"
@@ -140,12 +207,13 @@ export default function Surveys(pageProps) {
           </div>
         </div>
       </div>
+
       <div className="col-12">
         <div className="card">
           <div className="card-body p-0">
             <DataTable
               columns={columns}
-              data={search !== '' ? searchList : surveysList}
+              data={filteredSurveys}
               customStyles={customStyles}
               pagination
             />
