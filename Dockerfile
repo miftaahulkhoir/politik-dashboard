@@ -1,6 +1,7 @@
 FROM node:lts as dependencies
 WORKDIR /patronpolitik
 COPY package*.json ./
+COPY .env ./
 RUN npm install --force
 
 FROM node:lts as builder
