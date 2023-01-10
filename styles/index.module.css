@@ -1,0 +1,15 @@
+.chart_left {
+  height: 250px;
+}
+
+.card_bottom_right {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #016cee;
+  color: white;
+}
+
+.hr {
+  border-top: 1px solid #3e92f8;
+  margin: 24px 0;
+}

@@ -3,6 +3,7 @@ import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import DataTable from 'react-data-table-component';
+import Card from '../components/elements/card/Card';
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
@@ -140,14 +141,6 @@ export default function Surveys(pageProps) {
     },
   ];
 
-  const customStyles = {
-    headCells: {
-      style: {
-        backgroundColor: '#fafafa',
-      },
-    },
-  };
-
   return (
     <>
       <div className="col-12 pb-5 mb-24">
@@ -209,16 +202,9 @@ export default function Surveys(pageProps) {
       </div>
 
       <div className="col-12">
-        <div className="card">
-          <div className="card-body p-0">
-            <DataTable
-              columns={columns}
-              data={filteredSurveys}
-              customStyles={customStyles}
-              pagination
-            />
-          </div>
-        </div>
+        <Card noPadding>
+          <DataTable columns={columns} data={filteredSurveys} pagination />
+        </Card>
       </div>
     </>
   );
