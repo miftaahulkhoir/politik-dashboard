@@ -7,7 +7,7 @@ RUN npm install --force
 FROM node:lts as builder
 WORKDIR /patronpolitik
 COPY . .
-COPY --from=dependencies /license/node_modules ./node_modules
+COPY --from=dependencies /patronpolitik/node_modules ./node_modules
 RUN npm run build
 
 FROM node:lts as runner
