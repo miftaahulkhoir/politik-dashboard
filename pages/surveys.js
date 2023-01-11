@@ -2,8 +2,8 @@ import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import DataTable from 'react-data-table-component';
 import Card from '../components/elements/card/Card';
+import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
@@ -203,7 +203,7 @@ export default function Surveys(pageProps) {
 
       <div className="col-12">
         <Card noPadding>
-          <DataTable columns={columns} data={filteredSurveys} pagination />
+          <CustomDataTable columns={columns} data={filteredSurveys} />
         </Card>
       </div>
     </>

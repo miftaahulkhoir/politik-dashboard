@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import DataTable from 'react-data-table-component';
 import { TbDotsVertical, TbPlus } from 'react-icons/tb';
 import Card from '../components/elements/card/Card';
+import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
 import SummaryCard from '../components/elements/summaryCard/SummaryCard';
 import BlueCard from '../components/pagecomponents/home/BlueCard';
@@ -113,7 +113,7 @@ export default function Index({ pageProps }) {
               <span>Tambah survei</span>
             </button>
           </div>
-          <DataTable columns={columns} data={ranks} pagination />
+          <CustomDataTable columns={columns} data={ranks} />
         </Card>
       </div>
       <div className="col-3 mb-24">
