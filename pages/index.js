@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import DataTable from 'react-data-table-component';
+import { TbDotsVertical, TbPlus } from 'react-icons/tb';
 import Card from '../components/elements/card/Card';
 import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
 import SummaryCard from '../components/elements/summaryCard/SummaryCard';
@@ -80,7 +81,12 @@ export default function Index({ pageProps }) {
     },
     {
       name: '',
-      selector: (row) => row.role,
+      selector: (row) => <span style={{ color: '#016CEE' }}>{row.role}</span>,
+    },
+    {
+      name: '',
+      selector: (row) => <TbDotsVertical />,
+      width: '45px',
     },
   ];
 
@@ -91,7 +97,7 @@ export default function Index({ pageProps }) {
       </div>
       <div className="col-12 mb-24">
         <Card>
-          <div className="d-flex justify-content-between mb-12">
+          <div className="d-flex justify-content-between mb-12 mt-8">
             <h2 style={{ fontSize: '16px', fontWeight: 600 }}>
               Peringkat Koordinator
             </h2>
@@ -103,7 +109,8 @@ export default function Index({ pageProps }) {
                 borderColor: '#DDDDDD',
               }}
             >
-              Tambah survei
+              <TbPlus style={{ color: '#016CEE', marginRight: '4px' }} />
+              <span>Tambah survei</span>
             </button>
           </div>
           <DataTable columns={columns} data={ranks} pagination />
