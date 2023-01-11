@@ -11,7 +11,6 @@ import {
   Space,
   Switch,
 } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
 import Text from 'antd/es/typography/Text';
 import Title from 'antd/es/typography/Title';
 import axios from 'axios';
@@ -20,6 +19,7 @@ import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TbPencil, TbPlus, TbSearch, TbTrashX } from 'react-icons/tb';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
+const { TextArea } = Input;
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
