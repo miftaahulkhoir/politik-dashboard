@@ -38,6 +38,8 @@ export default function Surveys(pageProps) {
   const [filterDate, setFilterDate] = useState('');
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+  const [isFormEdit, setIsFormEdit] = useState(false);
+  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
 
   const [apiNotification, contextHolderNotification] =
     notification.useNotification();
@@ -102,7 +104,7 @@ export default function Surveys(pageProps) {
       const res = await axios.put(
         `${process.env.APP_BASEURL}api/survey/update-status/${id}`
       );
-      if (!res.status) throw new Error('unknown error');
+      if (!res?.data?.status) throw new Error('unknown error');
     } catch (error) {
       console.error(error);
       apiNotification.error({
@@ -176,22 +178,18 @@ export default function Surveys(pageProps) {
             type="text"
             icon={<TbPencil size={20} color="#7287A5" />}
             shape="circle"
-            onClick={async () => {
-              try {
-                if (row?.total_respondent > 0) {
-                  apiNotification.error({
-                    message: 'Gagal',
-                    description:
-                      'Tidak bisa mengubah survei karena telah memiliki responden',
-                  });
-                  return;
-                }
-              } catch (error) {
+            onClick={() => {
+              if (row?.total_respondent > 0) {
                 apiNotification.error({
                   message: 'Gagal',
-                  description: 'Terjadi kesalahan',
+                  description:
+                    'Tidak bisa mengubah survei karena telah memiliki responden',
                 });
+                return;
               }
+              setIsFormEdit(true);
+              setSelectedSurveyId(row.id);
+              setIsFormOpen(true);
             }}
           ></Button>
           <Button
@@ -212,7 +210,7 @@ export default function Surveys(pageProps) {
                 const res = await axios.delete(
                   `${process.env.APP_BASEURL}api/survey/${row?.id}`
                 );
-                if (!res.status) throw new Error('unknown error');
+                if (!res?.data?.status) throw new Error('unknown error');
 
                 const newSurveys = surveysList.filter((s) => s.id !== row.id);
                 setSurveysList([...newSurveys]);
@@ -243,7 +241,14 @@ export default function Surveys(pageProps) {
         <h1>Manajemen Survei</h1>
       </div>
 
-      <SurveyFormDrawer open={isFormOpen} setOpen={setIsFormOpen} />
+      <SurveyFormDrawer
+        open={isFormOpen}
+        setOpen={setIsFormOpen}
+        isEdit={isFormEdit}
+        setIsEdit={setIsFormEdit}
+        selectedSurveyId={selectedSurveyId}
+        apiNotification={apiNotification}
+      />
 
       <Space direction="vertical" size="middle">
         <SearchBar
@@ -399,19 +404,42 @@ const defaultSurveyQuestion = {
   },
 };
 
-function SurveyFormDrawer({ open, setOpen }) {
-  const onClose = () => {
-    setOpen(false);
-  };
-
+function SurveyFormDrawer({
+  open,
+  setOpen,
+  isEdit,
+  setIsEdit,
+  selectedSurveyId,
+  apiNotification,
+}) {
   const [title, setTitle] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([
     { ...defaultSurveyQuestion.text },
   ]);
 
+  useEffect(() => {
+    if (!isEdit) return;
+    (async function () {
+      try {
+        const res = await axios.get(
+          `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`
+        );
+        console.log(res.data);
+        const data = res?.data?.data;
+        setTitle(data?.survey_name);
+        setIsActive(data?.status ? 1 : 0);
+        setQuestions(data?.questions);
+      } catch (error) {}
+    })();
+  }, [isEdit]);
+
   const addQuestionHandler = () => {
     setQuestions([...questions, { ...defaultSurveyQuestion.text }]);
+  };
+
+  const onClose = () => {
+    setOpen(false);
   };
 
   const submitHandler = async () => {
@@ -440,13 +468,39 @@ function SurveyFormDrawer({ open, setOpen }) {
 
       console.log(survey);
 
-      const res = await axios.post(
-        `${process.env.APP_BASEURL}api/survey`,
-        survey
-      );
-      console.log(res);
+      if (isEdit) {
+        // update
+        const res = await axios.put(
+          `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`,
+          survey
+        );
+        if (!res?.data?.status) throw new Error('unknown error');
+
+        apiNotification.success({
+          message: 'Berhasil',
+          description: 'Perubahan survei telah disimpan',
+        });
+        setIsEdit(false);
+      } else {
+        // create
+        const res = await axios.post(
+          `${process.env.APP_BASEURL}api/survey`,
+          survey
+        );
+        if (!res?.data?.status) throw new Error('unknown error');
+
+        apiNotification.success({
+          message: 'Berhasil',
+          description: 'Survei telah ditambahkan',
+        });
+      }
+      setOpen(false);
     } catch (error) {
       console.error(error);
+      apiNotification.error({
+        message: 'Gagal',
+        description: 'Terjadi kesalahan saat menambahkan survei',
+      });
     }
   };
 
