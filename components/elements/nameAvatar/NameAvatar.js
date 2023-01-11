@@ -5,8 +5,10 @@ export default function NameAvatar({ shortName, longName, style }) {
   const name = shortName
     ? shortName
     : useMemo(() => {
-        // TODO: create name summarizer
-        return 'AP';
+        const words = longName.toUpperCase().split(' ');
+        if (words.length === 0) return '';
+        if (words.length === 1) return words[0][0];
+        return words[0][0] + words[1][0];
       }, [longName]);
 
   return (

@@ -1,57 +1,26 @@
-import { useState } from 'react';
+import axios from 'axios';
+import dynamic from 'next/dynamic';
+import { parseCookies } from 'nookies';
+import { useMemo } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
 import Card from '../components/elements/card/Card';
-import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
 import SummaryCard from '../components/elements/summaryCard/SummaryCard';
 import BlueCard from '../components/pagecomponents/home/BlueCard';
 import ChartCard from '../components/pagecomponents/home/ChartCard';
 
-export default function Index({ pageProps }) {
-  const [ranks, setRanks] = useState([
-    {
-      no: 1,
-      nama: 'Ananda Pratama Putra Nugraha',
-      relawan: 312,
-      pemilih: 2049,
-      role: 'Koordinator',
-    },
-    {
-      no: 2,
-      nama: 'Ananda Pratama Putra Nugraha',
-      relawan: 312,
-      pemilih: 2049,
-      role: 'Koordinator',
-    },
-    {
-      no: 3,
-      nama: 'Ananda Pratama Putra Nugraha',
-      relawan: 312,
-      pemilih: 2049,
-      role: 'Koordinator',
-    },
-    {
-      no: 4,
-      nama: 'Ananda Pratama Putra Nugraha',
-      relawan: 312,
-      pemilih: 2049,
-      role: 'Koordinator',
-    },
-    {
-      no: 5,
-      nama: 'Ananda Pratama Putra Nugraha',
-      relawan: 312,
-      pemilih: 2049,
-      role: 'Koordinator',
-    },
-    {
-      no: 6,
-      nama: 'Ananda Pratama Putra Nugraha',
-      relawan: 312,
-      pemilih: 2049,
-      role: 'Koordinator',
-    },
-  ]);
+const CustomDataTable = dynamic(
+  () => import('../components/elements/customDataTable/CustomDataTable'),
+  { ssr: false }
+);
+
+export default function Index({ users }) {
+  const ranks = useMemo(() => {
+    return users.map((user, i) => {
+      user.no = i + 1;
+      return user;
+    });
+  }, [users]);
 
   const columns = [
     {
@@ -66,22 +35,24 @@ export default function Index({ pageProps }) {
       grow: 3,
       selector: (row) => (
         <div className="d-flex align-items-center">
-          <NameAvatar shortName="AP" />
-          <div className="ml-12">{row.nama}</div>
+          <NameAvatar longName={row.name} />
+          <div className="ml-12">{row.name}</div>
         </div>
       ),
     },
     {
       name: 'Relawan',
-      selector: (row) => row.relawan + ' relawan',
+      selector: (row) => row.relawan || 0 + ' relawan',
     },
     {
       name: 'Pemilih',
-      selector: (row) => row.pemilih + ' pemilih',
+      selector: (row) => row.pemilih || 0 + ' pemilih',
     },
     {
       name: '',
-      selector: (row) => <span style={{ color: '#016CEE' }}>{row.role}</span>,
+      selector: (row) => (
+        <span style={{ color: '#016CEE' }}>{row.occupation.name}</span>
+      ),
     },
     {
       name: '',
@@ -101,17 +72,6 @@ export default function Index({ pageProps }) {
             <h2 style={{ fontSize: '16px', fontWeight: 600 }}>
               Peringkat Koordinator
             </h2>
-            {/* <button
-              className="btn border border-1"
-              style={{
-                fontSize: '12px',
-                padding: '7px 12px',
-                borderColor: '#DDDDDD',
-              }}
-            >
-              <TbPlus style={{ color: '#016CEE', marginRight: '4px' }} />
-              <span>Tambah survei</span>
-            </button> */}
           </div>
           <CustomDataTable columns={columns} data={ranks} />
         </Card>
@@ -154,5 +114,16 @@ export default function Index({ pageProps }) {
 }
 
 export async function getServerSideProps(ctx) {
-  return { props: {} };
+  let { token } = parseCookies(ctx);
+  let users = [];
+  await axios
+    .get(`${process.env.APP_BASEURL}api/users`, {
+      withCredentials: true,
+      headers: { Cookie: `token=${token}` },
+    })
+    .then((res) => {
+      users = res.data.data;
+    })
+    .catch((err) => {});
+  return { props: { users } };
 }

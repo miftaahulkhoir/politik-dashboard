@@ -73,7 +73,6 @@ export default function Surveys(pageProps) {
         ? filteredActive
         : filteredActive.filter((survey) => {
             const date = new Date(survey.created_at);
-            console.log('date', date.toISOString());
 
             return (
               date.getFullYear() === dateInput.getFullYear() &&
@@ -425,7 +424,6 @@ function SurveyFormDrawer({
         const res = await axios.get(
           `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`
         );
-        console.log(res.data);
         const data = res?.data?.data;
         setTitle(data?.survey_name);
         setIsActive(data?.status ? 1 : 0);
@@ -449,16 +447,13 @@ function SurveyFormDrawer({
         newQuestion.question_number = i + 1;
         newQuestion.section = 'section1';
         newQuestion.question_subject = 'subject1';
-        console.log(newQuestion);
         newQuestion.options = newQuestion?.options?.map((option, j) => {
           const newOption = option;
           newOption.value = j + 1;
           return newOption;
         });
-        // delete newQuestion.options;
         return newQuestion;
       });
-      // console.log(newQuestions);
 
       const survey = {
         survey_name: title,
@@ -466,10 +461,15 @@ function SurveyFormDrawer({
         questions: newQuestions || null,
       };
 
-      console.log(survey);
-
       if (isEdit) {
         // update
+
+        // FIXME: update ideas:
+        // loop req options -> ada api update sendiri
+        // loop req questions -> ada api update sendiri
+        // req survey -> hanya judul
+        // req status -> ada api update sendiri
+
         const res = await axios.put(
           `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`,
           survey
@@ -567,7 +567,6 @@ function SurveyFormCard({ index, questions, setQuestions }) {
       newQuestions[index].options = values?.map((value) => ({
         option_name: value,
       }));
-      console.log(newQuestions);
       setQuestions([...newQuestions]);
     },
     [questions]
@@ -696,7 +695,6 @@ function MultiInputEditable({ listIcon, labels, setLabels }) {
                       onChange: (value) => {
                         const newLabels = [...labels];
                         newLabels[index] = value;
-                        console.log('new labels', newLabels);
                         setLabels([...newLabels]);
                       },
                     }}
