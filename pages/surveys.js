@@ -405,10 +405,50 @@ function SurveyFormDrawer({ open, setOpen }) {
   };
 
   const [title, setTitle] = useState('');
+  const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([
-    defaultSurveyQuestion.dropdown,
-    defaultSurveyQuestion.dropdown,
+    { ...defaultSurveyQuestion.text },
   ]);
+
+  const addQuestionHandler = () => {
+    setQuestions([...questions, { ...defaultSurveyQuestion.text }]);
+  };
+
+  const submitHandler = async () => {
+    try {
+      const newQuestions = questions.map((question, i) => {
+        const newQuestion = question;
+        newQuestion.question_number = i + 1;
+        newQuestion.section = 'section1';
+        newQuestion.question_subject = 'subject1';
+        console.log(newQuestion);
+        newQuestion.options = newQuestion?.options?.map((option, j) => {
+          const newOption = option;
+          newOption.value = j + 1;
+          return newOption;
+        });
+        // delete newQuestion.options;
+        return newQuestion;
+      });
+      // console.log(newQuestions);
+
+      const survey = {
+        survey_name: title,
+        status: isActive ? 1 : 0,
+        questions: newQuestions || null,
+      };
+
+      console.log(survey);
+
+      const res = await axios.post(
+        `${process.env.APP_BASEURL}api/survey`,
+        survey
+      );
+      console.log(res);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   return (
     <Drawer
@@ -419,7 +459,7 @@ function SurveyFormDrawer({ open, setOpen }) {
       closable={false}
       width="60%"
       headerStyle={{ border: 'none', fontSize: '32px' }}
-      bodyStyle={{ background: '#EEEEEE', padding: '0px' }}
+      bodyStyle={{ background: '#EEEEEE', padding: '0px', overflowX: 'hidden' }}
       stye
     >
       <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
@@ -435,24 +475,49 @@ function SurveyFormDrawer({ open, setOpen }) {
           <Title level={5}>Status</Title>
           <Space>
             <Text>Tidak Aktif</Text>
-            <Switch defaultChecked />
+            <Switch checked={isActive} onChange={setIsActive} />
             <Text>Aktif</Text>
           </Space>
         </Col>
       </Row>
       {questions.map((question, index) => (
-        <SurveyFormCard index={index} key={index} setQuestions={setQuestions} />
+        <SurveyFormCard
+          key={index}
+          index={index}
+          questions={questions}
+          setQuestions={setQuestions}
+        />
       ))}
-
-      <Button>submit</Button>
+      <Row justify="space-between" style={{ margin: '24px' }}>
+        <Button onClick={addQuestionHandler}>Tambah pertanyaan</Button>
+        <Button type="primary" onClick={submitHandler}>
+          Simpan survei
+        </Button>
+      </Row>
     </Drawer>
   );
 }
 
-function SurveyFormCard({ index, setQuestions }) {
-  const [type, setType] = useState('text');
-  const [questionName, setQuestionName] = useState('');
-  const [labels, setLabels] = useState([]); // option strings
+function SurveyFormCard({ index, questions, setQuestions }) {
+  const type = useMemo(() => {
+    return questions[index].input_type;
+  }, [questions]);
+
+  const labels = useMemo(() => {
+    return questions[index]?.options?.map((option) => option.option_name);
+  }, [questions]);
+
+  const setLabels = useCallback(
+    (values) => {
+      const newQuestions = [...questions];
+      newQuestions[index].options = values?.map((value) => ({
+        option_name: value,
+      }));
+      console.log(newQuestions);
+      setQuestions([...newQuestions]);
+    },
+    [questions]
+  );
 
   const formElement = useMemo(() => {
     if (type === 'text') return <Input value="Isian singkat" disabled />;
@@ -470,8 +535,12 @@ function SurveyFormCard({ index, setQuestions }) {
           <Title level={5}>Pertanyaan</Title>
           <TextArea
             rows={2}
-            value={questionName}
-            onChange={(e) => setQuestionName(e.target.value)}
+            value={questions[index].question_name}
+            onChange={(e) => {
+              const newQuestions = [...questions];
+              newQuestions[index].question_name = e.target.value;
+              setQuestions([...newQuestions]);
+            }}
           />
         </Col>
         <Col span={8}>
@@ -497,7 +566,14 @@ function SurveyFormCard({ index, setQuestions }) {
                 label: 'Pilihan ganda',
               },
             ]}
-            onChange={(value) => setType(value)}
+            value={type}
+            onChange={(value) => {
+              const newQuestions = [...questions];
+              newQuestions[index].input_type = value;
+              newQuestions[index].options =
+                defaultSurveyQuestion[value].options;
+              setQuestions([...newQuestions]);
+            }}
           />
         </Col>
       </Row>
@@ -510,7 +586,6 @@ function SurveyFormCard({ index, setQuestions }) {
 }
 
 function DropdownInputEditable({ labels, setLabels }) {
-  // const [labels, setLabels] = useState(['']);
   return (
     <MultiInputEditable
       listIcon={<></>}
@@ -520,8 +595,7 @@ function DropdownInputEditable({ labels, setLabels }) {
   );
 }
 
-function MultiCheckboxEditable() {
-  const [labels, setLabels] = useState(['']);
+function MultiCheckboxEditable({ labels, setLabels }) {
   return (
     <MultiInputEditable
       listIcon={<TbSquare color="#016CEE" size={20}></TbSquare>}
@@ -531,8 +605,7 @@ function MultiCheckboxEditable() {
   );
 }
 
-function MultiRadioEditable() {
-  const [labels, setLabels] = useState(['']);
+function MultiRadioEditable({ labels, setLabels }) {
   return (
     <MultiInputEditable
       listIcon={<TbCircle color="#016CEE" size={20}></TbCircle>}
@@ -555,7 +628,7 @@ function MultiInputEditable({ listIcon, labels, setLabels }) {
         }}
       >
         {labels.map((label, index) => (
-          <>
+          <div key={index}>
             <Row
               justify="space-between"
               align="middle"
@@ -567,8 +640,9 @@ function MultiInputEditable({ listIcon, labels, setLabels }) {
                   <Text
                     editable={{
                       onChange: (value) => {
-                        const newLabels = labels;
+                        const newLabels = [...labels];
                         newLabels[index] = value;
+                        console.log('new labels', newLabels);
                         setLabels([...newLabels]);
                       },
                     }}
@@ -594,7 +668,7 @@ function MultiInputEditable({ listIcon, labels, setLabels }) {
             {index < labels.length - 1 ? (
               <Divider style={{ margin: '0' }}></Divider>
             ) : null}
-          </>
+          </div>
         ))}
       </Space>
       <Row justify="space-between" align="middle" style={{ padding: '8px 0' }}>
@@ -606,7 +680,7 @@ function MultiInputEditable({ listIcon, labels, setLabels }) {
               setLabels([...labels, '']);
             }}
           >
-            Tambah
+            Tambah Opsi
           </Button>
         </Col>
       </Row>
