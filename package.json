@@ -3,7 +3,6 @@
   "version": "0.0.1",
   "description": "PATRONS POLITIC",
   "main": "index.js",
-  "type": "module",
   "scripts": {
     "dev": "next dev -p 3004",
     "build": "next build",
