@@ -2,6 +2,7 @@ import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { TbPencil, TbPlus, TbTrashX } from 'react-icons/tb';
 import Card from '../components/elements/card/Card';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 
@@ -112,7 +113,6 @@ export default function Surveys(pageProps) {
             type="checkbox"
             role="switch"
             checked={row?.status}
-            // style={{ height: '20px', width: '36px' }}
           />
           <span className="ml-8">{row?.status ? 'Aktif' : 'Tidak aktif'}</span>
         </div>
@@ -123,21 +123,17 @@ export default function Surveys(pageProps) {
     {
       name: 'Aksi',
       selector: (row) => (
-        <div className="d-flex">
-          <div className="bg-primary" style={{ width: '16px', height: '16px' }}>
-            1
-          </div>
-          <div
-            className="bg-secondary ml-8"
-            style={{ width: '16px', height: '16px' }}
-          >
-            2
-          </div>
+        <div className="d-flex gap-2">
+          <TbPencil
+            style={{ width: '20px', height: '20px', color: '#7287A5' }}
+          />
+          <TbTrashX
+            style={{ width: '20px', height: '20px', color: '#B12E2E' }}
+          />
         </div>
       ),
       width: '220px',
       center: true,
-      sortable: true,
     },
   ];
 
@@ -193,9 +189,15 @@ export default function Surveys(pageProps) {
           <div className="col-3 d-flex justify-content-end">
             <button
               className="btn btn-primary btn-sm"
-              style={{ padding: '0 16px', height: '36px' }}
+              style={{
+                padding: '0 16px',
+                height: '36px',
+                fontSize: '12px',
+                fontWeight: 600,
+              }}
             >
-              Tambah survei
+              <TbPlus style={{ width: '20px', height: '20px' }} />
+              <span className="ml-4">Tambah survey</span>
             </button>
           </div>
         </div>
