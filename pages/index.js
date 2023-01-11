@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { TbDotsVertical, TbPlus } from 'react-icons/tb';
+import { TbDotsVertical } from 'react-icons/tb';
 import Card from '../components/elements/card/Card';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
@@ -101,7 +101,7 @@ export default function Index({ pageProps }) {
             <h2 style={{ fontSize: '16px', fontWeight: 600 }}>
               Peringkat Koordinator
             </h2>
-            <button
+            {/* <button
               className="btn border border-1"
               style={{
                 fontSize: '12px',
@@ -111,7 +111,7 @@ export default function Index({ pageProps }) {
             >
               <TbPlus style={{ color: '#016CEE', marginRight: '4px' }} />
               <span>Tambah survei</span>
-            </button>
+            </button> */}
           </div>
           <CustomDataTable columns={columns} data={ranks} />
         </Card>

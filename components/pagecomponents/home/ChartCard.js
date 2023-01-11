@@ -1,4 +1,3 @@
-import * as echarts from 'echarts';
 import Card from '../../elements/card/Card';
 // import ReactEcharts from 'echarts-for-react';
 import dynamic from 'next/dynamic';
@@ -10,7 +9,7 @@ export default function ChartCard({ dataX, dataY }) {
   const option = {
     color: ['#80FFA5'],
     title: {
-      text: 'Gradient Stacked Area Chart',
+      text: 'Progress anggota',
       textStyle: {
         fontSize: 16,
       },
@@ -55,16 +54,17 @@ export default function ChartCard({ dataX, dataY }) {
         showSymbol: false,
         areaStyle: {
           opacity: 1,
-          color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
-            {
-              offset: 0,
-              color: 'rgba(1, 108, 238, 1)',
-            },
-            {
-              offset: 1,
-              color: 'rgba(1, 108, 238, 0.2)',
-            },
-          ]),
+          // color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+          //   {
+          //     offset: 0,
+          //     color: 'rgba(1, 108, 238, 1)',
+          //   },
+          //   {
+          //     offset: 1,
+          //     color: 'rgba(1, 108, 238, 0.2)',
+          //   },
+          // ]),
+          color: 'rgba(1, 108, 238, 0.7)',
         },
         lineStyle: {
           width: 2,
