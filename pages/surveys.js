@@ -10,16 +10,25 @@ import {
   Select,
   Space,
   Switch,
+  Typography,
 } from 'antd';
-import TextArea from 'antd/es/input/TextArea';
-import Text from 'antd/es/typography/Text';
-import Title from 'antd/es/typography/Title';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { TbPencil, TbPlus, TbSearch, TbTrashX } from 'react-icons/tb';
+import {
+  TbCircle,
+  TbPencil,
+  TbPlus,
+  TbSearch,
+  TbSquare,
+  TbTrashX,
+  TbX,
+} from 'react-icons/tb';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
+
+const { TextArea } = Input;
+const { Text, Title } = Typography;
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
@@ -277,11 +286,11 @@ function SurveyFormDrawer({ open, setOpen }) {
       stye
     >
       <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
-        <Col span={14}>
+        <Col span={16}>
           <Title level={5}>Judul Survei</Title>
           <TextArea rows={2} />
         </Col>
-        <Col span={10}>
+        <Col span={8}>
           <Title level={5}>Status</Title>
           <Space>
             <Text>Tidak Aktif</Text>
@@ -290,59 +299,169 @@ function SurveyFormDrawer({ open, setOpen }) {
           </Space>
         </Col>
       </Row>
-
-      <Card style={{ margin: '24px' }}>
-        <Row gutter={32}>
-          <Col span={14}>
-            <Title level={5}>Pertanyaan</Title>
-            <TextArea rows={2} />
-          </Col>
-          <Col span={10}>
-            <Title level={5}>Status</Title>
-            <Space>
-              <Text>Tidak Aktif</Text>
-              <Switch defaultChecked />
-              <Text>Aktif</Text>
-            </Space>
-          </Col>
-        </Row>
-      </Card>
-
-      <Card style={{ margin: '24px' }}>
-        <Row gutter={32}>
-          <Col span={14}>
-            <Title level={5}>Pertanyaan</Title>
-            <TextArea rows={2} />
-          </Col>
-          <Col span={10}>
-            <Title level={5}>Jenis jawaban</Title>
-            <Select
-              defaultValue="paragraf"
-              style={{ width: '160px' }}
-              options={[
-                {
-                  value: 'paragraf',
-                  label: 'Paragraf',
-                },
-                {
-                  value: 'kotak-centang',
-                  label: 'Kotak Centang',
-                },
-                {
-                  value: 'dropdown',
-                  label: 'Dropdown',
-                },
-              ]}
-            />
-          </Col>
-        </Row>
-        <Divider />
-        <Row gutter={32}>
-          <Col span={14}>
-            <TextArea rows={3} />
-          </Col>
-        </Row>
-      </Card>
+      <SurveyFormCard />
     </Drawer>
+  );
+}
+
+function SurveyFormCard() {
+  const [type, setType] = useState('paragraf');
+
+  const formElement = useMemo(() => {
+    if (type === 'paragraf') return <TextArea />;
+    if (type === 'kotak-centang') return <MultiCheckboxEditable />;
+    if (type === 'dropdown') return <DropdownInputEditable />;
+    if (type === 'pilihan-ganda') return <MultiRadioEditable />;
+  }, [type]);
+
+  return (
+    <Card style={{ margin: '24px' }}>
+      <Row gutter={32}>
+        <Col span={16}>
+          <Title level={5}>Pertanyaan</Title>
+          <TextArea rows={2} />
+        </Col>
+        <Col span={8}>
+          <Title level={5}>Jenis jawaban</Title>
+          <Select
+            defaultValue="paragraf"
+            style={{ width: '160px' }}
+            options={[
+              {
+                value: 'paragraf',
+                label: 'Paragraf',
+              },
+              {
+                value: 'kotak-centang',
+                label: 'Kotak Centang',
+              },
+              {
+                value: 'dropdown',
+                label: 'Dropdown',
+              },
+              {
+                value: 'pilihan-ganda',
+                label: 'Pilihan Ganda',
+              },
+            ]}
+            onChange={(value) => setType(value)}
+          />
+        </Col>
+      </Row>
+      <Divider />
+      <Row gutter={32}>
+        <Col span={16}>
+          {/* <MultiRadioEditable />
+          <MultiCheckboxEditable />
+          <DropdownInputEditable /> */}
+          {formElement}
+        </Col>
+      </Row>
+    </Card>
+  );
+}
+
+function DropdownInputEditable() {
+  const [labels, setLabels] = useState(['']);
+  return (
+    <MultiInputEditable
+      listIcon={<></>}
+      labels={labels}
+      setLabels={setLabels}
+    />
+  );
+}
+
+function MultiCheckboxEditable() {
+  const [labels, setLabels] = useState(['']);
+  return (
+    <MultiInputEditable
+      listIcon={<TbSquare color="#016CEE" size={20}></TbSquare>}
+      labels={labels}
+      setLabels={setLabels}
+    />
+  );
+}
+
+function MultiRadioEditable() {
+  const [labels, setLabels] = useState(['']);
+  return (
+    <MultiInputEditable
+      listIcon={<TbCircle color="#016CEE" size={20}></TbCircle>}
+      labels={labels}
+      setLabels={setLabels}
+    />
+  );
+}
+
+function MultiInputEditable({ listIcon, labels, setLabels }) {
+  return (
+    <>
+      <Space
+        direction="vertical"
+        size={0}
+        style={{
+          width: '100%',
+          border: '1px solid #EEEEEE',
+          borderRadius: '8px',
+        }}
+      >
+        {labels.map((label, index) => (
+          <>
+            <Row
+              justify="space-between"
+              align="middle"
+              style={{ padding: '8px 16px' }}
+            >
+              <Col span={21}>
+                <Space>
+                  {listIcon}
+                  <Text
+                    editable={{
+                      onChange: (value) => {
+                        const newLabels = labels;
+                        newLabels[index] = value;
+                        setLabels([...newLabels]);
+                      },
+                    }}
+                  >
+                    {label}
+                  </Text>
+                </Space>
+              </Col>
+              <Col span={3}>
+                <Row justify="end">
+                  <Button
+                    type="text"
+                    icon={<TbX size={20} color="red" />}
+                    shape="circle"
+                    onClick={() => {
+                      const newLabels = labels.filter((_, i) => i !== index);
+                      setLabels([...newLabels]);
+                    }}
+                  ></Button>
+                </Row>
+              </Col>
+            </Row>
+            {index < labels.length - 1 ? (
+              <Divider style={{ margin: '0' }}></Divider>
+            ) : null}
+          </>
+        ))}
+      </Space>
+      <Row justify="space-between" align="middle" style={{ padding: '8px 0' }}>
+        <Col>
+          <Button
+            icon={<TbPlus size={16} />}
+            type="primary"
+            onClick={() => {
+              setLabels([...labels, '']);
+            }}
+          >
+            Tambah
+          </Button>
+        </Col>
+      </Row>
+    </>
   );
 }
