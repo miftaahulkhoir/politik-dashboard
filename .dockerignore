@@ -1,3 +1,5 @@
+.env.development
+.env.production
 Dockerfile
 .dockerignore
 node_modules
@@ -12,3 +14,8 @@ Makefile
 .next
 .idea
 _redirects
+run.sh
+build.sh
+.gitignore
+.gitattributes
+.gitlab-ci.yml
