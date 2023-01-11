@@ -11,6 +11,7 @@ import {
   Space,
   Switch,
   Typography,
+  notification,
 } from 'antd';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
@@ -37,6 +38,9 @@ export default function Surveys(pageProps) {
   const [filterDate, setFilterDate] = useState('');
 
   const [isFormOpen, setIsFormOpen] = useState(false);
+
+  const [apiNotification, contextHolderNotification] =
+    notification.useNotification();
 
   useEffect(() => {
     const surveys = [];
@@ -88,8 +92,25 @@ export default function Surveys(pageProps) {
   );
 
   const filterDateHandler = useCallback(
-    debounce((value) => setFilterDate(value), 300)
+    debounce((_, valueString) => {
+      setFilterDate(valueString);
+    }, 300)
   );
+
+  const changeStatusHandler = async (id) => {
+    try {
+      const res = await axios.put(
+        `${process.env.APP_BASEURL}api/survey/update-status/${id}`
+      );
+      if (!res.status) throw new Error('unknown error');
+    } catch (error) {
+      console.error(error);
+      apiNotification.error({
+        message: 'Gagal',
+        description: 'Terjadi kesalahan dalam mengubah status aktif',
+      });
+    }
+  };
 
   const columns = [
     {
@@ -102,9 +123,12 @@ export default function Surveys(pageProps) {
     {
       name: 'Judul survei',
       selector: (row) => row.survey_name,
+      sortable: true,
+      grow: 2.5,
     },
     {
       name: 'Tanggal rilis',
+      sortable: true,
       selector: (row) => {
         const date = new Date(row?.created_at);
         const dateText = new Intl.DateTimeFormat('id-ID', {
@@ -133,31 +157,77 @@ export default function Surveys(pageProps) {
       right: true,
     },
     {
-      name: 'Status',
+      name: 'Status Aktif',
       selector: (row) => (
-        <div className="form-check form-switch d-flex align-items-center">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            role="switch"
-            checked={row?.status}
-          />
-          <span className="ml-8">{row?.status ? 'Aktif' : 'Tidak aktif'}</span>
-        </div>
+        <Switch
+          defaultChecked={row?.status}
+          onChange={async () => await changeStatusHandler(row.id)}
+        />
       ),
       width: '130px',
+      // FIXME: sortable not working here
       sortable: true,
     },
     {
       name: 'Aksi',
       selector: (row) => (
         <div className="d-flex gap-2">
-          <TbPencil
-            style={{ width: '20px', height: '20px', color: '#7287A5' }}
-          />
-          <TbTrashX
-            style={{ width: '20px', height: '20px', color: '#B12E2E' }}
-          />
+          <Button
+            type="text"
+            icon={<TbPencil size={20} color="#7287A5" />}
+            shape="circle"
+            onClick={async () => {
+              try {
+                if (row?.total_respondent > 0) {
+                  apiNotification.error({
+                    message: 'Gagal',
+                    description:
+                      'Tidak bisa mengubah survei karena telah memiliki responden',
+                  });
+                  return;
+                }
+              } catch (error) {
+                apiNotification.error({
+                  message: 'Gagal',
+                  description: 'Terjadi kesalahan',
+                });
+              }
+            }}
+          ></Button>
+          <Button
+            type="text"
+            icon={<TbTrashX size={20} color="#B12E2E" />}
+            shape="circle"
+            onClick={async () => {
+              try {
+                if (row?.total_respondent > 0) {
+                  apiNotification.error({
+                    message: 'Gagal',
+                    description:
+                      'Tidak bisa menghapus survei karena telah memiliki responden',
+                  });
+                  return;
+                }
+
+                const res = await axios.delete(
+                  `${process.env.APP_BASEURL}api/survey/${row?.id}`
+                );
+                if (!res.status) throw new Error('unknown error');
+
+                const newSurveys = surveysList.filter((s) => s.id !== row.id);
+                setSurveysList([...newSurveys]);
+
+                apiNotification.success({
+                  message: `Survei ${row?.survey_name} berhasil dihapus`,
+                });
+              } catch (error) {
+                apiNotification.error({
+                  message: 'Gagal',
+                  description: 'Terjadi kesalahan',
+                });
+              }
+            }}
+          ></Button>
         </div>
       ),
       width: '220px',
@@ -167,6 +237,8 @@ export default function Surveys(pageProps) {
 
   return (
     <>
+      {contextHolderNotification}
+
       <div className="col-12 pb-5 mb-24">
         <h1>Manajemen Survei</h1>
       </div>
@@ -308,7 +380,7 @@ function SurveyFormCard() {
   const [type, setType] = useState('paragraf');
 
   const formElement = useMemo(() => {
-    if (type === 'paragraf') return <TextArea />;
+    if (type === 'paragraf') return <TextArea value="Paragraf" disabled />;
     if (type === 'kotak-centang') return <MultiCheckboxEditable />;
     if (type === 'dropdown') return <DropdownInputEditable />;
     if (type === 'pilihan-ganda') return <MultiRadioEditable />;
