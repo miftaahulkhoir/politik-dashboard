@@ -1,4 +1,19 @@
-import { Button, Card, Col, DatePicker, Input, Row, Select, Space } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  DatePicker,
+  Divider,
+  Drawer,
+  Input,
+  Row,
+  Select,
+  Space,
+  Switch,
+} from 'antd';
+import TextArea from 'antd/es/input/TextArea';
+import Text from 'antd/es/typography/Text';
+import Title from 'antd/es/typography/Title';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
@@ -11,6 +26,8 @@ export default function Surveys(pageProps) {
   const [filterSearch, setFilterSearch] = useState('');
   const [filterActive, setFilterActive] = useState(-1);
   const [filterDate, setFilterDate] = useState('');
+
+  const [isFormOpen, setIsFormOpen] = useState(false);
 
   useEffect(() => {
     const surveys = [];
@@ -145,12 +162,14 @@ export default function Surveys(pageProps) {
         <h1>Manajemen Survei</h1>
       </div>
 
+      <SurveyFormDrawer open={isFormOpen} setOpen={setIsFormOpen} />
+
       <Space direction="vertical" size="middle">
         <SearchBar
           filterSearchHandler={filterSearchHandler}
           filterActiveHandler={filterActiveHandler}
           filterDateHandler={filterDateHandler}
-          addSurveyHandler={() => {}}
+          addSurveyHandler={() => setIsFormOpen(true)}
         />
 
         <Row justify="end">
@@ -237,5 +256,93 @@ function SearchBar({
         </Button>
       </Col>
     </Row>
+  );
+}
+
+function SurveyFormDrawer({ open, setOpen }) {
+  const onClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <Drawer
+      title="Penambahan Survei"
+      placement="right"
+      onClose={onClose}
+      open={open}
+      closable={false}
+      width="60%"
+      headerStyle={{ border: 'none', fontSize: '32px' }}
+      bodyStyle={{ background: '#EEEEEE', padding: '0px' }}
+      stye
+    >
+      <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
+        <Col span={14}>
+          <Title level={5}>Judul Survei</Title>
+          <TextArea rows={2} />
+        </Col>
+        <Col span={10}>
+          <Title level={5}>Status</Title>
+          <Space>
+            <Text>Tidak Aktif</Text>
+            <Switch defaultChecked />
+            <Text>Aktif</Text>
+          </Space>
+        </Col>
+      </Row>
+
+      <Card style={{ margin: '24px' }}>
+        <Row gutter={32}>
+          <Col span={14}>
+            <Title level={5}>Pertanyaan</Title>
+            <TextArea rows={2} />
+          </Col>
+          <Col span={10}>
+            <Title level={5}>Status</Title>
+            <Space>
+              <Text>Tidak Aktif</Text>
+              <Switch defaultChecked />
+              <Text>Aktif</Text>
+            </Space>
+          </Col>
+        </Row>
+      </Card>
+
+      <Card style={{ margin: '24px' }}>
+        <Row gutter={32}>
+          <Col span={14}>
+            <Title level={5}>Pertanyaan</Title>
+            <TextArea rows={2} />
+          </Col>
+          <Col span={10}>
+            <Title level={5}>Jenis jawaban</Title>
+            <Select
+              defaultValue="paragraf"
+              style={{ width: '160px' }}
+              options={[
+                {
+                  value: 'paragraf',
+                  label: 'Paragraf',
+                },
+                {
+                  value: 'kotak-centang',
+                  label: 'Kotak Centang',
+                },
+                {
+                  value: 'dropdown',
+                  label: 'Dropdown',
+                },
+              ]}
+            />
+          </Col>
+        </Row>
+        <Divider />
+        <Row gutter={32}>
+          <Col span={14}>
+            <TextArea rows={3} />
+          </Col>
+        </Row>
+      </Card>
+    </Drawer>
   );
 }
