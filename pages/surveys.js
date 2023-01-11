@@ -340,10 +340,75 @@ function SearchBar({
   );
 }
 
+const defaultSurveyQuestion = {
+  text: {
+    input_type: 'text',
+    question_name: '',
+    question_subject: '',
+    section: '',
+    options: null,
+  },
+  long_text: {
+    input_type: 'long_type',
+    question_name: '',
+    question_subject: '',
+    section: '',
+    options: null,
+  },
+  yes_no_question: {
+    input_type: 'yes_no_question',
+    question_name: '',
+    question_subject: '',
+    section: '',
+    options: [
+      {
+        option_name: 'ya',
+      },
+      {
+        option_name: 'tidak',
+      },
+    ],
+  },
+  radio_button: {
+    input_type: 'radio_button',
+    question_name: '',
+    question_subject: '',
+    section: '',
+    options: [
+      {
+        option_name: 'opsi 1',
+      },
+      {
+        option_name: 'opsi 2',
+      },
+    ],
+  },
+  dropdown: {
+    input_type: 'dropdown',
+    question_name: '',
+    question_subject: '',
+    section: '',
+    options: [
+      {
+        option_name: 'opsi 1',
+      },
+      {
+        option_name: 'opsi 2',
+      },
+    ],
+  },
+};
+
 function SurveyFormDrawer({ open, setOpen }) {
   const onClose = () => {
     setOpen(false);
   };
+
+  const [title, setTitle] = useState('');
+  const [questions, setQuestions] = useState([
+    defaultSurveyQuestion.dropdown,
+    defaultSurveyQuestion.dropdown,
+  ]);
 
   return (
     <Drawer
@@ -360,7 +425,11 @@ function SurveyFormDrawer({ open, setOpen }) {
       <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
         <Col span={16}>
           <Title level={5}>Judul Survei</Title>
-          <TextArea rows={2} />
+          <TextArea
+            rows={2}
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+          />
         </Col>
         <Col span={8}>
           <Title level={5}>Status</Title>
@@ -371,49 +440,61 @@ function SurveyFormDrawer({ open, setOpen }) {
           </Space>
         </Col>
       </Row>
-      <SurveyFormCard />
+      {questions.map((question, index) => (
+        <SurveyFormCard index={index} key={index} setQuestions={setQuestions} />
+      ))}
+
+      <Button>submit</Button>
     </Drawer>
   );
 }
 
-function SurveyFormCard() {
-  const [type, setType] = useState('paragraf');
+function SurveyFormCard({ index, setQuestions }) {
+  const [type, setType] = useState('text');
+  const [questionName, setQuestionName] = useState('');
+  const [labels, setLabels] = useState([]); // option strings
 
   const formElement = useMemo(() => {
-    if (type === 'paragraf') return <TextArea value="Paragraf" disabled />;
-    if (type === 'kotak-centang') return <MultiCheckboxEditable />;
-    if (type === 'dropdown') return <DropdownInputEditable />;
-    if (type === 'pilihan-ganda') return <MultiRadioEditable />;
-  }, [type]);
+    if (type === 'text') return <Input value="Isian singkat" disabled />;
+    if (type === 'long_text') return <TextArea value="Paragraf" disabled />;
+    if (type === 'dropdown')
+      return <DropdownInputEditable labels={labels} setLabels={setLabels} />;
+    if (type === 'radio_button')
+      return <MultiRadioEditable labels={labels} setLabels={setLabels} />;
+  }, [type, labels, setLabels]);
 
   return (
     <Card style={{ margin: '24px' }}>
       <Row gutter={32}>
         <Col span={16}>
           <Title level={5}>Pertanyaan</Title>
-          <TextArea rows={2} />
+          <TextArea
+            rows={2}
+            value={questionName}
+            onChange={(e) => setQuestionName(e.target.value)}
+          />
         </Col>
         <Col span={8}>
           <Title level={5}>Jenis jawaban</Title>
           <Select
-            defaultValue="paragraf"
+            defaultValue="text"
             style={{ width: '160px' }}
             options={[
               {
-                value: 'paragraf',
-                label: 'Paragraf',
+                value: 'text',
+                label: 'Isian singkat',
               },
               {
-                value: 'kotak-centang',
-                label: 'Kotak Centang',
+                value: 'long_text',
+                label: 'Paragraf',
               },
               {
                 value: 'dropdown',
                 label: 'Dropdown',
               },
               {
-                value: 'pilihan-ganda',
-                label: 'Pilihan Ganda',
+                value: 'radio_button',
+                label: 'Pilihan ganda',
               },
             ]}
             onChange={(value) => setType(value)}
@@ -422,19 +503,14 @@ function SurveyFormCard() {
       </Row>
       <Divider />
       <Row gutter={32}>
-        <Col span={16}>
-          {/* <MultiRadioEditable />
-          <MultiCheckboxEditable />
-          <DropdownInputEditable /> */}
-          {formElement}
-        </Col>
+        <Col span={16}>{formElement}</Col>
       </Row>
     </Card>
   );
 }
 
-function DropdownInputEditable() {
-  const [labels, setLabels] = useState(['']);
+function DropdownInputEditable({ labels, setLabels }) {
+  // const [labels, setLabels] = useState(['']);
   return (
     <MultiInputEditable
       listIcon={<></>}
