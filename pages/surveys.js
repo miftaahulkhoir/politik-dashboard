@@ -1,18 +1,16 @@
+import { Button, Card, Col, DatePicker, Input, Row, Select, Space } from 'antd';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { TbPencil, TbPlus, TbTrashX } from 'react-icons/tb';
-import Card from '../components/elements/card/Card';
+import { TbPencil, TbPlus, TbSearch, TbTrashX } from 'react-icons/tb';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
-  const [search, setSearch] = useState('');
+  const [filterSearch, setFilterSearch] = useState('');
   const [filterActive, setFilterActive] = useState(-1);
   const [filterDate, setFilterDate] = useState('');
-
-  // console.log(surveysList);
 
   useEffect(() => {
     const surveys = [];
@@ -24,12 +22,12 @@ export default function Surveys(pageProps) {
 
   const filteredSurveys = useMemo(() => {
     const filteredSearch =
-      search === ''
+      filterSearch === ''
         ? surveysList
         : surveysList.filter((survey) => {
             return survey.survey_name
               .toLowerCase()
-              .includes(search.toLowerCase());
+              .includes(filterSearch.toLowerCase());
           });
 
     const filteredActive =
@@ -53,15 +51,19 @@ export default function Surveys(pageProps) {
           });
 
     return filteredDate;
-  }, [surveysList, search, filterActive, filterDate]);
+  }, [surveysList, filterSearch, filterActive, filterDate]);
 
-  const searchDebounceHandler = useCallback((e) => {
-    console.log(e.target.value);
-    debounce(() => {
-      console.log(1111);
-      setSearch(e.target.value);
-    }, 1000);
-  }, []);
+  const filterSearchHandler = useCallback(
+    debounce((e) => setFilterSearch(e.target.value), 300)
+  );
+
+  const filterActiveHandler = useCallback(
+    debounce((value) => setFilterActive(Number(value)), 300)
+  );
+
+  const filterDateHandler = useCallback(
+    debounce((value) => setFilterDate(value), 300)
+  );
 
   const columns = [
     {
@@ -143,71 +145,26 @@ export default function Surveys(pageProps) {
         <h1>Manajemen Survei</h1>
       </div>
 
-      {/* searchbar */}
-      <div className="container-fluid">
-        <div className="row g-2 mb-24">
-          <div className="col-3">
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Pencarian"
-              aria-label="Pencarian"
-              onChange={debounce((e) => {
-                setSearch(e.target.value);
-              }, 1000)}
-            />
-          </div>
-          <div className="col-3">
-            <select
-              className="form-select"
-              aria-label="Default select example"
-              defaultValue="-1"
-              style={{ height: '36px' }}
-              onChange={(e) => {
-                console.log(e.target);
-                setFilterActive(Number(e.target.value));
-              }}
-            >
-              <option value="-1">Aktif dan tidak aktif</option>
-              <option value="1">Aktif</option>
-              <option value="0">Tidak aktif</option>
-            </select>
-          </div>
-          <div className="col-3">
-            <input
-              type="date"
-              className="form-control"
-              placeholder="Tanggal rilis"
-              aria-label="Tanggal rilis"
-              onChange={(e) => setFilterDate(e.target.value)}
-            />
-            {/* <DatePicker
-              placeholder="Tanggal rilis"
-              aria-label="Tanggal rilis"
-            /> */}
-          </div>
-          <div className="col-3 d-flex justify-content-end">
-            <button
-              className="btn btn-primary btn-sm"
-              style={{
-                padding: '0 16px',
-                height: '36px',
-                fontSize: '12px',
-                fontWeight: 600,
-              }}
-            >
-              <TbPlus style={{ width: '20px', height: '20px' }} />
-              <span className="ml-4">Tambah survey</span>
-            </button>
-          </div>
-        </div>
-      </div>
+      <Space direction="vertical" size="middle">
+        <SearchBar
+          filterSearchHandler={filterSearchHandler}
+          filterActiveHandler={filterActiveHandler}
+          filterDateHandler={filterDateHandler}
+          addSurveyHandler={() => {}}
+        />
 
-      <div className="col-12">
-        <Card noPadding>
-          <CustomDataTable columns={columns} data={filteredSurveys} />
-        </Card>
-      </div>
+        <Row justify="end">
+          <Col span={24}>
+            <Card bodyStyle={{ padding: '0px' }} style={{ overflow: 'hidden' }}>
+              <CustomDataTable
+                columns={columns}
+                data={filteredSurveys}
+                style={{ width: '100%' }}
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Space>
     </>
   );
 }
@@ -225,4 +182,60 @@ export async function getServerSideProps(ctx) {
     })
     .catch((err) => {});
   return { props: { surveys } };
+}
+
+function SearchBar({
+  filterSearchHandler,
+  filterActiveHandler,
+  filterDateHandler,
+  addSurveyHandler,
+}) {
+  return (
+    <Row justify="space-between">
+      <Col span={18}>
+        <Row gutter={16}>
+          <Col span={8}>
+            <Input
+              placeholder="Pencarian"
+              prefix={<TbSearch />}
+              onChange={filterSearchHandler}
+            />
+          </Col>
+          <Col span={8}>
+            <Select
+              defaultValue="-1"
+              style={{ width: '100%' }}
+              onChange={filterActiveHandler}
+              options={[
+                {
+                  value: '-1',
+                  label: 'Aktif dan tidak aktif',
+                },
+                {
+                  value: '1',
+                  label: 'Aktif',
+                },
+                {
+                  value: '0',
+                  label: 'Tidak aktif',
+                },
+              ]}
+            />
+          </Col>
+          <Col span={8}>
+            <DatePicker
+              style={{ width: '100%' }}
+              placeholder="Tanggal"
+              onChange={filterDateHandler}
+            />
+          </Col>
+        </Row>
+      </Col>
+      <Col>
+        <Button icon={<TbPlus />} type="primary" onClick={addSurveyHandler}>
+          Tambah Survei
+        </Button>
+      </Col>
+    </Row>
+  );
 }
