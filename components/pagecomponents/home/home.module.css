@@ -70,3 +70,31 @@
   background: #3e92f8;
   border-radius: 8px;
 }
+
+.social_summary_card {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: white;
+  color: black;
+}
+
+.social_summary_card .title_top_left {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.social_summary_card .subtitle_top_left {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.social_summary_card .label {
+  font-size: 14px;
+  font-weight: 400;
+  color: #636363;
+}
+
+.social_summary_card .value {
+  font-size: 20px;
+  font-weight: 600;
+}
