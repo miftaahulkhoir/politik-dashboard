@@ -6,4 +6,3 @@ cp -f .env.production .env
 sed -i "/APP_VERSION/c \APP_VERSION=$RELEASE_VER" .env
 make build
 make push
-rm -rf *
