@@ -103,6 +103,10 @@ export default function Users(pageProps) {
 
       {contextHolderNotification}
 
+      <div className="col-12 pb-5 mb-24">
+        <h1>Sentimen Analisis</h1>
+      </div>
+
       <div className="col-12 mb-24">
         <SocialSummaryCard
           title={"Performance Summary"}
