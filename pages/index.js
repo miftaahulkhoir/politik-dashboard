@@ -1,5 +1,6 @@
 import axios from 'axios';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { parseCookies } from 'nookies';
 import { useMemo } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
@@ -63,6 +64,10 @@ export default function Index({ users }) {
 
   return (
     <>
+      <Head>
+        <title>Dashboard · Patrons</title>
+      </Head>
+
       <div className="col-12 pb-5 mb-24">
         <h1>Dashboard</h1>
       </div>
