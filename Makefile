@@ -2,7 +2,6 @@ run:
 	docker compose up -d
 
 build:
-	docker image prune -a -f
 	docker build --no-cache -t synapsisid/patronpolitik:$(DOCKER_IMG_TAG) .
 
 cleanimg:
