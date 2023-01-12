@@ -1,11 +1,11 @@
-import axios from 'axios';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
+import axios from "axios";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
 
 export default function Login({ pageProps }) {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [errorMsg, setErrorMsg] = useState(false);
 
   const handleLogin = (event) => {
@@ -16,7 +16,7 @@ export default function Login({ pageProps }) {
         password: password,
       })
       .then((res) => {
-        router.push('/');
+        router.push("/");
       })
       .catch((err) => {
         setErrorMsg(true);
@@ -24,79 +24,79 @@ export default function Login({ pageProps }) {
   };
   return (
     <>
-      <div className="auth-main">
-        <div className="codex-authbox">
-          <div className="auth-header">
-            <div className="codex-brand">
+      <div className='auth-main'>
+        <div className='codex-authbox'>
+          <div className='auth-header'>
+            <div className='codex-brand'>
               <a>
                 <img
-                  style={{ width: '60px' }}
+                  style={{ width: "60px" }}
                   src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`}
-                  alt=""
+                  alt=''
                 />
                 <img
-                  className="img-fluid light-logo"
+                  className='img-fluid light-logo'
                   src={`${process.env.APP_BASEURL}images/logo/logo.png`}
-                  alt=""
+                  alt=''
                 />
               </a>
             </div>
           </div>
           {errorMsg && (
-            <div className="alert alert-danger">
+            <div className='alert alert-danger'>
               Please check your Email and Password
             </div>
           )}
           <form onSubmit={handleLogin}>
-            <div className="form-group">
-              <label className="form-label">Email</label>
+            <div className='form-group'>
+              <label className='form-label'>Email</label>
               <input
-                className="form-control"
-                type="text"
+                className='form-control'
+                type='text'
                 onChange={(e) => setEmail(e.target.value)}
-                name="email"
+                name='email'
                 required
-                placeholder="Enter Your Email"
+                placeholder='Enter Your Email'
               />
             </div>
-            <div className="form-group">
-              <label className="form-label" for="Password">
+            <div className='form-group'>
+              <label className='form-label' htmlFor='Password'>
                 Password
               </label>
-              <div className="input-group group-input">
+              <div className='input-group group-input'>
                 <input
-                  className="form-control showhide-password"
-                  type="password"
+                  className='form-control showhide-password'
+                  type='password'
                   onChange={(e) => setPassword(e.target.value)}
-                  name="password"
-                  placeholder="Enter Your Password"
-                  required=""
+                  name='password'
+                  placeholder='Enter Your Password'
+                  required=''
                 />
-                <span className="input-group-text toggle-show fa fa-eye"></span>
+                <span className='input-group-text toggle-show fa fa-eye'></span>
               </div>
             </div>
-            <div className="form-group mb-0">
-              <div className="auth-remember">
-                <div className="form-check custom-chek">
+            <div className='form-group mb-0'>
+              <div className='auth-remember'>
+                <div className='form-check custom-chek'>
                   <input
-                    className="form-check-input"
-                    id="agree"
-                    type="checkbox"
-                    value=""
-                    required=""
+                    className='form-check-input'
+                    id='agree'
+                    type='checkbox'
+                    value=''
+                    required=''
                   />
-                  <label className="form-check-label" for="agree">
+                  <label className='form-check-label' htmlFor='agree'>
                     Remember me
                   </label>
                 </div>
-                <a className="text-primary f-pwd" href="forgot-password.html">
+                <a className='text-primary f-pwd' href='forgot-password.html'>
                   Forgot your password?
                 </a>
               </div>
             </div>
-            <div className="form-group">
-              <button className="btn btn-primary" type="submit">
-                <i className="fa fa-sign-in"></i> Login
+            <div className='form-group'>
+              <button className='btn btn-primary' type='submit'>
+                <i className='fa fa-sign-in'></i> Login
               </button>
             </div>
           </form>

@@ -33,6 +33,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
   const protectedRoutes =
     ctx.pathname === "/" ||
     ctx.pathname === "/surveys" ||
+    ctx.pathname === "/pemetaan" ||
     ctx.pathname === "/users";
 
   if (!token) {

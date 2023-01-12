@@ -154,7 +154,7 @@ export default function DashboardLayout({ children }) {
               </a>
             </li>
             <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-              <a>
+              <a onClick={() => router.push("/pemetaan")}>
                 <div className='icon-item'>
                   <i className='fa fa-map'></i>
                 </div>
