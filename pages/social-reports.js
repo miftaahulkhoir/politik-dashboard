@@ -38,8 +38,6 @@ export default function Users(pageProps) {
         <title>Sentimen Analisis · Patrons</title>
       </Head>
 
-      {contextHolderNotification}
-
       <div className="col-12 pb-5 mb-24">
         <h1>Sentimen Analisis</h1>
       </div>
