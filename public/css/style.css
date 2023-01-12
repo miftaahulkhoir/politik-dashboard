@@ -39,6 +39,10 @@
 /*******************
  02 TYPOGRAPHY START
 ********************/
+.leaflet-control-attribution {
+  display: none;
+}
+
 body {
   font-size: 14px;
   font-family: "Raleways", sans-serif;

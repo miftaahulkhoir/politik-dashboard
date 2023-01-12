@@ -1,0 +1,11 @@
+.map {
+  width: 100%;
+  position: relative;
+}
+
+.leaflet-control-attribution .leaflet-control {
+  display: none !important;
+}
+
+
+
