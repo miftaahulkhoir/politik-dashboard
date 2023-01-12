@@ -15,6 +15,7 @@ import {
 } from 'antd';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import Head from 'next/head';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import {
@@ -45,12 +46,14 @@ export default function Surveys(pageProps) {
     notification.useNotification();
 
   useEffect(() => {
+    console.log(pageProps);
+    if (!pageProps?.surveys) return;
     const surveys = [];
     pageProps.surveys.forEach((element, index) => {
       surveys.push({ no: index + 1, ...element });
     });
     setSurveysList([...surveys]);
-  }, []);
+  }, [pageProps]);
 
   const filteredSurveys = useMemo(() => {
     const filteredSearch =
@@ -234,6 +237,10 @@ export default function Surveys(pageProps) {
 
   return (
     <>
+      <Head>
+        <title>Manajemen Survei · Patrons</title>
+      </Head>
+
       {contextHolderNotification}
 
       <div className="col-12 pb-5 mb-24">
@@ -282,7 +289,8 @@ export async function getServerSideProps(ctx) {
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
-      surveys = res.data.data;
+      console.log(res);
+      surveys = res.data.data || [];
     })
     .catch((err) => {});
   return { props: { surveys } };

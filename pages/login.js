@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 
@@ -24,6 +25,9 @@ export default function Login({ pageProps }) {
   };
   return (
     <>
+      <Head>
+        <title>Login · Patrons</title>
+      </Head>
       <div className="auth-main">
         <div className="codex-authbox">
           <div className="auth-header">
