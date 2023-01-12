@@ -3,7 +3,7 @@ run:
 
 build:
 	docker image prune -a -f
-	docker build -t synapsisid/patronpolitik:$(DOCKER_IMG_TAG) --no-cache .
+	docker build --no-cache -t synapsisid/patronpolitik:$(DOCKER_IMG_TAG) .
 
 cleanimg:
 	docker compose down
