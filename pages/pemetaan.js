@@ -1,19 +1,25 @@
 import axios from "axios";
-import dynamic from "next/dynamic";
 import { parseCookies } from "nookies";
-import { useMemo, useState } from "react";
-import { TbDotsVertical } from "react-icons/tb";
+import { useEffect, useMemo, useState } from "react";
 import Card from "../components/elements/card/Card";
-import Map from "../components/elements/map/Map";
+import dynamic from "next/dynamic";
+const Map = dynamic(() => import("../components/elements/map/Map"), {
+  ssr: false,
+});
 import styles from "../components/elements/map/Home.module.css";
 
 export default function Pemetaan({ users }) {
+  const [isMounted, setIsMounted] = useState(false);
   const [markers, setMarkers] = useState([1, 2, 3, 4, 5]);
   const [zoom, setZoom] = useState(5.1);
   const [cordinate, setCordinate] = useState([
     -2.0459326720699523, 122.07302997496033,
   ]);
   const colors = ["#22a7f0", "#2ecc71", "#e74c3c", "#f1c40f", "#2c3e50"];
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   return (
     <>
@@ -59,42 +65,44 @@ export default function Pemetaan({ users }) {
             </Card>
           </div>
         </div>
-        <div className='map'>
-          <Map
-            className={styles.homeMap}
-            center={cordinate}
-            cordinate={cordinate}
-            zoom={zoom}
-            zoomTo={zoom}>
-            {({ TileLayer, CircleMarker, Marker, Polygon, Tooltip }) => (
-              <>
-                <TileLayer
-                  className='map'
-                  url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-                  attribution='&copy; <a href="http://osm?.org/copyright">OpenStreetMap</a> contributors'
-                />
-                <Marker position={[-2.0459326720699523, 120.07302997496033]}>
-                  <Tooltip>419 Kordinator</Tooltip>
-                </Marker>
-                <Marker position={[2.0459326720699523, 100.07302997496033]}>
-                  <Tooltip>312 Relawan</Tooltip>
-                </Marker>
-                <Marker position={[-2.0459326720699523, 110.07302997496033]}>
-                  <Tooltip>579 Pemilih</Tooltip>
-                </Marker>
-                <Marker position={[-8.2459326720699523, 115.07302997496033]}>
-                  <Tooltip>667 Terjangkau</Tooltip>
-                </Marker>
-                <Marker position={[-3.2459326720699523, 130.07302997496033]}>
-                  <Tooltip>22 Kecamatan</Tooltip>
-                </Marker>
-                <Marker position={[-3.2459326720699523, 112.07302997496033]}>
-                  <Tooltip>2170 Daftar Hitam</Tooltip>
-                </Marker>
-              </>
-            )}
-          </Map>
-        </div>
+        {isMounted && (
+          <div className='map'>
+            <Map
+              className={styles.homeMap}
+              center={cordinate}
+              cordinate={cordinate}
+              zoom={zoom}
+              zoomTo={zoom}>
+              {({ TileLayer, CircleMarker, Marker, Polygon, Tooltip }) => (
+                <>
+                  <TileLayer
+                    className='map'
+                    url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+                    attribution='&copy; <a href="http://osm?.org/copyright">OpenStreetMap</a> contributors'
+                  />
+                  <Marker position={[-2.0459326720699523, 120.07302997496033]}>
+                    <Tooltip>419 Kordinator</Tooltip>
+                  </Marker>
+                  <Marker position={[2.0459326720699523, 100.07302997496033]}>
+                    <Tooltip>312 Relawan</Tooltip>
+                  </Marker>
+                  <Marker position={[-2.0459326720699523, 110.07302997496033]}>
+                    <Tooltip>579 Pemilih</Tooltip>
+                  </Marker>
+                  <Marker position={[-8.2459326720699523, 115.07302997496033]}>
+                    <Tooltip>667 Terjangkau</Tooltip>
+                  </Marker>
+                  <Marker position={[-3.2459326720699523, 130.07302997496033]}>
+                    <Tooltip>22 Kecamatan</Tooltip>
+                  </Marker>
+                  <Marker position={[-3.2459326720699523, 112.07302997496033]}>
+                    <Tooltip>2170 Daftar Hitam</Tooltip>
+                  </Marker>
+                </>
+              )}
+            </Map>
+          </div>
+        )}
       </div>
     </>
   );
