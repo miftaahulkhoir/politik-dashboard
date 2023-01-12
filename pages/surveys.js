@@ -462,13 +462,7 @@ function SurveyFormDrawer({
         });
         return newQuestion;
       });
-
-      const survey = {
-        survey_name: title,
-        status: isActive ? 1 : 0,
-        questions: newQuestions || null,
-      };
-
+      console.log('new quests', newQuestions);
       if (isEdit) {
         // update
 
@@ -478,11 +472,58 @@ function SurveyFormDrawer({
         // req survey -> hanya judul
         // req status -> ada api update sendiri
 
-        const res = await axios.put(
+        // 1. update survey name
+        const survey = {
+          survey_name: title,
+        };
+
+        await axios.put(
           `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`,
           survey
         );
-        if (!res?.data?.status) throw new Error('unknown error');
+
+        // // 2. update/create questions
+        // const newOptions = [];
+        // await Promise.all(
+        //   newQuestions.forEach(async (q) => {
+        //     if (q.id) {
+        //       // update question
+        //       await axios.put(
+        //         `${process.env.APP_BASEURL}api/survey/${q.id}`,
+        //         q
+        //       );
+
+        //       // menambah options yang perlu diupdate
+        //       if (q.options) {
+        //         q.options.forEach((o) => {
+        //           o.question_id = q.id;
+        //           newOptions.push(o);
+        //         });
+        //       }
+        //       return;
+        //     }
+        //     // create question
+        //     q.survey_id = selectedSurveyId;
+        //     await axios.post(`${process.env.APP_BASEURL}api/survey`, q);
+        //   })
+        // );
+
+        // // 3. update options untuk question yang sudah ada
+
+        // console.log('options', options);
+        // await Promise.all(
+        //   newOptions.forEach(async (option) => {
+        //     if (option.id) {
+        //       // update
+        //       await axios.put(
+        //         `${process.env.APP_BASEURL}api/survey/${option.ques}`,
+        //         survey
+        //       );
+        //       return;
+        //     }
+        //     // create
+        //   })
+        // );
 
         apiNotification.success({
           message: 'Berhasil',
@@ -491,6 +532,12 @@ function SurveyFormDrawer({
         setIsEdit(false);
       } else {
         // create
+        const survey = {
+          survey_name: title,
+          status: isActive ? 1 : 0,
+          questions: newQuestions || null,
+        };
+
         const res = await axios.post(
           `${process.env.APP_BASEURL}api/survey`,
           survey
@@ -514,7 +561,7 @@ function SurveyFormDrawer({
 
   return (
     <Drawer
-      title="Penambahan Survei"
+      title={isEdit ? 'Pengubahan Survei' : 'Penambahan Survei'}
       placement="right"
       onClose={onClose}
       open={open}
