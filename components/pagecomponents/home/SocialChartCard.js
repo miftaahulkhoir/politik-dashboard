@@ -103,6 +103,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#08c4b2',
         },
+        color: '#08c4b2',
         emphasis: {
           focus: 'series',
         },
@@ -127,6 +128,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#6f5ed3',
         },
+        color: '#6f5ed3',
         emphasis: {
           focus: 'series',
         },
@@ -151,6 +153,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#ce3665',
         },
+        color: '#ce3665',
         emphasis: {
           focus: 'series',
         },
@@ -175,6 +178,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#ffcd1c',
         },
+        color: '#ffcd1c',
         emphasis: {
           focus: 'series',
         },
@@ -199,6 +203,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#3896e3',
         },
+        color: '#3896e3',
         emphasis: {
           focus: 'series',
         },
