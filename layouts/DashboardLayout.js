@@ -1,6 +1,7 @@
 import { useRouter } from "next/router";
+import { logoutUser } from "../utils/auth";
 
-export default function DashboardLayout({ children }) {
+export default function DashboardLayout({ profile, children }) {
   const router = useRouter();
   const { asPath } = router;
 
@@ -34,13 +35,12 @@ export default function DashboardLayout({ children }) {
                     </a>
                   </div>
                   <div className='search-bar'>
-                    <p>Selamat datang kembali, NERDY</p>
+                    <p>Selamat datang kembali, {profile?.occupation?.name}</p>
                   </div>
                 </div>
                 <div className='header-right'>
                   <ul className='nav-iconlist'>
                     <li className='nav-profile'>
-                      {" "}
                       <a>
                         <div className='media'>
                           <div className='user-icon'>
@@ -52,33 +52,32 @@ export default function DashboardLayout({ children }) {
                           </div>
                         </div>
                       </a>
-                      {/* <div className='hover-dropdown navprofile-drop'>
+                      <div className='hover-dropdown navprofile-drop'>
                         <ul>
                           <li>
-                            <a href='profile.html'>
+                            <a>
                               <i className='ti-user'></i>profile
                             </a>
                           </li>
                           <li>
-                            <a href='email-inbox.html'>
+                            <a>
                               <i className='ti-email'></i>inbox
                             </a>
                           </li>
                           <li>
-                            <a href='user-edit.html'>
+                            <a>
                               {" "}
                               <i className='ti-settings'></i>setting{" "}
                             </a>
                           </li>
-                          <li>
+                          <li onClick={() => logoutUser()}>
                             {" "}
-                            <a href='login.html'>
-                              {" "}
+                            <a>
                               <i className='fa fa-sign-out'></i>log out
                             </a>
                           </li>
                         </ul>
-                      </div> */}
+                      </div>
                     </li>
                   </ul>
                 </div>
@@ -115,52 +114,52 @@ export default function DashboardLayout({ children }) {
                 <span>Dashboard</span>
               </a>
             </li>
-            <li
-              className={
-                asPath === "/surveys" ? "meu-item active" : "menu-item"
-              }>
-              <a onClick={() => router.push("/surveys")}>
-                <div className='icon-item'>
-                  <i className='fa fa-list'></i>
-                </div>
-                <span>Manajemen Survei</span>
-              </a>
-            </li>
-            <li
-              className={
-                asPath === "/analytics" ? "meu-item active" : "menu-item"
-              }>
-              <a>
-                <div className='icon-item'>
-                  <i className='fa fa-desktop'></i>
-                </div>
-                <span>Analitik Survei</span>
-              </a>
-            </li>
-            <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-              <a onClick={() => router.push("/social-reports")}>
-                <div className='icon-item'>
-                  <i className='fa fa-pie-chart'></i>
-                </div>
-                <span>Sentimen Analisis</span>
-              </a>
-            </li>
-            <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-              <a>
-                <div className='icon-item'>
-                  <i className='fa fa-whatsapp'></i>
-                </div>
-                <span>WhatsApp Blast</span>
-              </a>
-            </li>
-            <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-              <a onClick={() => router.push("/pemetaan")}>
-                <div className='icon-item'>
-                  <i className='fa fa-map'></i>
-                </div>
-                <span>Pemetaan</span>
-              </a>
-            </li>
+            {profile?.occupation?.level < 4 && (
+              <li
+                className={
+                  asPath === "/surveys" ? "meu-item active" : "menu-item"
+                }>
+                <a onClick={() => router.push("/surveys")}>
+                  <div className='icon-item'>
+                    <i className='fa fa-list'></i>
+                  </div>
+                  <span>Manajemen Survei</span>
+                </a>
+              </li>
+            )}
+            {profile?.occupation?.level < 3 && (
+              <li
+                className={
+                  asPath === "/analytics" ? "meu-item active" : "menu-item"
+                }>
+                <a>
+                  <div className='icon-item'>
+                    <i className='fa fa-desktop'></i>
+                  </div>
+                  <span>Analitik Survei</span>
+                </a>
+              </li>
+            )}
+            {profile?.occupation?.level < 3 && (
+              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+                <a onClick={() => router.push("/social-reports")}>
+                  <div className='icon-item'>
+                    <i className='fa fa-pie-chart'></i>
+                  </div>
+                  <span>Sentimen Analisis</span>
+                </a>
+              </li>
+            )}
+            {profile?.occupation?.level < 3 && (
+              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+                <a>
+                  <div className='icon-item'>
+                    <i className='fa fa-whatsapp'></i>
+                  </div>
+                  <span>WhatsApp Blast</span>
+                </a>
+              </li>
+            )}
             <li className={asPath === "" ? "meu-item active" : "menu-item"}>
               <a>
                 <div className='icon-item'>
@@ -169,14 +168,16 @@ export default function DashboardLayout({ children }) {
                 <span>Report Kegiatan</span>
               </a>
             </li>
-            <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-              <a>
-                <div className='icon-item'>
-                  <i className='fa fa-calendar'></i>
-                </div>
-                <span>Manajemen Event</span>
-              </a>
-            </li>
+            {profile?.occupation?.level < 3 && (
+              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+                <a>
+                  <div className='icon-item'>
+                    <i className='fa fa-calendar'></i>
+                  </div>
+                  <span>Manajemen Event</span>
+                </a>
+              </li>
+            )}
             <li className={asPath === "" ? "meu-item active" : "menu-item"}>
               <a>
                 <div className='icon-item'>
@@ -185,23 +186,29 @@ export default function DashboardLayout({ children }) {
                 <span>Pengaduan</span>
               </a>
             </li>
-            <li
-              className={asPath === "/users" ? "meu-item active" : "menu-item"}>
-              <a onClick={() => router.push("/users")}>
-                <div className='icon-item'>
-                  <i className='fa fa-user'></i>
-                </div>
-                <span>Manajemen User</span>
-              </a>
-            </li>
-            <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-              <a>
-                <div className='icon-item'>
-                  <i className='fa fa-users'></i>
-                </div>
-                <span>Manajemen Akses Admin</span>
-              </a>
-            </li>
+            {profile?.occupation?.level < 3 && (
+              <li
+                className={
+                  asPath === "/users" ? "meu-item active" : "menu-item"
+                }>
+                <a onClick={() => router.push("/users")}>
+                  <div className='icon-item'>
+                    <i className='fa fa-user'></i>
+                  </div>
+                  <span>Manajemen User</span>
+                </a>
+              </li>
+            )}
+            {profile?.occupation?.level === 1 && (
+              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+                <a>
+                  <div className='icon-item'>
+                    <i className='fa fa-users'></i>
+                  </div>
+                  <span>Manajemen Akses Admin</span>
+                </a>
+              </li>
+            )}
           </ul>
         </div>
       </div>

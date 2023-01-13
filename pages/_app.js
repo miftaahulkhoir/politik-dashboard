@@ -1,7 +1,7 @@
+import axios from 'axios';
 import { useRouter } from 'next/router';
 import { destroyCookie, parseCookies } from 'nookies';
 import React from 'react';
-import AdminLayout from '../layouts/AdminLayout';
 import DashboardLayout from '../layouts/DashboardLayout';
 import '../public/css/style.css';
 import '../public/css/vendor/bootstrap.css';
@@ -16,8 +16,14 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   return (
     <>
-      {router.pathname !== '/login' && router.pathname !== '/admin' ? (
-        <DashboardLayout>
+      {(router.pathname !== '/login' &&
+        router.pathname !== '/register' &&
+        router.pathname !== '/' &&
+        pageProps.profile.occupation.level === 1) ||
+      (router.pathname !== '/login' &&
+        router.pathname !== '/register' &&
+        pageProps.profile.occupation.level > 1) ? (
+        <DashboardLayout {...pageProps}>
           <Component {...pageProps} />
         </DashboardLayout>
       ) : router.pathname === '/admin' ? (
@@ -46,11 +52,11 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     destroyCookie(ctx, 'token');
     protectedRoutes && redirectUser(ctx, '/login');
   } else {
-    // const res = await axios.get(`${process.env.APP_BASEURL}profiles/info`, {
-    //   withCredentials: true,
-    //   headers: { Cookie: `token=${token}` },
-    // });
-    // pageProps.user = await res.data.data;
+    const res = await axios.get(`${process.env.APP_BASEURL}api/profile`, {
+      withCredentials: true,
+      headers: { Cookie: `token=${token}` },
+    });
+    pageProps.profile = await res.data.data;
     if (Component.getServerSideProps) {
       pageProps = await Component.getServerSideProps(ctx);
     }

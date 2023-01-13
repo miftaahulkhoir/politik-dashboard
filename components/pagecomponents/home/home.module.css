@@ -1,5 +1,5 @@
 .chart_left {
-  height: 250px;
+  height: 410px;
 }
 
 /* blue chart */
@@ -89,12 +89,15 @@
 }
 
 .social_summary_card .label {
+  padding-left: 10px;
   font-size: 14px;
   font-weight: 400;
   color: #636363;
 }
 
 .social_summary_card .value {
+  padding-left: 10px;
   font-size: 20px;
   font-weight: 600;
 }
+

@@ -30,9 +30,9 @@ export const logoutUser = async () => {
     destroyCookie(null, "token");
     Router.push("/login");
   } catch (error) {}
-  // await axios.post(`${process.env.APP_BASEURL}logout`).then(res => {
-  //   if(res.data.status === true ){
-  // Router.push("/login");
-  //   }
-  // })
+  await axios.post(`${process.env.APP_BASEURL}logout`).then((res) => {
+    if (res.data.status === true) {
+      Router.push("/login");
+    }
+  });
 };
