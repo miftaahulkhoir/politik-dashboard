@@ -1,10 +1,10 @@
 import axios from "axios";
 import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
-import Head from 'next/head'
-import Card from '../components/elements/card/Card';
-import SocialChartCard from '../components/pagecomponents/home/SocialChartCard';
-import SocialSummaryCard from '../components/pagecomponents/home/SocialSummaryCard';
+import Head from "next/head";
+import Card from "../components/elements/card/Card";
+import SocialChartCard from "../components/pagecomponents/home/SocialChartCard";
+import SocialSummaryCard from "../components/pagecomponents/home/SocialSummaryCard";
 export default function Users(pageProps) {
   const [summaryImpressions, setSummaryImpressions] = useState(null);
   const [summaryEngagements, setSummaryEngagements] = useState(null);
@@ -17,9 +17,8 @@ export default function Users(pageProps) {
   const [videoViewsData, setVideoViewsData] = useState([]);
 
   useEffect(() => {
-    console.log(pageProps.reports);
     if (!pageProps?.reports) return;
-    
+
     setSummaryImpressions(pageProps.reports.summary.impressions);
     setSummaryEngagements(pageProps.reports.summary.engagements);
     setSummaryEngagementRate(pageProps.reports.summary.engagement_rate);
@@ -38,58 +37,51 @@ export default function Users(pageProps) {
         <title>Sentimen Analisis · Patrons</title>
       </Head>
 
-      <div className="col-12 pb-5 mb-24">
+      <div className='col-12 pb-5 mb-24'>
         <h1>Sentimen Analisis</h1>
       </div>
 
-      <div className="col-12 mb-24">
+      <div className='col-12 mb-24'>
         <SocialSummaryCard
           title={"Performance Summary"}
-          subtitle={"View your key profile performance metrics from the reporting period."}
+          subtitle={
+            "View your key profile performance metrics from the reporting period."
+          }
           impressions={summaryImpressions}
           engagements={summaryEngagements}
           engagementRate={summaryEngagementRate}
           postLinkClicks={summaryPostLinkClicks}
         />
       </div>
-      <div className="col-12 mb-24">
+      <div className='col-12 mb-24'>
         <Card noPadding>
           <SocialChartCard
-            title={'Audience Growth'}
+            title={"Audience Growth"}
             data={audienceGrowthData}
           />
         </Card>
       </div>
-      <div className="col-12 mb-24">
+      <div className='col-12 mb-24'>
         <Card noPadding>
-          <SocialChartCard
-            title={'Impressions'}
-            data={impressionData}
-          />
+          <SocialChartCard title={"Impressions"} data={impressionData} />
         </Card>
       </div>
-      <div className="col-12 mb-24">
+      <div className='col-12 mb-24'>
         <Card noPadding>
-          <SocialChartCard
-            title={'Engagement'}
-            data={engagementData}
-          />
+          <SocialChartCard title={"Engagement"} data={engagementData} />
         </Card>
       </div>
-      <div className="col-12 mb-24">
+      <div className='col-12 mb-24'>
         <Card noPadding>
           <SocialChartCard
-            title={'Engagement Rate'}
+            title={"Engagement Rate"}
             data={engagementRateData}
           />
         </Card>
       </div>
-      <div className="col-12 mb-24">
+      <div className='col-12 mb-24'>
         <Card noPadding>
-          <SocialChartCard
-            title={'Video Views'}
-            data={videoViewsData}
-          />
+          <SocialChartCard title={"Video Views"} data={videoViewsData} />
         </Card>
       </div>
     </>
@@ -105,7 +97,6 @@ export async function getServerSideProps(ctx) {
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
-      console.log(res)
       reports = res.data.data;
     })
     .catch((err) => {});

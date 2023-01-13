@@ -12,12 +12,12 @@ import {
   Switch,
   Typography,
   notification,
-} from 'antd';
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import Head from 'next/head';
-import { parseCookies } from 'nookies';
-import { useCallback, useEffect, useMemo, useState } from 'react';
+} from "antd";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import Head from "next/head";
+import { parseCookies } from "nookies";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import {
   TbCircle,
   TbPencil,
@@ -26,17 +26,17 @@ import {
   TbSquare,
   TbTrashX,
   TbX,
-} from 'react-icons/tb';
-import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
+} from "react-icons/tb";
+import CustomDataTable from "../components/elements/customDataTable/CustomDataTable";
 
 const { TextArea } = Input;
 const { Text, Title } = Typography;
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
-  const [filterSearch, setFilterSearch] = useState('');
+  const [filterSearch, setFilterSearch] = useState("");
   const [filterActive, setFilterActive] = useState(-1);
-  const [filterDate, setFilterDate] = useState('');
+  const [filterDate, setFilterDate] = useState("");
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
@@ -46,7 +46,6 @@ export default function Surveys(pageProps) {
     notification.useNotification();
 
   useEffect(() => {
-    console.log(pageProps);
     if (!pageProps?.surveys) return;
     const surveys = [];
     pageProps.surveys.forEach((element, index) => {
@@ -57,7 +56,7 @@ export default function Surveys(pageProps) {
 
   const filteredSurveys = useMemo(() => {
     const filteredSearch =
-      filterSearch === ''
+      filterSearch === ""
         ? surveysList
         : surveysList.filter((survey) => {
             return survey.survey_name
@@ -72,7 +71,7 @@ export default function Surveys(pageProps) {
 
     const dateInput = new Date(filterDate);
     const filteredDate =
-      filterDate === ''
+      filterDate === ""
         ? filteredActive
         : filteredActive.filter((survey) => {
             const date = new Date(survey.created_at);
@@ -106,105 +105,104 @@ export default function Surveys(pageProps) {
       const res = await axios.put(
         `${process.env.APP_BASEURL}api/survey/update-status/${id}`
       );
-      if (!res?.data?.status) throw new Error('unknown error');
+      if (!res?.data?.status) throw new Error("unknown error");
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: 'Gagal',
-        description: 'Terjadi kesalahan dalam mengubah status aktif',
+        message: "Gagal",
+        description: "Terjadi kesalahan dalam mengubah status aktif",
       });
     }
   };
 
   const columns = [
     {
-      name: 'No',
+      name: "No",
       selector: (row) => row.no,
-      width: '80px',
+      width: "80px",
       center: true,
       sortable: true,
     },
     {
-      name: 'Judul survei',
+      name: "Judul survei",
       selector: (row) => row.survey_name,
       sortable: true,
       grow: 2.5,
     },
     {
-      name: 'Tanggal rilis',
+      name: "Tanggal rilis",
       sortable: true,
       selector: (row) => {
         const date = new Date(row?.created_at);
-        const dateText = new Intl.DateTimeFormat('id-ID', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
+        const dateText = new Intl.DateTimeFormat("id-ID", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
         }).format(date);
-        const hourText = new Intl.DateTimeFormat('id-ID', {
-          hour: '2-digit',
+        const hourText = new Intl.DateTimeFormat("id-ID", {
+          hour: "2-digit",
           hour12: false,
-          minute: '2-digit',
+          minute: "2-digit",
         }).format(date);
         return (
           <div>
-            <p className="text-default">{dateText}</p>
-            <p className="text-light">{hourText}</p>
+            <p className='text-default'>{dateText}</p>
+            <p className='text-light'>{hourText}</p>
           </div>
         );
       },
     },
     {
-      name: 'Responden',
-      selector: (row) => row?.total_respondent + ' orang',
-      width: '150px',
+      name: "Responden",
+      selector: (row) => row?.total_respondent + " orang",
+      width: "150px",
       sortable: true,
       right: true,
     },
     {
-      name: 'Status Aktif',
+      name: "Status Aktif",
       selector: (row) => (
         <Switch
           defaultChecked={row?.status}
           onChange={async () => await changeStatusHandler(row.id)}
         />
       ),
-      width: '130px',
+      width: "130px",
       // FIXME: sortable not working here
       sortable: true,
     },
     {
-      name: 'Aksi',
+      name: "Aksi",
       selector: (row) => (
-        <div className="d-flex gap-2">
+        <div className='d-flex gap-2'>
           <Button
-            type="text"
-            icon={<TbPencil size={20} color="#7287A5" />}
-            shape="circle"
+            type='text'
+            icon={<TbPencil size={20} color='#7287A5' />}
+            shape='circle'
             onClick={() => {
               if (row?.total_respondent > 0) {
                 apiNotification.error({
-                  message: 'Gagal',
+                  message: "Gagal",
                   description:
-                    'Tidak bisa mengubah survei karena telah memiliki responden',
+                    "Tidak bisa mengubah survei karena telah memiliki responden",
                 });
                 return;
               }
               setIsFormEdit(true);
               setSelectedSurveyId(row.id);
               setIsFormOpen(true);
-            }}
-          ></Button>
+            }}></Button>
           <Button
-            type="text"
-            icon={<TbTrashX size={20} color="#B12E2E" />}
-            shape="circle"
+            type='text'
+            icon={<TbTrashX size={20} color='#B12E2E' />}
+            shape='circle'
             onClick={async () => {
               try {
                 if (row?.total_respondent > 0) {
                   apiNotification.error({
-                    message: 'Gagal',
+                    message: "Gagal",
                     description:
-                      'Tidak bisa menghapus survei karena telah memiliki responden',
+                      "Tidak bisa menghapus survei karena telah memiliki responden",
                   });
                   return;
                 }
@@ -212,7 +210,7 @@ export default function Surveys(pageProps) {
                 const res = await axios.delete(
                   `${process.env.APP_BASEURL}api/survey/${row?.id}`
                 );
-                if (!res?.data?.status) throw new Error('unknown error');
+                if (!res?.data?.status) throw new Error("unknown error");
 
                 const newSurveys = surveysList.filter((s) => s.id !== row.id);
                 setSurveysList([...newSurveys]);
@@ -222,15 +220,14 @@ export default function Surveys(pageProps) {
                 });
               } catch (error) {
                 apiNotification.error({
-                  message: 'Gagal',
-                  description: 'Terjadi kesalahan',
+                  message: "Gagal",
+                  description: "Terjadi kesalahan",
                 });
               }
-            }}
-          ></Button>
+            }}></Button>
         </div>
       ),
-      width: '220px',
+      width: "220px",
       center: true,
     },
   ];
@@ -243,7 +240,7 @@ export default function Surveys(pageProps) {
 
       {contextHolderNotification}
 
-      <div className="col-12 pb-5 mb-24">
+      <div className='col-12 pb-5 mb-24'>
         <h1>Manajemen Survei</h1>
       </div>
 
@@ -256,7 +253,7 @@ export default function Surveys(pageProps) {
         apiNotification={apiNotification}
       />
 
-      <Space direction="vertical" size="middle">
+      <Space direction='vertical' size='middle'>
         <SearchBar
           filterSearchHandler={filterSearchHandler}
           filterActiveHandler={filterActiveHandler}
@@ -264,13 +261,13 @@ export default function Surveys(pageProps) {
           addSurveyHandler={() => setIsFormOpen(true)}
         />
 
-        <Row justify="end">
+        <Row justify='end'>
           <Col span={24}>
-            <Card bodyStyle={{ padding: '0px' }} style={{ overflow: 'hidden' }}>
+            <Card bodyStyle={{ padding: "0px" }} style={{ overflow: "hidden" }}>
               <CustomDataTable
                 columns={columns}
                 data={filteredSurveys}
-                style={{ width: '100%' }}
+                style={{ width: "100%" }}
               />
             </Card>
           </Col>
@@ -289,7 +286,6 @@ export async function getServerSideProps(ctx) {
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
-      console.log(res);
       surveys = res.data.data || [];
     })
     .catch((err) => {});
@@ -303,48 +299,48 @@ function SearchBar({
   addSurveyHandler,
 }) {
   return (
-    <Row justify="space-between">
+    <Row justify='space-between'>
       <Col span={18}>
         <Row gutter={16}>
           <Col span={8}>
             <Input
-              placeholder="Pencarian"
+              placeholder='Pencarian'
               prefix={<TbSearch />}
               onChange={filterSearchHandler}
             />
           </Col>
           <Col span={8}>
             <Select
-              defaultValue="-1"
-              style={{ width: '100%' }}
+              defaultValue='-1'
+              style={{ width: "100%" }}
               onChange={filterActiveHandler}
               options={[
                 {
-                  value: '-1',
-                  label: 'Aktif dan tidak aktif',
+                  value: "-1",
+                  label: "Aktif dan tidak aktif",
                 },
                 {
-                  value: '1',
-                  label: 'Aktif',
+                  value: "1",
+                  label: "Aktif",
                 },
                 {
-                  value: '0',
-                  label: 'Tidak aktif',
+                  value: "0",
+                  label: "Tidak aktif",
                 },
               ]}
             />
           </Col>
           <Col span={8}>
             <DatePicker
-              style={{ width: '100%' }}
-              placeholder="Tanggal"
+              style={{ width: "100%" }}
+              placeholder='Tanggal'
               onChange={filterDateHandler}
             />
           </Col>
         </Row>
       </Col>
       <Col>
-        <Button icon={<TbPlus />} type="primary" onClick={addSurveyHandler}>
+        <Button icon={<TbPlus />} type='primary' onClick={addSurveyHandler}>
           Tambah Survei
         </Button>
       </Col>
@@ -354,58 +350,58 @@ function SearchBar({
 
 const defaultSurveyQuestion = {
   text: {
-    input_type: 'text',
-    question_name: '',
-    question_subject: '',
-    section: '',
+    input_type: "text",
+    question_name: "",
+    question_subject: "",
+    section: "",
     options: null,
   },
   long_text: {
-    input_type: 'long_type',
-    question_name: '',
-    question_subject: '',
-    section: '',
+    input_type: "long_type",
+    question_name: "",
+    question_subject: "",
+    section: "",
     options: null,
   },
   yes_no_question: {
-    input_type: 'yes_no_question',
-    question_name: '',
-    question_subject: '',
-    section: '',
+    input_type: "yes_no_question",
+    question_name: "",
+    question_subject: "",
+    section: "",
     options: [
       {
-        option_name: 'ya',
+        option_name: "ya",
       },
       {
-        option_name: 'tidak',
+        option_name: "tidak",
       },
     ],
   },
   radio_button: {
-    input_type: 'radio_button',
-    question_name: '',
-    question_subject: '',
-    section: '',
+    input_type: "radio_button",
+    question_name: "",
+    question_subject: "",
+    section: "",
     options: [
       {
-        option_name: 'opsi 1',
+        option_name: "opsi 1",
       },
       {
-        option_name: 'opsi 2',
+        option_name: "opsi 2",
       },
     ],
   },
   dropdown: {
-    input_type: 'dropdown',
-    question_name: '',
-    question_subject: '',
-    section: '',
+    input_type: "dropdown",
+    question_name: "",
+    question_subject: "",
+    section: "",
     options: [
       {
-        option_name: 'opsi 1',
+        option_name: "opsi 1",
       },
       {
-        option_name: 'opsi 2',
+        option_name: "opsi 2",
       },
     ],
   },
@@ -419,7 +415,7 @@ function SurveyFormDrawer({
   selectedSurveyId,
   apiNotification,
 }) {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([
     { ...defaultSurveyQuestion.text },
@@ -453,8 +449,8 @@ function SurveyFormDrawer({
       const newQuestions = questions.map((question, i) => {
         const newQuestion = question;
         newQuestion.question_number = i + 1;
-        newQuestion.section = 'section1';
-        newQuestion.question_subject = 'subject1';
+        newQuestion.section = "section1";
+        newQuestion.question_subject = "subject1";
         newQuestion.options = newQuestion?.options?.map((option, j) => {
           const newOption = option;
           newOption.value = j + 1;
@@ -462,7 +458,7 @@ function SurveyFormDrawer({
         });
         return newQuestion;
       });
-      console.log('new quests', newQuestions);
+      console.log("new quests", newQuestions);
       if (isEdit) {
         // update
 
@@ -526,8 +522,8 @@ function SurveyFormDrawer({
         // );
 
         apiNotification.success({
-          message: 'Berhasil',
-          description: 'Perubahan survei telah disimpan',
+          message: "Berhasil",
+          description: "Perubahan survei telah disimpan",
         });
         setIsEdit(false);
       } else {
@@ -542,36 +538,35 @@ function SurveyFormDrawer({
           `${process.env.APP_BASEURL}api/survey`,
           survey
         );
-        if (!res?.data?.status) throw new Error('unknown error');
+        if (!res?.data?.status) throw new Error("unknown error");
 
         apiNotification.success({
-          message: 'Berhasil',
-          description: 'Survei telah ditambahkan',
+          message: "Berhasil",
+          description: "Survei telah ditambahkan",
         });
       }
       setOpen(false);
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: 'Gagal',
-        description: 'Terjadi kesalahan saat menambahkan survei',
+        message: "Gagal",
+        description: "Terjadi kesalahan saat menambahkan survei",
       });
     }
   };
 
   return (
     <Drawer
-      title={isEdit ? 'Pengubahan Survei' : 'Penambahan Survei'}
-      placement="right"
+      title={isEdit ? "Pengubahan Survei" : "Penambahan Survei"}
+      placement='right'
       onClose={onClose}
       open={open}
       closable={false}
-      width="60%"
-      headerStyle={{ border: 'none', fontSize: '32px' }}
-      bodyStyle={{ background: '#EEEEEE', padding: '0px', overflowX: 'hidden' }}
-      stye
-    >
-      <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
+      width='60%'
+      headerStyle={{ border: "none", fontSize: "32px" }}
+      bodyStyle={{ background: "#EEEEEE", padding: "0px", overflowX: "hidden" }}
+      stye>
+      <Row gutter={32} style={{ padding: "24px", background: "white" }}>
         <Col span={16}>
           <Title level={5}>Judul Survei</Title>
           <TextArea
@@ -597,9 +592,9 @@ function SurveyFormDrawer({
           setQuestions={setQuestions}
         />
       ))}
-      <Row justify="space-between" style={{ margin: '24px' }}>
+      <Row justify='space-between' style={{ margin: "24px" }}>
         <Button onClick={addQuestionHandler}>Tambah pertanyaan</Button>
-        <Button type="primary" onClick={submitHandler}>
+        <Button type='primary' onClick={submitHandler}>
           Simpan survei
         </Button>
       </Row>
@@ -628,16 +623,16 @@ function SurveyFormCard({ index, questions, setQuestions }) {
   );
 
   const formElement = useMemo(() => {
-    if (type === 'text') return <Input value="Isian singkat" disabled />;
-    if (type === 'long_text') return <TextArea value="Paragraf" disabled />;
-    if (type === 'dropdown')
+    if (type === "text") return <Input value='Isian singkat' disabled />;
+    if (type === "long_text") return <TextArea value='Paragraf' disabled />;
+    if (type === "dropdown")
       return <DropdownInputEditable labels={labels} setLabels={setLabels} />;
-    if (type === 'radio_button')
+    if (type === "radio_button")
       return <MultiRadioEditable labels={labels} setLabels={setLabels} />;
   }, [type, labels, setLabels]);
 
   return (
-    <Card style={{ margin: '24px' }}>
+    <Card style={{ margin: "24px" }}>
       <Row gutter={32}>
         <Col span={16}>
           <Title level={5}>Pertanyaan</Title>
@@ -654,24 +649,24 @@ function SurveyFormCard({ index, questions, setQuestions }) {
         <Col span={8}>
           <Title level={5}>Jenis jawaban</Title>
           <Select
-            defaultValue="text"
-            style={{ width: '160px' }}
+            defaultValue='text'
+            style={{ width: "160px" }}
             options={[
               {
-                value: 'text',
-                label: 'Isian singkat',
+                value: "text",
+                label: "Isian singkat",
               },
               {
-                value: 'long_text',
-                label: 'Paragraf',
+                value: "long_text",
+                label: "Paragraf",
               },
               {
-                value: 'dropdown',
-                label: 'Dropdown',
+                value: "dropdown",
+                label: "Dropdown",
               },
               {
-                value: 'radio_button',
-                label: 'Pilihan ganda',
+                value: "radio_button",
+                label: "Pilihan ganda",
               },
             ]}
             value={type}
@@ -706,7 +701,7 @@ function DropdownInputEditable({ labels, setLabels }) {
 function MultiCheckboxEditable({ labels, setLabels }) {
   return (
     <MultiInputEditable
-      listIcon={<TbSquare color="#016CEE" size={20}></TbSquare>}
+      listIcon={<TbSquare color='#016CEE' size={20}></TbSquare>}
       labels={labels}
       setLabels={setLabels}
     />
@@ -716,7 +711,7 @@ function MultiCheckboxEditable({ labels, setLabels }) {
 function MultiRadioEditable({ labels, setLabels }) {
   return (
     <MultiInputEditable
-      listIcon={<TbCircle color="#016CEE" size={20}></TbCircle>}
+      listIcon={<TbCircle color='#016CEE' size={20}></TbCircle>}
       labels={labels}
       setLabels={setLabels}
     />
@@ -727,21 +722,19 @@ function MultiInputEditable({ listIcon, labels, setLabels }) {
   return (
     <>
       <Space
-        direction="vertical"
+        direction='vertical'
         size={0}
         style={{
-          width: '100%',
-          border: '1px solid #EEEEEE',
-          borderRadius: '8px',
-        }}
-      >
+          width: "100%",
+          border: "1px solid #EEEEEE",
+          borderRadius: "8px",
+        }}>
         {labels.map((label, index) => (
           <div key={index}>
             <Row
-              justify="space-between"
-              align="middle"
-              style={{ padding: '8px 16px' }}
-            >
+              justify='space-between'
+              align='middle'
+              style={{ padding: "8px 16px" }}>
               <Col span={21}>
                 <Space>
                   {listIcon}
@@ -752,41 +745,38 @@ function MultiInputEditable({ listIcon, labels, setLabels }) {
                         newLabels[index] = value;
                         setLabels([...newLabels]);
                       },
-                    }}
-                  >
+                    }}>
                     {label}
                   </Text>
                 </Space>
               </Col>
               <Col span={3}>
-                <Row justify="end">
+                <Row justify='end'>
                   <Button
-                    type="text"
-                    icon={<TbX size={20} color="red" />}
-                    shape="circle"
+                    type='text'
+                    icon={<TbX size={20} color='red' />}
+                    shape='circle'
                     onClick={() => {
                       const newLabels = labels.filter((_, i) => i !== index);
                       setLabels([...newLabels]);
-                    }}
-                  ></Button>
+                    }}></Button>
                 </Row>
               </Col>
             </Row>
             {index < labels.length - 1 ? (
-              <Divider style={{ margin: '0' }}></Divider>
+              <Divider style={{ margin: "0" }}></Divider>
             ) : null}
           </div>
         ))}
       </Space>
-      <Row justify="space-between" align="middle" style={{ padding: '8px 0' }}>
+      <Row justify='space-between' align='middle' style={{ padding: "8px 0" }}>
         <Col>
           <Button
             icon={<TbPlus size={16} />}
-            type="primary"
+            type='primary'
             onClick={() => {
-              setLabels([...labels, '']);
-            }}
-          >
+              setLabels([...labels, ""]);
+            }}>
             Tambah Opsi
           </Button>
         </Col>
