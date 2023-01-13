@@ -381,7 +381,7 @@ export default function Index({
                     {showKoordinator === true &&
                       kordinator.map((m, index) => (
                         <CircleMarker
-                          center={[m?.long, m?.lat]}
+                          center={[m?.latitude, m?.longitude]}
                           radius={20}
                           opacity={1.0}
                           pathOptions={{
@@ -391,41 +391,50 @@ export default function Index({
                           }}></CircleMarker>
                       ))}
                     {showRelawan === true &&
-                      relawan.map((m, index) => (
-                        <CircleMarker
-                          center={(m?.long, m?.lat)}
-                          radius={20}
-                          opacity={1.0}
-                          pathOptions={{
-                            color: "none",
-                            fillOpacity: 0.8,
-                            fillColor: handleColor(m?.occupation.name),
-                          }}></CircleMarker>
-                      ))}
+                      relawan.map(
+                        (m, index) =>
+                          m.longitude !== "" && (
+                            <CircleMarker
+                              center={[m?.latitude, m?.longitude]}
+                              radius={20}
+                              opacity={1.0}
+                              pathOptions={{
+                                color: "none",
+                                fillOpacity: 0.8,
+                                fillColor: handleColor(m?.occupation.name),
+                              }}></CircleMarker>
+                          )
+                      )}
                     {showPemilih === true &&
-                      pemilih.map((m, index) => (
-                        <CircleMarker
-                          center={(m?.long, m?.lat)}
-                          radius={20}
-                          opacity={1.0}
-                          pathOptions={{
-                            color: "none",
-                            fillOpacity: 0.8,
-                            fillColor: handleColor(m?.occupation.name),
-                          }}></CircleMarker>
-                      ))}
+                      pemilih.map(
+                        (m, index) =>
+                          m.longitude !== "" && (
+                            <CircleMarker
+                              center={[m?.latitude, m?.longitude]}
+                              radius={20}
+                              opacity={1.0}
+                              pathOptions={{
+                                color: "none",
+                                fillOpacity: 0.8,
+                                fillColor: handleColor(m?.occupation.name),
+                              }}></CircleMarker>
+                          )
+                      )}
                     {showBlackList === true &&
-                      daftarhitam.map((m, index) => (
-                        <CircleMarker
-                          center={(m?.long, m?.lat)}
-                          radius={20}
-                          opacity={1.0}
-                          pathOptions={{
-                            color: "none",
-                            fillOpacity: 0.8,
-                            fillColor: handleColor(m?.occupation.name),
-                          }}></CircleMarker>
-                      ))}
+                      daftarhitam.map(
+                        (m, index) =>
+                          m.longitude !== "" && (
+                            <CircleMarker
+                              center={[m?.latitude, m?.longitude]}
+                              radius={20}
+                              opacity={1.0}
+                              pathOptions={{
+                                color: "none",
+                                fillOpacity: 0.8,
+                                fillColor: handleColor(m?.occupation.name),
+                              }}></CircleMarker>
+                          )
+                      )}
                   </>
                 )}
               </Map>
