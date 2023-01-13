@@ -42,16 +42,18 @@ export default function Users(pageProps) {
       </div>
 
       <div className='col-12 mb-24'>
-        <SocialSummaryCard
-          title={"Performance Summary"}
-          subtitle={
-            "View your key profile performance metrics from the reporting period."
-          }
-          impressions={summaryImpressions}
-          engagements={summaryEngagements}
-          engagementRate={summaryEngagementRate}
-          postLinkClicks={summaryPostLinkClicks}
-        />
+        <Card noPadding>
+          <SocialSummaryCard
+            title={"Performance Summary"}
+            subtitle={
+              "View your key profile performance metrics from the reporting period."
+            }
+            impressions={summaryImpressions}
+            engagements={summaryEngagements}
+            engagementRate={summaryEngagementRate}
+            postLinkClicks={summaryPostLinkClicks}
+          />
+        </Card>
       </div>
       <div className='col-12 mb-24'>
         <Card noPadding>
