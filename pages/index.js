@@ -35,7 +35,7 @@ export default function Index({
   const [isMounted, setIsMounted] = useState(false);
   const [zoom, setZoom] = useState(12.3);
   const [cordinate, setCordinate] = useState([
-    -6.929946525721457, 107.60911297305545,
+    -7.0335559, 107.6589375,
   ]);
   const [position, setPosition] = useState("data");
   const [showKoordinator, setShowKoordinator] = useState(false);
