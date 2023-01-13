@@ -15,6 +15,7 @@ const Map = dynamic(() => import("../components/elements/map/Map"), {
   ssr: false,
 });
 import styles from "../components/elements/map/Home.module.css";
+import { logoutUser } from "../utils/auth";
 
 const CustomDataTable = dynamic(
   () => import("../components/elements/customDataTable/CustomDataTable"),
