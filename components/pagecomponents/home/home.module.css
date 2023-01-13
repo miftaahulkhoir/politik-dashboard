@@ -1,5 +1,5 @@
 .chart_left {
-  height: 410px;
+  height: 250px;
 }
 
 /* blue chart */
@@ -99,5 +99,9 @@
   padding-left: 10px;
   font-size: 20px;
   font-weight: 600;
+}
+
+.social_chart {
+  height: 410px;
 }
 
