@@ -125,25 +125,23 @@ export default function Index({
             <div className='custom-container'>
               <div className='row'>
                 <div className='col-12'>
-                  <div className='header-contian d-flex '>
-                    <div className='justify-content-start'>
-                      <div className='logo-gridwrap'>
-                        <a className='codexbrand-logo'>
-                          <img
-                            style={{ width: "40px" }}
-                            src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`}
-                            alt='theeme-logo'
-                          />
-                          <img
-                            className='img-fluid'
-                            style={{ width: "100px" }}
-                            src={`${process.env.APP_BASEURL}images/logo/logo.png`}
-                            alt='theeme-logo'
-                          />
-                        </a>
-                      </div>
+                  <div className='header-contian d-flex justify-content-between'>
+                    <div className='logo-gridwrap'>
+                      <a className='codexbrand-logo'>
+                        <img
+                          style={{ width: "40px" }}
+                          src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`}
+                          alt='theeme-logo'
+                        />
+                        <img
+                          className='img-fluid'
+                          style={{ width: "100px" }}
+                          src={`${process.env.APP_BASEURL}images/logo/logo.png`}
+                          alt='theeme-logo'
+                        />
+                      </a>
                     </div>
-                    <div className='justify-content-end ml-5'>
+                    <div>
                       <ul className='nav menu-admin'>
                         <li className='nav-item'>
                           <a
@@ -173,41 +171,43 @@ export default function Index({
                             WhatsApp Blast
                           </a>
                         </li>
-                        <li className='nav-item'>
+                        <li>
                           <a
                             className='nav-link'
                             onClick={() => router.push("/")}>
-                            Report Kegiatan
+                            More Menu
                           </a>
+                          <div className='hover-dropdown navprofile-drop'>
+                            <ul>
+                              <li>
+                                <a onClick={() => router.push("/")}>
+                                  Report Kegiatan
+                                </a>
+                              </li>
+                              <li>
+                                <a onClick={() => router.push("/")}>
+                                  Manajemen Event
+                                </a>
+                              </li>
+                              <li>
+                                <a onClick={() => router.push("/")}>
+                                  Pengaduan
+                                </a>
+                              </li>
+                              <li>
+                                <a onClick={() => router.push("/users")}>
+                                  Manajemen User
+                                </a>
+                              </li>
+                              <li>
+                                <a onClick={() => router.push("/")}>
+                                  Manajemen Akses Admin
+                                </a>
+                              </li>
+                            </ul>
+                          </div>
                         </li>
-                        <li className='nav-item'>
-                          <a
-                            className='nav-link'
-                            onClick={() => router.push("/")}>
-                            Manajemen Event
-                          </a>
-                        </li>
-                        <li className='nav-item'>
-                          <a
-                            className='nav-link'
-                            onClick={() => router.push("/")}>
-                            Pengaduan
-                          </a>
-                        </li>
-                        <li className='nav-item'>
-                          <a
-                            className='nav-link'
-                            onClick={() => router.push("/users")}>
-                            Manajemen User
-                          </a>
-                        </li>
-                        <li className='nav-item'>
-                          <a
-                            className='nav-link'
-                            onClick={() => router.push("/")}>
-                            Manajemen Akses Admin
-                          </a>
-                        </li>
+
                         <li className='nav-profile mx-5'>
                           <a>
                             <div className='media'>
