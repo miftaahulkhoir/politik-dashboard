@@ -14,27 +14,28 @@ export default function SocialChartCard({ title, data }) {
   let tiktok = [];
 
   data.forEach((element, index) => {
-    timestamp[index] = new Date(Date.parse(element.timestamp));
+    timestamp[index] = element.timestamp;
+  })
+  console.log(timestamp);
+
+  data.forEach((element, index) => {
+    twitter[index] = [timestamp[index], element.data.twitter];
   })
 
   data.forEach((element, index) => {
-    twitter[index] = element.data.twitter;
+    facebook[index] = [timestamp[index], element.data.facebook];
   })
 
   data.forEach((element, index) => {
-    facebook[index] = element.data.facebook;
+    instagram[index] = [timestamp[index], element.data.instagram];
   })
 
   data.forEach((element, index) => {
-    instagram[index] = element.data.instagram;
+    linkedin[index] = [timestamp[index], element.data.linkedin];
   })
 
   data.forEach((element, index) => {
-    linkedin[index] = element.data.linkedin;
-  })
-
-  data.forEach((element, index) => {
-    tiktok[index] = element.data.tiktok;
+    tiktok[index] = [timestamp[index], element.data.tiktok];
   })
 
   const option = {
@@ -51,16 +52,17 @@ export default function SocialChartCard({ title, data }) {
       }
     },
     legend: {
-      data: [title],
-      itemStyle: {
-        color: 'rgba(1, 108, 238, 1)',
-      },
-      right: 0,
+      orient: 'horizontal',
+      center: 'center',
+      top: 'bottom',
+      icon: 'rect',
+      height: 100,
+      data: ['Twitter', 'Facebook', 'Instagram', 'LinkedIn', 'TikTok']
     },
     grid: {
       left: '3%',
       right: '4%',
-      bottom: '3%',
+      bottom: '10%',
       containLabel: true,
     },
     dataLabels: {
@@ -68,10 +70,12 @@ export default function SocialChartCard({ title, data }) {
     },
     xAxis: [
       {
-        type: 'category',
+        type: 'time',
         boundaryGap: false,
         // data: ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul'],
-        data: timestamp,
+        axisLabel: {
+          formatter: '{dd}-{MM}-{yyyy}'
+        }
       },
     ],
     yAxis: [
@@ -99,6 +103,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#08c4b2',
         },
+        color: '#08c4b2',
         emphasis: {
           focus: 'series',
         },
@@ -123,6 +128,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#6f5ed3',
         },
+        color: '#6f5ed3',
         emphasis: {
           focus: 'series',
         },
@@ -147,6 +153,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#ce3665',
         },
+        color: '#ce3665',
         emphasis: {
           focus: 'series',
         },
@@ -171,6 +178,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#ffcd1c',
         },
+        color: '#ffcd1c',
         emphasis: {
           focus: 'series',
         },
@@ -195,6 +203,7 @@ export default function SocialChartCard({ title, data }) {
           // ]),
           color: '#3896e3',
         },
+        color: '#3896e3',
         emphasis: {
           focus: 'series',
         },
@@ -206,7 +215,7 @@ export default function SocialChartCard({ title, data }) {
   return (
     <Card>
       <div className={styles.chart_left}>
-        <ReactEcharts opts={{ height: 250 }} option={option} />
+        <ReactEcharts opts={{ height: 410 }} option={option} />
       </div>
     </Card>
   );

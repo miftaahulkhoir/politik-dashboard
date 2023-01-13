@@ -43,6 +43,171 @@
   display: none;
 }
 
+.codex-header-admin {
+  background-color: #ffffff;
+  padding: 20px;
+  top: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  z-index: 4;
+  box-shadow: 0 0 40px 5px rgba(5, 23, 34, 0.05);
+  border-bottom:1px solid #ddd;
+  transition: all 0.5s ease;
+}
+
+.menu-admin li a{
+  cursor: pointer;
+}
+
+.left-content {
+  margin: 100px 30px;
+  width: 20%;
+  box-sizing: border-box;
+  position: absolute;
+  left: 0;
+  background: transparent;
+  z-index: 99;
+}
+
+.left-content .card {
+  background: transparent;
+
+}
+
+.left-content a {
+  font-size: 20px;
+  color: #08080a;
+  cursor: pointer;
+}
+
+.left-content li {
+  background: #ddd;
+}
+
+.left-content .actives {
+  background-color: #fff;
+  color: #222 !important;
+}
+
+.search-list {
+  background: #fff;
+  height:auto !important;
+  padding: 15px;
+}
+
+.search-list .circle-cordinator {
+  width: 20px;
+  height:20px;
+  border-radius: 30px;
+  margin: 0px 10px;
+  background-color: #e74c3c;
+}
+
+.search-list .circle-relawan {
+  width: 20px;
+  height:20px;
+  border-radius: 30px;
+  margin: 0px 10px;
+  background-color: #3498db;
+}
+
+.search-list .circle-pemilih {
+  width: 20px;
+  height:20px;
+  border-radius: 30px;
+  margin: 0px 10px;
+  background-color: #2ecc71;
+}
+
+.search-list .circle-hitam {
+  width: 20px;
+  height:20px;
+  border-radius: 30px;
+  margin: 0px 10px;
+  background-color: #34495e;
+}
+
+.codex-header-admin .menu-admin .hover-dropdown {
+  margin-block-start: 10px;
+  margin-inline-end: 50px;
+  overflow: hidden;
+  background-color: #ffffff;
+  box-shadow: 0 0 40px 5px rgba(5, 23, 34, 0.15);
+  position: absolute;
+  top: 100%;
+  inset-inline-end: 0;
+  opacity: 0;
+  visibility: hidden;
+  transform: translateY(15px);
+  transition: all 0.5s ease;
+  border-radius: 5px;
+}
+
+.codex-header-admin .menu-admin .hover-dropdown li {
+  padding: 10px 5px;
+  border-bottom:2px solid #ddd;
+}
+
+.codex-header-admin .menu-admin .hover-dropdown i {
+  padding: 10px;
+}
+
+.codex-header-admin .menu-admin > li:hover .hover-dropdown {
+  transform: translateY(0);
+  opacity: 1;
+  visibility: visible;
+}
+
+.codex-header-admin .menu-admin .hover-dropdown.navprofile-drop {
+  min-width: 200px;
+}
+.codex-header-admin .menu-admin .hover-dropdown.navprofile-drop .media {
+  align-items: center;
+}
+.codex-header-admin .menu-admin .hover-dropdown.navprofile-drop .media .user-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 5px;
+  margin-inline-end: 10px;
+  background-color: rgba(26, 124, 188, 0.1);
+}
+.codex-header-admin .menu-admin .hover-dropdown.navprofile-drop .media .user-icon img {
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+}
+.codex-header-admin .menu-admin .hover-dropdown.navprofile-drop .media h6 {
+  font-size: 14px;
+}
+.codex-header-admin .menu-admin .hover-dropdown.navprofile-drop .media span {
+  font-size: 12px;
+  line-height: 1;
+}
+
+@media (max-width:1366px){
+  .menu-admin {
+    font-size: 10px;
+  }
+
+  .left-content a {
+    font-size: 14px;
+  }
+
+  .search-list h4 {
+    font-size: 14px;
+  }
+
+  .search-list th  {
+    font-size: 10px;
+  }
+
+   .search-list td  {
+    font-size: 10px;
+  }
+}
+
+
 body {
   font-size: 14px;
   font-family: "Raleways", sans-serif;
