@@ -1,16 +1,16 @@
-FROM node:lts as dependencies
+FROM node:lts-alpine as dependencies
 WORKDIR /patronpolitik
 COPY package*.json ./
 COPY .env ./
 RUN npm install --force
 
-FROM node:lts as builder
+FROM node:lts-alpine as builder
 WORKDIR /patronpolitik
 COPY . .
 COPY --from=dependencies /patronpolitik/node_modules ./node_modules
 RUN npm run build
 
-FROM node:lts as runner
+FROM node:lts-alpine as runner
 WORKDIR /patronpolitik
 ENV NODE_ENV production
 COPY --from=builder /patronpolitik/next.config.js ./
