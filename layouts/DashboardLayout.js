@@ -138,7 +138,7 @@ export default function DashboardLayout({ children }) {
               </a>
             </li>
             <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-              <a>
+              <a onClick={() => router.push("/social-reports")}>
                 <div className='icon-item'>
                   <i className='fa fa-pie-chart'></i>
                 </div>
