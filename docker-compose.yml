@@ -5,7 +5,7 @@ services:
     container_name: patronpolitik_fe
     restart: always
     ports:
-      - '3004:3000'
+      - 127.0.0.1:${APP_PORT}:${APP_PORT}
 
 networks:
   default:
