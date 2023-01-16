@@ -1,7 +1,8 @@
-import { notification } from 'antd';
+import { Button, notification } from 'antd';
 import axios from 'axios';
 import { parseCookies } from 'nookies';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
+import { TbPencil, TbTrashX } from 'react-icons/tb';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 import UserFormDrawer from '../components/pagecomponents/users/UserFormDrawer';
 
@@ -11,6 +12,10 @@ export default function Users(pageProps) {
   const [search, setSearch] = useState('');
 
   const [isDrawerActive, setIsDrawerActive] = useState(false);
+  const [isFormEdit, setIsFormEdit] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState('');
+
+  const [currentUser, setCurrentUser] = useState({});
 
   const [apiNotification, contextHolderNotification] =
     notification.useNotification();
@@ -19,43 +24,98 @@ export default function Users(pageProps) {
     pageProps.users.forEach((element, index) => {
       setUsersList((prev) => [...prev, { no: index + 1, ...element }]);
     });
+    console.log(usersList);
   }, []);
 
-  const columns = [
-    {
-      name: 'No',
-      selector: (row) => row.no,
-      width: '80px',
-      center: true,
-      sortable: true,
-    },
-    {
-      name: 'NIK',
-      width: '80px',
-      selector: (row) => row.NIK,
-    },
-    {
-      name: 'Nama',
-      selector: (row) => row?.name,
-    },
-    {
-      name: 'Jenis Kelamin',
-      selector: (row) => row?.gender,
-      width: '150px',
-      sortable: true,
-    },
-    {
-      name: 'Email',
-      selector: (row) => row?.email,
-      sortable: true,
-    },
-    {
-      name: 'Aksi',
-      selector: (row) => '',
-      width: '220px',
-      sortable: true,
-    },
-  ];
+  useEffect(() => {
+    axios
+      .get(`${process.env.APP_BASEURL}api/profile`)
+      .then((res) => {
+        setCurrentUser(res.data.data);
+      })
+      .catch((err) => {});
+  }, []);
+
+  const columns = useMemo(() => {
+    return [
+      {
+        name: 'No',
+        selector: (row) => row.no,
+        width: '80px',
+        center: true,
+        sortable: true,
+      },
+      {
+        name: 'NIK',
+        selector: (row) => row.nik,
+      },
+      {
+        name: 'Nama',
+        selector: (row) => row?.name,
+      },
+      {
+        name: 'Jenis Kelamin',
+        selector: (row) => (row?.gender === 'male' ? 'Laki-laki' : 'Perempuan'),
+        width: '140px',
+        sortable: true,
+      },
+      {
+        name: 'Email',
+        selector: (row) => row?.email,
+        sortable: true,
+      },
+      {
+        name: 'Aksi',
+        selector: (row) => {
+          const canModify =
+            currentUser?.occupation?.level < row?.occupation?.level;
+          return (
+            <div className="d-flex gap-2">
+              <Button
+                type="text"
+                disabled={!canModify}
+                icon={<TbPencil size={20} color="#7287A5" />}
+                shape="circle"
+                onClick={() => {
+                  setSelectedUserId(row.id);
+                  setIsFormEdit(true);
+                  setIsDrawerActive(true);
+                }}
+              ></Button>
+              <Button
+                type="text"
+                disabled={!canModify}
+                icon={<TbTrashX size={20} color="#B12E2E" />}
+                shape="circle"
+                onClick={async () => {
+                  try {
+                    await axios.delete(
+                      `${process.env.APP_BASEURL}api/users/${row?.id}`
+                    );
+
+                    const newUsers = usersList.filter((s) => s.id !== row.id);
+                    setUsersList([...newUsers]);
+
+                    apiNotification.success({
+                      message: 'Sukses',
+                      description: `User ${row?.survey_name} berhasil dihapus`,
+                    });
+                  } catch (error) {
+                    apiNotification.error({
+                      message: 'Gagal',
+                      description: 'Terjadi kesalahan',
+                    });
+                  }
+                }}
+              ></Button>
+            </div>
+          );
+        },
+        width: '130px',
+        center: true,
+      },
+    ];
+  }, [currentUser]);
 
   const handleSearch = (search) => {
     setSearch(search);
@@ -73,9 +133,14 @@ export default function Users(pageProps) {
       {contextHolderNotification}
 
       <UserFormDrawer
+        token={pageProps.token}
         open={isDrawerActive}
         setOpen={setIsDrawerActive}
         apiNotification={apiNotification}
+        isEdit={isFormEdit}
+        setIsEdit={setIsFormEdit}
+        selectedUserId={selectedUserId}
+        currentUser={currentUser}
       />
 
       <div className="col-12 pdv-3">
@@ -134,5 +199,5 @@ export async function getServerSideProps(ctx) {
       users = res.data.data;
     })
     .catch((err) => {});
-  return { props: { users } };
+  return { props: { token, users } };
 }
