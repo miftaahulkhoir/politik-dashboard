@@ -13,7 +13,7 @@ export default function Users(pageProps) {
 
   const [isDrawerActive, setIsDrawerActive] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
-  const [selectedUserId, setSelectedUserId] = useState('');
+  const [selectedUser, setSelectedUser] = useState({});
 
   const [currentUser, setCurrentUser] = useState({});
 
@@ -84,7 +84,7 @@ export default function Users(pageProps) {
                 }
                 shape="circle"
                 onClick={() => {
-                  setSelectedUserId(row.id);
+                  setSelectedUser(row);
                   setIsFormEdit(true);
                   setIsDrawerActive(true);
                 }}
@@ -151,7 +151,7 @@ export default function Users(pageProps) {
         apiNotification={apiNotification}
         isEdit={isFormEdit}
         setIsEdit={setIsFormEdit}
-        selectedUserId={selectedUserId}
+        selectedUser={selectedUser}
         setUsersList={setUsersList}
         currentUser={currentUser}
       />

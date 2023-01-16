@@ -20,7 +20,7 @@ export default function UserFormDrawer({
   setOpen,
   isEdit,
   setIsEdit,
-  selectedUserId,
+  selectedUser,
   apiNotification,
   setUsersList,
   currentUser,
@@ -79,8 +79,12 @@ export default function UserFormDrawer({
   // fill form if edit
   useEffect(() => {
     if (!isEdit) return;
+    // get regency and district list
+
+    axios.get(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`);
+
     axios
-      .get(`${process.env.APP_BASEURL}api/users/${selectedUserId}`)
+      .get(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`)
       .then((res) => {
         const data = res.data.data;
         setOccupation(data.occupation_id);
@@ -93,7 +97,7 @@ export default function UserFormDrawer({
         setLatitude(data.latitude);
         setLongitude(data.longitude);
       });
-  }, [isEdit, selectedUserId]);
+  }, [isEdit, selectedUser.id]);
 
   const clearForm = () => {
     setOccupation('');
@@ -118,7 +122,7 @@ export default function UserFormDrawer({
   const updateUser = (data) => {
     console.log('data', data);
     axios
-      .put(`${process.env.APP_BASEURL}api/users/${selectedUserId}`, data)
+      .put(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`, data)
       .then((res) => {
         apiNotification.success({
           message: 'Berhasil',
@@ -127,10 +131,14 @@ export default function UserFormDrawer({
 
         setUsersList((prevUsers) => [
           ...prevUsers.map((u) => {
-            if (u.id !== selectedUserId) return u;
-            data.id = selectedUserId;
-            data.no = u.no;
-            return data;
+            if (u.id !== selectedUser.id) return u;
+            // data.id = selectedUser.id;
+            // data.no = u.no;
+            const newData = {
+              ...u,
+              ...data,
+            };
+            return newData;
           }),
         ]);
 
