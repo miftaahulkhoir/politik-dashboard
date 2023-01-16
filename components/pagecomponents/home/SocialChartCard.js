@@ -214,7 +214,7 @@ export default function SocialChartCard({ title, data }) {
   };
   return (
     <Card>
-      <div className={styles.chart_left}>
+      <div className={styles.social_chart}>
         <ReactEcharts opts={{ height: 410 }} option={option} />
       </div>
     </Card>

@@ -34,7 +34,7 @@ export default function Index({
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [zoom, setZoom] = useState(12.3);
-  const [cordinate, setCordinate] = useState([-7.065715, 107.630213]);
+  const [cordinate, setCordinate] = useState([-7.0335559, 107.6589375]);
   const [position, setPosition] = useState('data');
   const [showKoordinator, setShowKoordinator] = useState(false);
   const [showRelawan, setShowRelawan] = useState(false);
@@ -144,7 +144,7 @@ export default function Index({
                         <li className="nav-item">
                           <a
                             className="nav-link"
-                            onClick={() => router.push('/surveys')}
+                            onClick={() => router.replace('/surveys')}
                           >
                             Manajemen Survei
                           </a>
@@ -152,7 +152,7 @@ export default function Index({
                         <li className="nav-item">
                           <a
                             className="nav-link"
-                            onClick={() => router.push('/')}
+                            onClick={() => router.replace('/ongoing')}
                           >
                             Analitik Survei
                           </a>
@@ -160,7 +160,7 @@ export default function Index({
                         <li className="nav-item">
                           <a
                             className="nav-link"
-                            onClick={() => router.push('/social-reports')}
+                            onClick={() => router.replace('/social-reports')}
                           >
                             Sentimen Analisis
                           </a>
@@ -168,42 +168,37 @@ export default function Index({
                         <li className="nav-item">
                           <a
                             className="nav-link"
-                            onClick={() => router.push('/')}
+                            onClick={() => router.replace('/blast')}
                           >
                             WhatsApp Blast
                           </a>
                         </li>
                         <li>
-                          <a
-                            className="nav-link"
-                            onClick={() => router.push('/')}
-                          >
-                            More Menu
-                          </a>
+                          <a className="nav-link">More Menu</a>
                           <div className="hover-dropdown navprofile-drop">
                             <ul>
                               <li>
-                                <a onClick={() => router.push('/')}>
+                                <a onClick={() => router.replace('/ongoing')}>
                                   Report Kegiatan
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push('/')}>
+                                <a onClick={() => router.replace('/ongoing')}>
                                   Manajemen Event
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push('/')}>
+                                <a onClick={() => router.replace('/ongoing')}>
                                   Pengaduan
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push('/users')}>
+                                <a onClick={() => router.replace('/users')}>
                                   Manajemen User
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push('/')}>
+                                <a onClick={() => router.replace('/ongoing')}>
                                   Manajemen Akses Admin
                                 </a>
                               </li>

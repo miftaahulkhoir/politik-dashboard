@@ -106,20 +106,23 @@ export default function DashboardLayout({ profile, children }) {
         </div>
         <div className='codex-menuwrapper'>
           <ul className='codex-menu custom-scroll' data-simplebar>
-            <li className={asPath === "/" ? "meu-item active" : "menu-item"}>
-              <a onClick={() => router.push("/")}>
+            <li
+              className={asPath === "/" ? "meu-item active" : "menu-item"}
+              onClick={() => router.replace("/")}>
+              <a>
                 <div className='icon-item'>
                   <i className='fa fa-dashboard'></i>
                 </div>
                 <span>Dashboard</span>
               </a>
             </li>
-            {profile?.occupation?.level < 4 && (
+            {profile?.occupation?.level < 3 && (
               <li
                 className={
                   asPath === "/surveys" ? "meu-item active" : "menu-item"
-                }>
-                <a onClick={() => router.push("/surveys")}>
+                }
+                onClick={() => router.replace("/surveys")}>
+                <a>
                   <div className='icon-item'>
                     <i className='fa fa-list'></i>
                   </div>
@@ -129,9 +132,10 @@ export default function DashboardLayout({ profile, children }) {
             )}
             {profile?.occupation?.level < 3 && (
               <li
-                className={
-                  asPath === "/analytics" ? "meu-item active" : "menu-item"
-                }>
+                // className={
+                //   asPath === "/ongoing" ? "meu-item active" : "menu-item"
+                // }
+                onClick={() => router.replace("/ongoing")}>
                 <a>
                   <div className='icon-item'>
                     <i className='fa fa-desktop'></i>
@@ -141,8 +145,12 @@ export default function DashboardLayout({ profile, children }) {
               </li>
             )}
             {profile?.occupation?.level < 3 && (
-              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
-                <a onClick={() => router.push("/social-reports")}>
+              <li
+                className={
+                  asPath === "/social-reports" ? "meu-item active" : "menu-item"
+                }
+                onClick={() => router.replace("/social-reports")}>
+                <a>
                   <div className='icon-item'>
                     <i className='fa fa-pie-chart'></i>
                   </div>
@@ -151,7 +159,11 @@ export default function DashboardLayout({ profile, children }) {
               </li>
             )}
             {profile?.occupation?.level < 3 && (
-              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+              <li
+                className={
+                  asPath === "/blast" ? "meu-item active" : "menu-item"
+                }
+                onClick={() => router.replace("/blast")}>
                 <a>
                   <div className='icon-item'>
                     <i className='fa fa-whatsapp'></i>
@@ -160,7 +172,9 @@ export default function DashboardLayout({ profile, children }) {
                 </a>
               </li>
             )}
-            <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+            <li
+              // className={asPath === "" ? "meu-item active" : "menu-item"}
+              onClick={() => router.replace("/ongoing")}>
               <a>
                 <div className='icon-item'>
                   <i className='fa fa-file'></i>
@@ -169,7 +183,9 @@ export default function DashboardLayout({ profile, children }) {
               </a>
             </li>
             {profile?.occupation?.level < 3 && (
-              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+              <li
+                // className={asPath === "" ? "meu-item active" : "menu-item"}
+                onClick={() => router.replace("/ongoing")}>
                 <a>
                   <div className='icon-item'>
                     <i className='fa fa-calendar'></i>
@@ -178,7 +194,9 @@ export default function DashboardLayout({ profile, children }) {
                 </a>
               </li>
             )}
-            <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+            <li
+              // className={asPath === "" ? "meu-item active" : "menu-item"}
+              onClick={() => router.replace("/ongoing")}>
               <a>
                 <div className='icon-item'>
                   <i className='fa fa-comment'></i>
@@ -190,8 +208,9 @@ export default function DashboardLayout({ profile, children }) {
               <li
                 className={
                   asPath === "/users" ? "meu-item active" : "menu-item"
-                }>
-                <a onClick={() => router.push("/users")}>
+                }
+                onClick={() => router.replace("/users")}>
+                <a>
                   <div className='icon-item'>
                     <i className='fa fa-user'></i>
                   </div>
@@ -200,7 +219,9 @@ export default function DashboardLayout({ profile, children }) {
               </li>
             )}
             {profile?.occupation?.level === 1 && (
-              <li className={asPath === "" ? "meu-item active" : "menu-item"}>
+              <li
+                // className={asPath === "" ? "meu-item active" : "menu-item"}
+                onClick={() => router.replace("/ongoing")}>
                 <a>
                   <div className='icon-item'>
                     <i className='fa fa-users'></i>
