@@ -81,7 +81,14 @@ export default function UserFormDrawer({
     if (!isEdit) return;
     // get regency and district list
 
-    axios.get(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`);
+    if (selectedUser?.distric_id) {
+      axios
+        .get(`${process.env.APP_BASEURL}api/distric/${selectedUser.distric_id}`)
+        .then((res) => {
+          setRegency(res.data.data.regency_id);
+          // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
+        });
+    }
 
     axios
       .get(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`)
@@ -107,6 +114,7 @@ export default function UserFormDrawer({
     setPassword('');
     setWa('');
     setGender('');
+    setRegency('');
     setDistric('');
     setLatitude('');
     setLongitude('');
@@ -230,6 +238,7 @@ export default function UserFormDrawer({
           <Title level={5}>Password</Title>
           <Input.Password
             value={password}
+            disabled={isEdit}
             onChange={(e) => setPassword(e.target.value)}
           />
         </Col>

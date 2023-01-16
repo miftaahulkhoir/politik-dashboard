@@ -1,15 +1,15 @@
-import { Button, notification } from 'antd';
+import { Button, Card, Col, Row, Space, notification } from 'antd';
 import axios from 'axios';
+import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { TbPencil, TbTrashX } from 'react-icons/tb';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 import UserFormDrawer from '../components/pagecomponents/users/UserFormDrawer';
+import UserSearchBar from '../components/pagecomponents/users/UserSearchBar';
 
 export default function Users(pageProps) {
   const [usersList, setUsersList] = useState([]);
-  const [searchList, setSearchList] = useState([]);
-  const [search, setSearch] = useState('');
 
   const [isDrawerActive, setIsDrawerActive] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
@@ -37,6 +37,45 @@ export default function Users(pageProps) {
       })
       .catch((err) => {});
   }, []);
+
+  // filters
+  const [filterSearch, setFilterSearch] = useState('');
+  const [filterDate, setFilterDate] = useState('');
+
+  const filteredUsers = useMemo(() => {
+    const filteredSearch =
+      filterSearch === ''
+        ? usersList
+        : usersList.filter((user) => {
+            return user.name.toLowerCase().includes(filterSearch.toLowerCase());
+          });
+
+    const dateInput = new Date(filterDate);
+    const filteredDate =
+      filterDate === ''
+        ? filteredSearch
+        : filteredSearch.filter((survey) => {
+            const date = new Date(survey.created_at);
+
+            return (
+              date.getFullYear() === dateInput.getFullYear() &&
+              date.getMonth() === dateInput.getMonth() &&
+              date.getDate() === dateInput.getDate()
+            );
+          });
+
+    return filteredDate;
+  }, [usersList, filterSearch, filterDate]);
+
+  const filterSearchHandler = useCallback(
+    debounce((e) => setFilterSearch(e.target.value), 300)
+  );
+
+  const filterDateHandler = useCallback(
+    debounce((_, valueString) => {
+      setFilterDate(valueString);
+    }, 300)
+  );
 
   const columns = useMemo(() => {
     return [
@@ -129,17 +168,6 @@ export default function Users(pageProps) {
     ];
   }, [currentUser]);
 
-  const handleSearch = (search) => {
-    setSearch(search);
-    let getlist = usersList.filter((x) =>
-      x.name.toLowerCase().includes(search.toLowerCase())
-    );
-    getlist.forEach((element, index) => {
-      getlist[index].no = index + 1;
-    });
-    setSearchList(getlist);
-  };
-
   return (
     <>
       {contextHolderNotification}
@@ -166,36 +194,26 @@ export default function Users(pageProps) {
           <li>Pemilih</li>
         </ul>
       </div>
-      <div className="col-12 pdv-3">
-        <div className="row">
-          <div className="col-3">
-            <input className="form-control"></input>
-          </div>
-          <div className="col-3">
-            <input className="form-control" type="date"></input>
-          </div>
-          <div className="col-3"></div>
-          <div className="col-3 d-flex justify-content-end">
-            <button
-              className="btn btn-sm btn-primary"
-              onClick={() => setIsDrawerActive(true)}
-            >
-              Tambah User
-            </button>
-          </div>
-        </div>
-      </div>
-      <div className="col-12">
-        <div className="card">
-          <div className="card-body p-0">
-            <CustomDataTable
-              columns={columns}
-              data={search !== '' ? searchList : usersList}
-              pagination
-            />
-          </div>
-        </div>
-      </div>
+
+      <Space direction="vertical" size="middle">
+        <UserSearchBar
+          filterSearchHandler={filterSearchHandler}
+          filterDateHandler={filterDateHandler}
+          addSurveyHandler={() => setIsDrawerActive(true)}
+        />
+
+        <Row justify="end">
+          <Col span={24}>
+            <Card bodyStyle={{ padding: '0px' }} style={{ overflow: 'hidden' }}>
+              <CustomDataTable
+                columns={columns}
+                data={filteredUsers}
+                pagination
+              />
+            </Card>
+          </Col>
+        </Row>
+      </Space>
     </>
   );
 }
