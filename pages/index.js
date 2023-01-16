@@ -144,28 +144,28 @@ export default function Index({
                         <li className='nav-item'>
                           <a
                             className='nav-link'
-                            onClick={() => router.push("/surveys")}>
+                            onClick={() => router.replace("/surveys")}>
                             Manajemen Survei
                           </a>
                         </li>
                         <li className='nav-item'>
                           <a
                             className='nav-link'
-                            onClick={() => router.push("/ongoing")}>
+                            onClick={() => router.replace("/ongoing")}>
                             Analitik Survei
                           </a>
                         </li>
                         <li className='nav-item'>
                           <a
                             className='nav-link'
-                            onClick={() => router.push("/social-reports")}>
+                            onClick={() => router.replace("/social-reports")}>
                             Sentimen Analisis
                           </a>
                         </li>
                         <li className='nav-item'>
                           <a
                             className='nav-link'
-                            onClick={() => router.push("/blast")}>
+                            onClick={() => router.replace("/blast")}>
                             WhatsApp Blast
                           </a>
                         </li>
@@ -174,27 +174,27 @@ export default function Index({
                           <div className='hover-dropdown navprofile-drop'>
                             <ul>
                               <li>
-                                <a onClick={() => router.push("/ongoing")}>
+                                <a onClick={() => router.replace("/ongoing")}>
                                   Report Kegiatan
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push("/ongoing")}>
+                                <a onClick={() => router.replace("/ongoing")}>
                                   Manajemen Event
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push("/ongoing")}>
+                                <a onClick={() => router.replace("/ongoing")}>
                                   Pengaduan
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push("/users")}>
+                                <a onClick={() => router.replace("/users")}>
                                   Manajemen User
                                 </a>
                               </li>
                               <li>
-                                <a onClick={() => router.push("/ongoing")}>
+                                <a onClick={() => router.replace("/ongoing")}>
                                   Manajemen Akses Admin
                                 </a>
                               </li>

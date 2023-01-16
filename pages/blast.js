@@ -102,7 +102,8 @@ export default function Blast(pageProps) {
               <input
                 className='form-control'
                 onChange={(e) => setNewNumber(e.target.value)}
-                disabled={customNumber === false}></input>
+                // disabled={customNumber === false}
+              ></input>
             </div>
             <div className='form-group'>
               <label>
@@ -112,17 +113,18 @@ export default function Blast(pageProps) {
                 className='form-control'
                 rows={10}
                 onChange={(e) => setPesan(e.target.value)}
-                disabled={
-                  kirimKoordinator === false &&
-                  kirimRelawan === false &&
-                  kirimPemilih === false &&
-                  customNumber === false
-                }></textarea>
+                // disabled={
+                //   kirimKoordinator === false &&
+                //   kirimRelawan === false &&
+                //   kirimPemilih === false &&
+                //   customNumber === false
+                // }
+              ></textarea>
             </div>
             <div className='form-group d-flex justify-content-end'>
               <button
                 className='btn btn-sm btn-primary'
-                disabled={pesan === ""}
+                // disabled={pesan === ""}
                 onClick={() => handleBlastPesan()}>
                 Kirim Pesan
               </button>
