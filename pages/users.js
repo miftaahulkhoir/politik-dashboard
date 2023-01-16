@@ -21,10 +21,12 @@ export default function Users(pageProps) {
     notification.useNotification();
 
   useEffect(() => {
+    const users = [];
     pageProps.users.forEach((element, index) => {
-      setUsersList((prev) => [...prev, { no: index + 1, ...element }]);
+      users.push({ no: index + 1, ...element });
     });
-    console.log(usersList);
+    console.log(users);
+    setUsersList([...users]);
   }, []);
 
   useEffect(() => {
@@ -68,13 +70,18 @@ export default function Users(pageProps) {
         name: 'Aksi',
         selector: (row) => {
           const canModify =
-            currentUser?.occupation?.level < row?.occupation?.level;
+            currentUser?.occupation?.level + 1 === row?.occupation?.level;
           return (
             <div className="d-flex gap-2">
               <Button
                 type="text"
                 disabled={!canModify}
-                icon={<TbPencil size={20} color="#7287A5" />}
+                icon={
+                  <TbPencil
+                    size={20}
+                    color={canModify ? '#7287A5' : '#cccccc'}
+                  />
+                }
                 shape="circle"
                 onClick={() => {
                   setSelectedUserId(row.id);
@@ -85,7 +92,12 @@ export default function Users(pageProps) {
               <Button
                 type="text"
                 disabled={!canModify}
-                icon={<TbTrashX size={20} color="#B12E2E" />}
+                icon={
+                  <TbTrashX
+                    size={20}
+                    color={canModify ? '#B12E2E' : '#cccccc'}
+                  />
+                }
                 shape="circle"
                 onClick={async () => {
                   try {
@@ -98,7 +110,7 @@ export default function Users(pageProps) {
 
                     apiNotification.success({
                       message: 'Sukses',
-                      description: `User ${row?.survey_name} berhasil dihapus`,
+                      description: `User ${row?.name} berhasil dihapus`,
                     });
                   } catch (error) {
                     apiNotification.error({
@@ -140,6 +152,7 @@ export default function Users(pageProps) {
         isEdit={isFormEdit}
         setIsEdit={setIsFormEdit}
         selectedUserId={selectedUserId}
+        setUsersList={setUsersList}
         currentUser={currentUser}
       />
 

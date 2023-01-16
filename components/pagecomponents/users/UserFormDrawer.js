@@ -22,6 +22,7 @@ export default function UserFormDrawer({
   setIsEdit,
   selectedUserId,
   apiNotification,
+  setUsersList,
   currentUser,
 }) {
   // input form states
@@ -115,13 +116,27 @@ export default function UserFormDrawer({
 
   // handler
   const updateUser = (data) => {
+    console.log('data', data);
     axios
-      .put(`${process.env.APP_BASEURL}api/users/${selectedUserId}`, data, {
-        withCredentials: true,
-        headers: { Cookie: `token=${token}` },
-      })
+      .put(`${process.env.APP_BASEURL}api/users/${selectedUserId}`, data)
       .then((res) => {
-        console.log('edit res', res);
+        apiNotification.success({
+          message: 'Berhasil',
+          description: 'Perubahan user telah disimpan',
+        });
+
+        setUsersList((prevUsers) => [
+          ...prevUsers.map((u) => {
+            if (u.id !== selectedUserId) return u;
+            data.id = selectedUserId;
+            data.no = u.no;
+            return data;
+          }),
+        ]);
+
+        setIsEdit(false);
+        setOpen(false);
+        clearForm();
       })
       .catch((err) => {});
   };
@@ -131,7 +146,12 @@ export default function UserFormDrawer({
     axios
       .post(`${process.env.APP_BASEURL}api/users/create`, data)
       .then((res) => {
-        console.log(res);
+        apiNotification.success({
+          message: 'Berhasil',
+          description: 'User baru ditambahkan',
+        });
+        setOpen(false);
+        clearForm();
       })
       .catch((err) => {});
   };
