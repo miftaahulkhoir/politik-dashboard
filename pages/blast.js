@@ -16,7 +16,7 @@ export default function Blast(pageProps) {
     let phone =
       "087720505350, 082298778245, 081413016714, 082227711152, 085260402035, 081398577794";
     axios
-      .post(`https://wa.patronpolitik.id/send`, {
+      .post(`${process.env.APP_BASEURL}api/wa/send`, {
         secretkey: "KyaRxzcVpqwe",
         phone: customNumber === true ? newNumber : phone,
         message: pesan,
