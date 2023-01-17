@@ -1,27 +1,27 @@
-import axios from "axios";
-import { useRouter } from "next/router";
-import { destroyCookie, parseCookies } from "nookies";
-import React from "react";
-import DashboardLayout from "../layouts/DashboardLayout";
-import "../public/css/style.css";
-import "../public/css/vendor/bootstrap.css";
-import "../public/css/vendor/flag-icon/flag-icon.css";
-import "../public/css/vendor/font-awesome.css";
-import "../public/css/vendor/icoicon/icoicon.css";
-import "../public/css/vendor/simplebar.css";
-import "../public/css/vendor/themify-icons.css";
-import { redirectUser } from "../utils/auth";
+import axios from 'axios';
+import { useRouter } from 'next/router';
+import { destroyCookie, parseCookies } from 'nookies';
+import React from 'react';
+import DashboardLayout from '../layouts/DashboardLayout';
+import '../public/css/style.css';
+import '../public/css/vendor/bootstrap.css';
+import '../public/css/vendor/flag-icon/flag-icon.css';
+import '../public/css/vendor/font-awesome.css';
+import '../public/css/vendor/icoicon/icoicon.css';
+import '../public/css/vendor/simplebar.css';
+import '../public/css/vendor/themify-icons.css';
+import { redirectUser } from '../utils/auth';
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
   return (
     <>
-      {(router.pathname !== "/login" &&
-        router.pathname !== "/register" &&
-        router.pathname !== "/" &&
+      {(router.pathname !== '/login' &&
+        router.pathname !== '/register' &&
+        router.pathname !== '/' &&
         pageProps.profile?.occupation?.level === 1) ||
-      (router.pathname !== "/login" &&
-        router.pathname !== "/register" &&
+      (router.pathname !== '/login' &&
+        router.pathname !== '/register' &&
         pageProps.profile?.occupation?.level > 1) ? (
         <DashboardLayout {...pageProps}>
           <Component {...pageProps} />
@@ -38,17 +38,18 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
   let { token } = parseCookies(ctx);
 
   const protectedRoutes =
-    ctx.pathname === "/" ||
-    ctx.pathname === "/surveys" ||
-    ctx.pathname === "/pemetaan" ||
-    ctx.pathname === "/users" ||
-    ctx.pathname === "/social-reports" ||
-    ctx.pathname === "/blast" ||
-    ctx.pathname === "/ongoing";
+    ctx.pathname === '/' ||
+    ctx.pathname === '/surveys' ||
+    ctx.pathname === '/survey-results' ||
+    ctx.pathname === '/pemetaan' ||
+    ctx.pathname === '/users' ||
+    ctx.pathname === '/social-reports' ||
+    ctx.pathname === '/blast' ||
+    ctx.pathname === '/ongoing';
 
   if (!token) {
-    destroyCookie(ctx, "token");
-    protectedRoutes && redirectUser(ctx, "/login");
+    destroyCookie(ctx, 'token');
+    protectedRoutes && redirectUser(ctx, '/login');
   } else {
     const res = await axios.get(`${process.env.APP_BASEURL}api/profile`, {
       withCredentials: true,
@@ -58,7 +59,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     if (Component.getServerSideProps) {
       pageProps = await Component.getServerSideProps(ctx);
     }
-    !protectedRoutes && redirectUser(ctx, "/");
+    !protectedRoutes && redirectUser(ctx, '/');
   }
   return { pageProps };
 };

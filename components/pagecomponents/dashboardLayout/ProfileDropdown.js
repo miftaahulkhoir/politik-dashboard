@@ -38,7 +38,3 @@ export default function ProfileDropdown() {
     </Dropdown>
   );
 }
-
-// export default function ProfileDropdown() {
-//   return <div>hai</div>;
-// }
