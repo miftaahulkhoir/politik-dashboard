@@ -4,6 +4,7 @@ export default function CustomDataTable(props) {
   return (
     <DataTable
       pagination
+      highlightOnHover
       customStyles={{
         rows: {
           style: {

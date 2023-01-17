@@ -4,7 +4,7 @@ import { TbPlus, TbSearch } from 'react-icons/tb';
 export default function UserSearchBar({
   filterSearchHandler,
   filterDateHandler,
-  addSurveyHandler,
+  addUserHandler,
 }) {
   return (
     <Row justify="space-between">
@@ -27,8 +27,8 @@ export default function UserSearchBar({
         </Row>
       </Col>
       <Col>
-        <Button icon={<TbPlus />} type="primary" onClick={addSurveyHandler}>
-          Tambah Survei
+        <Button icon={<TbPlus />} type="primary" onClick={addUserHandler}>
+          Tambah User
         </Button>
       </Col>
     </Row>

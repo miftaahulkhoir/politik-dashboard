@@ -14,7 +14,7 @@ export default function UserDataTable({
     return [
       {
         name: 'No',
-        selector: (row, index) => index + 1,
+        selector: (row) => row.no,
         width: '80px',
         center: true,
         sortable: true,

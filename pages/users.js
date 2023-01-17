@@ -81,10 +81,10 @@ export default function Users(pageProps) {
   );
 
   const filteredRoleUsers = useMemo(() => {
-    return filteredUsers.filter(
-      (user) => user?.occupation?.level === activeRoleLevel
-    );
-  }, [activeRoleLevel]);
+    return filteredUsers
+      .filter((user) => user?.occupation?.level === activeRoleLevel)
+      .map((user, i) => ({ ...user, no: i + 1 }));
+  }, [activeRoleLevel, filteredUsers]);
 
   return (
     <>
@@ -115,7 +115,7 @@ export default function Users(pageProps) {
         <UserSearchBar
           filterSearchHandler={filterSearchHandler}
           filterDateHandler={filterDateHandler}
-          addSurveyHandler={() => setIsDrawerActive(true)}
+          addUserHandler={() => setIsDrawerActive(true)}
         />
 
         <UserDataTable

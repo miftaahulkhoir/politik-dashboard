@@ -165,6 +165,13 @@ export default function UserFormDrawer({
           message: 'Berhasil',
           description: 'User baru ditambahkan',
         });
+
+        setUsersList((prevUsers) => {
+          const data = res.data.data;
+          data.no = prevUsers.length + 1;
+          return [...prevUsers, data];
+        });
+
         setOpen(false);
         clearForm();
       })
@@ -248,7 +255,8 @@ export default function UserFormDrawer({
             onChange={(value) => setOccupation(value)}
             style={{ width: '100%' }}
             options={occupations
-              .filter((o) => o.level > currentUser?.occupation?.level)
+              // .filter((o) => o.level > currentUser?.occupation?.level)
+              .filter((o) => o.level === currentUser?.occupation?.level + 1)
               .map((o) => ({ label: o.name, value: o.id }))}
           />
         </Col>
