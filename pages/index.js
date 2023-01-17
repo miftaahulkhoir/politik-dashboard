@@ -11,7 +11,7 @@ import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
 import SummaryCard from '../components/elements/summaryCard/SummaryCard';
 import BlueCard from '../components/pagecomponents/home/BlueCard';
 import ChartCard from '../components/pagecomponents/home/ChartCard';
-import { logoutUser } from '../utils/auth';
+import HomeNavbar from '../components/pagecomponents/home/HomeNavbar';
 
 const Map = dynamic(() => import('../components/elements/map/Map'), {
   ssr: false,
@@ -119,140 +119,7 @@ export default function Index({
       </Head>
       {profile.occupation.level === 1 ? (
         <>
-          <header className="codex-header-admin">
-            <div className="custom-container">
-              <div className="row">
-                <div className="col-12">
-                  <div className="header-contian d-flex justify-content-between">
-                    <div className="logo-gridwrap">
-                      <a className="codexbrand-logo">
-                        <img
-                          style={{ width: '40px' }}
-                          src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`}
-                          alt="theeme-logo"
-                        />
-                        <img
-                          className="img-fluid"
-                          style={{ width: '100px' }}
-                          src={`${process.env.APP_BASEURL}images/logo/logo.png`}
-                          alt="theeme-logo"
-                        />
-                      </a>
-                    </div>
-                    <div>
-                      <ul className="nav menu-admin">
-                        <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            onClick={() => router.replace('/surveys')}
-                          >
-                            Manajemen Survei
-                          </a>
-                        </li>
-                        <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            onClick={() => router.replace('/ongoing')}
-                          >
-                            Analitik Survei
-                          </a>
-                        </li>
-                        <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            onClick={() => router.replace('/social-reports')}
-                          >
-                            Sentimen Analisis
-                          </a>
-                        </li>
-                        <li className="nav-item">
-                          <a
-                            className="nav-link"
-                            onClick={() => router.replace('/blast')}
-                          >
-                            WhatsApp Blast
-                          </a>
-                        </li>
-                        <li>
-                          <a className="nav-link">More Menu</a>
-                          <div className="hover-dropdown navprofile-drop">
-                            <ul>
-                              <li>
-                                <a onClick={() => router.replace('/ongoing')}>
-                                  Report Kegiatan
-                                </a>
-                              </li>
-                              <li>
-                                <a onClick={() => router.replace('/ongoing')}>
-                                  Manajemen Event
-                                </a>
-                              </li>
-                              <li>
-                                <a onClick={() => router.replace('/ongoing')}>
-                                  Pengaduan
-                                </a>
-                              </li>
-                              <li>
-                                <a onClick={() => router.replace('/users')}>
-                                  Manajemen User
-                                </a>
-                              </li>
-                              <li>
-                                <a onClick={() => router.replace('/ongoing')}>
-                                  Manajemen Akses Admin
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </li>
-
-                        <li className="nav-profile mx-5">
-                          <a>
-                            <div className="media">
-                              <div className="user-icon">
-                                <img
-                                  className="img-fluid rounded-50"
-                                  style={{ width: '40px' }}
-                                  src={`${process.env.APP_BASEURL}images/avtar/3.jpg`}
-                                  alt="logo"
-                                />
-                              </div>
-                            </div>
-                          </a>
-                          <div className="hover-dropdown navprofile-drop">
-                            <ul>
-                              <li>
-                                <a>
-                                  <i className="ti-user"></i>profile
-                                </a>
-                              </li>
-                              <li>
-                                <a>
-                                  <i className="ti-email"></i>inbox
-                                </a>
-                              </li>
-                              <li>
-                                <a>
-                                  {' '}
-                                  <i className="ti-settings"></i>setting{' '}
-                                </a>
-                              </li>
-                              <li onClick={() => logoutUser()}>
-                                {' '}
-                                <a>
-                                  <i className="fa fa-sign-out"></i>log out
-                                </a>
-                              </li>
-                            </ul>
-                          </div>
-                        </li>
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </header>
+          <HomeNavbar />
           <div className="left-content">
             <div className="card">
               <div className="card-body p-0">

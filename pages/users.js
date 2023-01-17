@@ -102,7 +102,7 @@ export default function Users(pageProps) {
       />
 
       <div className="col-12 pdv-3">
-        <h1>Manajemen User</h1>
+        <h1>Manajemen Pengguna</h1>
       </div>
 
       <Space direction="vertical" size="middle">
@@ -124,6 +124,9 @@ export default function Users(pageProps) {
           setSelectedUser={setSelectedUser}
           setIsFormEdit={setIsFormEdit}
           setIsDrawerActive={setIsDrawerActive}
+          apiNotification={apiNotification}
+          usersList={usersList}
+          setUsersList={setUsersList}
         />
       </Space>
     </>
@@ -142,8 +145,6 @@ export async function getServerSideProps(ctx) {
       users = res.data.data;
     })
     .catch((err) => {});
-
-  let occupations = [];
 
   return { props: { users } };
 }
