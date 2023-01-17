@@ -231,7 +231,7 @@ export async function getServerSideProps(ctx) {
   
   // get groups
   await axios
-    .get(`http://127.0.0.1:3131/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
+    .get(`${process.env.API_SOURCE}/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
