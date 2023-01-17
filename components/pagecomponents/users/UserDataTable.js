@@ -1,4 +1,5 @@
-import { Button, Card, Col, Row } from 'antd';
+import { Button, Card, Col, Modal, Row } from 'antd';
+import axios from 'axios';
 import { useMemo } from 'react';
 import { TbPencil, TbTrashX } from 'react-icons/tb';
 import CustomDataTable from '../../elements/customDataTable/CustomDataTable';
@@ -9,7 +10,46 @@ export default function UserDataTable({
   setSelectedUser,
   setIsFormEdit,
   setIsDrawerActive,
+  apiNotification,
+  usersList,
+  setUsersList,
 }) {
+  const deleteUserHandler = (row) => {
+    Modal.confirm({
+      title: 'Peringatan',
+      content: `Apakah kamu yakin ingin menghapus ${row.name}`,
+      okText: 'Ya',
+      okType: 'danger',
+      cancelText: 'Tidak',
+      onOk: function () {
+        axios
+          .delete(`${process.env.APP_BASEURL}api/users/${row?.id}`)
+          .then(() => {
+            const newUsers = usersList.filter((s) => s.id !== row?.id);
+            setUsersList([...newUsers]);
+
+            apiNotification.success({
+              message: 'Sukses',
+              description: `User ${row?.name} berhasil dihapus`,
+            });
+          })
+          .catch((err) => {
+            apiNotification.error({
+              message: 'Gagal',
+              description: 'Terjadi kesalahan',
+            });
+            console.error(err);
+          });
+      },
+    });
+  };
+
+  const updateUserHandler = (row) => {
+    setSelectedUser(row);
+    setIsFormEdit(true);
+    setIsDrawerActive(true);
+  };
+
   const columns = useMemo(() => {
     return [
       {
@@ -36,7 +76,6 @@ export default function UserDataTable({
       {
         name: 'Email',
         selector: (row) => row?.email,
-        sortable: true,
       },
       {
         name: 'Aksi',
@@ -55,11 +94,7 @@ export default function UserDataTable({
                   />
                 }
                 shape="circle"
-                onClick={() => {
-                  setSelectedUser(row);
-                  setIsFormEdit(true);
-                  setIsDrawerActive(true);
-                }}
+                onClick={() => updateUserHandler(row)}
               ></Button>
               <Button
                 type="text"
@@ -71,26 +106,7 @@ export default function UserDataTable({
                   />
                 }
                 shape="circle"
-                onClick={async () => {
-                  try {
-                    await axios.delete(
-                      `${process.env.APP_BASEURL}api/users/${row?.id}`
-                    );
-
-                    const newUsers = usersList.filter((s) => s.id !== row.id);
-                    setUsersList([...newUsers]);
-
-                    apiNotification.success({
-                      message: 'Sukses',
-                      description: `User ${row?.name} berhasil dihapus`,
-                    });
-                  } catch (error) {
-                    apiNotification.error({
-                      message: 'Gagal',
-                      description: 'Terjadi kesalahan',
-                    });
-                  }
-                }}
+                onClick={() => deleteUserHandler(row)}
               ></Button>
             </div>
           );
