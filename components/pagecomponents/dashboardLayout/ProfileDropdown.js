@@ -1,5 +1,5 @@
 import { Avatar, Dropdown } from 'antd';
-import { TbLogout, TbMail, TbSettings, TbUser } from 'react-icons/tb';
+import { TbLogout, TbSettings, TbUser } from 'react-icons/tb';
 import { logoutUser } from '../../../utils/auth';
 
 export default function ProfileDropdown() {
@@ -11,16 +11,11 @@ export default function ProfileDropdown() {
     },
     {
       key: '2',
-      label: 'Kotak Masuk',
-      icon: <TbMail size={16} />,
-    },
-    {
-      key: '3',
       label: 'Pengaturan',
       icon: <TbSettings size={16} />,
     },
     {
-      key: '4',
+      key: '3',
       label: 'Keluar',
       icon: <TbLogout size={16} />,
       danger: true,
