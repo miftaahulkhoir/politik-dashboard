@@ -3,7 +3,13 @@ import { useMemo } from 'react';
 import { TbPencil, TbTrashX } from 'react-icons/tb';
 import CustomDataTable from '../../elements/customDataTable/CustomDataTable';
 
-export default function UserDataTable({ data, currentUser }) {
+export default function UserDataTable({
+  data,
+  currentUser,
+  setSelectedUser,
+  setIsFormEdit,
+  setIsDrawerActive,
+}) {
   const columns = useMemo(() => {
     return [
       {

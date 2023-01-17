@@ -68,21 +68,23 @@ export default function Users(pageProps) {
     return filteredDate;
   }, [usersList, filterSearch, filterDate]);
 
-  const filteredRoleUsers = useMemo(() => {
-    return filteredUsers.filter(
-      (user) => user?.occupation?.level === activeRoleLevel
-    );
-  }, [activeRoleLevel]);
-
   const filterSearchHandler = useCallback(
-    debounce((e) => setFilterSearch(e.target.value), 300)
+    debounce((e) => setFilterSearch(e.target.value), 300),
+    []
   );
 
   const filterDateHandler = useCallback(
     debounce((_, valueString) => {
       setFilterDate(valueString);
-    }, 300)
+    }, 300),
+    []
   );
+
+  const filteredRoleUsers = useMemo(() => {
+    return filteredUsers.filter(
+      (user) => user?.occupation?.level === activeRoleLevel
+    );
+  }, [activeRoleLevel]);
 
   return (
     <>
@@ -116,7 +118,13 @@ export default function Users(pageProps) {
           addSurveyHandler={() => setIsDrawerActive(true)}
         />
 
-        <UserDataTable data={filteredRoleUsers} currentUser={currentUser} />
+        <UserDataTable
+          data={filteredRoleUsers}
+          currentUser={currentUser}
+          setSelectedUser={setSelectedUser}
+          setIsFormEdit={setIsFormEdit}
+          setIsDrawerActive={setIsDrawerActive}
+        />
       </Space>
     </>
   );
