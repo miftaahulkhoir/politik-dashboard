@@ -15,7 +15,6 @@ const { TextArea } = Input;
 const { Text, Title } = Typography;
 
 export default function UserFormDrawer({
-  token,
   open,
   setOpen,
   isEdit,

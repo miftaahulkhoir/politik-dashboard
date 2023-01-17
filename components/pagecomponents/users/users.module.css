@@ -1,0 +1,17 @@
+/* USER ROLE SELECT */
+
+.button {
+  color: #191d23;
+  font-weight: 600;
+  padding: 0;
+  border-radius: 0;
+}
+
+.button:hover {
+  color: #486dfd;
+}
+
+.button_active {
+  color: #486dfd;
+  border-bottom: 1px solid #486dfd;
+}

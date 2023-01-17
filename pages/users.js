@@ -1,11 +1,11 @@
-import { Button, Card, Col, Row, Space, notification } from 'antd';
+import { Space, notification } from 'antd';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { TbPencil, TbTrashX } from 'react-icons/tb';
-import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
+import UserDataTable from '../components/pagecomponents/users/UserDataTable';
 import UserFormDrawer from '../components/pagecomponents/users/UserFormDrawer';
+import UserRoleSelect from '../components/pagecomponents/users/UserRoleSelect';
 import UserSearchBar from '../components/pagecomponents/users/UserSearchBar';
 
 export default function Users(pageProps) {
@@ -16,6 +16,7 @@ export default function Users(pageProps) {
   const [selectedUser, setSelectedUser] = useState({});
 
   const [currentUser, setCurrentUser] = useState({});
+  const [activeRoleLevel, setActiveRoleLevel] = useState(1);
 
   const [apiNotification, contextHolderNotification] =
     notification.useNotification();
@@ -67,6 +68,12 @@ export default function Users(pageProps) {
     return filteredDate;
   }, [usersList, filterSearch, filterDate]);
 
+  const filteredRoleUsers = useMemo(() => {
+    return filteredUsers.filter(
+      (user) => user?.occupation?.level === activeRoleLevel
+    );
+  }, [activeRoleLevel]);
+
   const filterSearchHandler = useCallback(
     debounce((e) => setFilterSearch(e.target.value), 300)
   );
@@ -77,103 +84,11 @@ export default function Users(pageProps) {
     }, 300)
   );
 
-  const columns = useMemo(() => {
-    return [
-      {
-        name: 'No',
-        selector: (row) => row.no,
-        width: '80px',
-        center: true,
-        sortable: true,
-      },
-      {
-        name: 'NIK',
-        selector: (row) => row.nik,
-      },
-      {
-        name: 'Nama',
-        selector: (row) => row?.name,
-      },
-      {
-        name: 'Jenis Kelamin',
-        selector: (row) => (row?.gender === 'male' ? 'Laki-laki' : 'Perempuan'),
-        width: '140px',
-        sortable: true,
-      },
-      {
-        name: 'Email',
-        selector: (row) => row?.email,
-        sortable: true,
-      },
-      {
-        name: 'Aksi',
-        selector: (row) => {
-          const canModify =
-            currentUser?.occupation?.level + 1 === row?.occupation?.level;
-          return (
-            <div className="d-flex gap-2">
-              <Button
-                type="text"
-                disabled={!canModify}
-                icon={
-                  <TbPencil
-                    size={20}
-                    color={canModify ? '#7287A5' : '#cccccc'}
-                  />
-                }
-                shape="circle"
-                onClick={() => {
-                  setSelectedUser(row);
-                  setIsFormEdit(true);
-                  setIsDrawerActive(true);
-                }}
-              ></Button>
-              <Button
-                type="text"
-                disabled={!canModify}
-                icon={
-                  <TbTrashX
-                    size={20}
-                    color={canModify ? '#B12E2E' : '#cccccc'}
-                  />
-                }
-                shape="circle"
-                onClick={async () => {
-                  try {
-                    await axios.delete(
-                      `${process.env.APP_BASEURL}api/users/${row?.id}`
-                    );
-
-                    const newUsers = usersList.filter((s) => s.id !== row.id);
-                    setUsersList([...newUsers]);
-
-                    apiNotification.success({
-                      message: 'Sukses',
-                      description: `User ${row?.name} berhasil dihapus`,
-                    });
-                  } catch (error) {
-                    apiNotification.error({
-                      message: 'Gagal',
-                      description: 'Terjadi kesalahan',
-                    });
-                  }
-                }}
-              ></Button>
-            </div>
-          );
-        },
-        width: '130px',
-        center: true,
-      },
-    ];
-  }, [currentUser]);
-
   return (
     <>
       {contextHolderNotification}
 
       <UserFormDrawer
-        token={pageProps.token}
         open={isDrawerActive}
         setOpen={setIsDrawerActive}
         apiNotification={apiNotification}
@@ -187,32 +102,21 @@ export default function Users(pageProps) {
       <div className="col-12 pdv-3">
         <h1>Manajemen User</h1>
       </div>
-      <div className="col-12 pdv-3 custom-tabs">
-        <ul>
-          <li>Kordinator</li>
-          <li>Relawan</li>
-          <li>Pemilih</li>
-        </ul>
-      </div>
 
       <Space direction="vertical" size="middle">
+        <UserRoleSelect
+          currentUser={currentUser}
+          activeLevel={activeRoleLevel}
+          setActiveLevel={setActiveRoleLevel}
+        />
+
         <UserSearchBar
           filterSearchHandler={filterSearchHandler}
           filterDateHandler={filterDateHandler}
           addSurveyHandler={() => setIsDrawerActive(true)}
         />
 
-        <Row justify="end">
-          <Col span={24}>
-            <Card bodyStyle={{ padding: '0px' }} style={{ overflow: 'hidden' }}>
-              <CustomDataTable
-                columns={columns}
-                data={filteredUsers}
-                pagination
-              />
-            </Card>
-          </Col>
-        </Row>
+        <UserDataTable data={filteredRoleUsers} currentUser={currentUser} />
       </Space>
     </>
   );
@@ -230,5 +134,8 @@ export async function getServerSideProps(ctx) {
       users = res.data.data;
     })
     .catch((err) => {});
-  return { props: { token, users } };
+
+  let occupations = [];
+
+  return { props: { users } };
 }
