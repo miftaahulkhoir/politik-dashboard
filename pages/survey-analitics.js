@@ -1,13 +1,13 @@
-import { Col, Row, Space, Tabs } from 'antd';
+import { Space } from 'antd';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
 import { parseCookies } from 'nookies';
 import { useEffect, useState } from 'react';
-import SurveyDropdownSelector from '../components/pagecomponents/surveyResults/SurveyDropdownSelector';
-import SurveyResultHeader from '../components/pagecomponents/surveyResults/SurveyResultHeader';
+import SurveyDropdownSelector from '../components/pagecomponents/surveyAnalitics/SurveyDropdownSelector';
+import SurveyResultHeader from '../components/pagecomponents/surveyAnalitics/SurveyResultHeader';
 
 const SurveyCharts = dynamic(() =>
-  import('../components/pagecomponents/surveyResults/SurveyCharts')
+  import('../components/pagecomponents/surveyAnalitics/SurveyCharts')
 );
 
 export default function SurveyResults({ surveys }) {
@@ -22,18 +22,18 @@ export default function SurveyResults({ surveys }) {
       .catch((err) => {});
   }, [selectedSurveyID]);
 
-  const tabItems = [
-    {
-      key: '1',
-      label: `Rangkuman`,
-      children: <SurveyCharts survey={survey} />,
-    },
-    {
-      key: '2',
-      label: `Jawaban responden`,
-      children: `Under development`,
-    },
-  ];
+  // const tabItems = [
+  //   {
+  //     key: '1',
+  //     label: `Rangkuman`,
+  //     children: <SurveyCharts survey={survey} />,
+  //   },
+  //   {
+  //     key: '2',
+  //     label: `Jawaban responden`,
+  //     children: `Under development`,
+  //   },
+  // ];
 
   return (
     <>
@@ -50,16 +50,31 @@ export default function SurveyResults({ surveys }) {
 
         {survey ? (
           <>
-            {/* row header */}
             <SurveyResultHeader survey={survey} />
-            {/* row tabs -> charts and results */}
-            <Row>
-              <Col span={24}>
-                <Tabs defaultActiveKey="1" items={tabItems} centered />
-              </Col>
-            </Row>
+
+            {/* <Tabs defaultActiveKey="1" items={tabItems} centered /> */}
+            <SurveyCharts survey={survey} />
           </>
-        ) : null}
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '32px 0',
+            }}
+          >
+            <img
+              style={{ width: '30%', maxHeight: '280px' }}
+              src="/images/people_with_up.svg"
+              alt="select"
+            />
+            <div style={{ fontSize: '16px', marginTop: '16px' }}>
+              Tolong pilih survei terlebih dahulu
+            </div>
+          </div>
+        )}
       </Space>
     </>
   );
