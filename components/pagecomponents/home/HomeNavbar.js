@@ -8,9 +8,9 @@ export default function HomeNavbar() {
 
   const links = [
     { name: 'Manajemen Survei', path: '/surveys' },
-    { name: 'Analitik Survei', path: '/survey-analitics' },
-    { name: 'Sentimen Analisis', path: '/social-reports' },
-    { name: 'WhatsApp Blast', path: '/blast' },
+    { name: 'Analisis Survei', path: '/survey-analysis' },
+    { name: 'Analisis Sentimen', path: '/sentiment-analysis' },
+    { name: 'WhatsApp Blast', path: '/whatsapp-blast' },
   ];
 
   return (
