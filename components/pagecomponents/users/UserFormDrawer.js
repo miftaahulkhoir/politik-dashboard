@@ -127,7 +127,6 @@ export default function UserFormDrawer({
 
   // handler
   const updateUser = (data) => {
-    console.log('data', data);
     axios
       .put(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`, data)
       .then((res) => {

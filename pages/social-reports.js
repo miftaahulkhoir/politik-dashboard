@@ -102,8 +102,9 @@ export default function SocialReports(pageProps) {
   // 2. get report 
   const fetchSocialData = async () => {
     try {
+      console.log(`${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`)
       const res = await axios.post(
-        `https://panel.patronpolitik.id/api/social/156097/reports`,
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
         {
           keyword_id: selectedTopicData,
           from_time: filterDate[0],
@@ -157,7 +158,7 @@ export default function SocialReports(pageProps) {
         <div className='col-12'>
           <Card noPadding>
             <SocialSummaryCard
-              title={"Performance Summary"}
+              title={"Performance Summaries"}
               subtitle={
                 "View your key profile performance metrics from the reporting period."
               }
@@ -211,7 +212,7 @@ export async function getServerSideProps(ctx) {
   
   // get groups
   await axios
-    .get(`https://panel.patronpolitik.id/api/social/156097`, {
+    .get(`${process.env.APP_BASEURL}api/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })

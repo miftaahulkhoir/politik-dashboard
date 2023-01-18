@@ -64,7 +64,6 @@ export default function SurveyFormDrawer({
         });
         return newQuestion;
       });
-      console.log('new quests', newQuestions);
       if (isEdit) {
         // update
 
