@@ -5,21 +5,25 @@ import {
   Divider,
   Drawer,
   Input,
+  notification,
   Row,
   Select,
   Space,
   Switch,
-  Typography,
-  notification,
-} from 'antd';
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import Head from 'next/head';
-import { parseCookies } from 'nookies';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import Card from '../components/elements/card/Card';
-import SocialChartCard from '../components/pagecomponents/home/SocialChartCard';
-import SocialSummaryCard from '../components/pagecomponents/home/SocialSummaryCard';
+  Typography
+} from "antd";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import { parseCookies } from "nookies";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import Head from "next/head";
+import Card from "../components/elements/card/Card";
+import SocialTimeChart from "../components/pagecomponents/home/SocialTimeChart";
+import SocialSummaryCard from "../components/pagecomponents/home/SocialSummaryCard";
+import {
+  TbPlus,
+  TbSearch,
+} from "react-icons/tb";
 const { RangePicker } = DatePicker;
 
 const { TextArea } = Input;
@@ -30,7 +34,10 @@ export default function SocialReports(pageProps) {
   const [summaryEngagements, setSummaryEngagements] = useState(null);
   const [summaryEngagementRate, setSummaryEngagementRate] = useState(null);
   const [summaryPostLinkClicks, setSummaryPostLinkClicks] = useState(null);
-  const [audienceGrowthData, setAudienceGrowthData] = useState([]);
+
+  const [mentionData, setMentionData] = useState(null);
+
+
   const [impressionData, setImpressionData] = useState([]);
   const [engagementData, setEngagementData] = useState([]);
   const [engagementRateData, setEngagementRateData] = useState([]);
@@ -45,6 +52,7 @@ export default function SocialReports(pageProps) {
   const [isGroupAssigned, setIsGroupAssigned] = useState(false);
   const [isTopicAssigned, setIsTopicAssigned] = useState(false);
   const [isDateAssigned, setIsDateAssigned] = useState(false);
+  const [isDataFetched, setIsDataFetched] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
@@ -69,6 +77,7 @@ export default function SocialReports(pageProps) {
     if (isGroupAssigned && isTopicAssigned && isDateAssigned) {
       fetchSocialData();
     }
+    console.log("audience growth", mentionData);
   }, [selectedGroupData, selectedTopicData, filterDate]);
 
   const selectGroupHandler = useCallback(
@@ -105,18 +114,25 @@ export default function SocialReports(pageProps) {
   // 2. get report
   const fetchSocialData = async () => {
     try {
-      console.log(`${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`);
-      const res = await axios
-        .post(`${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`, {
-          keyword_id: selectedTopicData,
-          from_time: filterDate[0],
-          to_time: filterDate[1],
-          dimension_type: 'time',
-        })
-        .then((response) => {
-          console.log(res);
-          console.log(response);
-        });
+      let request = {
+        keyword_id: selectedTopicData.toString(),
+        feed_type: "keyword",
+        from_time: filterDate[0].toString(),
+        to_time: filterDate[1].toString(),
+        time_resolution: "day",
+        dimension_type: "time",
+        sort_direction: "dsc",
+        sort_by: "key",
+        value_type: "count",
+        merge_operator: "sum"
+      };
+      const res = await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
+        request
+      );
+      // console.log("IMPORTANT", res);
+      console.log("response", res.data.data.data.entries);
+      setMentionData(res.data.data.data.entries);
       if (!res?.data?.status) throw new Error('unknown error');
     } catch (error) {
       console.error(error);
@@ -172,33 +188,33 @@ export default function SocialReports(pageProps) {
         </div>
         <div className="col-12">
           <Card noPadding>
-            <SocialChartCard
-              title={'Audience Growth'}
-              data={audienceGrowthData}
+            <SocialTimeChart
+              title={"Audience Growth"}
+              data={mentionData}
             />
           </Card>
         </div>
         <div className="col-12">
           <Card noPadding>
-            <SocialChartCard title={'Impressions'} data={impressionData} />
+            <SocialTimeChart title={"Impressions"} data={impressionData} />
           </Card>
         </div>
         <div className="col-12">
           <Card noPadding>
-            <SocialChartCard title={'Engagement'} data={engagementData} />
+            <SocialTimeChart title={"Engagement"} data={engagementData} />
           </Card>
         </div>
         <div className="col-12">
           <Card noPadding>
-            <SocialChartCard
-              title={'Engagement Rate'}
+            <SocialTimeChart
+              title={"Engagement Rate"}
               data={engagementRateData}
             />
           </Card>
         </div>
         <div className="col-12">
           <Card noPadding>
-            <SocialChartCard title={'Video Views'} data={videoViewsData} />
+            <SocialTimeChart title={"Video Views"} data={videoViewsData} />
           </Card>
         </div>
       </Space>
