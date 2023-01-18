@@ -68,7 +68,6 @@ export default function SocialReports(pageProps) {
   }, []);
 
   useEffect(() => {
-    console.log("use effect");
     if (isGroupAssigned && isTopicAssigned && isDateAssigned) {
       fetchSocialData();
     }
@@ -103,38 +102,20 @@ export default function SocialReports(pageProps) {
   // 2. get report 
   const fetchSocialData = async () => {
     try {
-      console.log("completed", selectedGroupData, selectedTopicData, filterDate, `${mtkToken}`);
-
-      let requestBody = {
-        access_token: `${mtkToken}`,
-        data_request: {
-          source_feeds: [{
-            feed_type: "keyword",
-            keyword_id: selectedTopicData
-          }],
+      console.log(`${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`)
+      const res = await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
+        {
+          keyword_id: selectedTopicData,
           from_time: filterDate[0],
           to_time: filterDate[1],
-          time_resolution: "day",
-          dimension: {
-            dimension_type: "dsc",
-            sort_by: "key"
-          },
-          report_value: {
-            value_type: "count",
-            merge_operator: "sum"
-          }
-        } 
-      }
-      console.log('post complete data', `${process.env.API_SOURCE}social/${mtkOrgId}/reports`);
-
-      const res = await axios.post(
-        `${process.env.API_SOURCE}social/${mtkOrgId}/reports`, {
-          data: requestBody,
-          withCredentials: true,
+          dimension_type: "time"
         }
       ).then((response) => {
+        console.log(res);
         console.log(response);
-      })
+      });
+      if (!res?.data?.status) throw new Error('unknown error');
     } catch (error) {
       console.error(error);
       apiNotification.error({
@@ -177,7 +158,7 @@ export default function SocialReports(pageProps) {
         <div className='col-12'>
           <Card noPadding>
             <SocialSummaryCard
-              title={"Performance Summary"}
+              title={"Performance Summaries"}
               subtitle={
                 "View your key profile performance metrics from the reporting period."
               }
@@ -231,14 +212,13 @@ export async function getServerSideProps(ctx) {
   
   // get groups
   await axios
-    .get(`${process.env.API_SOURCE}/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
+    .get(`${process.env.APP_BASEURL}api/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
       reports = res.data.data;
       mediatoolkit = {
-        url: `${process.env.API_SOURCE}`,
         orgid: `${process.env.MEDIATOOLKIT_ORG_ID}`
       }
     })

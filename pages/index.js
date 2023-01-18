@@ -1,24 +1,25 @@
-import axios from 'axios';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { parseCookies } from 'nookies';
-import { useEffect, useMemo, useState } from 'react';
-import { TbDotsVertical } from 'react-icons/tb';
-import Card from '../components/elements/card/Card';
-import styles from '../components/elements/map/Home.module.css';
-import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
-import SummaryCard from '../components/elements/summaryCard/SummaryCard';
-import BlueCard from '../components/pagecomponents/home/BlueCard';
-import ChartCard from '../components/pagecomponents/home/ChartCard';
-import HomeNavbar from '../components/pagecomponents/home/HomeNavbar';
+import axios from "axios";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { parseCookies } from "nookies";
+import { useEffect, useMemo, useState } from "react";
+import { TbDotsVertical } from "react-icons/tb";
+import Card from "../components/elements/card/Card";
+import styles from "../components/elements/map/Home.module.css";
+import NameAvatar from "../components/elements/nameAvatar/NameAvatar";
+import SummaryCard from "../components/elements/summaryCard/SummaryCard";
+import BlueCard from "../components/pagecomponents/home/BlueCard";
+import ChartCard from "../components/pagecomponents/home/ChartCard";
+import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+const Centrifuge = require("centrifuge");
 
-const Map = dynamic(() => import('../components/elements/map/Map'), {
+const Map = dynamic(() => import("../components/elements/map/Map"), {
   ssr: false,
 });
 
 const CustomDataTable = dynamic(
-  () => import('../components/elements/customDataTable/CustomDataTable'),
+  () => import("../components/elements/customDataTable/CustomDataTable"),
   { ssr: false }
 );
 
@@ -35,17 +36,59 @@ export default function Index({
   const [isMounted, setIsMounted] = useState(false);
   const [zoom, setZoom] = useState(12.3);
   const [cordinate, setCordinate] = useState([-7.0335559, 107.6589375]);
-  const [position, setPosition] = useState('data');
+  const [position, setPosition] = useState("data");
+  const [dataKordinator, setKordinator] = useState([]);
+  const [dataRelawan, setRelawan] = useState([]);
   const [showKoordinator, setShowKoordinator] = useState(false);
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
   const [showBlackList, setShowBlackList] = useState(false);
+  const centrifuge = new Centrifuge(process.env.WEBSOCKET_CREDENTIALS_HOST);
+
   useEffect(() => {
     setIsMounted(true);
     if (window.screen.width === 1366) {
       setZoom(11.8);
     }
+    setKordinator(kordinator);
+    setRelawan(relawan);
   }, []);
+
+  useEffect(() => {
+    centrifuge.connect();
+    centrifuge.on("connect", function (ctx) {
+      console.log("connected", ctx);
+    });
+    if (showKoordinator === true) {
+      dataKordinator.forEach((element) => {
+        centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
+          let newarr = [...dataKordinator];
+          let id = newarr.findIndex((x) => x.id === element.id);
+          newarr[id].latitude = ctx.data.latitude;
+          newarr[id].longitude = ctx.data.longitude;
+          setKordinator(newarr);
+        });
+      });
+    }
+  }, [showKoordinator]);
+
+  useEffect(() => {
+    centrifuge.connect();
+    centrifuge.on("connect", function (ctx) {
+      console.log("connected", ctx);
+    });
+    if (showRelawan === true) {
+      dataRelawan.forEach((element) => {
+        centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
+          let newarr = [...dataRelawan];
+          let id = newarr.findIndex((x) => x.id === element.id);
+          newarr[id].latitude = ctx.data.latitude;
+          newarr[id].longitude = ctx.data.longitude;
+          setRelawan(newarr);
+        });
+      });
+    }
+  }, [showRelawan]);
 
   const ranks = useMemo(() => {
     return users.map((user, i) => {
@@ -56,57 +99,57 @@ export default function Index({
 
   const columns = [
     {
-      name: 'No',
+      name: "No",
       selector: (row) => row.no,
-      width: '80px',
+      width: "80px",
       center: true,
       sortable: true,
     },
     {
-      name: 'Nama Koordinator',
+      name: "Nama Koordinator",
       grow: 3,
       selector: (row) => (
-        <div className="d-flex align-items-center">
+        <div className='d-flex align-items-center'>
           <NameAvatar longName={row.name} />
-          <div className="ml-12">{row.name}</div>
+          <div className='ml-12'>{row.name}</div>
         </div>
       ),
     },
     {
-      name: 'Relawan',
-      selector: (row) => row.relawan || 0 + ' relawan',
+      name: "Relawan",
+      selector: (row) => row.relawan || 0 + " relawan",
     },
     {
-      name: 'Pemilih',
-      selector: (row) => row.pemilih || 0 + ' pemilih',
+      name: "Pemilih",
+      selector: (row) => row.pemilih || 0 + " pemilih",
     },
     {
-      name: '',
+      name: "",
       selector: (row) => (
-        <span style={{ color: '#016CEE' }}>{row.occupation.name}</span>
+        <span style={{ color: "#016CEE" }}>{row.occupation.name}</span>
       ),
     },
     {
-      name: '',
+      name: "",
       selector: (row) => <TbDotsVertical />,
-      width: '45px',
+      width: "45px",
     },
   ];
 
   const handleColor = (col) => {
-    let color = '';
+    let color = "";
     switch (col) {
-      case 'Koordinator':
-        color = '#e74c3c';
+      case "Koordinator":
+        color = "#e74c3c";
         break;
-      case 'Relawan':
-        color = '#3498db';
+      case "Relawan":
+        color = "#3498db";
         break;
-      case 'General User':
-        color = '#2ecc71';
+      case "General User":
+        color = "#2ecc71";
         break;
-      case 'Daftar Hitam':
-        color = '#34495e';
+      case "Daftar Hitam":
+        color = "#34495e";
         break;
     }
     return color;
@@ -120,37 +163,35 @@ export default function Index({
       {profile.occupation.level === 1 ? (
         <>
           <HomeNavbar />
-          <div className="left-content">
-            <div className="card">
-              <div className="card-body p-0">
-                <ul className="nav">
+          <div className='left-content'>
+            <div className='card'>
+              <div className='card-body p-0'>
+                <ul className='nav'>
                   <li
                     className={
-                      position === 'data' ? 'nav-item actives' : 'nav-item'
-                    }
-                  >
-                    <a className="nav-link" onClick={() => setPosition('data')}>
-                      <i className="fa fa-list"></i>
+                      position === "data" ? "nav-item actives" : "nav-item"
+                    }>
+                    <a className='nav-link' onClick={() => setPosition("data")}>
+                      <i className='fa fa-list'></i>
                     </a>
                   </li>
                   <li
                     className={
-                      position === 'persebaran'
-                        ? 'nav-item actives'
-                        : 'nav-item'
+                      position === "persebaran"
+                        ? "nav-item actives"
+                        : "nav-item"
                     }
-                    onClick={() => setPosition('persebaran')}
-                  >
-                    <a className="nav-link">Persebaran</a>
+                    onClick={() => setPosition("persebaran")}>
+                    <a className='nav-link'>Persebaran</a>
                   </li>
                 </ul>
               </div>
-              <div className="col-12 search-list">
-                {position === 'data' && (
+              <div className='col-12 search-list'>
+                {position === "data" && (
                   <>
                     <h4>Data Kordinator</h4>
                     <hr />
-                    <table className="table table-striped">
+                    <table className='table table-striped'>
                       <thead>
                         <tr>
                           <th>Total Kordinator</th>
@@ -169,7 +210,7 @@ export default function Index({
                     <br />
                     <h4>Data Relawan</h4>
                     <hr />
-                    <table className="table table-striped">
+                    <table className='table table-striped'>
                       <thead>
                         <tr>
                           <th>Total Pemilih</th>
@@ -187,42 +228,42 @@ export default function Index({
                     </table>
                   </>
                 )}
-                {position === 'persebaran' && (
+                {position === "persebaran" && (
                   <>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showKoordinator}
-                        onClick={() => setShowKoordinator(!showKoordinator)}
-                      ></input>
-                      <div className="circle-cordinator"></div>
+                        onClick={() =>
+                          setShowKoordinator(!showKoordinator)
+                        }></input>
+                      <div className='circle-cordinator'></div>
                       <label>Kordinator</label>
                     </div>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showRelawan}
-                        onClick={() => setShowRelawan(!showRelawan)}
-                      ></input>
-                      <div className="circle-relawan"></div>
+                        onClick={() => setShowRelawan(!showRelawan)}></input>
+                      <div className='circle-relawan'></div>
                       <label>Relawan</label>
                     </div>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showPemilih}
-                        onClick={() => setShowPemilih(!showPemilih)}
-                      ></input>
-                      <div className="circle-pemilih"></div>
+                        onClick={() => setShowPemilih(!showPemilih)}></input>
+                      <div className='circle-pemilih'></div>
                       <label>Pemilih</label>
                     </div>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showBlackList}
-                        onClick={() => setShowBlackList(!showBlackList)}
-                      ></input>
-                      <div className="circle-hitam"></div>
+                        onClick={() =>
+                          setShowBlackList(!showBlackList)
+                        }></input>
+                      <div className='circle-hitam'></div>
                       <label>Daftar Hitam</label>
                     </div>
                   </>
@@ -232,80 +273,95 @@ export default function Index({
           </div>
 
           {isMounted && (
-            <div className="map">
+            <div className='map'>
               <Map
                 className={styles.homeMap}
                 center={cordinate}
                 cordinate={cordinate}
                 zoom={zoom}
-                zoomTo={zoom}
-              >
+                zoomTo={zoom}>
                 {({ TileLayer, CircleMarker, Marker, Polygon, Tooltip }) => (
                   <>
                     <TileLayer
-                      className="map"
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                      className='map'
+                      url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
                       attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
                     />
                     {showKoordinator === true &&
-                      kordinator.map((m, index) => (
+                      dataKordinator.map((m, index) => (
                         <CircleMarker
+                          key={index}
                           center={[m?.latitude, m?.longitude]}
                           radius={20}
                           opacity={1.0}
                           pathOptions={{
-                            color: 'none',
+                            color: "none",
                             fillOpacity: 0.8,
                             fillColor: handleColor(m?.occupation.name),
-                          }}
-                        ></CircleMarker>
+                          }}>
+                          <Tooltip
+                            direction='top'
+                            offset={[0, -10]}
+                            opacity={1}
+                            permanent>
+                            {m.name}
+                          </Tooltip>
+                        </CircleMarker>
                       ))}
                     {showRelawan === true &&
-                      relawan.map(
+                      dataRelawan.map(
                         (m, index) =>
-                          m.longitude !== '' && (
+                          m.longitude !== "" && (
                             <CircleMarker
+                              key={index}
                               center={[m?.latitude, m?.longitude]}
                               radius={20}
                               opacity={1.0}
                               pathOptions={{
-                                color: 'none',
+                                color: "none",
                                 fillOpacity: 0.8,
                                 fillColor: handleColor(m?.occupation.name),
-                              }}
-                            ></CircleMarker>
+                              }}>
+                              <Tooltip
+                                direction='top'
+                                offset={[0, -10]}
+                                opacity={1}
+                                permanent>
+                                {m.name}
+                              </Tooltip>
+                            </CircleMarker>
                           )
                       )}
                     {showPemilih === true &&
                       pemilih.map(
                         (m, index) =>
-                          m.longitude !== '' && (
+                          m.longitude !== "" && (
                             <CircleMarker
+                              key={index}
                               center={[m?.latitude, m?.longitude]}
                               radius={20}
                               opacity={1.0}
                               pathOptions={{
-                                color: 'none',
+                                color: "none",
                                 fillOpacity: 0.8,
                                 fillColor: handleColor(m?.occupation.name),
-                              }}
-                            ></CircleMarker>
+                              }}></CircleMarker>
                           )
                       )}
                     {showBlackList === true &&
                       daftarhitam.map(
                         (m, index) =>
-                          m.longitude !== '' && (
+                          m.longitude !== "" && (
                             <CircleMarker
+                              key={index}
                               center={[m?.latitude, m?.longitude]}
                               radius={20}
                               opacity={1.0}
                               pathOptions={{
-                                color: 'none',
+                                color: "none",
                                 fillOpacity: 0.8,
                                 fillColor: handleColor(m?.occupation.name),
-                              }}
-                            ></CircleMarker>
+                              }}></CircleMarker>
                           )
                       )}
                   </>
@@ -316,50 +372,50 @@ export default function Index({
         </>
       ) : (
         <>
-          <div className="col-12 pb-5 mb-24">
+          <div className='col-12 pb-5 mb-24'>
             <h1>Dashboard</h1>
           </div>
-          <div className="col-12 mb-24">
+          <div className='col-12 mb-24'>
             <Card>
-              <div className="d-flex justify-content-between mb-12 mt-8">
-                <h2 style={{ fontSize: '16px', fontWeight: 600 }}>
+              <div className='d-flex justify-content-between mb-12 mt-8'>
+                <h2 style={{ fontSize: "16px", fontWeight: 600 }}>
                   Peringkat Koordinator
                 </h2>
               </div>
               <CustomDataTable columns={columns} data={ranks} />
             </Card>
           </div>
-          <div className="col-3 mb-24">
-            <SummaryCard title="Total relawan" number={425} stat={-0.051} />
+          <div className='col-3 mb-24'>
+            <SummaryCard title='Total relawan' number={425} stat={-0.051} />
           </div>
-          <div className="col-3 mb-24">
-            <SummaryCard title="Total pemilih" number={6875} stat={0.128} />
+          <div className='col-3 mb-24'>
+            <SummaryCard title='Total pemilih' number={6875} stat={0.128} />
           </div>
-          <div className="col-3 mb-24">
+          <div className='col-3 mb-24'>
             <SummaryCard
-              title="Total logistik"
-              subtitle="satuan rupiah"
+              title='Total logistik'
+              subtitle='satuan rupiah'
               number={192092251}
               stat={-0.121}
             />
           </div>
-          <div className="col-3 mb-24">
+          <div className='col-3 mb-24'>
             <SummaryCard
-              title="Pemilih baru"
-              subtitle="2 Des 2022"
+              title='Pemilih baru'
+              subtitle='2 Des 2022'
               number={6875}
               stat={0.041}
             />
           </div>
-          <div className="col-6 mb-24">
+          <div className='col-6 mb-24'>
             <Card noPadding>
               <ChartCard
-                dataX={['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul']}
+                dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]}
                 dataY={[140, 232, 101, 264, 90, 340]}
               />
             </Card>
           </div>
-          <div className="col-6 mb-24">
+          <div className='col-6 mb-24'>
             <BlueCard />
           </div>
         </>

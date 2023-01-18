@@ -73,6 +73,7 @@
 
 .left-content .card {
   background: transparent;
+  border:none;
 }
 
 .left-content a {

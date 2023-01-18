@@ -1,5 +1,5 @@
 #!/bin/bash
-export DOCKER_IMG_TAG=$( git log --max-count=1 --oneline | awk '{tag=$1 "-fe";print tag}' )
+source release_ver.sh
 
 make down
 cp -f .env.production .env
