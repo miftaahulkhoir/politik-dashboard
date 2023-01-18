@@ -158,7 +158,7 @@ export default function SocialReports(pageProps) {
         <div className='col-12'>
           <Card noPadding>
             <SocialSummaryCard
-              title={"Performance Summaries"}
+              title={"Performance Summary"}
               subtitle={
                 "View your key profile performance metrics from the reporting period."
               }
@@ -212,14 +212,14 @@ export async function getServerSideProps(ctx) {
   
   // get groups
   await axios
-    .get(`${process.env.APP_BASEURL}api/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
+    .get(`${process.env.APP_BASEURL}api/social/156097`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
       reports = res.data.data;
       mediatoolkit = {
-        orgid: `${process.env.MEDIATOOLKIT_ORG_ID}`
+        orgid: `156097`
       }
     })
     .catch((err) => {
