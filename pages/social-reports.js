@@ -68,7 +68,6 @@ export default function SocialReports(pageProps) {
   }, []);
 
   useEffect(() => {
-    console.log("use effect");
     if (isGroupAssigned && isTopicAssigned && isDateAssigned) {
       fetchSocialData();
     }
@@ -125,10 +124,10 @@ export default function SocialReports(pageProps) {
           }
         } 
       }
-      console.log('post complete data', `${process.env.API_SOURCE}social/${mtkOrgId}/reports`);
+      console.log('post complete data', `https://api.patronpolitik.id/v1/social/156097/reports`);
 
       const res = await axios.post(
-        `${process.env.API_SOURCE}social/${mtkOrgId}/reports`, {
+        `https://api.patronpolitik.id/v1/social/156097/reports`, {
           data: requestBody,
           withCredentials: true,
         }
@@ -231,7 +230,7 @@ export async function getServerSideProps(ctx) {
   
   // get groups
   await axios
-    .get(`${process.env.API_SOURCE}/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
+    .get(`${process.env.API_SOURCE}social/156097`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
