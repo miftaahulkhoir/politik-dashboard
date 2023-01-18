@@ -289,17 +289,19 @@ export default function SocialReports(pageProps) {
             />
           </Card>
         </div>
-        <div className="col-5">
-          <Card noPadding>
-            <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
-          </Card>
-        </div>
-        <div className="col-5">
-          <Card noPadding>
-            <SocialPieChart title={"All Sources"} data={allSource} />
-          </Card>
-        </div>
-        <div className="col-12">
+        <Row gutter={18}>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialPieChart title={"All Sources"} data={allSource} />
+            </Card>
+          </Col>
+        </Row>
+        {/* <div className="col-12">
           <Card noPadding>
             <SocialTimeChart title={"Engagement"} data={engagementData} />
           </Card>
@@ -316,7 +318,7 @@ export default function SocialReports(pageProps) {
           <Card noPadding>
             <SocialTimeChart title={"Video Views"} data={videoViewsData} />
           </Card>
-        </div>
+        </div> */}
       </Space>
     </>
   );
