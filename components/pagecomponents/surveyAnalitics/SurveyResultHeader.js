@@ -1,4 +1,4 @@
-import { Col, Row, Space, Switch, Typography } from 'antd';
+import { Col, Row, Space, Typography } from 'antd';
 import { useMemo } from 'react';
 
 export default function SurveyResultHeader({ survey }) {
@@ -28,16 +28,6 @@ export default function SurveyResultHeader({ survey }) {
             {survey?.total_respondent} responden
           </Typography.Title>
           <Typography.Text style={{ color: '#7287A5' }}>{date}</Typography.Text>
-        </Space>
-      </Col>
-      <Col span={1}></Col>
-      <Col span={8}>
-        <Typography.Title level={5}>Status</Typography.Title>
-        <Space>
-          <Typography.Text>Tidak Aktif</Typography.Text>
-          {/* TODO: implement switch */}
-          <Switch checked={survey.status} />
-          <Typography.Text>Aktif</Typography.Text>
         </Space>
       </Col>
     </Row>

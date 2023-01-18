@@ -6,7 +6,6 @@ import { parseCookies } from 'nookies';
 import { useEffect, useMemo, useState } from 'react';
 import { TbDotsVertical } from 'react-icons/tb';
 import Card from '../components/elements/card/Card';
-import styles from '../components/elements/map/Home.module.css';
 import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
 import SummaryCard from '../components/elements/summaryCard/SummaryCard';
 import BlueCard from '../components/pagecomponents/home/BlueCard';
@@ -14,9 +13,12 @@ import ChartCard from '../components/pagecomponents/home/ChartCard';
 import HomeNavbar from '../components/pagecomponents/home/HomeNavbar';
 const Centrifuge = require('centrifuge');
 
-const Map = dynamic(() => import('../components/elements/map/Map'), {
-  ssr: false,
-});
+const HomeMap = dynamic(
+  () => import('../components/pagecomponents/home/HomeMap'),
+  {
+    ssr: false,
+  }
+);
 
 const CustomDataTable = dynamic(
   () => import('../components/elements/customDataTable/CustomDataTable'),
@@ -34,8 +36,6 @@ export default function Index({
 }) {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const [zoom, setZoom] = useState(12.3);
-  const [cordinate, setCordinate] = useState([-7.0335559, 107.6589375]);
   const [position, setPosition] = useState('data');
   const [dataKordinator, setKordinator] = useState([]);
   const [dataRelawan, setRelawan] = useState([]);
@@ -47,9 +47,6 @@ export default function Index({
 
   useEffect(() => {
     setIsMounted(true);
-    if (window.screen.width === 1366) {
-      setZoom(11.8);
-    }
     setKordinator(kordinator);
     setRelawan(relawan);
   }, []);
@@ -276,106 +273,17 @@ export default function Index({
 
           {isMounted && (
             <div className="map">
-              <Map
-                className={styles.homeMap}
-                center={cordinate}
-                cordinate={cordinate}
-                zoom={zoom}
-                zoomTo={zoom}
-              >
-                {({ TileLayer, CircleMarker, Marker, Polygon, Tooltip }) => (
-                  <>
-                    <TileLayer
-                      className="map"
-                      url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                      attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
-                    />
-                    {showKoordinator === true &&
-                      dataKordinator.map((m, index) => (
-                        <CircleMarker
-                          key={index}
-                          center={[m?.latitude, m?.longitude]}
-                          radius={20}
-                          opacity={1.0}
-                          pathOptions={{
-                            color: 'none',
-                            fillOpacity: 0.8,
-                            fillColor: handleColor(m?.occupation.name),
-                          }}
-                        >
-                          <Tooltip
-                            direction="top"
-                            offset={[0, -10]}
-                            opacity={1}
-                            permanent
-                          >
-                            {m.name}
-                          </Tooltip>
-                        </CircleMarker>
-                      ))}
-                    {showRelawan === true &&
-                      dataRelawan.map(
-                        (m, index) =>
-                          m.longitude !== '' && (
-                            <CircleMarker
-                              key={index}
-                              center={[m?.latitude, m?.longitude]}
-                              radius={20}
-                              opacity={1.0}
-                              pathOptions={{
-                                color: 'none',
-                                fillOpacity: 0.8,
-                                fillColor: handleColor(m?.occupation.name),
-                              }}
-                            >
-                              <Tooltip
-                                direction="top"
-                                offset={[0, -10]}
-                                opacity={1}
-                                permanent
-                              >
-                                {m.name}
-                              </Tooltip>
-                            </CircleMarker>
-                          )
-                      )}
-                    {showPemilih === true &&
-                      pemilih.map(
-                        (m, index) =>
-                          m.longitude !== '' && (
-                            <CircleMarker
-                              key={index}
-                              center={[m?.latitude, m?.longitude]}
-                              radius={20}
-                              opacity={1.0}
-                              pathOptions={{
-                                color: 'none',
-                                fillOpacity: 0.8,
-                                fillColor: handleColor(m?.occupation.name),
-                              }}
-                            ></CircleMarker>
-                          )
-                      )}
-                    {showBlackList === true &&
-                      daftarhitam.map(
-                        (m, index) =>
-                          m.longitude !== '' && (
-                            <CircleMarker
-                              key={index}
-                              center={[m?.latitude, m?.longitude]}
-                              radius={20}
-                              opacity={1.0}
-                              pathOptions={{
-                                color: 'none',
-                                fillOpacity: 0.8,
-                                fillColor: handleColor(m?.occupation.name),
-                              }}
-                            ></CircleMarker>
-                          )
-                      )}
-                  </>
-                )}
-              </Map>
+              <HomeMap
+                showKoordinator={showKoordinator}
+                dataKordinator={dataKordinator}
+                showRelawan={showRelawan}
+                dataRelawan={dataRelawan}
+                showPemilih={showPemilih}
+                dataPemilih={pemilih}
+                showBlackList={showBlackList}
+                dataBlackList={daftarhitam}
+                handleColor={handleColor}
+              />
             </div>
           )}
         </>
