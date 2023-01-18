@@ -223,7 +223,7 @@ export default function Surveys(pageProps) {
 
       {contextHolderNotification}
 
-      <div className="col-12 pdv-3">
+      <div className="col-12 pdv-3 mb-12">
         <h1>Manajemen Survei</h1>
       </div>
 

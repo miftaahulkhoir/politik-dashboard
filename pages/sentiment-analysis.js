@@ -2,7 +2,8 @@ import {
   Button,
   Col,
   DatePicker,
-  Divider, Drawer,
+  Divider,
+  Drawer,
   Input,
   notification,
   Row,
@@ -41,12 +42,13 @@ export default function SocialReports(pageProps) {
   const [engagementData, setEngagementData] = useState([]);
   const [engagementRateData, setEngagementRateData] = useState([]);
   const [videoViewsData, setVideoViewsData] = useState([]);
-  const [apiNotification, contextHolderNotification] = notification.useNotification();
+  const [apiNotification, contextHolderNotification] =
+    notification.useNotification();
 
-  const [mtkUrl, setMtkUrl] = useState("");
-  const [mtkToken, setMtkToken] = useState("");
-  const [mtkOrgId, setMtkOrgId] = useState("");
-  
+  const [mtkUrl, setMtkUrl] = useState('');
+  const [mtkToken, setMtkToken] = useState('');
+  const [mtkOrgId, setMtkOrgId] = useState('');
+
   const [isGroupAssigned, setIsGroupAssigned] = useState(false);
   const [isTopicAssigned, setIsTopicAssigned] = useState(false);
   const [isDateAssigned, setIsDateAssigned] = useState(false);
@@ -55,11 +57,11 @@ export default function SocialReports(pageProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
-  
-  const [filterSearch, setFilterSearch] = useState("");
+
+  const [filterSearch, setFilterSearch] = useState('');
   const [groupData, setGroupData] = useState([]);
-  const [selectedGroupData, setSelectedGroup] = useState("");
-  const [selectedTopicData, setSelectedTopic] = useState("");
+  const [selectedGroupData, setSelectedGroup] = useState('');
+  const [selectedTopicData, setSelectedTopic] = useState('');
   const [filterDate, setFilterDate] = useState([]);
 
   useEffect(() => {
@@ -68,7 +70,7 @@ export default function SocialReports(pageProps) {
     setMtkToken(pageProps.mediatoolkit.token);
     setMtkUrl(pageProps.mediatoolkit.url);
     setMtkOrgId(pageProps.mediatoolkit.orgid);
-    console.log("process:", pageProps);
+    console.log('process:', pageProps);
   }, []);
 
   useEffect(() => {
@@ -96,15 +98,20 @@ export default function SocialReports(pageProps) {
     debounce((_, valueString) => {
       let res = [];
       valueString.forEach((value, index) => {
-        res[index] = new Date(parseInt(value.slice(0, 4)), parseInt(value.slice(5, 7))-1, parseInt(value.slice(8, 10))).getTime() / 1000;
+        res[index] =
+          new Date(
+            parseInt(value.slice(0, 4)),
+            parseInt(value.slice(5, 7)) - 1,
+            parseInt(value.slice(8, 10))
+          ).getTime() / 1000;
       });
       setFilterDate(res);
       setIsDateAssigned(true);
     }, 300)
   );
-  
+
   // 1. get report time
-  // 2. get report 
+  // 2. get report
   const fetchSocialData = async () => {
     try {
       let request = {
@@ -130,8 +137,8 @@ export default function SocialReports(pageProps) {
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: "Gagal",
-        description: "Terjadi kesalahan dalam pengambilan data reports"
+        message: 'Gagal',
+        description: 'Terjadi kesalahan dalam pengambilan data reports',
       });
     }
   };
@@ -139,11 +146,11 @@ export default function SocialReports(pageProps) {
   return (
     <>
       <Head>
-        <title>Sentimen Analisis · Patrons</title>
+        <title>Analisis Sentimen · Patrons</title>
       </Head>
 
-      <div className='col-12 pb-5 mb-24'>
-        <h1>Sentimen Analisis</h1>
+      <div className="col-12 pdv-3 mb-12">
+        <h1>Analisis Sentimen</h1>
       </div>
 
       <SurveyFormDrawer
@@ -155,23 +162,22 @@ export default function SocialReports(pageProps) {
         apiNotification={apiNotification}
       />
 
-      <Space direction='vertical' size='middle'>
+      <Space direction="vertical" size="middle">
         <SearchBar
-            groupData={groupData}
-            selectGroupHandler={selectGroupHandler}
-            selectTopicHandler={selectTopicHandler}
-            selectDateHandler={selectDateHandler}
+          groupData={groupData}
+          selectGroupHandler={selectGroupHandler}
+          selectTopicHandler={selectTopicHandler}
+          selectDateHandler={selectDateHandler}
+          selectedGroupData={selectedGroupData}
+          addSurveyHandler={() => setIsFormOpen(true)}
+        />
 
-            selectedGroupData={selectedGroupData}
-            addSurveyHandler={() => setIsFormOpen(true)}
-          />
-
-        <div className='col-12'>
+        <div className="col-12">
           <Card noPadding>
             <SocialSummaryCard
-              title={"Performance Summary"}
+              title={'Performance Summary'}
               subtitle={
-                "View your key profile performance metrics from the reporting period."
+                'View your key profile performance metrics from the reporting period.'
               }
               impressions={summaryImpressions}
               engagements={summaryEngagements}
@@ -180,7 +186,7 @@ export default function SocialReports(pageProps) {
             />
           </Card>
         </div>
-        <div className='col-12'>
+        <div className="col-12">
           <Card noPadding>
             <SocialTimeChart
               title={"Audience Growth"}
@@ -188,17 +194,17 @@ export default function SocialReports(pageProps) {
             />
           </Card>
         </div>
-        <div className='col-12'>
+        <div className="col-12">
           <Card noPadding>
             <SocialTimeChart title={"Impressions"} data={impressionData} />
           </Card>
         </div>
-        <div className='col-12'>
+        <div className="col-12">
           <Card noPadding>
             <SocialTimeChart title={"Engagement"} data={engagementData} />
           </Card>
         </div>
-        <div className='col-12'>
+        <div className="col-12">
           <Card noPadding>
             <SocialTimeChart
               title={"Engagement Rate"}
@@ -206,12 +212,11 @@ export default function SocialReports(pageProps) {
             />
           </Card>
         </div>
-        <div className='col-12'>
+        <div className="col-12">
           <Card noPadding>
             <SocialTimeChart title={"Video Views"} data={videoViewsData} />
           </Card>
         </div>
-      
       </Space>
     </>
   );
@@ -220,7 +225,7 @@ export default function SocialReports(pageProps) {
 export async function getServerSideProps(ctx) {
   let { token } = parseCookies(ctx);
   let reports, mediatoolkit;
-  
+
   // get groups
   await axios
     .get(`${process.env.APP_BASEURL}api/social/156097`, {
@@ -230,8 +235,8 @@ export async function getServerSideProps(ctx) {
     .then((res) => {
       reports = res.data.data;
       mediatoolkit = {
-        orgid: `156097`
-      }
+        orgid: `156097`,
+      };
     })
     .catch((err) => {
       console.log(err);
@@ -252,19 +257,19 @@ function SearchBar({
   groupData.forEach((value, index) => {
     groupList[index] = {
       value: value.id,
-      label: value.name
+      label: value.name,
     };
-  })
+  });
 
   let topicList = [{}];
-  if (selectedGroupData != "") {
-    let temp = groupData.find(value => value.id == selectedGroupData);
+  if (selectedGroupData != '') {
+    let temp = groupData.find((value) => value.id == selectedGroupData);
     temp.keywords.forEach((value, index) => {
       topicList[index] = {
         value: value.id,
-        label: value.name
+        label: value.name,
       };
-    })
+    });
   }
 
   // console.log("yes", selectedGroup.keywords);
@@ -275,38 +280,33 @@ function SearchBar({
   // })
 
   return (
-    <Row justify='space-between'>
+    <Row justify="space-between">
       <Col span={18}>
         <Row gutter={16}>
           <Col span={8}>
             <Select
-              placeholder={"Pilih Group..."}
-              style={{ width: "100%" }}
+              placeholder={'Pilih Group...'}
+              style={{ width: '100%' }}
               onChange={selectGroupHandler}
               options={groupList}
             />
           </Col>
           <Col span={8}>
             <Select
-              placeholder={"Pilih Topik..."}
-              style={{ width: "100%" }}
+              placeholder={'Pilih Topik...'}
+              style={{ width: '100%' }}
               onChange={selectTopicHandler}
               options={topicList}
             />
           </Col>
           <Col span={8}>
             <RangePicker
-              style={{ width: "100%" }}
+              style={{ width: '100%' }}
               placeholder={['Tanggal Awal', 'Tanggal Akhir']}
               onChange={selectDateHandler}
             />
           </Col>
         </Row>
-      </Col>
-      <Col>
-        <Button icon={<TbPlus />} type='primary' onClick={addSurveyHandler}>
-          Tambah Survei
-        </Button>
       </Col>
     </Row>
   );
@@ -314,58 +314,58 @@ function SearchBar({
 
 const defaultSurveyQuestion = {
   text: {
-    input_type: "text",
-    question_name: "",
-    question_subject: "",
-    section: "",
+    input_type: 'text',
+    question_name: '',
+    question_subject: '',
+    section: '',
     options: null,
   },
   long_text: {
-    input_type: "long_type",
-    question_name: "",
-    question_subject: "",
-    section: "",
+    input_type: 'long_type',
+    question_name: '',
+    question_subject: '',
+    section: '',
     options: null,
   },
   yes_no_question: {
-    input_type: "yes_no_question",
-    question_name: "",
-    question_subject: "",
-    section: "",
+    input_type: 'yes_no_question',
+    question_name: '',
+    question_subject: '',
+    section: '',
     options: [
       {
-        option_name: "ya",
+        option_name: 'ya',
       },
       {
-        option_name: "tidak",
+        option_name: 'tidak',
       },
     ],
   },
   radio_button: {
-    input_type: "radio_button",
-    question_name: "",
-    question_subject: "",
-    section: "",
+    input_type: 'radio_button',
+    question_name: '',
+    question_subject: '',
+    section: '',
     options: [
       {
-        option_name: "opsi 1",
+        option_name: 'opsi 1',
       },
       {
-        option_name: "opsi 2",
+        option_name: 'opsi 2',
       },
     ],
   },
   dropdown: {
-    input_type: "dropdown",
-    question_name: "",
-    question_subject: "",
-    section: "",
+    input_type: 'dropdown',
+    question_name: '',
+    question_subject: '',
+    section: '',
     options: [
       {
-        option_name: "opsi 1",
+        option_name: 'opsi 1',
       },
       {
-        option_name: "opsi 2",
+        option_name: 'opsi 2',
       },
     ],
   },
@@ -379,7 +379,7 @@ function SurveyFormDrawer({
   selectedSurveyId,
   apiNotification,
 }) {
-  const [title, setTitle] = useState("");
+  const [title, setTitle] = useState('');
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([
     { ...defaultSurveyQuestion.text },
@@ -413,8 +413,8 @@ function SurveyFormDrawer({
       const newQuestions = questions.map((question, i) => {
         const newQuestion = question;
         newQuestion.question_number = i + 1;
-        newQuestion.section = "section1";
-        newQuestion.question_subject = "subject1";
+        newQuestion.section = 'section1';
+        newQuestion.question_subject = 'subject1';
         newQuestion.options = newQuestion?.options?.map((option, j) => {
           const newOption = option;
           newOption.value = j + 1;
@@ -422,7 +422,7 @@ function SurveyFormDrawer({
         });
         return newQuestion;
       });
-      console.log("new quests", newQuestions);
+      console.log('new quests', newQuestions);
       if (isEdit) {
         // update
 
@@ -486,8 +486,8 @@ function SurveyFormDrawer({
         // );
 
         apiNotification.success({
-          message: "Berhasil",
-          description: "Perubahan survei telah disimpan",
+          message: 'Berhasil',
+          description: 'Perubahan survei telah disimpan',
         });
         setIsEdit(false);
       } else {
@@ -502,35 +502,36 @@ function SurveyFormDrawer({
           `${process.env.APP_BASEURL}api/survey`,
           survey
         );
-        if (!res?.data?.status) throw new Error("unknown error");
+        if (!res?.data?.status) throw new Error('unknown error');
 
         apiNotification.success({
-          message: "Berhasil",
-          description: "Survei telah ditambahkan",
+          message: 'Berhasil',
+          description: 'Survei telah ditambahkan',
         });
       }
       setOpen(false);
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: "Gagal",
-        description: "Terjadi kesalahan saat menambahkan survei",
+        message: 'Gagal',
+        description: 'Terjadi kesalahan saat menambahkan survei',
       });
     }
   };
 
   return (
     <Drawer
-      title={isEdit ? "Pengubahan Survei" : "Penambahan Survei"}
-      placement='right'
+      title={isEdit ? 'Pengubahan Survei' : 'Penambahan Survei'}
+      placement="right"
       onClose={onClose}
       open={open}
       closable={false}
-      width='60%'
-      headerStyle={{ border: "none", fontSize: "32px" }}
-      bodyStyle={{ background: "#EEEEEE", padding: "0px", overflowX: "hidden" }}
-      stye>
-      <Row gutter={32} style={{ padding: "24px", background: "white" }}>
+      width="60%"
+      headerStyle={{ border: 'none', fontSize: '32px' }}
+      bodyStyle={{ background: '#EEEEEE', padding: '0px', overflowX: 'hidden' }}
+      stye
+    >
+      <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
         <Col span={16}>
           <Title level={5}>Judul Survei</Title>
           <TextArea
@@ -556,9 +557,9 @@ function SurveyFormDrawer({
           setQuestions={setQuestions}
         />
       ))}
-      <Row justify='space-between' style={{ margin: "24px" }}>
+      <Row justify="space-between" style={{ margin: '24px' }}>
         <Button onClick={addQuestionHandler}>Tambah pertanyaan</Button>
-        <Button type='primary' onClick={submitHandler}>
+        <Button type="primary" onClick={submitHandler}>
           Simpan survei
         </Button>
       </Row>
@@ -587,16 +588,16 @@ function SurveyFormCard({ index, questions, setQuestions }) {
   );
 
   const formElement = useMemo(() => {
-    if (type === "text") return <Input value='Isian singkat' disabled />;
-    if (type === "long_text") return <TextArea value='Paragraf' disabled />;
-    if (type === "dropdown")
+    if (type === 'text') return <Input value="Isian singkat" disabled />;
+    if (type === 'long_text') return <TextArea value="Paragraf" disabled />;
+    if (type === 'dropdown')
       return <DropdownInputEditable labels={labels} setLabels={setLabels} />;
-    if (type === "radio_button")
+    if (type === 'radio_button')
       return <MultiRadioEditable labels={labels} setLabels={setLabels} />;
   }, [type, labels, setLabels]);
 
   return (
-    <Card style={{ margin: "24px" }}>
+    <Card style={{ margin: '24px' }}>
       <Row gutter={32}>
         <Col span={16}>
           <Title level={5}>Pertanyaan</Title>
@@ -613,24 +614,24 @@ function SurveyFormCard({ index, questions, setQuestions }) {
         <Col span={8}>
           <Title level={5}>Jenis jawaban</Title>
           <Select
-            defaultValue='text'
-            style={{ width: "160px" }}
+            defaultValue="text"
+            style={{ width: '160px' }}
             options={[
               {
-                value: "text",
-                label: "Isian singkat",
+                value: 'text',
+                label: 'Isian singkat',
               },
               {
-                value: "long_text",
-                label: "Paragraf",
+                value: 'long_text',
+                label: 'Paragraf',
               },
               {
-                value: "dropdown",
-                label: "Dropdown",
+                value: 'dropdown',
+                label: 'Dropdown',
               },
               {
-                value: "radio_button",
-                label: "Pilihan ganda",
+                value: 'radio_button',
+                label: 'Pilihan ganda',
               },
             ]}
             value={type}

@@ -68,7 +68,7 @@ export default function DashboardLayout({ profile, children }) {
           <ul className="codex-menu custom-scroll" data-simplebar>
             <li
               className={asPath === '/' ? 'meu-item active' : 'menu-item'}
-              onClick={() => router.replace('/')}
+              onClick={() => router.push('/')}
             >
               <a>
                 <div className="icon-item">
@@ -82,7 +82,7 @@ export default function DashboardLayout({ profile, children }) {
                 className={
                   asPath === '/surveys' ? 'meu-item active' : 'menu-item'
                 }
-                onClick={() => router.replace('/surveys')}
+                onClick={() => router.push('/surveys')}
               >
                 <a>
                   <div className="icon-item">
@@ -97,37 +97,39 @@ export default function DashboardLayout({ profile, children }) {
                 // className={
                 //   asPath === "/ongoing" ? "meu-item active" : "menu-item"
                 // }
-                onClick={() => router.replace('/survey-analitics')}
+                onClick={() => router.push('/survey-analysis')}
               >
                 <a>
                   <div className="icon-item">
                     <i className="fa fa-desktop"></i>
                   </div>
-                  <span>Analitik Survei</span>
+                  <span>Analisis Survei</span>
                 </a>
               </li>
             )}
             {profile?.occupation?.level < 3 && (
               <li
                 className={
-                  asPath === '/social-reports' ? 'meu-item active' : 'menu-item'
+                  asPath === '/sentiment-analysis'
+                    ? 'meu-item active'
+                    : 'menu-item'
                 }
-                onClick={() => router.replace('/social-reports')}
+                onClick={() => router.push('/sentiment-analysis')}
               >
                 <a>
                   <div className="icon-item">
                     <i className="fa fa-pie-chart"></i>
                   </div>
-                  <span>Sentimen Analisis</span>
+                  <span>Analisis Sentimen</span>
                 </a>
               </li>
             )}
             {profile?.occupation?.level < 3 && (
               <li
                 className={
-                  asPath === '/blast' ? 'meu-item active' : 'menu-item'
+                  asPath === '/whatsapp-blast' ? 'meu-item active' : 'menu-item'
                 }
-                onClick={() => router.replace('/blast')}
+                onClick={() => router.push('/whatsapp-blast')}
               >
                 <a>
                   <div className="icon-item">
@@ -139,31 +141,31 @@ export default function DashboardLayout({ profile, children }) {
             )}
             <li
               // className={asPath === "" ? "meu-item active" : "menu-item"}
-              onClick={() => router.replace('/ongoing')}
+              onClick={() => router.push('/ongoing')}
             >
               <a>
                 <div className="icon-item">
                   <i className="fa fa-file"></i>
                 </div>
-                <span>Report Kegiatan</span>
+                <span>Laporan Kegiatan</span>
               </a>
             </li>
             {profile?.occupation?.level < 3 && (
               <li
                 // className={asPath === "" ? "meu-item active" : "menu-item"}
-                onClick={() => router.replace('/ongoing')}
+                onClick={() => router.push('/ongoing')}
               >
                 <a>
                   <div className="icon-item">
                     <i className="fa fa-calendar"></i>
                   </div>
-                  <span>Manajemen Event</span>
+                  <span>Manajemen Kegiatan</span>
                 </a>
               </li>
             )}
             <li
               // className={asPath === "" ? "meu-item active" : "menu-item"}
-              onClick={() => router.replace('/ongoing')}
+              onClick={() => router.push('/ongoing')}
             >
               <a>
                 <div className="icon-item">
@@ -177,20 +179,20 @@ export default function DashboardLayout({ profile, children }) {
                 className={
                   asPath === '/users' ? 'meu-item active' : 'menu-item'
                 }
-                onClick={() => router.replace('/users')}
+                onClick={() => router.push('/users')}
               >
                 <a>
                   <div className="icon-item">
                     <i className="fa fa-user"></i>
                   </div>
-                  <span>Manajemen User</span>
+                  <span>Manajemen Pengguna</span>
                 </a>
               </li>
             )}
             {profile?.occupation?.level === 1 && (
               <li
                 // className={asPath === "" ? "meu-item active" : "menu-item"}
-                onClick={() => router.replace('/ongoing')}
+                onClick={() => router.push('/ongoing')}
               >
                 <a>
                   <div className="icon-item">
@@ -211,7 +213,7 @@ export default function DashboardLayout({ profile, children }) {
         </div>
       </div>
       <footer className="codex-footer">
-        <p>Copyright 2022-23 © All rights reserved.</p>
+        <p>Copyright 2023 © Patrons Politik. All rights reserved.</p>
       </footer>
     </>
   );

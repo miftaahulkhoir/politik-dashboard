@@ -37,8 +37,8 @@ export default function SurveyResults({ surveys }) {
 
   return (
     <>
-      <div className="col-12 pdv-3">
-        <h1>Analitik Survei</h1>
+      <div className="col-12 pdv-3 mb-12">
+        <h1>Analisis Survei</h1>
       </div>
 
       <Space direction="vertical" style={{ width: '100%' }} size="large">
