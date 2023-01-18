@@ -97,7 +97,7 @@ export default function DashboardLayout({ profile, children }) {
                 // className={
                 //   asPath === "/ongoing" ? "meu-item active" : "menu-item"
                 // }
-                onClick={() => router.replace('/ongoing')}
+                onClick={() => router.replace('/survey-analitics')}
               >
                 <a>
                   <div className="icon-item">
