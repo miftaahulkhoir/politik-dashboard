@@ -104,32 +104,40 @@ export default function SocialReports(pageProps) {
     try {
       console.log("completed", selectedGroupData, selectedTopicData, filterDate, `${mtkToken}`);
 
-      let requestBody = {
-        access_token: `${mtkToken}`,
-        data_request: {
-          source_feeds: [{
-            feed_type: "keyword",
-            keyword_id: selectedTopicData
-          }],
-          from_time: filterDate[0],
-          to_time: filterDate[1],
-          time_resolution: "day",
-          dimension: {
-            dimension_type: "dsc",
-            sort_by: "key"
-          },
-          report_value: {
-            value_type: "count",
-            merge_operator: "sum"
-          }
-        } 
-      }
+      // let requestBody = {
+      //   access_token: `${mtkToken}`,
+      //   data_request: {
+      //     source_feeds: [{
+      //       feed_type: "keyword",
+      //       keyword_id: selectedTopicData
+      //     }],
+      //     from_time: filterDate[0],
+      //     to_time: filterDate[1],
+      //     time_resolution: "day",
+      //     dimension: {
+      //       dimension_type: "time",
+      //       dimension_sort: {
+      //         sort_direction: "dsc",
+      //         sort_by: "key"
+      //       }
+      //     },
+      //     report_value: {
+      //       value_type: "count",
+      //       merge_operator: "sum"
+      //     }
+      //   } 
+      // }
       console.log('post complete data', `https://api.patronpolitik.id/v1/social/156097/reports`);
 
-      const res = await axios.post(
-        `https://api.patronpolitik.id/v1/social/156097/reports`, {
-          data: requestBody,
-          withCredentials: true,
+      const res = await axios(
+        `https://api.patronpolitik.id/v1/social/156097/reports`,
+        {
+          keyword_id: selectedTopicData,
+          from_time: filterDate[0],
+          to_time: filterDate[1],
+          dimension_type: "time"
+        }, {
+          withCredentials: true
         }
       ).then((response) => {
         console.log(response);
@@ -238,7 +246,8 @@ export async function getServerSideProps(ctx) {
       reports = res.data.data;
       mediatoolkit = {
         url: `${process.env.API_SOURCE}`,
-        orgid: `${process.env.MEDIATOOLKIT_ORG_ID}`
+        orgid: `${process.env.MEDIATOOLKIT_ORG_ID}`,
+        token: `${process.env.MEDIATOOLKIT_TOKEN}`
       }
     })
     .catch((err) => {
