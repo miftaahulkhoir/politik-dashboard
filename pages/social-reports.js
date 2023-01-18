@@ -102,46 +102,19 @@ export default function SocialReports(pageProps) {
   // 2. get report 
   const fetchSocialData = async () => {
     try {
-      console.log("completed", selectedGroupData, selectedTopicData, filterDate, `${mtkToken}`);
-
-      // let requestBody = {
-      //   access_token: `${mtkToken}`,
-      //   data_request: {
-      //     source_feeds: [{
-      //       feed_type: "keyword",
-      //       keyword_id: selectedTopicData
-      //     }],
-      //     from_time: filterDate[0],
-      //     to_time: filterDate[1],
-      //     time_resolution: "day",
-      //     dimension: {
-      //       dimension_type: "time",
-      //       dimension_sort: {
-      //         sort_direction: "dsc",
-      //         sort_by: "key"
-      //       }
-      //     },
-      //     report_value: {
-      //       value_type: "count",
-      //       merge_operator: "sum"
-      //     }
-      //   } 
-      // }
-      console.log('post complete data', `https://api.patronpolitik.id/v1/social/156097/reports`);
-
-      const res = await axios(
-        `https://api.patronpolitik.id/v1/social/156097/reports`,
+      const res = await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
         {
           keyword_id: selectedTopicData,
           from_time: filterDate[0],
           to_time: filterDate[1],
           dimension_type: "time"
-        }, {
-          withCredentials: true
         }
       ).then((response) => {
+        console.log(res);
         console.log(response);
-      })
+      });
+      if (!res?.data?.status) throw new Error('unknown error');
     } catch (error) {
       console.error(error);
       apiNotification.error({
@@ -238,16 +211,14 @@ export async function getServerSideProps(ctx) {
   
   // get groups
   await axios
-    .get(`${process.env.API_SOURCE}social/156097`, {
+    .get(`${process.env.APP_BASEURL}api/social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
       reports = res.data.data;
       mediatoolkit = {
-        url: `${process.env.API_SOURCE}`,
-        orgid: `${process.env.MEDIATOOLKIT_ORG_ID}`,
-        token: `${process.env.MEDIATOOLKIT_TOKEN}`
+        orgid: `${process.env.MEDIATOOLKIT_ORG_ID}`
       }
     })
     .catch((err) => {
