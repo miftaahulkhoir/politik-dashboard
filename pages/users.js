@@ -101,7 +101,7 @@ export default function Users(pageProps) {
         currentUser={currentUser}
       />
 
-      <div className="col-12 pdv-3">
+      <div className="col-12 pdv-3 mb-12">
         <h1>Manajemen Pengguna</h1>
       </div>
 

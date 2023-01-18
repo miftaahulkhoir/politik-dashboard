@@ -25,7 +25,7 @@ export default function UserRoleSelect({
   }, [currentUser]);
 
   const filteredOccupations = useMemo(() => {
-    return occupations.filter((o) => o.level !== currentUser.occupation.level);
+    return occupations.filter((o) => o.level > currentUser.occupation.level);
   }, [occupations]);
 
   return (

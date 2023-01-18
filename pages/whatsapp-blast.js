@@ -1,7 +1,6 @@
-import axios from "axios";
-import { parseCookies } from "nookies";
-import { useState } from "react";
-import Card from "../components/elements/card/Card";
+import axios from 'axios';
+import { parseCookies } from 'nookies';
+import { useState } from 'react';
 
 export default function Blast(pageProps) {
   const { kordinator, relawan, pemilih, profile } = pageProps;
@@ -9,23 +8,23 @@ export default function Blast(pageProps) {
   const [kirimRelawan, setKirimRelawan] = useState(false);
   const [kirimPemilih, setKirimPemilih] = useState(false);
   const [customNumber, setCustomNumber] = useState(false);
-  const [newNumber, setNewNumber] = useState("");
-  const [pesan, setPesan] = useState("");
+  const [newNumber, setNewNumber] = useState('');
+  const [pesan, setPesan] = useState('');
 
   const handleBlastPesan = () => {
     let phone =
-      "087720505350, 082298778245, 081413016714, 082227711152, 085260402035, 081398577794";
+      '087720505350, 082298778245, 081413016714, 082227711152, 085260402035, 081398577794';
     axios
       .post(`${process.env.APP_BASEURL}api/wa/send`, {
-        secretkey: "KyaRxzcVpqwe",
+        secretkey: 'KyaRxzcVpqwe',
         phone: customNumber === true ? newNumber : phone,
         message: pesan,
       })
       .then((res) => {
-        console.log("AAA");
+        console.log('AAA');
       })
       .catch((err) => {
-        console.log("BBB");
+        console.log('BBB');
       });
     // let noPhone = "";
     // if (kirimKoordinator === true) {
@@ -47,70 +46,71 @@ export default function Blast(pageProps) {
 
   return (
     <>
-      <div className='col-12 pb-5 mb-24'>
-        <h1>Whatsapp Blast</h1>
+      <div className="col-12 pdv-3 mb-12">
+        <h1>WhatsApp Blast</h1>
       </div>
-      <div className='col-12 mb-24'>
-        <div className='card'>
-          <div className='card-body'>
-            <ul className='px-0'>
+
+      <div className="col-12 mb-24">
+        <div className="card">
+          <div className="card-body">
+            <ul className="px-0">
               <h5>Pilih Penerima Pesan</h5>
               <hr />
               {profile.occupation.level < 2 && (
                 <li>
                   <input
-                    type='checkbox'
+                    type="checkbox"
                     defaultChecked={kirimKoordinator}
                     onClick={() => setKirimKoordinator(!kirimKoordinator)}
-                  />{" "}
+                  />{' '}
                   Semua Koordinator
                 </li>
               )}
               {profile.occupation.level < 3 && (
                 <li>
                   <input
-                    type='checkbox'
+                    type="checkbox"
                     defaultChecked={kirimRelawan}
                     onClick={() => setKirimRelawan(!kirimRelawan)}
-                  />{" "}
+                  />{' '}
                   Semua Relawan
                 </li>
               )}
               {profile.occupation.level < 3 && (
                 <li>
                   <input
-                    type='checkbox'
+                    type="checkbox"
                     defaultChecked={kirimPemilih}
                     onClick={() => setKirimPemilih(!kirimPemilih)}
-                  />{" "}
+                  />{' '}
                   Semua Pemilih
                 </li>
               )}
               <li>
                 <input
-                  type='checkbox'
+                  type="checkbox"
                   defaultChecked={customNumber}
                   onClick={() => setCustomNumber(!customNumber)}
-                />{" "}
+                />{' '}
                 Custom Number
               </li>
             </ul>
-            <div className='form-group'>
+            <div className="form-group">
               <label>
                 <h5>Custom Number</h5>
               </label>
               <input
-                className='form-control'
+                className="form-control"
                 onChange={(e) => setNewNumber(e.target.value)}
                 // disabled={customNumber === false}
               ></input>
             </div>
-            <div className='form-group'>
+            <div className="form-group">
               <label>
                 <h5>Pesan</h5>
               </label>
               <textarea
-                className='form-control'
+                className="form-control"
                 rows={10}
                 onChange={(e) => setPesan(e.target.value)}
                 // disabled={
@@ -121,11 +121,12 @@ export default function Blast(pageProps) {
                 // }
               ></textarea>
             </div>
-            <div className='form-group d-flex justify-content-end'>
+            <div className="form-group d-flex justify-content-end">
               <button
-                className='btn btn-sm btn-primary'
+                className="btn btn-sm btn-primary"
                 // disabled={pesan === ""}
-                onClick={() => handleBlastPesan()}>
+                onClick={() => handleBlastPesan()}
+              >
                 Kirim Pesan
               </button>
             </div>
