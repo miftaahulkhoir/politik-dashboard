@@ -103,7 +103,7 @@ export default function SocialReports(pageProps) {
   const fetchSocialData = async () => {
     try {
       const res = await axios.post(
-        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
+        `https://panel.patronpolitik.id/api/social/156097/reports`,
         {
           keyword_id: selectedTopicData,
           from_time: filterDate[0],
@@ -211,7 +211,7 @@ export async function getServerSideProps(ctx) {
   
   // get groups
   await axios
-    .get(`${process.env.API_SOURCE}social/${process.env.MEDIATOOLKIT_ORG_ID}`, {
+    .get(`https://panel.patronpolitik.id/api/social/156097`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
