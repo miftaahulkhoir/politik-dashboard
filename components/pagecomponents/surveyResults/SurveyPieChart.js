@@ -13,7 +13,7 @@ export default function SurveyPieChart({ title, data }) {
       },
       series: [
         {
-          name: 'Access From',
+          name: title,
           type: 'pie',
           radius: '50%',
           center: ['50%', '33%'],

@@ -12,7 +12,6 @@ export default function SurveyResultHeader({ survey }) {
       minute: 'numeric',
     }).format(createdAt);
 
-    console.log('survey', survey);
     return formatted;
   }, [survey]);
 
