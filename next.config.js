@@ -11,6 +11,7 @@ module.exports = {
     APP_LINKPOWERED_BY: process.env.APP_LINKPOWERED_BY,
     API_SOURCE: process.env.API_SOURCE,
     APP_BASEURL: process.env.APP_BASEURL,
+    WEBSOCKET_CREDENTIALS_HOST: process.env.WEBSOCKET_CREDENTIALS_HOST,
   },
   async rewrites() {
     return [
