@@ -1,23 +1,27 @@
 import EChartsReact from 'echarts-for-react';
+import { useMemo } from 'react';
 import SurveyChartCard from './SurveyChartCard';
 
-export default function SurveyLineChart({ title }) {
-  const option = {
-    xAxis: {
-      type: 'category',
-      data: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    },
-    yAxis: {
-      type: 'value',
-    },
-    series: [
-      {
-        data: [820, 932, 901, 934, 1290, 1330, 1320],
-        type: 'line',
-        smooth: true,
+export default function SurveyLineChart({ title, dataX, dataY }) {
+  const option = useMemo(() => {
+    return {
+      xAxis: {
+        type: 'category',
+        data: dataX,
       },
-    ],
-  };
+      yAxis: {
+        type: 'value',
+      },
+      series: [
+        {
+          data: dataY,
+          type: 'line',
+          smooth: true,
+        },
+      ],
+    };
+  }, [dataX, dataY]);
+
   return (
     <SurveyChartCard title={title}>
       <EChartsReact option={option} />
