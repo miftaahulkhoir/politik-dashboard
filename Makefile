@@ -1,5 +1,6 @@
 run:
-	docker compose up -d --pull always
+	docker compose pull
+	docker compose up -d
 
 build:
 	docker build --no-cache -t synapsisid/patronpolitik:$(DOCKER_IMG_TAG) .
