@@ -9,6 +9,7 @@ import {
   Row,
   Select,
   Space,
+  Spin,
   Switch,
   Typography
 } from "antd";
@@ -35,6 +36,9 @@ export default function SocialReports(pageProps) {
   const [summaryEngagements, setSummaryEngagements] = useState(null);
   const [summaryEngagementRate, setSummaryEngagementRate] = useState(null);
   const [summaryPostLinkClicks, setSummaryPostLinkClicks] = useState(null);
+
+  const [showCharts, setShowCharts] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const [mentionData, setMentionData] = useState(null);
   const [mentionSum, setMentionSum] = useState(null);
@@ -80,6 +84,7 @@ export default function SocialReports(pageProps) {
 
   useEffect(() => {
     if (isGroupAssigned && isTopicAssigned && isDateAssigned) {
+      setIsLoading(true);
       fetchSocialData();
     }
   }, [selectedGroupData, selectedTopicData, filterDate]);
@@ -132,6 +137,8 @@ export default function SocialReports(pageProps) {
         setAllSource(res.data.data.sum_of_all_source.data.entries);
         setSentiment(res.data.data.effective_sentiment.data.entries);
         setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
+        setShowCharts(true);
+        setIsLoading(false);
         if (!res?.data?.status) throw new Error('unknown error');
       });
     } catch (error) {
@@ -172,82 +179,95 @@ export default function SocialReports(pageProps) {
           addSurveyHandler={() => setIsFormOpen(true)}
         />
 
-        <div className="col-12">
-          <Card noPadding>
-            <SocialSummaryCard
-              title={'Performance Summary'}
-              subtitle={
-                'View your key profile performance metrics from the reporting period.'
-              }
-              mentionSum={mentionSum}
-              totalImpression={totalImpression}
-              engagementRate={summaryEngagementRate}
-              postLinkClicks={summaryPostLinkClicks}
-            />
-          </Card>
-        </div>
-        <div className="col-12">
-          <Card noPadding>
-            <SocialTimeChart
-              title={"Mentions Over Time"}
-              data={mentionData}
-              chartType={"common"}
-            />
-          </Card>
-        </div>
-        <div className="col-12">
-          <Card noPadding>
-            <SocialTimeChart
-            title={"Mentions Over Time by Source"}
-            data={mentionBySource}
-            chartType={"detail"}
-            />
-          </Card>
-        </div>
-        <div className="col-12">
-          <Card noPadding>
-            <SocialPieChart title={"All Sources"} data={allSource} />
-          </Card>
-        </div>
-        <div className="col-12">
-          <Card noPadding>
-            <SocialTimeChart
-            title={"Sentiment Over Time"}
-            data={sentimentOverTime}
-            chartType={"detail"}
-            />
-          </Card>
-        </div>
-        <Row gutter={18}>
-          <Col span={12}>
-            <Card noPadding>
-              <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
-            </Card>
-          </Col>
-          <Col span={12}>
-            <Card noPadding>
-              <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
-            </Card>
-          </Col>
-        </Row>
-        {/* <div className="col-12">
-          <Card noPadding>
-            <SocialTimeChart title={"Engagement"} data={engagementData} />
-          </Card>
-        </div>
-        <div className="col-12">
-          <Card noPadding>
-            <SocialTimeChart
-              title={"Engagement Rate"}
-              data={engagementRateData}
-            />
-          </Card>
-        </div>
-        <div className="col-12">
-          <Card noPadding>
-            <SocialTimeChart title={"Video Views"} data={videoViewsData} />
-          </Card>
-        </div> */}
+        {showCharts ? (
+          <>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialSummaryCard
+                  title={'Performance Summary'}
+                  subtitle={
+                    'View your key profile performance metrics from the reporting period.'
+                  }
+                  mentionSum={mentionSum}
+                  totalImpression={totalImpression}
+                  engagementRate={summaryEngagementRate}
+                  postLinkClicks={summaryPostLinkClicks}
+                />
+              </Card>
+            </div>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialTimeChart
+                  title={"Mentions Over Time"}
+                  data={mentionData}
+                  chartType={"common"}
+                />
+              </Card>
+            </div>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialTimeChart
+                title={"Mentions Over Time by Source"}
+                data={mentionBySource}
+                chartType={"detail"}
+                />
+              </Card>
+            </div>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialPieChart title={"All Sources"} data={allSource} />
+              </Card>
+            </div>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialTimeChart
+                title={"Sentiment Over Time"}
+                data={sentimentOverTime}
+                chartType={"detail"}
+                />
+              </Card>
+            </div>
+            <Row gutter={18}>
+              <Col span={12}>
+                <Card noPadding>
+                  <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
+                </Card>
+              </Col>
+              <Col span={12}>
+                <Card noPadding>
+                  <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
+                </Card>
+              </Col>
+            </Row>
+          </>
+        ) : (
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              padding: '40px 0',
+            }}
+          >
+            {isLoading ? 
+              <Spin size="large" style={{margin: '50px 0'}}>
+                <div className="content" />
+              </Spin>
+              :
+              <>
+                <img
+                  style={{ width: '30%', maxHeight: '280px' }}
+                  src="/images/people_with_up.svg"
+                  alt="select"
+                />
+                <div style={{ fontSize: '16px', marginTop: '16px' }}>
+                  Tolong pilih topik terlebih dahulu
+                </div>
+              </>
+            }
+          </div>
+        )}
       </Space>
     </>
   );
