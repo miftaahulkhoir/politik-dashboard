@@ -19,6 +19,7 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Head from "next/head";
 import Card from "../components/elements/card/Card";
 import SocialTimeChart from "../components/pagecomponents/home/SocialTimeChart";
+import SocialPieChart from "../components/pagecomponents/home/SocialPieChart";
 import SocialSummaryCard from "../components/pagecomponents/home/SocialSummaryCard";
 import {
   TbPlus,
@@ -36,9 +37,12 @@ export default function SocialReports(pageProps) {
   const [summaryPostLinkClicks, setSummaryPostLinkClicks] = useState(null);
 
   const [mentionData, setMentionData] = useState(null);
+  const [mentionSum, setMentionSum] = useState(null);
+  const [totalImpression, setTotalImpression] = useState(null);
+  const [allSource, setAllSource] = useState([]);
+  const [mentionBySource, setMentionBySource] = useState([]);
+  const [sentiment, setSentiment] = useState([]);
 
-
-  const [impressionData, setImpressionData] = useState([]);
   const [engagementData, setEngagementData] = useState([]);
   const [engagementRateData, setEngagementRateData] = useState([]);
   const [videoViewsData, setVideoViewsData] = useState([]);
@@ -77,7 +81,6 @@ export default function SocialReports(pageProps) {
     if (isGroupAssigned && isTopicAssigned && isDateAssigned) {
       fetchSocialData();
     }
-    console.log("audience growth", mentionData);
   }, [selectedGroupData, selectedTopicData, filterDate]);
 
   const selectGroupHandler = useCallback(
@@ -114,6 +117,7 @@ export default function SocialReports(pageProps) {
   // 2. get report
   const fetchSocialData = async () => {
     try {
+      // mentions over time
       let request = {
         keyword_id: selectedTopicData.toString(),
         feed_type: "keyword",
@@ -121,19 +125,100 @@ export default function SocialReports(pageProps) {
         to_time: filterDate[1].toString(),
         time_resolution: "day",
         dimension_type: "time",
-        sort_direction: "dsc",
+        sort_direction: "asc",
         sort_by: "key",
         value_type: "count",
         merge_operator: "sum"
       };
-      const res = await axios.post(
+      await axios.post(
         `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
         request
-      );
-      // console.log("IMPORTANT", res);
-      console.log("response", res.data.data.data.entries);
-      setMentionData(res.data.data.data.entries);
-      if (!res?.data?.status) throw new Error('unknown error');
+      ).then ((res) => {
+        console.log("mention over time response", res.data.data.data.entries);
+        setMentionData(res.data.data.data.entries);
+        if (!res?.data?.status) throw new Error('unknown error');
+      });
+      // number of mentions
+      request = {
+        keyword_id: selectedTopicData.toString(),
+        feed_type: "keyword",
+        from_time: filterDate[0].toString(),
+        to_time: filterDate[1].toString(),
+        time_resolution: "day",
+        value_type: "count",
+        merge_operator: "sum"
+      };
+      await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports/brief`,
+        request
+      ).then ((res) => {
+        console.log("number of mentions", res.data.data.data.total_value);
+        setMentionSum(res.data.data.data.total_value);
+        if (!res?.data?.status) throw new Error('unknown error');
+      });
+      // number of total impression
+      request.value_type = "reach";
+      await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports/brief`,
+        request
+      ).then ((res) => {
+        console.log("number of mentions", res.data.data.data.total_value);
+        setTotalImpression(res.data.data.data.total_value);
+        if (!res?.data?.status) throw new Error('unknown error');
+      });
+      // number of all source
+      request = {
+        keyword_id: selectedTopicData.toString(),
+        feed_type: "keyword",
+        from_time: filterDate[0].toString(),
+        to_time: filterDate[1].toString(),
+        time_resolution: "day",
+        dimension_type: "source_type",
+        sort_direction: "dsc",
+        sort_by: "value",
+        value_type: "count",
+        merge_operator: "sum"
+      };
+      await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
+        request
+      ).then ((res) => {
+        console.log("all source", res.data.data.data.entries);
+        setAllSource(res.data.data.data.entries);
+        if (!res?.data?.status) throw new Error('unknown error');
+      });
+      // effective sentiment
+      request.dimension_type = "effective_sentiment";
+      await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
+        request
+      ).then ((res) => {
+        console.log("all source", res.data.data.data.entries);
+        setSentiment(res.data.data.data.entries);
+        if (!res?.data?.status) throw new Error('unknown error');
+      });
+      // mention over time by source
+      request = {
+        keyword_id: selectedTopicData.toString(),
+        feed_type: "keyword",
+        from_time: filterDate[0].toString(),
+        to_time: filterDate[1].toString(),
+        time_resolution: "day",
+        dimension_type: "source_type",
+        sub_dimension: "time",
+        sort_direction: "asc",
+        sort_by: "key",
+        value_type: "count",
+        merge_operator: "sum"
+      };
+      await axios.post(
+        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports/detail`,
+        request
+      ).then ((res) => {
+        console.log("mention over time by source response", res.data.data.data.entries);
+        setMentionBySource(res.data.data.data.entries);
+        if (!res?.data?.status) throw new Error('unknown error');
+      });
     } catch (error) {
       console.error(error);
       apiNotification.error({
@@ -179,8 +264,8 @@ export default function SocialReports(pageProps) {
               subtitle={
                 'View your key profile performance metrics from the reporting period.'
               }
-              impressions={summaryImpressions}
-              engagements={summaryEngagements}
+              mentionSum={mentionSum}
+              totalImpression={totalImpression}
               engagementRate={summaryEngagementRate}
               postLinkClicks={summaryPostLinkClicks}
             />
@@ -189,17 +274,39 @@ export default function SocialReports(pageProps) {
         <div className="col-12">
           <Card noPadding>
             <SocialTimeChart
-              title={"Audience Growth"}
+              title={"Mentions Over Time"}
               data={mentionData}
+              chartType={"common"}
             />
           </Card>
         </div>
         <div className="col-12">
           <Card noPadding>
-            <SocialTimeChart title={"Impressions"} data={impressionData} />
+            <SocialTimeChart
+            title={"Mentions Over Time by Source"}
+            data={mentionBySource}
+            chartType={"detail"}
+            />
           </Card>
         </div>
+        <Row gutter={18}>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
+            </Card>
+          </Col>
+        </Row>
         <div className="col-12">
+          <Card noPadding>
+            <SocialPieChart title={"All Sources"} data={allSource} />
+          </Card>
+        </div>
+        {/* <div className="col-12">
           <Card noPadding>
             <SocialTimeChart title={"Engagement"} data={engagementData} />
           </Card>
@@ -216,7 +323,7 @@ export default function SocialReports(pageProps) {
           <Card noPadding>
             <SocialTimeChart title={"Video Views"} data={videoViewsData} />
           </Card>
-        </div>
+        </div> */}
       </Space>
     </>
   );

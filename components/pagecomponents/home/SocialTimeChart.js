@@ -4,19 +4,107 @@ import dynamic from 'next/dynamic';
 const ReactEcharts = dynamic(() => import('echarts-for-react'), { ssr: false });
 
 import styles from './home.module.css';
+import { Empty } from 'antd';
 
-export default function SocialTimeChart({ title, data }) {
-  let formattedData = [[]];
+export default function SocialTimeChart({ title, data, chartType }) {
+  let timestamp = []
+  let formattedData = [];
+  let series = [];
+  let legends = [];
+  let colors = ["#08c4b2", "#6f5ed3", "#ce3665", "#ffcd1c", "#3896e3"];
 
   if (data != null) {
-    data.forEach((value, index) => {
-      formattedData[index] = [new Date(value.key*1000), value.value];
-      // timestamp[index] = value.key;
-      // splitData[index] = value.value;
-      console.log(formattedData[index]);
-    })
-  } else {
-    formattedData[0] = [new Date(1672506000000), 0];
+    if (chartType == "common") {
+      let temp = [];
+      data.forEach((value, index) => {
+        temp[index] = value.value;
+        let tempDate = new Date(value.key*1000)
+        let tempMonth = tempDate.getUTCMonth()+1
+        tempMonth = tempMonth.toString()
+        timestamp[index] = `${tempDate.getDate()}-${tempMonth.padStart(2, "0")}-${tempDate.getUTCFullYear()}`;
+      })
+      series = [{
+        name: 'Data',
+        type: 'line',
+        smooth: true,
+        showSymbol: false,
+        // areaStyle: {
+        //   opacity: 1,
+        //   color: colors[0],
+        // },
+        color: colors[0],
+        data: temp
+        // emphasis: {
+        //   focus: 'series',
+        // },
+        // encode: {
+        //   x: "timestamp",
+        //   y: "Data"
+        // }
+      }]
+    } else if (chartType == "detail") {
+      data.forEach((value, index) => {
+        let temp = [];
+        value.entries.forEach((v, i) => {
+          temp[i] = v.value;
+          let tempDate = new Date(v.key*1000)
+          let tempMonth = tempDate.getUTCMonth()+1
+          tempMonth = tempMonth.toString()
+          timestamp[i] = `${tempDate.getDate()}-${tempMonth.padStart(2, "0")}-${tempDate.getUTCFullYear()}`;
+        })
+        series[index] = {
+          name: value.key.charAt(0).toUpperCase() + value.key.slice(1),
+          type: 'line',
+          smooth: true,
+          showSymbol: false,
+          color: colors[index],
+          data: temp
+        }
+      })
+      // dimensions[0] = "timestamp";
+      
+      // data.forEach((value, index) => {
+      //   // assign value
+      //   let temp = [];
+      //   data.forEach((val, ind) => {
+      //     val.entries.forEach((v, i) => {
+      //       if (temp.length == 0) {
+      //         temp.push(new Date(value.entries[index].key*1000));
+      //       }
+      //       if (index == i) {
+      //         temp.push(v.value);
+      //       }
+      //     })
+      //     // formattedData[i] = [new Date(v.key*1000), v.value];
+      //   })
+
+      //   formattedData[index] = temp;
+
+      //   // set dimension of each dataset
+      //   dimensions[index+1] = value.key.charAt(0).toUpperCase() + value.key.slice(1);
+      //   legends[index] = value.key.charAt(0).toUpperCase() + value.key.slice(1);
+
+      //   // set series
+      //   series[index] = {
+      //     name: dimensions[index+1],
+      //     type: 'line',
+      //     smooth: true,
+      //     showSymbol: false,
+      //     areaStyle: {
+      //       opacity: 1,
+      //       color: colors[index],
+      //     },
+      //     color: colors[index],
+      //     emphasis: {
+      //       focus: 'series',
+      //     },
+      //     encode: {
+      //       x: "timestamp",
+      //       y: dimensions[index+1]
+      //     }
+      //   }
+      // })
+    }
   }
 
   const option = {
@@ -28,9 +116,6 @@ export default function SocialTimeChart({ title, data }) {
     },
     tooltip: {
       trigger: 'axis',
-      x: {
-        format: 'dd/MM/yy HH:mm'
-      }
     },
     legend: {
       orient: 'horizontal',
@@ -38,7 +123,7 @@ export default function SocialTimeChart({ title, data }) {
       top: 'bottom',
       icon: 'rect',
       height: 100,
-      data: ['Twitter']
+      data: legends
     },
     grid: {
       left: '3%',
@@ -49,18 +134,12 @@ export default function SocialTimeChart({ title, data }) {
     dataLabels: {
       enabled: false
     },
-    dataset: {
-      source: formattedData,
-      dimensions: ["timestamp", "Data"]
-    },
     xAxis: [
       {
-        type: 'time',
+        type: 'category',
         boundaryGap: false,
         // data: ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul'],
-        axisLabel: {
-          formatter: '{dd}-{MM}-{yyyy}'
-        }
+        data: timestamp
       },
     ],
     yAxis: [
@@ -68,26 +147,7 @@ export default function SocialTimeChart({ title, data }) {
         type: 'value',
       },
     ],
-    series: [
-      {
-        name: 'Data',
-        type: 'line',
-        smooth: true,
-        showSymbol: false,
-        areaStyle: {
-          opacity: 1,
-          color: '#08c4b2',
-        },
-        color: '#08c4b2',
-        emphasis: {
-          focus: 'series',
-        },
-        encode: {
-          x: "timestamp",
-          y: "Data"
-        }
-      }
-    ],
+    series: series,
   };
   return (
     <Card>
