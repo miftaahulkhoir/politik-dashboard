@@ -50,10 +50,6 @@ export default function SocialPieChart({ title, data, chartType }) {
       type: "pie",
       radius: radius,
       avoidLabelOverlap: false,
-      label: {
-        show: false,
-        position: 'center'
-      },
       emphasis: {
         label: {
           show: true,

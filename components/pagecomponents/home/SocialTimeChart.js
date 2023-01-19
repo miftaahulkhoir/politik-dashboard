@@ -52,8 +52,9 @@ export default function SocialTimeChart({ title, data, chartType }) {
             tempMonth = tempMonth.toString()
             timestamp[i] = `${tempDate.getDate()}-${tempMonth.padStart(2, "0")}-${tempDate.getUTCFullYear()}`;
           })
+          legends[index] = value.key.charAt(0).toUpperCase() + value.key.slice(1)
           series[index] = {
-            name: value.key.charAt(0).toUpperCase() + value.key.slice(1),
+            name: legends[index],
             type: 'line',
             smooth: true,
             showSymbol: false,
