@@ -30,8 +30,6 @@ export default function SocialPieChart({ title, data, chartType }) {
     }
   }
 
-  console.log("PIE CHART HELLOOOO", finalData);
-
   const option = {
     title: {
       text: title,
