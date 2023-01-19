@@ -28,7 +28,7 @@ const CustomDataTable = dynamic(
 export default function Index({
   profile,
   users,
-  kordinator,
+  koordinator,
   relawan,
   pemilih,
   daftarhitam,
@@ -37,7 +37,7 @@ export default function Index({
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState('data');
-  const [dataKordinator, setKordinator] = useState([]);
+  const [dataKoordinator, setKoordinator] = useState([]);
   const [dataRelawan, setRelawan] = useState([]);
   const [showKoordinator, setShowKoordinator] = useState(false);
   const [showRelawan, setShowRelawan] = useState(false);
@@ -47,7 +47,7 @@ export default function Index({
 
   useEffect(() => {
     setIsMounted(true);
-    setKordinator(kordinator);
+    setKoordinator(koordinator);
     setRelawan(relawan);
   }, []);
 
@@ -57,13 +57,13 @@ export default function Index({
       console.log('connected', ctx);
     });
     if (showKoordinator === true) {
-      dataKordinator.forEach((element) => {
+      dataKoordinator.forEach((element) => {
         centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          let newarr = [...dataKordinator];
+          let newarr = [...dataKoordinator];
           let id = newarr.findIndex((x) => x.id === element.id);
           newarr[id].latitude = ctx.data.latitude;
           newarr[id].longitude = ctx.data.longitude;
-          setKordinator(newarr);
+          setKoordinator(newarr);
         });
       });
     }
@@ -188,19 +188,19 @@ export default function Index({
               <div className="col-12 search-list">
                 {position === 'data' && (
                   <>
-                    <h4>Data Kordinator</h4>
+                    <h4>Data Koordinator</h4>
                     <hr />
                     <table className="table table-striped">
                       <thead>
                         <tr>
-                          <th>Total Kordinator</th>
+                          <th>Total Koordinator</th>
                           <th>Total Relawan</th>
                           <th>Total Kecamatan</th>
                         </tr>
                       </thead>
                       <tbody>
                         <tr>
-                          <td>{kordinator.length} Kordinator</td>
+                          <td>{koordinator.length} Koordinator</td>
                           <td>{relawan.length} Relawan</td>
                           <td>{kecamatan.length} Kecamatan</td>
                         </tr>
@@ -236,7 +236,7 @@ export default function Index({
                         onClick={() => setShowKoordinator(!showKoordinator)}
                       ></input>
                       <div className="circle-cordinator"></div>
-                      <label>Kordinator</label>
+                      <label>Koordinator</label>
                     </div>
                     <div className="form-group d-flex justify-content-left">
                       <input
@@ -275,7 +275,7 @@ export default function Index({
             <div className="map">
               <HomeMap
                 showKoordinator={showKoordinator}
-                dataKordinator={dataKordinator}
+                dataKoordinator={dataKoordinator}
                 showRelawan={showRelawan}
                 dataRelawan={dataRelawan}
                 showPemilih={showPemilih}
@@ -345,7 +345,7 @@ export default function Index({
 export async function getServerSideProps(ctx) {
   let { token } = parseCookies(ctx);
   let kecamatan = [];
-  let kordinator = [];
+  let koordinator = [];
   let relawan = [];
   let pemilih = [];
   let daftarhitam = [];
@@ -357,7 +357,7 @@ export async function getServerSideProps(ctx) {
     })
     .then((res) => {
       users = res.data.data;
-      kordinator = res.data.data.filter((x) => x.occupation.level === 2);
+      koordinator = res.data.data.filter((x) => x.occupation.level === 2);
       relawan = res.data.data.filter((x) => x.occupation.level === 3);
       pemilih = res.data.data.filter((x) => x.occupation.level === 4);
       daftarhitam = res.data.data.filter((x) => x.occupation.level === 5);
@@ -373,6 +373,6 @@ export async function getServerSideProps(ctx) {
     })
     .catch((err) => {});
   return {
-    props: { users, kordinator, relawan, pemilih, daftarhitam, kecamatan },
+    props: { users, koordinator, relawan, pemilih, daftarhitam, kecamatan },
   };
 }

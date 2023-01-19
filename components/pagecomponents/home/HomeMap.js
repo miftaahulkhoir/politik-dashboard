@@ -11,7 +11,7 @@ import styles from '../../elements/map/Home.module.css';
 
 export default function HomeMap({
   showKoordinator,
-  dataKordinator,
+  dataKoordinator,
   showRelawan,
   dataRelawan,
   showPemilih,
@@ -42,7 +42,7 @@ export default function HomeMap({
         attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
       />
       {showKoordinator === true &&
-        dataKordinator.map((m, index) => (
+        dataKoordinator.map((m, index) => (
           <Marker
             key={index}
             icon={
