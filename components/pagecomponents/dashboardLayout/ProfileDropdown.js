@@ -1,22 +1,21 @@
 import { Avatar, Dropdown } from 'antd';
-import Router from 'next/router';
-import { TbLogout, TbSettings, TbUser } from 'react-icons/tb';
+import { TbLogout, TbUser } from 'react-icons/tb';
 import { logoutUser } from '../../../utils/auth';
 
 export default function ProfileDropdown() {
   const items = [
-    {
-      key: '1',
-      label: 'Profil',
-      icon: <TbUser size={16} />,
-      onClick: () => Router.push('/ongoing'),
-    },
-    {
-      key: '2',
-      label: 'Pengaturan',
-      icon: <TbSettings size={16} />,
-      onClick: () => Router.push('/ongoing'),
-    },
+    // {
+    //   key: '1',
+    //   label: 'Profil',
+    //   icon: <TbUser size={16} />,
+    //   onClick: () => Router.push('/ongoing'),
+    // },
+    // {
+    //   key: '2',
+    //   label: 'Pengaturan',
+    //   icon: <TbSettings size={16} />,
+    //   onClick: () => Router.push('/ongoing'),
+    // },
     {
       key: '3',
       label: 'Keluar',

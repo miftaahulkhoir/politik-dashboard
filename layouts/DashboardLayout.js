@@ -2,14 +2,10 @@ import { useRouter } from 'next/router';
 import {
   TbBrandGoogleAnalytics,
   TbBrandWhatsapp,
-  TbCalendarEvent,
   TbDeviceAnalytics,
-  TbFileReport,
   TbLayoutDashboard,
   TbListCheck,
-  TbMessageReport,
   TbUser,
-  TbUsers,
 } from 'react-icons/tb';
 import ProfileDropdown from '../components/pagecomponents/dashboardLayout/ProfileDropdown';
 
@@ -142,7 +138,7 @@ export default function DashboardLayout({ profile, children }) {
                 </a>
               </li>
             )}
-            <li
+            {/* <li
               // className={asPath === "" ? "meu-item active" : "menu-item"}
               onClick={() => router.push('/ongoing')}
             >
@@ -150,8 +146,8 @@ export default function DashboardLayout({ profile, children }) {
                 <TbCalendarEvent size={24} />
                 <span>Laporan Kegiatan</span>
               </a>
-            </li>
-            {profile?.occupation?.level < 3 && (
+            </li> */}
+            {/* {profile?.occupation?.level < 3 && (
               <li
                 // className={asPath === "" ? "meu-item active" : "menu-item"}
                 onClick={() => router.push('/ongoing')}
@@ -161,8 +157,8 @@ export default function DashboardLayout({ profile, children }) {
                   <span>Manajemen Kegiatan</span>
                 </a>
               </li>
-            )}
-            <li
+            )} */}
+            {/* <li
               // className={asPath === "" ? "meu-item active" : "menu-item"}
               onClick={() => router.push('/ongoing')}
             >
@@ -170,7 +166,7 @@ export default function DashboardLayout({ profile, children }) {
                 <TbMessageReport size={24} />
                 <span>Pengaduan</span>
               </a>
-            </li>
+            </li> */}
             {profile?.occupation?.level < 3 && (
               <li
                 className={
@@ -184,7 +180,7 @@ export default function DashboardLayout({ profile, children }) {
                 </a>
               </li>
             )}
-            {profile?.occupation?.level === 1 && (
+            {/* {profile?.occupation?.level === 1 && (
               <li
                 // className={asPath === "" ? "meu-item active" : "menu-item"}
                 onClick={() => router.push('/ongoing')}
@@ -194,7 +190,7 @@ export default function DashboardLayout({ profile, children }) {
                   <span>Manajemen Akses Admin</span>
                 </a>
               </li>
-            )}
+            )} */}
           </ul>
         </div>
       </div>
