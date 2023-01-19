@@ -40,8 +40,9 @@ export default function SocialReports(pageProps) {
   const [mentionSum, setMentionSum] = useState(null);
   const [totalImpression, setTotalImpression] = useState(null);
   const [allSource, setAllSource] = useState([]);
-  const [mentionBySource, setMentionBySource] = useState([]);
   const [sentiment, setSentiment] = useState([]);
+  const [mentionBySource, setMentionBySource] = useState([]);
+  const [sentimentOverTime, setSentimentOverTime] = useState([]);
 
   const [engagementData, setEngagementData] = useState([]);
   const [engagementRateData, setEngagementRateData] = useState([]);
@@ -130,7 +131,7 @@ export default function SocialReports(pageProps) {
         setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
         setAllSource(res.data.data.sum_of_all_source.data.entries);
         setSentiment(res.data.data.effective_sentiment.data.entries);
-        setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);
+        setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
         if (!res?.data?.status) throw new Error('unknown error');
       });
     } catch (error) {
@@ -203,6 +204,20 @@ export default function SocialReports(pageProps) {
             />
           </Card>
         </div>
+        <div className="col-12">
+          <Card noPadding>
+            <SocialPieChart title={"All Sources"} data={allSource} />
+          </Card>
+        </div>
+        <div className="col-12">
+          <Card noPadding>
+            <SocialTimeChart
+            title={"Sentiment Over Time"}
+            data={sentimentOverTime}
+            chartType={"detail"}
+            />
+          </Card>
+        </div>
         <Row gutter={18}>
           <Col span={12}>
             <Card noPadding>
@@ -215,11 +230,6 @@ export default function SocialReports(pageProps) {
             </Card>
           </Col>
         </Row>
-        <div className="col-12">
-          <Card noPadding>
-            <SocialPieChart title={"All Sources"} data={allSource} />
-          </Card>
-        </div>
         {/* <div className="col-12">
           <Card noPadding>
             <SocialTimeChart title={"Engagement"} data={engagementData} />
