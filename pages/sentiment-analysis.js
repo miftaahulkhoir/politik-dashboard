@@ -113,110 +113,24 @@ export default function SocialReports(pageProps) {
     }, 300)
   );
 
-  // 1. get report time
-  // 2. get report
   const fetchSocialData = async () => {
     try {
-      // mentions over time
+      // call api
       let request = {
         keyword_id: selectedTopicData.toString(),
-        feed_type: "keyword",
         from_time: filterDate[0].toString(),
-        to_time: filterDate[1].toString(),
-        time_resolution: "day",
-        dimension_type: "time",
-        sort_direction: "asc",
-        sort_by: "key",
-        value_type: "count",
-        merge_operator: "sum"
+        to_time: filterDate[1].toString()
       };
       await axios.post(
         `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
         request
       ).then ((res) => {
-        console.log("mention over time response", res.data.data.data.entries);
-        setMentionData(res.data.data.data.entries);
-        if (!res?.data?.status) throw new Error('unknown error');
-      });
-      // number of mentions
-      request = {
-        keyword_id: selectedTopicData.toString(),
-        feed_type: "keyword",
-        from_time: filterDate[0].toString(),
-        to_time: filterDate[1].toString(),
-        time_resolution: "day",
-        value_type: "count",
-        merge_operator: "sum"
-      };
-      await axios.post(
-        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports/brief`,
-        request
-      ).then ((res) => {
-        console.log("number of mentions", res.data.data.data.total_value);
-        setMentionSum(res.data.data.data.total_value);
-        if (!res?.data?.status) throw new Error('unknown error');
-      });
-      // number of total impression
-      request.value_type = "reach";
-      await axios.post(
-        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports/brief`,
-        request
-      ).then ((res) => {
-        console.log("number of mentions", res.data.data.data.total_value);
-        setTotalImpression(res.data.data.data.total_value);
-        if (!res?.data?.status) throw new Error('unknown error');
-      });
-      // number of all source
-      request = {
-        keyword_id: selectedTopicData.toString(),
-        feed_type: "keyword",
-        from_time: filterDate[0].toString(),
-        to_time: filterDate[1].toString(),
-        time_resolution: "day",
-        dimension_type: "source_type",
-        sort_direction: "dsc",
-        sort_by: "value",
-        value_type: "count",
-        merge_operator: "sum"
-      };
-      await axios.post(
-        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
-        request
-      ).then ((res) => {
-        console.log("all source", res.data.data.data.entries);
-        setAllSource(res.data.data.data.entries);
-        if (!res?.data?.status) throw new Error('unknown error');
-      });
-      // effective sentiment
-      request.dimension_type = "effective_sentiment";
-      await axios.post(
-        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
-        request
-      ).then ((res) => {
-        console.log("all source", res.data.data.data.entries);
-        setSentiment(res.data.data.data.entries);
-        if (!res?.data?.status) throw new Error('unknown error');
-      });
-      // mention over time by source
-      request = {
-        keyword_id: selectedTopicData.toString(),
-        feed_type: "keyword",
-        from_time: filterDate[0].toString(),
-        to_time: filterDate[1].toString(),
-        time_resolution: "day",
-        dimension_type: "source_type",
-        sub_dimension: "time",
-        sort_direction: "asc",
-        sort_by: "key",
-        value_type: "count",
-        merge_operator: "sum"
-      };
-      await axios.post(
-        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports/detail`,
-        request
-      ).then ((res) => {
-        console.log("mention over time by source response", res.data.data.data.entries);
-        setMentionBySource(res.data.data.data.entries);
+        setMentionData(res.data.data.mentions_over_time.data.entries);
+        setMentionSum(res.data.data.sum_of_mentions.data.total_value);
+        setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
+        setAllSource(res.data.data.sum_of_all_source.data.entries);
+        setSentiment(res.data.data.effective_sentiment.data.entries);
+        setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);
         if (!res?.data?.status) throw new Error('unknown error');
       });
     } catch (error) {
