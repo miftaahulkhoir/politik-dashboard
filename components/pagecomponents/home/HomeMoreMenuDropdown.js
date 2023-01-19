@@ -1,11 +1,11 @@
-import { Dropdown } from 'antd';
+import { Button, Dropdown } from 'antd';
 import Router from 'next/router';
 import {
+  TbCalendarEvent,
   TbChevronDown,
-  TbNotebook,
-  TbNotes,
-  TbSpeakerphone,
-  TbUserExclamation,
+  TbFileReport,
+  TbMessageReport,
+  TbUser,
   TbUsers,
 } from 'react-icons/tb';
 
@@ -14,31 +14,31 @@ export default function HomeMoreMenuDropdown() {
     {
       key: '1',
       label: 'Laporan Kegiatan',
-      icon: <TbNotes size={16} />,
+      icon: <TbFileReport size={16} />,
       onClick: () => Router.push('/ongoing'),
     },
     {
       key: '2',
       label: 'Manajemen Kegiatan',
-      icon: <TbNotebook size={16} />,
+      icon: <TbCalendarEvent size={16} />,
       onClick: () => Router.push('/ongoing'),
     },
     {
       key: '3',
       label: 'Pengaduan',
-      icon: <TbSpeakerphone size={16} />,
+      icon: <TbMessageReport size={16} />,
       onClick: () => Router.push('/ongoing'),
     },
     {
       key: '4',
       label: 'Manajemen Pengguna',
-      icon: <TbUsers size={16} />,
+      icon: <TbUser size={16} />,
       onClick: () => Router.push('/users'),
     },
     {
       key: '5',
       label: 'Manajemen Akses Admin',
-      icon: <TbUserExclamation size={16} />,
+      icon: <TbUsers size={16} />,
       onClick: () => Router.push('/ongoing'),
     },
   ];
@@ -50,10 +50,10 @@ export default function HomeMoreMenuDropdown() {
       }}
       placement="bottomRight"
     >
-      <div type="button">
+      <Button type="text">
         Lainnya
         <TbChevronDown />
-      </div>
+      </Button>
     </Dropdown>
   );
 }

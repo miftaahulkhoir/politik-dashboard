@@ -1,4 +1,16 @@
 import { useRouter } from 'next/router';
+import {
+  TbBrandGoogleAnalytics,
+  TbBrandWhatsapp,
+  TbCalendarEvent,
+  TbDeviceAnalytics,
+  TbFileReport,
+  TbLayoutDashboard,
+  TbListCheck,
+  TbMessageReport,
+  TbUser,
+  TbUsers,
+} from 'react-icons/tb';
 import ProfileDropdown from '../components/pagecomponents/dashboardLayout/ProfileDropdown';
 
 export default function DashboardLayout({ profile, children }) {
@@ -36,7 +48,8 @@ export default function DashboardLayout({ profile, children }) {
                   </div>
                   <div className="search-bar p-0">
                     <p className="m-0">
-                      Selamat datang kembali, {profile?.occupation?.name}
+                      Selamat datang kembali,{' '}
+                      {profile?.occupation?.name?.toUpperCase()}
                     </p>
                   </div>
                 </div>
@@ -71,9 +84,7 @@ export default function DashboardLayout({ profile, children }) {
               onClick={() => router.push('/')}
             >
               <a>
-                <div className="icon-item">
-                  <i className="fa fa-dashboard"></i>
-                </div>
+                <TbLayoutDashboard size={24} />
                 <span>Dashboard</span>
               </a>
             </li>
@@ -85,9 +96,7 @@ export default function DashboardLayout({ profile, children }) {
                 onClick={() => router.push('/surveys')}
               >
                 <a>
-                  <div className="icon-item">
-                    <i className="fa fa-list"></i>
-                  </div>
+                  <TbListCheck size={24} />
                   <span>Manajemen Survei</span>
                 </a>
               </li>
@@ -100,9 +109,7 @@ export default function DashboardLayout({ profile, children }) {
                 onClick={() => router.push('/survey-analysis')}
               >
                 <a>
-                  <div className="icon-item">
-                    <i className="fa fa-desktop"></i>
-                  </div>
+                  <TbDeviceAnalytics size={24} />
                   <span>Analisis Survei</span>
                 </a>
               </li>
@@ -117,9 +124,7 @@ export default function DashboardLayout({ profile, children }) {
                 onClick={() => router.push('/sentiment-analysis')}
               >
                 <a>
-                  <div className="icon-item">
-                    <i className="fa fa-pie-chart"></i>
-                  </div>
+                  <TbBrandGoogleAnalytics size={24} />
                   <span>Analisis Sentimen</span>
                 </a>
               </li>
@@ -132,9 +137,7 @@ export default function DashboardLayout({ profile, children }) {
                 onClick={() => router.push('/whatsapp-blast')}
               >
                 <a>
-                  <div className="icon-item">
-                    <i className="fa fa-whatsapp"></i>
-                  </div>
+                  <TbBrandWhatsapp size={24} />
                   <span>WhatsApp Blast</span>
                 </a>
               </li>
@@ -144,9 +147,7 @@ export default function DashboardLayout({ profile, children }) {
               onClick={() => router.push('/ongoing')}
             >
               <a>
-                <div className="icon-item">
-                  <i className="fa fa-file"></i>
-                </div>
+                <TbCalendarEvent size={24} />
                 <span>Laporan Kegiatan</span>
               </a>
             </li>
@@ -156,9 +157,7 @@ export default function DashboardLayout({ profile, children }) {
                 onClick={() => router.push('/ongoing')}
               >
                 <a>
-                  <div className="icon-item">
-                    <i className="fa fa-calendar"></i>
-                  </div>
+                  <TbFileReport size={24} />
                   <span>Manajemen Kegiatan</span>
                 </a>
               </li>
@@ -168,9 +167,7 @@ export default function DashboardLayout({ profile, children }) {
               onClick={() => router.push('/ongoing')}
             >
               <a>
-                <div className="icon-item">
-                  <i className="fa fa-comment"></i>
-                </div>
+                <TbMessageReport size={24} />
                 <span>Pengaduan</span>
               </a>
             </li>
@@ -182,9 +179,7 @@ export default function DashboardLayout({ profile, children }) {
                 onClick={() => router.push('/users')}
               >
                 <a>
-                  <div className="icon-item">
-                    <i className="fa fa-user"></i>
-                  </div>
+                  <TbUser size={24} />
                   <span>Manajemen Pengguna</span>
                 </a>
               </li>
@@ -195,9 +190,7 @@ export default function DashboardLayout({ profile, children }) {
                 onClick={() => router.push('/ongoing')}
               >
                 <a>
-                  <div className="icon-item">
-                    <i className="fa fa-users"></i>
-                  </div>
+                  <TbUsers size={24} />
                   <span>Manajemen Akses Admin</span>
                 </a>
               </li>

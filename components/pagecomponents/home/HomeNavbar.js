@@ -1,3 +1,4 @@
+import { Button } from 'antd';
 import { useRouter } from 'next/router';
 import ProfileDropdown from '../dashboardLayout/ProfileDropdown';
 import HomeMoreMenuDropdown from './HomeMoreMenuDropdown';
@@ -23,9 +24,12 @@ export default function HomeNavbar() {
         <div className={styles.items_container}>
           <div className={styles.links_container}>
             {links.map((link, i) => (
-              <div role="button" key={i} onClick={() => router.push(link.path)}>
+              // <div role="button" key={i} onClick={() => router.push(link.path)}>
+              //   {link.name}
+              // </div>
+              <Button type="text" onClick={() => router.push(link.path)}>
                 {link.name}
-              </div>
+              </Button>
             ))}
           </div>
           <HomeMoreMenuDropdown />
