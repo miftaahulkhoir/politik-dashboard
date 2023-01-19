@@ -8,7 +8,6 @@ import { Empty } from 'antd';
 
 export default function SocialTimeChart({ title, data, chartType }) {
   let timestamp = []
-  let formattedData = [];
   let series = [];
   let legends = [];
   let colors = ["#08c4b2", "#6f5ed3", "#ce3665", "#ffcd1c", "#3896e3"];
@@ -44,21 +43,23 @@ export default function SocialTimeChart({ title, data, chartType }) {
       }]
     } else if (chartType == "detail") {
       data.forEach((value, index) => {
-        let temp = [];
-        value.entries.forEach((v, i) => {
-          temp[i] = v.value;
-          let tempDate = new Date(v.key*1000)
-          let tempMonth = tempDate.getUTCMonth()+1
-          tempMonth = tempMonth.toString()
-          timestamp[i] = `${tempDate.getDate()}-${tempMonth.padStart(2, "0")}-${tempDate.getUTCFullYear()}`;
-        })
-        series[index] = {
-          name: value.key.charAt(0).toUpperCase() + value.key.slice(1),
-          type: 'line',
-          smooth: true,
-          showSymbol: false,
-          color: colors[index],
-          data: temp
+        if (value.key != "undefined") {
+          let temp = [];
+          value.entries.forEach((v, i) => {
+            temp[i] = v.value;
+            let tempDate = new Date(v.key*1000)
+            let tempMonth = tempDate.getUTCMonth()+1
+            tempMonth = tempMonth.toString()
+            timestamp[i] = `${tempDate.getDate()}-${tempMonth.padStart(2, "0")}-${tempDate.getUTCFullYear()}`;
+          })
+          series[index] = {
+            name: value.key.charAt(0).toUpperCase() + value.key.slice(1),
+            type: 'line',
+            smooth: true,
+            showSymbol: false,
+            color: colors[index],
+            data: temp
+          }
         }
       })
       // dimensions[0] = "timestamp";
