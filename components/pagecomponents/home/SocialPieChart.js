@@ -9,12 +9,22 @@ export default function SocialPieChart({ title, data, chartType }) {
   let finalData = [];
 
   if (data != null) {
-    data.forEach((value, index) => {
-      finalData[index] = {
-        value: value.value,
-        name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
-      };
-    })
+    if (chartType == "posneg") {
+      data.forEach((value, index) => {
+        if (value.key == "positive" || value.key == "negative")
+        finalData[index] = {
+          value: value.value,
+          name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
+        };
+      })
+    } else {
+      data.forEach((value, index) => {
+        finalData[index] = {
+          value: value.value,
+          name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
+        };
+      })
+    }
   }
 
   console.log("PIE CHART HELLOOOO", finalData);

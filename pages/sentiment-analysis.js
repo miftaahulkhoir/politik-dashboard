@@ -297,10 +297,15 @@ export default function SocialReports(pageProps) {
           </Col>
           <Col span={12}>
             <Card noPadding>
-              <SocialPieChart title={"All Sources"} data={allSource} />
+              <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
             </Card>
           </Col>
         </Row>
+        <div className="col-12">
+          <Card noPadding>
+            <SocialPieChart title={"All Sources"} data={allSource} />
+          </Card>
+        </div>
         {/* <div className="col-12">
           <Card noPadding>
             <SocialTimeChart title={"Engagement"} data={engagementData} />
