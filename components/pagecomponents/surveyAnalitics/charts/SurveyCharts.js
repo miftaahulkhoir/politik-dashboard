@@ -1,9 +1,10 @@
 import axios from 'axios';
 import { useEffect, useMemo, useState } from 'react';
+import styles from '../surveyResults.module.css';
 import SurveyLineChart from './SurveyLineChart';
 import SurveyPieChart from './SurveyPieChart';
+import SurveyTableChart from './SurveyTableChart';
 import SurveyTextChart from './SurveyTextChart';
-import styles from './surveyResults.module.css';
 
 export default function SurveyCharts({ survey }) {
   // respondent count time series
@@ -55,6 +56,19 @@ export default function SurveyCharts({ survey }) {
             key={q.id}
             title={q.question_name}
             data={q.answer_text}
+          />
+        );
+      }
+
+      if (
+        q?.options?.length > 8 ||
+        q?.options?.some((option) => option.option_name.length > 30)
+      ) {
+        return (
+          <SurveyTableChart
+            key={q.id}
+            title={q.question_name}
+            options={q.options}
           />
         );
       }

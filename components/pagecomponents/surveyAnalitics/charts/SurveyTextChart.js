@@ -1,6 +1,6 @@
 import { Space } from 'antd';
+import styles from '../surveyResults.module.css';
 import SurveyChartCard from './SurveyChartCard';
-import styles from './surveyResults.module.css';
 
 export default function SurveyTextChart({ title, data = [] }) {
   return (

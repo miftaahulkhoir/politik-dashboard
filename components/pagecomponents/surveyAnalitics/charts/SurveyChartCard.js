@@ -27,6 +27,7 @@ export default function SurveyChartCard({
           position: 'sticky',
           top: '0px',
           padding: '16px 0',
+          zIndex: 999,
         }}
       >
         {title}

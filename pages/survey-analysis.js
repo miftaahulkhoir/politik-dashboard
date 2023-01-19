@@ -7,7 +7,7 @@ import SurveyDropdownSelector from '../components/pagecomponents/surveyAnalitics
 import SurveyResultHeader from '../components/pagecomponents/surveyAnalitics/SurveyResultHeader';
 
 const SurveyCharts = dynamic(() =>
-  import('../components/pagecomponents/surveyAnalitics/SurveyCharts')
+  import('../components/pagecomponents/surveyAnalitics/charts/SurveyCharts')
 );
 
 export default function SurveyResults({ surveys }) {
