@@ -1,8 +1,8 @@
 import 'leaflet/dist/leaflet.css';
 import { useState } from 'react';
 import {
-  CircleMarker,
   MapContainer,
+  Marker,
   TileLayer,
   Tooltip,
   useMapEvents,
@@ -22,6 +22,7 @@ export default function HomeMap({
 }) {
   const [zoom, setZoom] = useState(11);
   const [center, setCenter] = useState({ lat: -7.0335559, lng: 107.6589375 });
+  const [iconSize, setIconSize] = useState(30);
 
   return (
     <MapContainer
@@ -30,7 +31,11 @@ export default function HomeMap({
       zoomControl={false}
       className={styles.homeMap}
     >
-      <HomeMapComponent setZoom={setZoom} setCenter={setCenter} />
+      <HomeMapComponent
+        setZoom={setZoom}
+        setCenter={setCenter}
+        setIconSize={setIconSize}
+      />
       <TileLayer
         className="map"
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -38,36 +43,36 @@ export default function HomeMap({
       />
       {showKoordinator === true &&
         dataKordinator.map((m, index) => (
-          <CircleMarker
+          <Marker
             key={index}
-            center={[m?.latitude, m?.longitude]}
-            radius={20}
-            opacity={1.0}
-            pathOptions={{
-              color: 'none',
-              fillOpacity: 0.8,
-              fillColor: handleColor(m?.occupation.name),
-            }}
+            icon={
+              new L.Icon({
+                iconUrl: '/images/map/markers/user-koordinator.svg',
+                iconSize: [iconSize, iconSize],
+                iconAnchor: [iconSize / 2, iconSize / 2],
+              })
+            }
+            position={[m?.latitude, m?.longitude]}
           >
             <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
               {m.name}
             </Tooltip>
-          </CircleMarker>
+          </Marker>
         ))}
       {showRelawan === true &&
         dataRelawan.map(
           (m, index) =>
             m.longitude !== '' && (
-              <CircleMarker
+              <Marker
                 key={index}
-                center={[m?.latitude, m?.longitude]}
-                radius={20}
-                opacity={1.0}
-                pathOptions={{
-                  color: 'none',
-                  fillOpacity: 0.8,
-                  fillColor: handleColor(m?.occupation.name),
-                }}
+                icon={
+                  new L.Icon({
+                    iconUrl: '/images/map/markers/user-relawan.svg',
+                    iconSize: [iconSize, iconSize],
+                    iconAnchor: [iconSize / 2, iconSize / 2],
+                  })
+                }
+                position={[m?.latitude, m?.longitude]}
               >
                 <Tooltip
                   direction="top"
@@ -77,56 +82,61 @@ export default function HomeMap({
                 >
                   {m.name}
                 </Tooltip>
-              </CircleMarker>
+              </Marker>
             )
         )}
       {showPemilih === true &&
         dataPemilih.map(
           (m, index) =>
             m.longitude !== '' && (
-              <CircleMarker
+              <Marker
                 key={index}
-                center={[m?.latitude, m?.longitude]}
-                radius={20}
-                opacity={1.0}
-                pathOptions={{
-                  color: 'none',
-                  fillOpacity: 0.8,
-                  fillColor: handleColor(m?.occupation.name),
-                }}
-              ></CircleMarker>
+                icon={
+                  new L.Icon({
+                    iconUrl: '/images/map/markers/user-pemilih.svg',
+                    iconSize: [iconSize, iconSize],
+                    iconAnchor: [iconSize / 2, iconSize / 2],
+                  })
+                }
+                position={[m?.latitude, m?.longitude]}
+              ></Marker>
             )
         )}
       {showBlackList === true &&
         dataBlackList.map(
           (m, index) =>
             m.longitude !== '' && (
-              <CircleMarker
+              <Marker
                 key={index}
-                center={[m?.latitude, m?.longitude]}
-                radius={20}
-                opacity={1.0}
-                pathOptions={{
-                  color: 'none',
-                  fillOpacity: 0.8,
-                  fillColor: handleColor(m?.occupation.name),
-                }}
-              ></CircleMarker>
+                icon={
+                  new L.Icon({
+                    iconUrl: '/images/map/markers/user-blacklist.svg',
+                    iconSize: [iconSize, iconSize],
+                    iconAnchor: [iconSize / 2, iconSize / 2],
+                  })
+                }
+                position={[m?.latitude, m?.longitude]}
+              ></Marker>
             )
         )}
     </MapContainer>
   );
 }
 
-function HomeMapComponent({ setZoom, setCenter }) {
+function HomeMapComponent({ setZoom, setCenter, setIconSize }) {
+  const scaleZoom = (input) => {
+    return input / 19;
+  };
+
   const mapEvents = useMapEvents({
     zoomend: () => {
-      // console.log(mapEvents.getZoom());
-      setZoom(mapEvents.getZoom());
+      const zoom = mapEvents.getZoom();
+      setZoom(zoom);
       setCenter(mapEvents.getCenter());
+
+      setIconSize(40 * scaleZoom(zoom) + 1);
     },
     dragend: () => {
-      // console.log(mapEvents.getCenter());
       setCenter(mapEvents.getCenter());
     },
   });
