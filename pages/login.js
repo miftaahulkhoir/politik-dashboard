@@ -3,12 +3,14 @@ import axios from 'axios';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
+import { logoutUser } from '../utils/auth';
 
 export default function Login({ pageProps }) {
   const router = useRouter();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [errorMsg, setErrorMsg] = useState(false);
+  const [showErrorMsg, setShowErrorMsg] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -17,13 +19,23 @@ export default function Login({ pageProps }) {
         email: email,
         password: password,
       })
-      .then((res) => {
-        router.push('/');
+      .then(async (res) => {
+        if (res?.data?.data?.occupation_level > 2) {
+          await logoutUser();
+          setErrorMsg(
+            'Untuk sementara, hanya bisa diakses oleh admin dan koordinator'
+          );
+          setShowErrorMsg(true);
+        } else {
+          router.push('/');
+        }
       })
       .catch((err) => {
-        setErrorMsg(true);
+        setErrorMsg('Cek kembali email dan password Anda');
+        setShowErrorMsg(true);
       });
   };
+
   return (
     <>
       <Head>
@@ -47,11 +59,7 @@ export default function Login({ pageProps }) {
               </a>
             </div>
           </div>
-          {errorMsg && (
-            <div className="alert alert-danger">
-              Please check your Email and Password
-            </div>
-          )}
+          {showErrorMsg && <div className="alert alert-danger">{errorMsg}</div>}
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label className="form-label">Email</label>

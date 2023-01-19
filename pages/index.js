@@ -88,7 +88,7 @@ export default function Index({
   }, [showRelawan]);
 
   const ranks = useMemo(() => {
-    return users.map((user, i) => {
+    return users?.map((user, i) => {
       user.no = i + 1;
       return user;
     });
@@ -157,7 +157,7 @@ export default function Index({
       <Head>
         <title>Dashboard · Patrons</title>
       </Head>
-      {profile.occupation.level === 1 ? (
+      {profile?.occupation?.level === 1 ? (
         <>
           <HomeNavbar />
           <div className="left-content">
