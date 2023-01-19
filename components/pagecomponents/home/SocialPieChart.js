@@ -21,16 +21,16 @@ export default function SocialPieChart({ title, data, chartType }) {
       radius = ['0%', '70%'];
     } else {
       data.forEach((value, index) => {
-        finalData[index] = {
-          value: value.value,
-          name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
-        };
+        if (value.key != "undefined") {
+          finalData[index] = {
+            value: value.value,
+            name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
+          };
+        }
       })
       radius = ['40%', '70%'];
     }
   }
-
-  console.log("PIE CHART HELLOOOO", finalData);
 
   const option = {
     title: {
@@ -43,8 +43,7 @@ export default function SocialPieChart({ title, data, chartType }) {
       trigger: 'item'
     },
     legend: {
-      top: '5%',
-      left: 'center'
+      top: 'bottom',
     },
     series: [{
       name: title,
@@ -62,10 +61,17 @@ export default function SocialPieChart({ title, data, chartType }) {
           fontWeight: 'bold'
         }
       },
-      labelLine: {
-        show: false
+      data: finalData,
+      emphasis: {
+        itemStyle: {
+          shadowBlur: 10,
+          shadowOffsetX: 0,
+          shadowColor: 'rgba(0, 0, 0, 0.5)',
+        },
       },
-      data: finalData
+      label: {
+        formatter: '{b}: {c} ({d}%)',
+      },
     }],
   };
   return (
