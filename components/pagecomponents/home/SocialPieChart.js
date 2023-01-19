@@ -7,6 +7,7 @@ import styles from './home.module.css';
 
 export default function SocialPieChart({ title, data, chartType }) {
   let finalData = [];
+  let radius = [];
 
   if (data != null) {
     if (chartType == "posneg") {
@@ -17,6 +18,7 @@ export default function SocialPieChart({ title, data, chartType }) {
           name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
         };
       })
+      radius = ['0%', '70%'];
     } else {
       data.forEach((value, index) => {
         finalData[index] = {
@@ -24,6 +26,7 @@ export default function SocialPieChart({ title, data, chartType }) {
           name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
         };
       })
+      radius = ['40%', '70%'];
     }
   }
 
@@ -46,7 +49,7 @@ export default function SocialPieChart({ title, data, chartType }) {
     series: [{
       name: title,
       type: "pie",
-      radius: ['40%', '70%'],
+      radius: radius,
       avoidLabelOverlap: false,
       label: {
         show: false,
