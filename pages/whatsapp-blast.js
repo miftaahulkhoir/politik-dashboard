@@ -3,7 +3,7 @@ import { parseCookies } from 'nookies';
 import { useState } from 'react';
 
 export default function Blast(pageProps) {
-  const { kordinator, relawan, pemilih, profile } = pageProps;
+  const { koordinator, relawan, pemilih, profile } = pageProps;
   const [kirimKoordinator, setKirimKoordinator] = useState(false);
   const [kirimRelawan, setKirimRelawan] = useState(false);
   const [kirimPemilih, setKirimPemilih] = useState(false);
@@ -28,7 +28,7 @@ export default function Blast(pageProps) {
       });
     // let noPhone = "";
     // if (kirimKoordinator === true) {
-    //   kordinator.forEach((element) => {
+    //   koordinator.forEach((element) => {
     //     noPhone += `${element.phone},`;
     //   });
     // }
@@ -139,7 +139,7 @@ export default function Blast(pageProps) {
 
 export async function getServerSideProps(ctx) {
   let { token } = parseCookies(ctx);
-  let kordinator = [];
+  let koordinator = [];
   let relawan = [];
   let pemilih = [];
   let users = [];
@@ -150,12 +150,12 @@ export async function getServerSideProps(ctx) {
     })
     .then((res) => {
       users = res.data.data;
-      kordinator = res.data.data.filter((x) => x.occupation.level === 2);
+      koordinator = res.data.data.filter((x) => x.occupation.level === 2);
       relawan = res.data.data.filter((x) => x.occupation.level === 3);
       pemilih = res.data.data.filter((x) => x.occupation.level === 4);
     })
     .catch((err) => {});
   return {
-    props: { users, kordinator, relawan, pemilih },
+    props: { users, koordinator, relawan, pemilih },
   };
 }
