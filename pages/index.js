@@ -357,10 +357,10 @@ export async function getServerSideProps(ctx) {
     })
     .then((res) => {
       users = res.data.data;
-      koordinator = res.data.data.filter((x) => x.occupation.level === 2);
-      relawan = res.data.data.filter((x) => x.occupation.level === 3);
-      pemilih = res.data.data.filter((x) => x.occupation.level === 4);
-      daftarhitam = res.data.data.filter((x) => x.occupation.level === 5);
+      koordinator = res.data.data.filter((x) => x.occupation?.level === 2);
+      relawan = res.data.data.filter((x) => x.occupation?.level === 3);
+      pemilih = res.data.data.filter((x) => x.occupation?.level === 4);
+      daftarhitam = res.data.data.filter((x) => x.occupation?.level === 5);
     })
     .catch((err) => {});
   await axios

@@ -56,7 +56,7 @@ export default function Blast(pageProps) {
             <ul className="px-0">
               <h5>Pilih Penerima Pesan</h5>
               <hr />
-              {profile.occupation.level < 2 && (
+              {profile.occupation?.level < 2 && (
                 <li>
                   <input
                     type="checkbox"
@@ -66,7 +66,7 @@ export default function Blast(pageProps) {
                   Semua Koordinator
                 </li>
               )}
-              {profile.occupation.level < 3 && (
+              {profile.occupation?.level < 3 && (
                 <li>
                   <input
                     type="checkbox"
@@ -76,7 +76,7 @@ export default function Blast(pageProps) {
                   Semua Relawan
                 </li>
               )}
-              {profile.occupation.level < 3 && (
+              {profile.occupation?.level < 3 && (
                 <li>
                   <input
                     type="checkbox"
@@ -150,9 +150,9 @@ export async function getServerSideProps(ctx) {
     })
     .then((res) => {
       users = res.data.data;
-      koordinator = res.data.data.filter((x) => x.occupation.level === 2);
-      relawan = res.data.data.filter((x) => x.occupation.level === 3);
-      pemilih = res.data.data.filter((x) => x.occupation.level === 4);
+      koordinator = res.data.data.filter((x) => x.occupation?.level === 2);
+      relawan = res.data.data.filter((x) => x.occupation?.level === 3);
+      pemilih = res.data.data.filter((x) => x.occupation?.level === 4);
     })
     .catch((err) => {});
   return {

@@ -25,7 +25,7 @@ export default function UserRoleSelect({
   }, [currentUser]);
 
   const filteredOccupations = useMemo(() => {
-    return occupations.filter((o) => o.level > currentUser.occupation.level);
+    return occupations.filter((o) => o.level > currentUser.occupation?.level);
   }, [occupations]);
 
   return (
@@ -34,11 +34,11 @@ export default function UserRoleSelect({
         <Button
           className={clsx(
             styles.button,
-            activeLevel === occupation.level ? styles.button_active : ''
+            activeLevel === occupation?.level ? styles.button_active : ''
           )}
           type="link"
-          onClick={() => setActiveLevel(occupation.level)}
-          key={occupation.level}
+          onClick={() => setActiveLevel(occupation?.level)}
+          key={occupation?.level}
         >
           {occupation.name}
         </Button>
