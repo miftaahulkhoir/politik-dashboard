@@ -20,7 +20,7 @@ export default function DashboardLayout({ profile, children }) {
         <div className="loader-item two"></div>
         <div className="loader-item three"> </div>
       </div>
-      <header className="codex-header">
+      <header className="codex-header" style={{ zIndex: 99 }}>
         <div className="custom-container">
           <div className="row">
             <div className="col-12">
