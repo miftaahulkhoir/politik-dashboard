@@ -252,6 +252,7 @@ export default function Surveys(pageProps) {
         isEdit={isFormEdit}
         setIsEdit={setIsFormEdit}
         selectedSurveyId={selectedSurveyId}
+        setSurveysList={setSurveysList}
         apiNotification={apiNotification}
       />
 

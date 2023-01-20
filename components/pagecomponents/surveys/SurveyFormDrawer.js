@@ -20,6 +20,7 @@ export default function SurveyFormDrawer({
   setIsEdit,
   selectedSurveyId,
   apiNotification,
+  setSurveysList,
 }) {
   const [title, setTitle] = useState('');
   const [isActive, setIsActive] = useState(false);
@@ -42,12 +43,19 @@ export default function SurveyFormDrawer({
     })();
   }, [isEdit]);
 
+  const clearForm = () => {
+    setTitle('');
+    setIsActive(false);
+    setQuestions([{ ...defaultSurveyQuestion.text }]);
+  };
+
   const addQuestionHandler = () => {
     setQuestions([...questions, { ...defaultSurveyQuestion.text }]);
   };
 
   const onClose = () => {
     setOpen(false);
+    clearForm();
   };
 
   const submitHandler = async () => {
@@ -139,18 +147,20 @@ export default function SurveyFormDrawer({
           questions: newQuestions || null,
         };
 
-        const res = await axios.post(
-          `${process.env.APP_BASEURL}api/survey`,
-          survey
-        );
-        if (!res?.data?.status) throw new Error('unknown error');
+        const res = await axios.post('/api/survey', survey);
+        const newSurvey = res.data.data;
+
+        setSurveysList((prevSurveys) => {
+          newSurvey.no = prevSurveys.length + 1;
+          return [...prevSurveys, newSurvey];
+        });
 
         apiNotification.success({
           message: 'Berhasil',
           description: 'Survei telah ditambahkan',
         });
       }
-      setOpen(false);
+      onClose();
     } catch (error) {
       console.error(error);
       apiNotification.error({
