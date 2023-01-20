@@ -28,5 +28,5 @@ COPY --from=builder /patronpolitik/.next ./.next
 COPY --from=builder /patronpolitik/node_modules ./node_modules
 COPY --from=builder /patronpolitik/package.json ./package.json
 
-#EXPOSE 3000
+EXPOSE 3000
 CMD ["npm", "start"]
