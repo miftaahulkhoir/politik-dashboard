@@ -17,7 +17,18 @@ build:       # This job runs in the build stage, which runs first.
 deploy-prod:      # This job runs in the deploy stage.
   stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
   environment: production
+  only:
+    - master
   tags:
     - production
+  script:
+    - sudo bash ./run.sh $CI_COMMIT_BRANCH
+
+deploy-staging:      # This job runs in the deploy stage.
+  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+  except:
+    - master
+  tags:
+    - dev
   script:
     - sudo bash ./run.sh $CI_COMMIT_BRANCH

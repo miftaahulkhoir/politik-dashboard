@@ -1,6 +1,10 @@
 #!/bin/bash
 source release_ver.sh
 
-make down
-cp -f .env.production .env
-make run && find . -name . -o -prune -exec rm -rf -- {} +
+if [ -z $1 ] || [ $1 != "master" ]; then
+
+else
+    make down-prod
+    cp -f .env.production .env
+    make run-prod && find . -name . -o -prune -exec rm -rf -- {} +
+fi
