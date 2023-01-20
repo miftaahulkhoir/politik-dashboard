@@ -1,27 +1,27 @@
-import axios from 'axios';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import { parseCookies } from 'nookies';
-import { useEffect, useMemo, useState } from 'react';
-import { TbDotsVertical } from 'react-icons/tb';
-import Card from '../components/elements/card/Card';
-import NameAvatar from '../components/elements/nameAvatar/NameAvatar';
-import SummaryCard from '../components/elements/summaryCard/SummaryCard';
-import BlueCard from '../components/pagecomponents/home/BlueCard';
-import ChartCard from '../components/pagecomponents/home/ChartCard';
-import HomeNavbar from '../components/pagecomponents/home/HomeNavbar';
-const Centrifuge = require('centrifuge');
+import axios from "axios";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import { useRouter } from "next/router";
+import { parseCookies } from "nookies";
+import { useEffect, useMemo, useState } from "react";
+import { TbDotsVertical } from "react-icons/tb";
+import Card from "../components/elements/card/Card";
+import NameAvatar from "../components/elements/nameAvatar/NameAvatar";
+import SummaryCard from "../components/elements/summaryCard/SummaryCard";
+import BlueCard from "../components/pagecomponents/home/BlueCard";
+import ChartCard from "../components/pagecomponents/home/ChartCard";
+import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+const Centrifuge = require("centrifuge");
 
 const HomeMap = dynamic(
-  () => import('../components/pagecomponents/home/HomeMap'),
+  () => import("../components/pagecomponents/home/HomeMap"),
   {
     ssr: false,
   }
 );
 
 const CustomDataTable = dynamic(
-  () => import('../components/elements/customDataTable/CustomDataTable'),
+  () => import("../components/elements/customDataTable/CustomDataTable"),
   { ssr: false }
 );
 
@@ -36,13 +36,15 @@ export default function Index({
 }) {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
-  const [position, setPosition] = useState('data');
+  const [position, setPosition] = useState("data");
   const [dataKoordinator, setKoordinator] = useState([]);
   const [dataRelawan, setRelawan] = useState([]);
   const [showKoordinator, setShowKoordinator] = useState(false);
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
   const [showBlackList, setShowBlackList] = useState(false);
+  const [userLogCordinate, setUserLogCordinate] = useState(false);
+  const [logCordinate, setLogCordinate] = useState([]);
   const centrifuge = new Centrifuge(process.env.WEBSOCKET_CREDENTIALS_HOST);
 
   useEffect(() => {
@@ -53,8 +55,8 @@ export default function Index({
 
   useEffect(() => {
     centrifuge.connect();
-    centrifuge.on('connect', function (ctx) {
-      console.log('connected', ctx);
+    centrifuge.on("connect", function (ctx) {
+      console.log("connected", ctx);
     });
     if (showKoordinator === true) {
       dataKoordinator.forEach((element) => {
@@ -71,8 +73,8 @@ export default function Index({
 
   useEffect(() => {
     centrifuge.connect();
-    centrifuge.on('connect', function (ctx) {
-      console.log('connected', ctx);
+    centrifuge.on("connect", function (ctx) {
+      console.log("connected", ctx);
     });
     if (showRelawan === true) {
       dataRelawan.forEach((element) => {
@@ -96,60 +98,65 @@ export default function Index({
 
   const columns = [
     {
-      name: 'No',
+      name: "No",
       selector: (row) => row.no,
-      width: '80px',
+      width: "80px",
       center: true,
       sortable: true,
     },
     {
-      name: 'Nama Koordinator',
+      name: "Nama Koordinator",
       grow: 3,
       selector: (row) => (
-        <div className="d-flex align-items-center">
+        <div className='d-flex align-items-center'>
           <NameAvatar longName={row.name} />
-          <div className="ml-12">{row.name}</div>
+          <div className='ml-12'>{row.name}</div>
         </div>
       ),
     },
     {
-      name: 'Relawan',
-      selector: (row) => row.relawan || 0 + ' relawan',
+      name: "Relawan",
+      selector: (row) => row.relawan || 0 + " relawan",
     },
     {
-      name: 'Pemilih',
-      selector: (row) => row.pemilih || 0 + ' pemilih',
+      name: "Pemilih",
+      selector: (row) => row.pemilih || 0 + " pemilih",
     },
     {
-      name: '',
+      name: "",
       selector: (row) => (
-        <span style={{ color: '#016CEE' }}>{row.occupation.name}</span>
+        <span style={{ color: "#016CEE" }}>{row.occupation.name}</span>
       ),
     },
     {
-      name: '',
+      name: "",
       selector: (row) => <TbDotsVertical />,
-      width: '45px',
+      width: "45px",
     },
   ];
 
   const handleColor = (col) => {
-    let color = '';
+    let color = "";
     switch (col) {
-      case 'Koordinator':
-        color = '#e74c3c';
+      case "Koordinator":
+        color = "#e74c3c";
         break;
-      case 'Relawan':
-        color = '#3498db';
+      case "Relawan":
+        color = "#3498db";
         break;
-      case 'General User':
-        color = '#2ecc71';
+      case "General User":
+        color = "#2ecc71";
         break;
-      case 'Daftar Hitam':
-        color = '#34495e';
+      case "Daftar Hitam":
+        color = "#34495e";
         break;
     }
     return color;
+  };
+
+  const handleCenter = () => {
+    setUserLogCordinate(false);
+    setLogCordinate([]);
   };
 
   return (
@@ -160,37 +167,53 @@ export default function Index({
       {profile?.occupation?.level === 1 ? (
         <>
           <HomeNavbar />
-          <div className="left-content">
-            <div className="card">
-              <div className="card-body p-0">
-                <ul className="nav">
-                  <li
-                    className={
-                      position === 'data' ? 'nav-item actives' : 'nav-item'
-                    }
-                  >
-                    <a className="nav-link" onClick={() => setPosition('data')}>
-                      <i className="fa fa-list"></i>
-                    </a>
-                  </li>
-                  <li
-                    className={
-                      position === 'persebaran'
-                        ? 'nav-item actives'
-                        : 'nav-item'
-                    }
-                    onClick={() => setPosition('persebaran')}
-                  >
-                    <a className="nav-link">Persebaran</a>
-                  </li>
+          <div className='left-content'>
+            <div className='card'>
+              <div className='card-body p-0'>
+                <ul className='nav'>
+                  {userLogCordinate === true && (
+                    <li
+                      className={
+                        userLogCordinate === true
+                          ? "nav-item actives"
+                          : "nav-item"
+                      }>
+                      <a className='nav-link' onClick={() => handleCenter()}>
+                        <i className='fa fa-close'></i>
+                      </a>
+                    </li>
+                  )}
+                  {userLogCordinate === false && (
+                    <>
+                      <li
+                        className={
+                          position === "data" ? "nav-item actives" : "nav-item"
+                        }>
+                        <a
+                          className='nav-link'
+                          onClick={() => setPosition("data")}>
+                          <i className='fa fa-list'></i>
+                        </a>
+                      </li>
+                      <li
+                        className={
+                          position === "persebaran"
+                            ? "nav-item actives"
+                            : "nav-item"
+                        }
+                        onClick={() => setPosition("persebaran")}>
+                        <a className='nav-link'>Persebaran</a>
+                      </li>
+                    </>
+                  )}
                 </ul>
               </div>
-              <div className="col-12 search-list">
-                {position === 'data' && (
+              <div className='col-12 search-list'>
+                {position === "data" && userLogCordinate === false && (
                   <>
                     <h4>Data Koordinator</h4>
                     <hr />
-                    <table className="table table-striped">
+                    <table className='table table-striped'>
                       <thead>
                         <tr>
                           <th>Total Koordinator</th>
@@ -209,7 +232,7 @@ export default function Index({
                     <br />
                     <h4>Data Relawan</h4>
                     <hr />
-                    <table className="table table-striped">
+                    <table className='table table-striped'>
                       <thead>
                         <tr>
                           <th>Total Pemilih</th>
@@ -227,52 +250,74 @@ export default function Index({
                     </table>
                   </>
                 )}
-                {position === 'persebaran' && (
+                {position === "persebaran" && userLogCordinate === false && (
                   <>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showKoordinator}
-                        onClick={() => setShowKoordinator(!showKoordinator)}
-                      ></input>
-                      <div className="circle-cordinator"></div>
+                        onClick={() => {
+                          setShowKoordinator(!showKoordinator);
+                        }}></input>
+                      <div className='circle-cordinator'></div>
                       <label>Koordinator</label>
                     </div>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showRelawan}
-                        onClick={() => setShowRelawan(!showRelawan)}
-                      ></input>
-                      <div className="circle-relawan"></div>
+                        onClick={() => {
+                          setShowRelawan(!showRelawan);
+                        }}></input>
+                      <div className='circle-relawan'></div>
                       <label>Relawan</label>
                     </div>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showPemilih}
-                        onClick={() => setShowPemilih(!showPemilih)}
-                      ></input>
-                      <div className="circle-pemilih"></div>
+                        onClick={() => {
+                          setShowPemilih(!showPemilih);
+                        }}></input>
+                      <div className='circle-pemilih'></div>
                       <label>Pemilih</label>
                     </div>
-                    <div className="form-group d-flex justify-content-left">
+                    <div className='form-group d-flex justify-content-left'>
                       <input
-                        type="checkbox"
+                        type='checkbox'
                         defaultChecked={showBlackList}
-                        onClick={() => setShowBlackList(!showBlackList)}
-                      ></input>
-                      <div className="circle-hitam"></div>
+                        onClick={() => {
+                          setShowBlackList(!showBlackList);
+                        }}></input>
+                      <div className='circle-hitam'></div>
                       <label>Daftar Hitam</label>
                     </div>
                   </>
+                )}
+                {userLogCordinate === true && (
+                  <table className='table table-bordered my-2'>
+                    <thead>
+                      <tr>
+                        <th>Location</th>
+                        <th>Date</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {logCordinate.map((cordinate) => (
+                        <tr>
+                          <td>{cordinate.locationName}</td>
+                          <td>{cordinate.timestamp}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
                 )}
               </div>
             </div>
           </div>
 
           {isMounted && (
-            <div className="map">
+            <div className='map'>
               <HomeMap
                 showKoordinator={showKoordinator}
                 dataKoordinator={dataKoordinator}
@@ -282,6 +327,10 @@ export default function Index({
                 dataPemilih={pemilih}
                 showBlackList={showBlackList}
                 dataBlackList={daftarhitam}
+                userLogCordinate={userLogCordinate}
+                setUserLogCordinate={setUserLogCordinate}
+                logCordinate={logCordinate}
+                setLogCordinate={setLogCordinate}
                 handleColor={handleColor}
               />
             </div>
@@ -289,47 +338,47 @@ export default function Index({
         </>
       ) : (
         <>
-          <div className="col-12 pdv-3 mb-12">
+          <div className='col-12 pdv-3 mb-12'>
             <h1>Dashboard</h1>
           </div>
 
-          <div className="col-3 mb-24">
-            <SummaryCard title="Total relawan" number={425} stat={-0.051} />
+          <div className='col-3 mb-24'>
+            <SummaryCard title='Total relawan' number={425} stat={-0.051} />
           </div>
-          <div className="col-3 mb-24">
-            <SummaryCard title="Total pemilih" number={6875} stat={0.128} />
+          <div className='col-3 mb-24'>
+            <SummaryCard title='Total pemilih' number={6875} stat={0.128} />
           </div>
-          <div className="col-3 mb-24">
+          <div className='col-3 mb-24'>
             <SummaryCard
-              title="Total logistik"
-              subtitle="satuan rupiah"
+              title='Total logistik'
+              subtitle='satuan rupiah'
               number={192092251}
               stat={-0.121}
             />
           </div>
-          <div className="col-3 mb-24">
+          <div className='col-3 mb-24'>
             <SummaryCard
-              title="Pemilih baru"
-              subtitle="2 Des 2022"
+              title='Pemilih baru'
+              subtitle='2 Des 2022'
               number={6875}
               stat={0.041}
             />
           </div>
-          <div className="col-6 mb-24">
+          <div className='col-6 mb-24'>
             <Card noPadding>
               <ChartCard
-                dataX={['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul']}
+                dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]}
                 dataY={[140, 232, 101, 264, 90, 340]}
               />
             </Card>
           </div>
-          <div className="col-6 mb-24">
+          <div className='col-6 mb-24'>
             <BlueCard />
           </div>
-          <div className="col-12 mb-24">
+          <div className='col-12 mb-24'>
             <Card>
-              <div className="d-flex justify-content-between mb-12 mt-8">
-                <h2 style={{ fontSize: '16px', fontWeight: 600 }}>
+              <div className='d-flex justify-content-between mb-12 mt-8'>
+                <h2 style={{ fontSize: "16px", fontWeight: 600 }}>
                   Peringkat Koordinator
                 </h2>
               </div>
