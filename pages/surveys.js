@@ -1,12 +1,22 @@
-import { Button, Card, Col, Row, Space, Switch, notification } from 'antd';
+import {
+  Button,
+  Card,
+  Col,
+  Row,
+  Space,
+  Switch,
+  Tooltip,
+  notification,
+} from 'antd';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
 import Head from 'next/head';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { TbPencil, TbTrashX } from 'react-icons/tb';
+import { TbEye, TbPencil, TbTrashX } from 'react-icons/tb';
 import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
 import SurveyFormDrawer from '../components/pagecomponents/surveys/SurveyFormDrawer';
+import SurveyResponseDrawer from '../components/pagecomponents/surveys/SurveyResponseDrawer';
 import SurveySearchBar from '../components/pagecomponents/surveys/SurveySearchBar';
 
 export default function Surveys(pageProps) {
@@ -18,6 +28,9 @@ export default function Surveys(pageProps) {
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
+  const [selectedSurvey, setSelectedSurvey] = useState({});
+
+  const [isResponseDrawerOpen, setIsResponseDrawerOpen] = useState(false);
 
   const [apiNotification, contextHolderNotification] =
     notification.useNotification();
@@ -156,58 +169,74 @@ export default function Surveys(pageProps) {
       name: 'Aksi',
       selector: (row) => (
         <div className="d-flex gap-2">
-          <Button
-            type="text"
-            icon={<TbPencil size={20} color="#7287A5" />}
-            shape="circle"
-            onClick={() => {
-              if (row?.total_respondent > 0) {
-                apiNotification.error({
-                  message: 'Gagal',
-                  description:
-                    'Tidak bisa mengubah survei karena telah memiliki responden',
-                });
-                return;
-              }
-              setIsFormEdit(true);
-              setSelectedSurveyId(row.id);
-              setIsFormOpen(true);
-            }}
-          ></Button>
-          <Button
-            type="text"
-            icon={<TbTrashX size={20} color="#B12E2E" />}
-            shape="circle"
-            onClick={async () => {
-              try {
+          <Tooltip title="Ubah survei">
+            <Button
+              type="text"
+              icon={<TbPencil size={20} color="#7287A5" />}
+              shape="circle"
+              onClick={() => {
                 if (row?.total_respondent > 0) {
                   apiNotification.error({
                     message: 'Gagal',
                     description:
-                      'Tidak bisa menghapus survei karena telah memiliki responden',
+                      'Tidak bisa mengubah survei karena telah memiliki responden',
                   });
                   return;
                 }
+                setIsFormEdit(true);
+                setSelectedSurveyId(row.id);
+                setIsFormOpen(true);
+              }}
+            ></Button>
+          </Tooltip>
+          <Tooltip title="Hapus survei">
+            <Button
+              type="text"
+              icon={<TbTrashX size={20} color="#B12E2E" />}
+              shape="circle"
+              onClick={async () => {
+                try {
+                  if (row?.total_respondent > 0) {
+                    apiNotification.error({
+                      message: 'Gagal',
+                      description:
+                        'Tidak bisa menghapus survei karena telah memiliki responden',
+                    });
+                    return;
+                  }
 
-                const res = await axios.delete(
-                  `${process.env.APP_BASEURL}api/survey/${row?.id}`
-                );
-                if (!res?.data?.status) throw new Error('unknown error');
+                  const res = await axios.delete(
+                    `${process.env.APP_BASEURL}api/survey/${row?.id}`
+                  );
+                  if (!res?.data?.status) throw new Error('unknown error');
 
-                const newSurveys = surveysList.filter((s) => s.id !== row.id);
-                setSurveysList([...newSurveys]);
+                  const newSurveys = surveysList.filter((s) => s.id !== row.id);
+                  setSurveysList([...newSurveys]);
 
-                apiNotification.success({
-                  message: `Survei ${row?.survey_name} berhasil dihapus`,
-                });
-              } catch (error) {
-                apiNotification.error({
-                  message: 'Gagal',
-                  description: 'Terjadi kesalahan',
-                });
-              }
-            }}
-          ></Button>
+                  apiNotification.success({
+                    message: `Survei ${row?.survey_name} berhasil dihapus`,
+                  });
+                } catch (error) {
+                  apiNotification.error({
+                    message: 'Gagal',
+                    description: 'Terjadi kesalahan',
+                  });
+                }
+              }}
+            ></Button>
+          </Tooltip>
+          <Tooltip title="Lihat responden">
+            <Button
+              type="text"
+              icon={<TbEye size={20} color="#016CEE" />}
+              shape="circle"
+              onClick={() => {
+                setIsResponseDrawerOpen(true);
+                setSelectedSurvey(row);
+                console.log(row);
+              }}
+            ></Button>
+          </Tooltip>
         </div>
       ),
       width: '220px',
@@ -234,6 +263,12 @@ export default function Surveys(pageProps) {
         setIsEdit={setIsFormEdit}
         selectedSurveyId={selectedSurveyId}
         apiNotification={apiNotification}
+      />
+
+      <SurveyResponseDrawer
+        open={isResponseDrawerOpen}
+        setOpen={setIsResponseDrawerOpen}
+        selectedSurvey={selectedSurvey}
       />
 
       <Space direction="vertical" size="middle">
