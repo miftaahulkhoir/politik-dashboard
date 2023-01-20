@@ -157,15 +157,6 @@ export default function SocialReports(pageProps) {
         <h1>Analisis Sentimen</h1>
       </div>
 
-      <SurveyFormDrawer
-        open={isFormOpen}
-        setOpen={setIsFormOpen}
-        isEdit={isFormEdit}
-        setIsEdit={setIsFormEdit}
-        selectedSurveyId={selectedSurveyId}
-        apiNotification={apiNotification}
-      />
-
       <Space direction="vertical" size="middle">
         <SearchBar
           groupData={groupData}
