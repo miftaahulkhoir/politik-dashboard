@@ -7,7 +7,7 @@ services:
     ports:
       - 5133:${APP_PORT}
     env_file:
-      - .env.development
+      - .env
 
 networks:
   default:

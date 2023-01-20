@@ -1,7 +1,6 @@
 #!/bin/bash
 source release_ver.sh
 
-rm -rf .env
 if [ -z $1 ] || [ $1 != "master" ]; then
     export DOCKER_IMG_TAG="dev-fe"
     cp -f .env.development .env
