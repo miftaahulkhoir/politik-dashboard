@@ -1,31 +1,23 @@
 import {
-  Button,
   Col,
   DatePicker,
-  Divider,
-  Drawer,
   Input,
-  notification,
   Row,
   Select,
   Space,
   Spin,
-  Switch,
-  Typography
-} from "antd";
-import axios from "axios";
-import debounce from "lodash.debounce";
-import { parseCookies } from "nookies";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import Head from "next/head";
-import Card from "../components/elements/card/Card";
-import SocialTimeChart from "../components/pagecomponents/home/SocialTimeChart";
-import SocialPieChart from "../components/pagecomponents/home/SocialPieChart";
-import SocialSummaryCard from "../components/pagecomponents/home/SocialSummaryCard";
-import {
-  TbPlus,
-  TbSearch,
-} from "react-icons/tb";
+  Typography,
+  notification,
+} from 'antd';
+import axios from 'axios';
+import debounce from 'lodash.debounce';
+import Head from 'next/head';
+import { parseCookies } from 'nookies';
+import { useCallback, useEffect, useState } from 'react';
+import Card from '../components/elements/card/Card';
+import SocialPieChart from '../components/pagecomponents/home/SocialPieChart';
+import SocialSummaryCard from '../components/pagecomponents/home/SocialSummaryCard';
+import SocialTimeChart from '../components/pagecomponents/home/SocialTimeChart';
 const { RangePicker } = DatePicker;
 
 const { TextArea } = Input;
@@ -125,22 +117,27 @@ export default function SocialReports(pageProps) {
       let request = {
         keyword_id: selectedTopicData.toString(),
         from_time: filterDate[0].toString(),
-        to_time: filterDate[1].toString()
+        to_time: filterDate[1].toString(),
       };
-      await axios.post(
-        `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
-        request
-      ).then ((res) => {
-        setMentionData(res.data.data.mentions_over_time.data.entries);
-        setMentionSum(res.data.data.sum_of_mentions.data.total_value);
-        setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
-        setAllSource(res.data.data.sum_of_all_source.data.entries);
-        setSentiment(res.data.data.effective_sentiment.data.entries);
-        setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
-        setShowCharts(true);
-        setIsLoading(false);
-        if (!res?.data?.status) throw new Error('unknown error');
-      });
+      await axios
+        .post(
+          `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
+          request
+        )
+        .then((res) => {
+          setMentionData(res.data.data.mentions_over_time.data.entries);
+          setMentionSum(res.data.data.sum_of_mentions.data.total_value);
+          setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
+          setAllSource(res.data.data.sum_of_all_source.data.entries);
+          setSentiment(res.data.data.effective_sentiment.data.entries);
+          setMentionBySource(
+            res.data.data.mentions_over_time_by_source.data.entries
+          );
+          setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
+          setShowCharts(true);
+          setIsLoading(false);
+          if (!res?.data?.status) throw new Error('unknown error');
+        });
     } catch (error) {
       console.error(error);
       apiNotification.error({
@@ -198,44 +195,48 @@ export default function SocialReports(pageProps) {
             <div className="col-12">
               <Card noPadding>
                 <SocialTimeChart
-                  title={"Mentions Over Time"}
+                  title={'Mentions Over Time'}
                   data={mentionData}
-                  chartType={"common"}
+                  chartType={'common'}
                 />
               </Card>
             </div>
             <div className="col-12">
               <Card noPadding>
                 <SocialTimeChart
-                title={"Mentions Over Time by Source"}
-                data={mentionBySource}
-                chartType={"detail"}
+                  title={'Mentions Over Time by Source'}
+                  data={mentionBySource}
+                  chartType={'detail'}
                 />
               </Card>
             </div>
             <div className="col-12">
               <Card noPadding>
-                <SocialPieChart title={"All Sources"} data={allSource} />
+                <SocialPieChart title={'All Sources'} data={allSource} />
               </Card>
             </div>
             <div className="col-12">
               <Card noPadding>
                 <SocialTimeChart
-                title={"Sentiment Over Time"}
-                data={sentimentOverTime}
-                chartType={"detail"}
+                  title={'Sentiment Over Time'}
+                  data={sentimentOverTime}
+                  chartType={'detail'}
                 />
               </Card>
             </div>
             <Row gutter={18}>
               <Col span={12}>
                 <Card noPadding>
-                  <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
+                  <SocialPieChart title={'Sentiment Ratio'} data={sentiment} />
                 </Card>
               </Col>
               <Col span={12}>
                 <Card noPadding>
-                  <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
+                  <SocialPieChart
+                    title={'Positive-Negative Sentiment Ratio'}
+                    data={sentiment}
+                    chartType={'posneg'}
+                  />
                 </Card>
               </Col>
             </Row>
@@ -250,11 +251,11 @@ export default function SocialReports(pageProps) {
               padding: '40px 0',
             }}
           >
-            {isLoading ? 
-              <Spin size="large" style={{margin: '50px 0'}}>
+            {isLoading ? (
+              <Spin size="large" style={{ margin: '50px 0' }}>
                 <div className="content" />
               </Spin>
-              :
+            ) : (
               <>
                 <img
                   style={{ width: '30%', maxHeight: '280px' }}
@@ -265,7 +266,7 @@ export default function SocialReports(pageProps) {
                   Tolong pilih topik terlebih dahulu
                 </div>
               </>
-            }
+            )}
           </div>
         )}
       </Space>
@@ -360,346 +361,5 @@ function SearchBar({
         </Row>
       </Col>
     </Row>
-  );
-}
-
-const defaultSurveyQuestion = {
-  text: {
-    input_type: 'text',
-    question_name: '',
-    question_subject: '',
-    section: '',
-    options: null,
-  },
-  long_text: {
-    input_type: 'long_type',
-    question_name: '',
-    question_subject: '',
-    section: '',
-    options: null,
-  },
-  yes_no_question: {
-    input_type: 'yes_no_question',
-    question_name: '',
-    question_subject: '',
-    section: '',
-    options: [
-      {
-        option_name: 'ya',
-      },
-      {
-        option_name: 'tidak',
-      },
-    ],
-  },
-  radio_button: {
-    input_type: 'radio_button',
-    question_name: '',
-    question_subject: '',
-    section: '',
-    options: [
-      {
-        option_name: 'opsi 1',
-      },
-      {
-        option_name: 'opsi 2',
-      },
-    ],
-  },
-  dropdown: {
-    input_type: 'dropdown',
-    question_name: '',
-    question_subject: '',
-    section: '',
-    options: [
-      {
-        option_name: 'opsi 1',
-      },
-      {
-        option_name: 'opsi 2',
-      },
-    ],
-  },
-};
-
-function SurveyFormDrawer({
-  open,
-  setOpen,
-  isEdit,
-  setIsEdit,
-  selectedSurveyId,
-  apiNotification,
-}) {
-  const [title, setTitle] = useState('');
-  const [isActive, setIsActive] = useState(false);
-  const [questions, setQuestions] = useState([
-    { ...defaultSurveyQuestion.text },
-  ]);
-
-  useEffect(() => {
-    if (!isEdit) return;
-    (async function () {
-      try {
-        const res = await axios.get(
-          `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`
-        );
-        const data = res?.data?.data;
-        setTitle(data?.survey_name);
-        setIsActive(data?.status ? 1 : 0);
-        setQuestions(data?.questions);
-      } catch (error) {}
-    })();
-  }, [isEdit]);
-
-  const addQuestionHandler = () => {
-    setQuestions([...questions, { ...defaultSurveyQuestion.text }]);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
-
-  const submitHandler = async () => {
-    try {
-      const newQuestions = questions.map((question, i) => {
-        const newQuestion = question;
-        newQuestion.question_number = i + 1;
-        newQuestion.section = 'section1';
-        newQuestion.question_subject = 'subject1';
-        newQuestion.options = newQuestion?.options?.map((option, j) => {
-          const newOption = option;
-          newOption.value = j + 1;
-          return newOption;
-        });
-        return newQuestion;
-      });
-      console.log('new quests', newQuestions);
-      if (isEdit) {
-        // update
-
-        // FIXME: update ideas:
-        // loop req options -> ada api update sendiri
-        // loop req questions -> ada api update sendiri
-        // req survey -> hanya judul
-        // req status -> ada api update sendiri
-
-        // 1. update survey name
-        const survey = {
-          survey_name: title,
-        };
-
-        await axios.put(
-          `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`,
-          survey
-        );
-
-        // // 2. update/create questions
-        // const newOptions = [];
-        // await Promise.all(
-        //   newQuestions.forEach(async (q) => {
-        //     if (q.id) {
-        //       // update question
-        //       await axios.put(
-        //         `${process.env.APP_BASEURL}api/survey/${q.id}`,
-        //         q
-        //       );
-
-        //       // menambah options yang perlu diupdate
-        //       if (q.options) {
-        //         q.options.forEach((o) => {
-        //           o.question_id = q.id;
-        //           newOptions.push(o);
-        //         });
-        //       }
-        //       return;
-        //     }
-        //     // create question
-        //     q.survey_id = selectedSurveyId;
-        //     await axios.post(`${process.env.APP_BASEURL}api/survey`, q);
-        //   })
-        // );
-
-        // // 3. update options untuk question yang sudah ada
-
-        // console.log('options', options);
-        // await Promise.all(
-        //   newOptions.forEach(async (option) => {
-        //     if (option.id) {
-        //       // update
-        //       await axios.put(
-        //         `${process.env.APP_BASEURL}api/survey/${option.ques}`,
-        //         survey
-        //       );
-        //       return;
-        //     }
-        //     // create
-        //   })
-        // );
-
-        apiNotification.success({
-          message: 'Berhasil',
-          description: 'Perubahan survei telah disimpan',
-        });
-        setIsEdit(false);
-      } else {
-        // create
-        const survey = {
-          survey_name: title,
-          status: isActive ? 1 : 0,
-          questions: newQuestions || null,
-        };
-
-        const res = await axios.post(
-          `${process.env.APP_BASEURL}api/survey`,
-          survey
-        );
-        if (!res?.data?.status) throw new Error('unknown error');
-
-        apiNotification.success({
-          message: 'Berhasil',
-          description: 'Survei telah ditambahkan',
-        });
-      }
-      setOpen(false);
-    } catch (error) {
-      console.error(error);
-      apiNotification.error({
-        message: 'Gagal',
-        description: 'Terjadi kesalahan saat menambahkan survei',
-      });
-    }
-  };
-
-  return (
-    <Drawer
-      title={isEdit ? 'Pengubahan Survei' : 'Penambahan Survei'}
-      placement="right"
-      onClose={onClose}
-      open={open}
-      closable={false}
-      width="60%"
-      headerStyle={{ border: 'none', fontSize: '32px' }}
-      bodyStyle={{ background: '#EEEEEE', padding: '0px', overflowX: 'hidden' }}
-      stye
-    >
-      <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
-        <Col span={16}>
-          <Title level={5}>Judul Survei</Title>
-          <TextArea
-            rows={2}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
-        </Col>
-        <Col span={8}>
-          <Title level={5}>Status</Title>
-          <Space>
-            <Text>Tidak Aktif</Text>
-            <Switch checked={isActive} onChange={setIsActive} />
-            <Text>Aktif</Text>
-          </Space>
-        </Col>
-      </Row>
-      {questions.map((question, index) => (
-        <SurveyFormCard
-          key={index}
-          index={index}
-          questions={questions}
-          setQuestions={setQuestions}
-        />
-      ))}
-      <Row justify="space-between" style={{ margin: '24px' }}>
-        <Button onClick={addQuestionHandler}>Tambah pertanyaan</Button>
-        <Button type="primary" onClick={submitHandler}>
-          Simpan survei
-        </Button>
-      </Row>
-    </Drawer>
-  );
-}
-
-function SurveyFormCard({ index, questions, setQuestions }) {
-  const type = useMemo(() => {
-    return questions[index].input_type;
-  }, [questions]);
-
-  const labels = useMemo(() => {
-    return questions[index]?.options?.map((option) => option.option_name);
-  }, [questions]);
-
-  const setLabels = useCallback(
-    (values) => {
-      const newQuestions = [...questions];
-      newQuestions[index].options = values?.map((value) => ({
-        option_name: value,
-      }));
-      setQuestions([...newQuestions]);
-    },
-    [questions]
-  );
-
-  const formElement = useMemo(() => {
-    if (type === 'text') return <Input value="Isian singkat" disabled />;
-    if (type === 'long_text') return <TextArea value="Paragraf" disabled />;
-    if (type === 'dropdown')
-      return <DropdownInputEditable labels={labels} setLabels={setLabels} />;
-    if (type === 'radio_button')
-      return <MultiRadioEditable labels={labels} setLabels={setLabels} />;
-  }, [type, labels, setLabels]);
-
-  return (
-    <Card style={{ margin: '24px' }}>
-      <Row gutter={32}>
-        <Col span={16}>
-          <Title level={5}>Pertanyaan</Title>
-          <TextArea
-            rows={2}
-            value={questions[index].question_name}
-            onChange={(e) => {
-              const newQuestions = [...questions];
-              newQuestions[index].question_name = e.target.value;
-              setQuestions([...newQuestions]);
-            }}
-          />
-        </Col>
-        <Col span={8}>
-          <Title level={5}>Jenis jawaban</Title>
-          <Select
-            defaultValue="text"
-            style={{ width: '160px' }}
-            options={[
-              {
-                value: 'text',
-                label: 'Isian singkat',
-              },
-              {
-                value: 'long_text',
-                label: 'Paragraf',
-              },
-              {
-                value: 'dropdown',
-                label: 'Dropdown',
-              },
-              {
-                value: 'radio_button',
-                label: 'Pilihan ganda',
-              },
-            ]}
-            value={type}
-            onChange={(value) => {
-              const newQuestions = [...questions];
-              newQuestions[index].input_type = value;
-              newQuestions[index].options =
-                defaultSurveyQuestion[value].options;
-              setQuestions([...newQuestions]);
-            }}
-          />
-        </Col>
-      </Row>
-      <Divider />
-      <Row gutter={32}>
-        <Col span={16}>{formElement}</Col>
-      </Row>
-    </Card>
   );
 }

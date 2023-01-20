@@ -25,7 +25,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
   );
 
   const formElement = useMemo(() => {
-    if (type === 'text') return <Input value="Isian singkat" disabled />;
+    if (type === 'text') return <Input value="Isian Singkat" disabled />;
     if (type === 'long_text')
       return <Input.TextArea value="Paragraf" disabled />;
     if (type === 'dropdown')
@@ -57,7 +57,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
             options={[
               {
                 value: 'text',
-                label: 'Isian singkat',
+                label: 'Isian Singkat',
               },
               {
                 value: 'long_text',
@@ -69,7 +69,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
               },
               {
                 value: 'radio_button',
-                label: 'Pilihan ganda',
+                label: 'Pilihan Ganda',
               },
             ]}
             value={type}

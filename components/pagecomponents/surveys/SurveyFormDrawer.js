@@ -199,9 +199,13 @@ export default function SurveyFormDrawer({
         />
       ))}
       <Row justify="space-between" style={{ margin: '24px' }}>
-        <Button onClick={addQuestionHandler}>Tambah pertanyaan</Button>
-        <Button type="primary" onClick={submitHandler}>
-          Simpan survei
+        <Button onClick={addQuestionHandler}>Tambah Pertanyaan</Button>
+        <Button
+          type="primary"
+          onClick={submitHandler}
+          style={{ fontWeight: 600, letterSpacing: '0.8px' }}
+        >
+          SIMPAN
         </Button>
       </Row>
     </Drawer>

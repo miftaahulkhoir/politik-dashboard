@@ -10,6 +10,7 @@ export default function SurveyTableChart({ title, options }) {
     {
       name: 'Jumlah',
       selector: (row) => row.total_answer,
+      width: '80px',
       right: true,
     },
   ];

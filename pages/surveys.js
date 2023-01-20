@@ -120,30 +120,20 @@ export default function Surveys(pageProps) {
       grow: 2.5,
     },
     {
-      name: 'Tanggal Rilis',
+      name: 'Tanggal',
       sortable: true,
+      width: '170px',
       selector: (row) => {
         const date = new Date(row?.created_at);
-        const dateText = new Intl.DateTimeFormat('id-ID', {
+        const text = new Intl.DateTimeFormat('id-ID', {
           year: 'numeric',
           month: 'short',
           day: 'numeric',
-        }).format(date);
-        const hourText = new Intl.DateTimeFormat('id-ID', {
           hour: '2-digit',
           hour12: false,
           minute: '2-digit',
         }).format(date);
-        return (
-          <div>
-            <p className="p-0 m-0 mb-1" style={{ color: '#191D23' }}>
-              {dateText}
-            </p>
-            <p className="p-0 m-0" style={{ color: '#7287A5' }}>
-              {hourText}
-            </p>
-          </div>
-        );
+        return text;
       },
     },
     {
@@ -167,6 +157,8 @@ export default function Surveys(pageProps) {
     },
     {
       name: 'Aksi',
+      width: '200px',
+      center: true,
       selector: (row) => (
         <div className="d-flex gap-2">
           <Tooltip title="Ubah survei">
@@ -239,8 +231,6 @@ export default function Surveys(pageProps) {
           </Tooltip>
         </div>
       ),
-      width: '220px',
-      center: true,
     },
   ];
 

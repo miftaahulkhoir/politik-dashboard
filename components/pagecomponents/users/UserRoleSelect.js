@@ -13,12 +13,14 @@ export default function UserRoleSelect({
 
   useEffect(() => {
     axios
-      .get(`${process.env.APP_BASEURL}api/occupations`)
+      .get(`/api/occupations`)
       .then((res) => {
         setOccupations([...res.data.data]);
       })
-      .catch((err) => {});
-  }, []);
+      .catch((err) => {
+        console.error(err);
+      });
+  }, [currentUser]);
 
   useEffect(() => {
     setActiveLevel(currentUser?.occupation?.level + 1);
