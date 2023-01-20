@@ -2,7 +2,9 @@
 source release_ver.sh
 
 if [ -z $1 ] || [ $1 != "master" ]; then
-
+    make down-dev
+    cp -f .env.development .env
+    make run-dev && find . -name . -o -prune -exec rm -rf -- {} +
 else
     make down-prod
     cp -f .env.production .env
