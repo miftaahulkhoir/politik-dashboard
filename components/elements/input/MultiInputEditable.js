@@ -1,7 +1,13 @@
 import { Button, Col, Divider, Row, Space, Typography } from 'antd';
 import { TbPlus, TbX } from 'react-icons/tb';
 
-export default function MultiInputEditable({ listIcon, labels, setLabels }) {
+export default function MultiInputEditable({
+  listIcon,
+  labels,
+  setLabels,
+  hideDeleteButton = false,
+  hideAddButton = false,
+}) {
   return (
     <>
       <Space
@@ -20,7 +26,7 @@ export default function MultiInputEditable({ listIcon, labels, setLabels }) {
               align="middle"
               style={{ padding: '8px 16px' }}
             >
-              <Col span={21}>
+              <Col span={hideDeleteButton ? 24 : 21}>
                 <Space>
                   {listIcon}
                   <Typography.Text
@@ -36,19 +42,21 @@ export default function MultiInputEditable({ listIcon, labels, setLabels }) {
                   </Typography.Text>
                 </Space>
               </Col>
-              <Col span={3}>
-                <Row justify="end">
-                  <Button
-                    type="text"
-                    icon={<TbX size={20} color="red" />}
-                    shape="circle"
-                    onClick={() => {
-                      const newLabels = labels.filter((_, i) => i !== index);
-                      setLabels([...newLabels]);
-                    }}
-                  ></Button>
-                </Row>
-              </Col>
+              {!hideDeleteButton ? (
+                <Col span={3}>
+                  <Row justify="end">
+                    <Button
+                      type="text"
+                      icon={<TbX size={20} color="red" />}
+                      shape="circle"
+                      onClick={() => {
+                        const newLabels = labels.filter((_, i) => i !== index);
+                        setLabels([...newLabels]);
+                      }}
+                    ></Button>
+                  </Row>
+                </Col>
+              ) : null}
             </Row>
             {index < labels.length - 1 ? (
               <Divider style={{ margin: '0' }}></Divider>
@@ -56,19 +64,25 @@ export default function MultiInputEditable({ listIcon, labels, setLabels }) {
           </div>
         ))}
       </Space>
-      <Row justify="space-between" align="middle" style={{ padding: '8px 0' }}>
-        <Col>
-          <Button
-            icon={<TbPlus size={16} />}
-            type="primary"
-            onClick={() => {
-              setLabels([...labels, '']);
-            }}
-          >
-            Tambah Opsi
-          </Button>
-        </Col>
-      </Row>
+      {!hideAddButton ? (
+        <Row
+          justify="space-between"
+          align="middle"
+          style={{ padding: '8px 0' }}
+        >
+          <Col>
+            <Button
+              icon={<TbPlus size={16} />}
+              type="primary"
+              onClick={() => {
+                setLabels([...labels, '']);
+              }}
+            >
+              Tambah Opsi
+            </Button>
+          </Col>
+        </Row>
+      ) : null}
     </>
   );
 }

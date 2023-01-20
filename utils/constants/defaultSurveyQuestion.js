@@ -20,10 +20,10 @@ const defaultSurveyQuestion = {
     section: '',
     options: [
       {
-        option_name: 'ya',
+        option_name: 'Ya',
       },
       {
-        option_name: 'tidak',
+        option_name: 'Tidak',
       },
     ],
   },
@@ -34,10 +34,10 @@ const defaultSurveyQuestion = {
     section: '',
     options: [
       {
-        option_name: 'opsi 1',
+        option_name: 'Opsi 1',
       },
       {
-        option_name: 'opsi 2',
+        option_name: 'Opsi 2',
       },
     ],
   },
@@ -48,10 +48,10 @@ const defaultSurveyQuestion = {
     section: '',
     options: [
       {
-        option_name: 'opsi 1',
+        option_name: 'Opsi 1',
       },
       {
-        option_name: 'opsi 2',
+        option_name: 'Opsi 2',
       },
     ],
   },

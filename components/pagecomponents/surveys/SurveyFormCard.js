@@ -3,6 +3,7 @@ import { useCallback, useMemo } from 'react';
 import defaultSurveyQuestion from '../../../utils/constants/defaultSurveyQuestion';
 import DropdownInputEditable from '../../elements/input/DropdownInputEditable';
 import MultiRadioEditable from '../../elements/input/MultiRadioEditable';
+import YesNoQuestion from '../../elements/input/YesNoQuestion';
 
 export default function SurveyFormCard({ index, questions, setQuestions }) {
   const type = useMemo(() => {
@@ -32,6 +33,8 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
       return <DropdownInputEditable labels={labels} setLabels={setLabels} />;
     if (type === 'radio_button')
       return <MultiRadioEditable labels={labels} setLabels={setLabels} />;
+    if (type === 'yes_no_question')
+      return <YesNoQuestion labels={labels} setLabels={setLabels} />;
   }, [type, labels, setLabels]);
 
   return (
@@ -50,7 +53,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
           />
         </Col>
         <Col span={8}>
-          <Typography.Title level={5}>Jenis jawaban</Typography.Title>
+          <Typography.Title level={5}>Jenis Jawaban</Typography.Title>
           <Select
             defaultValue="text"
             style={{ width: '160px' }}
@@ -70,6 +73,10 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
               {
                 value: 'radio_button',
                 label: 'Pilihan Ganda',
+              },
+              {
+                value: 'yes_no_question',
+                label: 'Ya dan Tidak',
               },
             ]}
             value={type}
