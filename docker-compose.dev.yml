@@ -6,6 +6,8 @@ services:
     restart: always
     ports:
       - 5133:${APP_PORT}
+    env_file:
+      - .env.development
 
 networks:
   default:
