@@ -61,8 +61,8 @@
 }
 
 .left-content {
-  width: 20%;
-  min-width: 300px;
+  width: 28%;
+  min-width: 320px;
   box-sizing: border-box;
   position: absolute;
   left: 30px;
@@ -73,7 +73,7 @@
 
 .left-content .card {
   background: transparent;
-  border:none;
+  border: none;
 }
 
 .left-content a {

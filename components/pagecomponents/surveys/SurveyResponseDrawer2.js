@@ -19,6 +19,7 @@ export default function SurveyResponseDrawer2({
         const anss = res.data.data.answers;
         const answers = anss.map((ans) => {
           return {
+            id: ans.id,
             question: ans.question.question_name,
             answer: 'coba answer bangggg heheheheh eheheh mantap',
           };
@@ -39,7 +40,7 @@ export default function SurveyResponseDrawer2({
     >
       <Space direction="vertical" size="large">
         {answers.map((ans) => (
-          <div>
+          <div key={ans.id}>
             <div>{ans.question}</div>
             <div className={styles.ans_answer}>{ans.answer}</div>
           </div>
