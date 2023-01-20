@@ -1,6 +1,7 @@
 #!/bin/bash
 source release_ver.sh
 
+rm -rf .env
 if [ -z $1 ] || [ $1 != "master" ]; then
     make down-dev
     cp -f .env.development .env
