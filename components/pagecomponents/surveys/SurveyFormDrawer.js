@@ -41,7 +41,7 @@ export default function SurveyFormDrawer({
         setQuestions(data?.questions);
       } catch (error) {}
     })();
-  }, [isEdit]);
+  }, [isEdit, selectedSurveyId]);
 
   const clearForm = () => {
     setTitle('');
@@ -55,117 +55,87 @@ export default function SurveyFormDrawer({
 
   const onClose = () => {
     setOpen(false);
+    setIsEdit(false);
     clearForm();
+  };
+
+  const getFormattedSurvey = () => {
+    const newQuestions = questions.map((question, i) => {
+      const newQuestion = question;
+      newQuestion.question_number = i + 1;
+      newQuestion.section = 'section1';
+      newQuestion.question_subject = 'subject1';
+      newQuestion.options = newQuestion?.options?.map((option, j) => {
+        const newOption = option;
+        newOption.value = j + 1;
+        return newOption;
+      });
+      return newQuestion;
+    });
+
+    const survey = {
+      survey_name: title,
+      status: isActive ? 1 : 0,
+      questions: newQuestions || null,
+    };
+
+    return survey;
   };
 
   const submitHandler = async () => {
     try {
-      const newQuestions = questions.map((question, i) => {
-        const newQuestion = question;
-        newQuestion.question_number = i + 1;
-        newQuestion.section = 'section1';
-        newQuestion.question_subject = 'subject1';
-        newQuestion.options = newQuestion?.options?.map((option, j) => {
-          const newOption = option;
-          newOption.value = j + 1;
-          return newOption;
-        });
-        return newQuestion;
-      });
+      const survey = getFormattedSurvey();
       if (isEdit) {
-        // update
-
-        // FIXME: update ideas:
-        // loop req options -> ada api update sendiri
-        // loop req questions -> ada api update sendiri
-        // req survey -> hanya judul
-        // req status -> ada api update sendiri
-
-        // 1. update survey name
-        const survey = {
-          survey_name: title,
-        };
-
-        await axios.put(
-          `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`,
-          survey
-        );
-
-        // // 2. update/create questions
-        // const newOptions = [];
-        // await Promise.all(
-        //   newQuestions.forEach(async (q) => {
-        //     if (q.id) {
-        //       // update question
-        //       await axios.put(
-        //         `${process.env.APP_BASEURL}api/survey/${q.id}`,
-        //         q
-        //       );
-
-        //       // menambah options yang perlu diupdate
-        //       if (q.options) {
-        //         q.options.forEach((o) => {
-        //           o.question_id = q.id;
-        //           newOptions.push(o);
-        //         });
-        //       }
-        //       return;
-        //     }
-        //     // create question
-        //     q.survey_id = selectedSurveyId;
-        //     await axios.post(`${process.env.APP_BASEURL}api/survey`, q);
-        //   })
-        // );
-
-        // // 3. update options untuk question yang sudah ada
-
-        // console.log('options', options);
-        // await Promise.all(
-        //   newOptions.forEach(async (option) => {
-        //     if (option.id) {
-        //       // update
-        //       await axios.put(
-        //         `${process.env.APP_BASEURL}api/survey/${option.ques}`,
-        //         survey
-        //       );
-        //       return;
-        //     }
-        //     // create
-        //   })
-        // );
-
-        apiNotification.success({
-          message: 'Berhasil',
-          description: 'Perubahan survei telah disimpan',
-        });
-        setIsEdit(false);
+        await updateSurvey(survey);
       } else {
-        // create
-        const survey = {
-          survey_name: title,
-          status: isActive ? 1 : 0,
-          questions: newQuestions || null,
-        };
-
-        const res = await axios.post('/api/survey', survey);
-        const newSurvey = res.data.data;
-
-        setSurveysList((prevSurveys) => {
-          newSurvey.no = prevSurveys.length + 1;
-          return [...prevSurveys, newSurvey];
-        });
-
-        apiNotification.success({
-          message: 'Berhasil',
-          description: 'Survei telah ditambahkan',
-        });
+        await createSurvey(survey);
       }
+
       onClose();
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const createSurvey = async (survey) => {
+    try {
+      const res = await axios.post('/api/survey', survey);
+      const newSurvey = res.data.data;
+
+      setSurveysList((prevSurveys) => {
+        newSurvey.no = prevSurveys.length + 1;
+        return [...prevSurveys, newSurvey];
+      });
+
+      apiNotification.success({
+        message: 'Berhasil',
+        description: 'Survei telah ditambahkan',
+      });
     } catch (error) {
       console.error(error);
       apiNotification.error({
         message: 'Gagal',
         description: 'Terjadi kesalahan saat menambahkan survei',
+      });
+    }
+  };
+
+  const updateSurvey = async (survey) => {
+    try {
+      const res = await axios.put(`/api/survey/${selectedSurveyId}`, survey);
+      const newSurvey = res.data.data;
+
+      // TODO: update the state
+
+      apiNotification.success({
+        message: 'Berhasil',
+        description: 'Survei telah diedit',
+      });
+    } catch (error) {
+      console.error(error);
+      apiNotification.error({
+        message: 'Gagal',
+        description: 'Terjadi kesalahan saat menyimpan perubahan survei',
       });
     }
   };
