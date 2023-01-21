@@ -1,5 +1,6 @@
 import axios from "axios";
 import "leaflet/dist/leaflet.css";
+import moment from "moment";
 import { useEffect, useState } from "react";
 import {
   MapContainer,
@@ -42,7 +43,17 @@ export default function HomeMap({
   const handleDetailCordinate = (userid, name, type) => {
     setLogType(type);
     axios
-      .get(`${process.env.APP_BASEURL}api/data-mapping?userid=${userid}`)
+      .get(
+        `${
+          process.env.APP_BASEURL
+        }api/data-mapping?userid=${userid}&from=${moment
+          .utc()
+          .local()
+          .format("Y-MM-DD")} 00:00:00&until=${moment
+          .utc()
+          .local()
+          .format("Y-MM-DD")} 23:59:00`
+      )
       .then((res) => {
         res.data.data.forEach((element, index) => {
           let arr = [];

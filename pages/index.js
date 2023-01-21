@@ -53,8 +53,44 @@ export default function Index({
 
   useEffect(() => {
     setIsMounted(true);
-    setKoordinator(koordinator);
-    setRelawan(relawan);
+    koordinator.forEach((element, index) => {
+      axios
+        .get(
+          `${process.env.APP_BASEURL}api/data-mapping?userid=${
+            element.id
+          }&from=${moment
+            .utc(moment.utc().local().subtract(2, "hours"))
+            .format("Y-MM-DD HH:mm:00")}&until=${moment
+            .utc(moment.utc().local())
+            .format("Y-MM-DD HH:mm")}`
+        )
+        .then((res) => {
+          let lastLoc = { ...element };
+          lastLoc.latitude = res.data.data[0]?.latitude || lastLoc.latitude;
+          lastLoc.longitude = res.data.data[0]?.longitude || lastLoc.longitude;
+          setKoordinator((prev) => [...prev, lastLoc]);
+        })
+        .catch((err) => {});
+    });
+    relawan.forEach((element, index) => {
+      axios
+        .get(
+          `${process.env.APP_BASEURL}api/data-mapping?userid=${
+            element.id
+          }&from=${moment
+            .utc(moment.utc().local().subtract(2, "hours"))
+            .format("Y-MM-DD HH:mm:00")}&until=${moment
+            .utc(moment.utc().local())
+            .format("Y-MM-DD HH:mm:00")}`
+        )
+        .then((res) => {
+          let lastLoc = { ...element };
+          lastLoc.latitude = res.data.data[0]?.latitude || lastLoc.latitude;
+          lastLoc.longitude = res.data.data[0]?.longitude || lastLoc.longitude;
+          setRelawan((prev) => [...prev, lastLoc]);
+        })
+        .catch((err) => {});
+    });
   }, []);
 
   useEffect(() => {
@@ -303,8 +339,8 @@ export default function Index({
                   <table className='table table-bordered my-2'>
                     <thead>
                       <tr>
-                        <th>Location</th>
-                        <th>Date</th>
+                        <th>Lokasi</th>
+                        <th>Tanggal</th>
                       </tr>
                     </thead>
                     <tbody>
