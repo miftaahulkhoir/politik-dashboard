@@ -1,4 +1,5 @@
 import axios from "axios";
+import moment from "moment/moment";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -310,7 +311,12 @@ export default function Index({
                       {logCordinate.map((cordinate) => (
                         <tr>
                           <td>{cordinate.locationName}</td>
-                          <td>{cordinate.timestamp}</td>
+                          <td>
+                            {moment
+                              .utc(cordinate.timestamp)
+                              .local()
+                              .format("H:mm D/M/Y")}
+                          </td>
                         </tr>
                       ))}
                     </tbody>

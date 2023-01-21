@@ -66,10 +66,7 @@ export default function HomeMap({
           //   [element.latitude, element.longitude],
           // ]);
         });
-        map.flyTo([
-          res.data.data[res.data.data.length - 1]?.latitude,
-          res.data.data[res.data.data.length - 1]?.longitude,
-        ]);
+        map.flyTo([res.data.data[0]?.latitude, res.data.data[0]?.longitude]);
       })
       .catch((err) => {});
   };
