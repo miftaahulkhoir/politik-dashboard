@@ -44,7 +44,10 @@ export default function Index({
   const [showPemilih, setShowPemilih] = useState(false);
   const [showBlackList, setShowBlackList] = useState(false);
   const [userLogCordinate, setUserLogCordinate] = useState(false);
+  const [recenter, setRecenter] = useState(false);
   const [logCordinate, setLogCordinate] = useState([]);
+  const [center, setCenter] = useState({ lat: -7.0335559, lng: 107.6589375 });
+  const [tempCenter, setTempCenter] = useState([]);
   const centrifuge = new Centrifuge(process.env.WEBSOCKET_CREDENTIALS_HOST);
 
   useEffect(() => {
@@ -157,6 +160,7 @@ export default function Index({
   const handleCenter = () => {
     setUserLogCordinate(false);
     setLogCordinate([]);
+    setRecenter(true);
   };
 
   return (
@@ -244,7 +248,7 @@ export default function Index({
                         <tr>
                           <td>{pemilih.length}</td>
                           <td>{pemilih.length}</td>
-                          <td>{pemilih.length - 10}</td>
+                          <td>{daftarhitam.length}</td>
                         </tr>
                       </tbody>
                     </table>
@@ -327,8 +331,14 @@ export default function Index({
                 dataPemilih={pemilih}
                 showBlackList={showBlackList}
                 dataBlackList={daftarhitam}
+                tempCenter={tempCenter}
+                setTempCenter={setTempCenter}
+                center={center}
+                setCenter={setCenter}
                 userLogCordinate={userLogCordinate}
                 setUserLogCordinate={setUserLogCordinate}
+                recenter={recenter}
+                setRecenter={setRecenter}
                 logCordinate={logCordinate}
                 setLogCordinate={setLogCordinate}
                 handleColor={handleColor}

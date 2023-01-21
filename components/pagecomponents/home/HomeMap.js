@@ -21,30 +21,23 @@ export default function HomeMap({
   dataPemilih,
   showBlackList,
   dataBlackList,
+  center,
+  setCenter,
+  tempCenter,
+  setTempCenter,
   userLogCordinate,
   setUserLogCordinate,
   logCordinate,
   setLogCordinate,
+  recenter,
+  setRecenter,
   handleColor,
 }) {
   const [zoom, setZoom] = useState(11);
-  const [center, setCenter] = useState({ lat: -7.0335559, lng: 107.6589375 });
   const [iconSize, setIconSize] = useState(30);
   // const [polygonCordinate, setpolygonCordinate] = useState([]);
   const [logType, setLogType] = useState("");
   const [map, setMap] = useState(null);
-
-  useEffect(() => {
-    if (userLogCordinate === false) {
-      handleCenter();
-    }
-  }, [userLogCordinate]);
-
-  const handleCenter = () => {
-    try {
-      map.setView([center.lat, center.lng]);
-    } catch (error) {}
-  };
 
   const handleDetailCordinate = (userid, name, type) => {
     setLogType(type);
@@ -73,7 +66,7 @@ export default function HomeMap({
           //   [element.latitude, element.longitude],
           // ]);
         });
-        map.setView([
+        map.flyTo([
           res.data.data[res.data.data.length - 1]?.latitude,
           res.data.data[res.data.data.length - 1]?.longitude,
         ]);
@@ -90,7 +83,10 @@ export default function HomeMap({
       className={styles.homeMap}>
       <HomeMapComponent
         setZoom={setZoom}
+        recenter={recenter}
+        tempCenter={tempCenter}
         setCenter={setCenter}
+        setRecenter={setRecenter}
         setIconSize={setIconSize}
       />
       <TileLayer
@@ -106,6 +102,7 @@ export default function HomeMap({
             eventHandlers={{
               click: (e) => {
                 handleDetailCordinate(m.id, m.name, "koordinator"),
+                  setTempCenter([m.latitude, m.longitude]),
                   setUserLogCordinate(true);
               },
             }}
@@ -132,6 +129,7 @@ export default function HomeMap({
                 eventHandlers={{
                   click: (e) => {
                     handleDetailCordinate(m.id, m.name, "relawan"),
+                      setTempCenter([m.latitude, m.longitude]),
                       setUserLogCordinate(true);
                   },
                 }}
@@ -215,7 +213,14 @@ export default function HomeMap({
   );
 }
 
-function HomeMapComponent({ setZoom, setCenter, setIconSize }) {
+function HomeMapComponent({
+  setZoom,
+  recenter,
+  tempCenter,
+  setRecenter,
+  setCenter,
+  setIconSize,
+}) {
   const scaleZoom = (input) => {
     return input / 19;
   };
@@ -223,14 +228,19 @@ function HomeMapComponent({ setZoom, setCenter, setIconSize }) {
   const mapEvents = useMapEvents({
     zoomend: () => {
       const zoom = mapEvents.getZoom();
-      setZoom(zoom);
-      setCenter(mapEvents.getCenter());
-
+      // setZoom(zoom);
+      // setCenter(mapEvents.getCenter());
       setIconSize(40 * scaleZoom(zoom) + 1);
     },
-    dragend: () => {
-      setCenter(mapEvents.getCenter());
-    },
+    // dragend: () => {
+    //   setCenter(mapEvents.getCenter());
+    // },
   });
+
+  if (recenter === true) {
+    mapEvents.setZoom(11).flyTo([tempCenter[0], tempCenter[1]]);
+    setRecenter(false);
+  }
+
   return null;
 }

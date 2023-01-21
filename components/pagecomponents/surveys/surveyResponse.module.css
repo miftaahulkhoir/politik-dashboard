@@ -4,3 +4,7 @@
   border-radius: 8px;
   margin-top: 4px;
 }
+
+.custom_ant .ant-collapse-content-box {
+  padding: 0;
+}

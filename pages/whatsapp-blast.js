@@ -1,4 +1,5 @@
 import axios from 'axios';
+import Head from 'next/head';
 import { parseCookies } from 'nookies';
 import { useState } from 'react';
 
@@ -46,6 +47,10 @@ export default function Blast(pageProps) {
 
   return (
     <>
+      <Head>
+        <title>WhatsApp Blast · Patrons</title>
+      </Head>
+
       <div className="col-12 pdv-3 mb-12">
         <h1>WhatsApp Blast</h1>
       </div>

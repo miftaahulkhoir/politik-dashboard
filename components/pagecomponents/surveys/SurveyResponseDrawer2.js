@@ -1,7 +1,7 @@
 import { Drawer, Space } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import styles from './surveyResult.module.css';
+import styles from './surveyResponse.module.css';
 
 export default function SurveyResponseDrawer2({
   open,
@@ -12,6 +12,7 @@ export default function SurveyResponseDrawer2({
 
   useEffect(() => {
     if (!selectedResponse?.id || !open) return;
+    console.log('sss', selectedResponse);
     axios
       .get(`/api/response/${selectedResponse.id}`)
       .then((res) => {
@@ -21,7 +22,7 @@ export default function SurveyResponseDrawer2({
           return {
             id: ans.id,
             question: ans.question.question_name,
-            answer: 'coba answer bangggg heheheheh eheheh mantap',
+            answer: ans.answer,
           };
         });
         setAnswers([...answers]);
@@ -31,14 +32,14 @@ export default function SurveyResponseDrawer2({
 
   return (
     <Drawer
-      title={selectedResponse?.id}
+      title={selectedResponse?.respondent || selectedResponse?.id}
       placement="right"
       closable={false}
       width="50%"
       open={open}
       onClose={() => setOpen(false)}
     >
-      <Space direction="vertical" size="large">
+      <Space direction="vertical" size="large" style={{ width: '100%' }}>
         {answers.map((ans) => (
           <div key={ans.id}>
             <div>{ans.question}</div>

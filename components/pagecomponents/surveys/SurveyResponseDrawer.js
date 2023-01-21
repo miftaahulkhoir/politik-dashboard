@@ -1,15 +1,16 @@
-import { Drawer } from 'antd';
+import { Collapse, Drawer, Space } from 'antd';
 import axios from 'axios';
 import { useEffect, useState } from 'react';
 import DataTable from 'react-data-table-component';
 import SurveyResponseDrawer2 from './SurveyResponseDrawer2';
+import styles from './surveyResponse.module.css';
 
 export default function SurveyResponseDrawer({
   open,
   setOpen,
   selectedSurvey,
 }) {
-  const [responses, setResponses] = useState([]);
+  const [responsesByRecruiters, setResponsesByRecruiters] = useState([]);
   const [selectedResponse, setSelectedResponse] = useState({});
 
   const [isDrawer2Open, setIsDrawer2Open] = useState(false);
@@ -23,16 +24,19 @@ export default function SurveyResponseDrawer({
         },
       })
       .then((res) => {
-        console.log(res.data.data);
-        setResponses([...res.data.data]);
+        const responses = res.data.data;
+        const result = groupResponsesByRecruiters(responses);
+        setResponsesByRecruiters([...result]);
       })
-      .catch((err) => {});
+      .catch((err) => {
+        console.error(err);
+      });
   }, [selectedSurvey?.id]);
 
   const columns = [
     {
       name: 'Nama',
-      selector: (row) => row.respondent_id,
+      selector: (row) => row.respondent || row.id,
     },
   ];
 
@@ -56,24 +60,59 @@ export default function SurveyResponseDrawer({
         setOpen={setIsDrawer2Open}
         selectedResponse={selectedResponse}
       />
-      <DataTable
-        highlightOnHover
-        noTableHead
-        dense
-        striped
-        pointerOnHover
-        columns={columns}
-        data={responses}
-        onRowClicked={onRowClicked}
-        customStyles={{
-          rows: {
-            style: {
-              padding: '8px 0',
-              fontSize: '14px',
-            },
-          },
-        }}
-      />
+
+      <Space direction="vertical" style={{ width: '100%' }}>
+        {responsesByRecruiters.map((rbr) => (
+          <Collapse key={rbr.recruiter_id}>
+            <Collapse.Panel
+              header={`${rbr.recruiter} (${rbr.responses.length} responden)`}
+              className={styles.custom_ant}
+            >
+              <DataTable
+                style={{ padding: '0' }}
+                highlightOnHover
+                noTableHead
+                dense
+                striped
+                pointerOnHover
+                columns={columns}
+                data={rbr.responses}
+                onRowClicked={onRowClicked}
+                customStyles={{
+                  rows: {
+                    style: {
+                      padding: '12px 0',
+                      fontSize: '14px',
+                    },
+                  },
+                }}
+              />
+            </Collapse.Panel>
+          </Collapse>
+        ))}
+      </Space>
     </Drawer>
   );
+}
+
+function groupResponsesByRecruiters(arr) {
+  const groupedArr = {};
+
+  // Group objects by postal code
+  arr.forEach((item) => {
+    if (!groupedArr[item.recruiter_id]) {
+      groupedArr[item.recruiter_id] = [];
+    }
+    groupedArr[item.recruiter_id].push(item);
+  });
+
+  const result = Object.values(groupedArr).map((resp) => {
+    return {
+      recruiter_id: resp[0].recruiter_id,
+      recruiter: resp[0].recruiter,
+      responses: resp,
+    };
+  });
+
+  return result;
 }

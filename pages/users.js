@@ -1,6 +1,7 @@
 import { Space, notification } from 'antd';
 import axios from 'axios';
 import debounce from 'lodash.debounce';
+import Head from 'next/head';
 import { parseCookies } from 'nookies';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import UserDataTable from '../components/pagecomponents/users/UserDataTable';
@@ -100,6 +101,10 @@ export default function Users(pageProps) {
         setUsersList={setUsersList}
         currentUser={currentUser}
       />
+
+      <Head>
+        <title>Manajemen Pengguna · Patrons</title>
+      </Head>
 
       <div className="col-12 pdv-3 mb-12">
         <h1>Manajemen Pengguna</h1>

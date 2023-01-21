@@ -1,6 +1,7 @@
 import { Space } from 'antd';
 import axios from 'axios';
 import dynamic from 'next/dynamic';
+import Head from 'next/head';
 import { parseCookies } from 'nookies';
 import { useEffect, useState } from 'react';
 import SurveyDropdownSelector from '../components/pagecomponents/surveyAnalitics/SurveyDropdownSelector';
@@ -37,6 +38,10 @@ export default function SurveyResults({ surveys }) {
 
   return (
     <>
+      <Head>
+        <title>Analisis Survei · Patrons</title>
+      </Head>
+
       <div className="col-12 pdv-3 mb-12">
         <h1>Analisis Survei</h1>
       </div>

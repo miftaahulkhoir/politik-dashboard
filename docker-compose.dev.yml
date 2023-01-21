@@ -1,7 +1,7 @@
 version: '3'
 services:
   patronpolitik-fe-dev:
-    image: synapsisid/patronpolitik:${DOCKER_IMG_TAG}
+    image: synapsisid/patronpolitik:dev-fe
     container_name: dev_patronpolitik_fe
     restart: always
     ports:
