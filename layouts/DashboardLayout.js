@@ -99,9 +99,11 @@ export default function DashboardLayout({ profile, children }) {
             )}
             {profile?.occupation?.level < 3 && (
               <li
-                // className={
-                //   asPath === "/ongoing" ? "meu-item active" : "menu-item"
-                // }
+                className={
+                  asPath === '/survey-analysis'
+                    ? 'meu-item active'
+                    : 'menu-item'
+                }
                 onClick={() => router.push('/survey-analysis')}
               >
                 <a>

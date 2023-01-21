@@ -61,30 +61,11 @@ export default function SurveyResponseDrawer({
         selectedResponse={selectedResponse}
       />
 
-      {/* <DataTable
-        highlightOnHover
-        noTableHead
-        dense
-        striped
-        pointerOnHover
-        columns={columns}
-        data={responsesByRecruiters}
-        onRowClicked={onRowClicked}
-        customStyles={{
-          rows: {
-            style: {
-              padding: '8px 0',
-              fontSize: '14px',
-            },
-          },
-        }}
-      /> */}
-
       <Space direction="vertical" style={{ width: '100%' }}>
         {responsesByRecruiters.map((rbr) => (
           <Collapse key={rbr.recruiter_id}>
             <Collapse.Panel
-              header={rbr.recruiter}
+              header={`${rbr.recruiter} (${rbr.responses.length} responden)`}
               className={styles.custom_ant}
             >
               <DataTable
