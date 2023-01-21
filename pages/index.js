@@ -40,6 +40,7 @@ export default function Index({
   const [position, setPosition] = useState("data");
   const [dataKoordinator, setKoordinator] = useState([]);
   const [dataRelawan, setRelawan] = useState([]);
+  const [dataPemilih, setPemilih] = useState([]);
   const [showKoordinator, setShowKoordinator] = useState(false);
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
@@ -83,6 +84,24 @@ export default function Index({
         .catch((err) => {
           let lastLoc = { ...element };
           setRelawan((prev) => [...prev, lastLoc]);
+        });
+    });
+    pemilih.forEach((element, index) => {
+      axios
+        .get(
+          `${process.env.APP_BASEURL}api/response?respondentid=${element.id}`
+        )
+        .then((res) => {
+          let lastLoc = { ...element };
+          lastLoc.latitude =
+            res.data.data[0]?.location?.latitude || lastLoc.latitude;
+          lastLoc.longitude =
+            res.data.data[0]?.location?.longitude || lastLoc.longitude;
+          setPemilih((prev) => [...prev, lastLoc]);
+        })
+        .catch((err) => {
+          let lastLoc = { ...element };
+          setPemilih((prev) => [...prev, lastLoc]);
         });
     });
   }, []);
@@ -364,7 +383,7 @@ export default function Index({
                 showRelawan={showRelawan}
                 dataRelawan={dataRelawan}
                 showPemilih={showPemilih}
-                dataPemilih={pemilih}
+                dataPemilih={dataPemilih}
                 showBlackList={showBlackList}
                 dataBlackList={daftarhitam}
                 tempCenter={tempCenter}

@@ -173,7 +173,15 @@ export default function HomeMap({
                     iconAnchor: [iconSize / 2, iconSize / 2],
                   })
                 }
-                position={[m?.latitude, m?.longitude]}></Marker>
+                position={[m?.latitude, m?.longitude]}>
+                <Tooltip
+                  direction='top'
+                  offset={[0, -10]}
+                  opacity={1}
+                  permanent>
+                  {m.name}
+                </Tooltip>
+              </Marker>
             )
         )}
       {showBlackList === true &&
