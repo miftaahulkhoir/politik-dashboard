@@ -61,18 +61,23 @@ export default function UserDataTable({
       },
       {
         name: "NIK",
-        selector: (row) => row.nik,
+        selector: (row) => row?.nik || "-",
       },
       {
         name: "Nama",
         selector: (row) => row?.name,
       },
-      // {
-      //   name: 'Jenis Kelamin',
-      //   selector: (row) => (row?.gender === 'male' ? 'Laki-laki' : 'Perempuan'),
-      //   width: '140px',
-      //   sortable: true,
-      // },
+      {
+        name: "Jenis Kelamin",
+        selector: (row) =>
+          row?.gender === "male"
+            ? "Laki-laki"
+            : row?.gender === "female"
+            ? "Perempuan"
+            : "-",
+        width: "140px",
+        sortable: true,
+      },
       {
         name: "Email",
         selector: (row) => row?.email || "-",
