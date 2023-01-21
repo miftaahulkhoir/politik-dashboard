@@ -55,21 +55,21 @@ export default function HomeMap({
           .format("Y-MM-DD")} 23:59:00`
       )
       .then((res) => {
+        let arr = [];
         res.data.data.forEach((element, index) => {
-          let arr = [];
           axios
             .get(
               `https://api.geoapify.com/v1/geocode/reverse?lat=${element?.latitude}&lon=${element?.longitude}&apiKey=5523a1bf84d64e849bdd9a6ca7af26e2`
             )
             .then((res2) => {
-              setLogCordinate((prev) => [
-                ...prev,
-                {
-                  name: name,
-                  locationName: `${res2.data.features[0]?.properties?.address_line1}, ${res2.data.features[0]?.properties?.address_line2}`,
-                  ...element,
-                },
-              ]);
+              arr[index] = {
+                name: name,
+                locationName: `${res2.data.features[0]?.properties?.address_line1}, ${res2.data.features[0]?.properties?.address_line2}`,
+                ...element,
+              };
+              if (index === res.data.data.length - 1) {
+                setLogCordinate(arr);
+              }
             })
             .catch((err) => {});
           // setpolygonCordinate((prev) => [
