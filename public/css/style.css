@@ -73,7 +73,8 @@
 
 .left-content .card {
   background: transparent;
-  border: none;
+  border:none;
+  box-shadow: none;
 }
 
 .left-content a {
@@ -94,6 +95,8 @@
 .search-list {
   background: #fff;
   height: auto !important;
+  max-height:45vh;
+  overflow-y: scroll;
   padding: 15px;
 }
 
