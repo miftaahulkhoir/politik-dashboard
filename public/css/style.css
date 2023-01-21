@@ -95,7 +95,7 @@
 .search-list {
   background: #fff;
   height: auto !important;
-  max-height:45vh;
+  max-height:80vh;
   overflow-y: scroll;
   padding: 15px;
 }
