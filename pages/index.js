@@ -56,40 +56,34 @@ export default function Index({
     koordinator.forEach((element, index) => {
       axios
         .get(
-          `${process.env.APP_BASEURL}api/data-mapping?userid=${
-            element.id
-          }&from=${moment
-            .utc(moment.utc().local().subtract(2, "hours"))
-            .format("Y-MM-DD HH:mm:00")}&until=${moment
-            .utc(moment.utc().local())
-            .format("Y-MM-DD HH:mm")}`
+          `${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`
         )
         .then((res) => {
           let lastLoc = { ...element };
-          lastLoc.latitude = res.data.data[0]?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data[0]?.longitude || lastLoc.longitude;
+          lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
+          lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
           setKoordinator((prev) => [...prev, lastLoc]);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          let lastLoc = { ...element };
+          setKoordinator((prev) => [...prev, lastLoc]);
+        });
     });
     relawan.forEach((element, index) => {
       axios
         .get(
-          `${process.env.APP_BASEURL}api/data-mapping?userid=${
-            element.id
-          }&from=${moment
-            .utc(moment.utc().local().subtract(2, "hours"))
-            .format("Y-MM-DD HH:mm:00")}&until=${moment
-            .utc(moment.utc().local())
-            .format("Y-MM-DD HH:mm:00")}`
+          `${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`
         )
         .then((res) => {
           let lastLoc = { ...element };
-          lastLoc.latitude = res.data.data[0]?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data[0]?.longitude || lastLoc.longitude;
+          lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
+          lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
           setRelawan((prev) => [...prev, lastLoc]);
         })
-        .catch((err) => {});
+        .catch((err) => {
+          let lastLoc = { ...element };
+          setRelawan((prev) => [...prev, lastLoc]);
+        });
     });
   }, []);
 
