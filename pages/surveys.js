@@ -43,7 +43,8 @@ export default function Surveys(pageProps) {
             return survey.survey_name.toLowerCase().includes(filterSearch.toLowerCase());
           });
 
-    const filteredActive = filterActive === -1 ? filteredSearch : filteredSearch.filter((survey) => survey.status === filterActive);
+    const filteredActive =
+      filterActive === -1 ? filteredSearch : filteredSearch.filter((survey) => survey.status === filterActive);
 
     const dateInput = new Date(filterDate);
     const filteredDate =
@@ -52,7 +53,11 @@ export default function Surveys(pageProps) {
         : filteredActive.filter((survey) => {
             const date = new Date(survey.created_at);
 
-            return date.getFullYear() === dateInput.getFullYear() && date.getMonth() === dateInput.getMonth() && date.getDate() === dateInput.getDate();
+            return (
+              date.getFullYear() === dateInput.getFullYear() &&
+              date.getMonth() === dateInput.getMonth() &&
+              date.getDate() === dateInput.getDate()
+            );
           });
 
     return filteredDate;
@@ -121,7 +126,9 @@ export default function Surveys(pageProps) {
     },
     {
       name: "Status",
-      selector: (row) => <Switch defaultChecked={row?.status} onChange={async () => await changeStatusHandler(row.id)} />,
+      selector: (row) => (
+        <Switch defaultChecked={row?.status} onChange={async () => await changeStatusHandler(row.id)} />
+      ),
       width: "100px",
       center: true,
       sortable: true,
@@ -222,7 +229,11 @@ export default function Surveys(pageProps) {
         apiNotification={apiNotification}
       />
 
-      <SurveyResponseDrawer open={isResponseDrawerOpen} setOpen={setIsResponseDrawerOpen} selectedSurvey={selectedSurvey} />
+      <SurveyResponseDrawer
+        open={isResponseDrawerOpen}
+        setOpen={setIsResponseDrawerOpen}
+        selectedSurvey={selectedSurvey}
+      />
 
       <Space direction="vertical" size="middle">
         <SurveySearchBar
