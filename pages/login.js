@@ -1,6 +1,7 @@
 import { Input } from "antd";
 import axios from "axios";
 import Head from "next/head";
+import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useState } from "react";
 
@@ -70,9 +71,9 @@ export default function Login({ pageProps }) {
                     Ingat saya
                   </label>
                 </div>
-                <a className="text-primary f-pwd" href="/ongoing">
+                <Link className="text-primary f-pwd" href="/ongoing">
                   Lupa password?
-                </a>
+                </Link>
               </div>
             </div>
             <div className="form-group">

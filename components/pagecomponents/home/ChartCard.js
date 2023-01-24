@@ -1,10 +1,10 @@
-import Card from "../../elements/card/Card";
-
-// import ReactEcharts from 'echarts-for-react';
 import dynamic from "next/dynamic";
-const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
 import styles from "./home.module.css";
+
+import Card from "../../elements/card/Card";
+
+const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
 export default function ChartCard({ dataX, dataY }) {
   const option = {

@@ -1,5 +1,5 @@
 import { useRouter } from "next/router";
-import { TbBrandGoogleAnalytics, TbBrandWhatsapp, TbDeviceAnalytics, TbLayoutDashboard, TbListCheck, TbUser } from "react-icons/tb";
+import { TbBrandGoogleAnalytics, TbBrandWhatsapp, TbDeviceAnalytics, TbLayoutDashboard, TbListCheck, TbMessageReport, TbUser } from "react-icons/tb";
 
 import ProfileDropdown from "../components/pagecomponents/dashboardLayout/ProfileDropdown";
 
@@ -108,15 +108,12 @@ export default function DashboardLayout({ profile, children }) {
                 </a>
               </li>
             )} */}
-            {/* <li
-              // className={asPath === "" ? "meu-item active" : "menu-item"}
-              onClick={() => router.push('/ongoing')}
-            >
+            <li className={asPath === "/reports" ? "meu-item active" : "menu-item"} onClick={() => router.push("/reports")}>
               <a>
                 <TbMessageReport size={24} />
                 <span>Pengaduan</span>
               </a>
-            </li> */}
+            </li>
             {profile?.occupation?.level < 3 && (
               <li className={asPath === "/users" ? "meu-item active" : "menu-item"} onClick={() => router.push("/users")}>
                 <a>

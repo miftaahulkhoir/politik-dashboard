@@ -1,8 +1,9 @@
 import axios from "axios";
+import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import moment from "moment";
-import { useEffect, useState } from "react";
-import { MapContainer, Marker, Polyline, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet";
+import { useState } from "react";
+import { MapContainer, Marker, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
 
 import styles from "../../elements/map/Home.module.css";
 

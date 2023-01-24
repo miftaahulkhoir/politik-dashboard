@@ -1,12 +1,10 @@
 import dynamic from "next/dynamic";
 
-import Card from "../../elements/card/Card";
-// import ReactEcharts from 'echarts-for-react';
-const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
-
 import styles from "./home.module.css";
 
-import { Empty } from "antd";
+import Card from "../../elements/card/Card";
+
+const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
 export default function SocialTimeChart({ title, data, chartType }) {
   const timestamp = [];

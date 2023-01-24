@@ -1,3 +1,4 @@
+/* eslint-disable no-loss-of-precision */
 import dynamic from "next/dynamic";
 import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";

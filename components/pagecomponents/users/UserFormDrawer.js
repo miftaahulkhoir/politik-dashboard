@@ -1,9 +1,6 @@
-import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd";
+import { Button, Col, Drawer, Input, Radio, Row, Select } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-
-const { TextArea } = Input;
-const { Text, Title } = Typography;
 
 export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selectedUser, apiNotification, setUsersList, currentUser }) {
   // input form states
@@ -77,7 +74,7 @@ export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selec
       setLatitude(data.latitude);
       setLongitude(data.longitude);
     });
-  }, [isEdit, selectedUser.id]);
+  }, [isEdit, selectedUser.distric_id, selectedUser.id]);
 
   const clearForm = () => {
     setOccupation("");
@@ -183,11 +180,11 @@ export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selec
     >
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Nama Lengkap</Title>
+          <Input.Title level={5}>Nama Lengkap</Input.Title>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Jenis Kelamin</Title>
+          <Input.Title level={5}>Jenis Kelamin</Input.Title>
           <Radio.Group
             value={gender}
             onChange={(e) => {
@@ -202,23 +199,23 @@ export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selec
           ></Radio.Group>
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>NIK</Title>
+          <Input.Title level={5}>NIK</Input.Title>
           <Input value={nik} onChange={(e) => setNik(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Nomor WhatsApp</Title>
+          <Input.Title level={5}>Nomor WhatsApp</Input.Title>
           <Input value={wa} onChange={(e) => setWa(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Email</Title>
+          <Input.Title level={5}>Email</Input.Title>
           <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Password</Title>
+          <Input.Title level={5}>Password</Input.Title>
           <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Jabatan</Title>
+          <Input.Title level={5}>Jabatan</Input.Title>
           <Select
             value={occupation}
             onChange={(value) => setOccupation(value)}
@@ -230,7 +227,7 @@ export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selec
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Kabupaten</Title>
+          <Input.Title level={5}>Kabupaten</Input.Title>
           <Select
             value={regency}
             onChange={(value) => setRegency(value)}
@@ -239,7 +236,7 @@ export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selec
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Kecamatan</Title>
+          <Input.Title level={5}>Kecamatan</Input.Title>
           <Select
             value={distric}
             onChange={(value) => setDistric(value)}
@@ -248,11 +245,11 @@ export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selec
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Lokasi (Latitude)</Title>
+          <Input.Title level={5}>Lokasi (Latitude)</Input.Title>
           <Input value={latitude} onChange={(e) => setLatitude(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Title level={5}>Lokasi (Longitude)</Title>
+          <Input.Title level={5}>Lokasi (Longitude)</Input.Title>
           <Input value={longitude} onChange={(e) => setLongitude(e.target.value)} />
         </Col>
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>

@@ -1,10 +1,11 @@
+import dynamic from "next/dynamic";
+
+import styles from "./home.module.css";
+
 import Card from "../../elements/card/Card";
 
 // import ReactEcharts from 'echarts-for-react';
-import dynamic from "next/dynamic";
 const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
-
-import styles from "./home.module.css";
 
 export default function SocialPieChart({ title, data, chartType }) {
   const finalData = [];
@@ -52,13 +53,13 @@ export default function SocialPieChart({ title, data, chartType }) {
         type: "pie",
         radius: radius,
         avoidLabelOverlap: false,
-        emphasis: {
-          label: {
-            show: true,
-            fontSize: 40,
-            fontWeight: "bold",
-          },
-        },
+        // emphasis: {
+        //   label: {
+        //     show: true,
+        //     fontSize: 40,
+        //     fontWeight: "bold",
+        //   },
+        // },
         data: finalData,
         emphasis: {
           itemStyle: {

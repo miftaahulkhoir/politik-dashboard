@@ -3,6 +3,8 @@
   "plugins": ["import", "prettier"],
   "rules": {
     "prettier/prettier": "error",
+    "@next/next/no-img-element": "off",
+    "no-empty": "warn",
     "no-console": ["warn", { "allow": ["error"] }],
     // "no-console": "error",
     "require-jsdoc": "off",
