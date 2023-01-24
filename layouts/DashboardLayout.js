@@ -204,7 +204,9 @@ export default function DashboardLayout({ profile, children }) {
         </div>
       </div>
       <footer className="codex-footer">
-        <p>Copyright 2023 © Patrons Politik. All rights reserved.</p>
+        <p className="p-0 m-0">
+          Copyright 2023 © Patrons Politik. All rights reserved.
+        </p>
       </footer>
     </>
   );

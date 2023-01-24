@@ -292,8 +292,12 @@ export default function UserFormDrawer({
           />
         </Col>
         <div style={{ display: 'flex', justifyContent: 'end', width: '100%' }}>
-          <Button type="primary" onClick={submitHandler}>
-            Submit
+          <Button
+            type="primary"
+            onClick={submitHandler}
+            style={{ fontWeight: 600, letterSpacing: '0.8px' }}
+          >
+            SIMPAN
           </Button>
         </div>
       </Row>

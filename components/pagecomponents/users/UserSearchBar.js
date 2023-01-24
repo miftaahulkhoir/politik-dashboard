@@ -28,7 +28,7 @@ export default function UserSearchBar({
       </Col>
       <Col>
         <Button icon={<TbPlus />} type="primary" onClick={addUserHandler}>
-          Tambah User
+          Tambah Pengguna
         </Button>
       </Col>
     </Row>
