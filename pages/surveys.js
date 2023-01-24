@@ -1,29 +1,21 @@
-import {
-  Button,
-  Card,
-  Col,
-  Row,
-  Space,
-  Switch,
-  Tooltip,
-  notification,
-} from 'antd';
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import Head from 'next/head';
-import { parseCookies } from 'nookies';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { TbEye, TbPencil, TbTrashX } from 'react-icons/tb';
-import CustomDataTable from '../components/elements/customDataTable/CustomDataTable';
-import SurveyFormDrawer from '../components/pagecomponents/surveys/SurveyFormDrawer';
-import SurveyResponseDrawer from '../components/pagecomponents/surveys/SurveyResponseDrawer';
-import SurveySearchBar from '../components/pagecomponents/surveys/SurveySearchBar';
+import { Button, Card, Col, Row, Space, Switch, Tooltip, notification } from "antd";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import Head from "next/head";
+import { parseCookies } from "nookies";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
+
+import CustomDataTable from "../components/elements/customDataTable/CustomDataTable";
+import SurveyFormDrawer from "../components/pagecomponents/surveys/SurveyFormDrawer";
+import SurveyResponseDrawer from "../components/pagecomponents/surveys/SurveyResponseDrawer";
+import SurveySearchBar from "../components/pagecomponents/surveys/SurveySearchBar";
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
-  const [filterSearch, setFilterSearch] = useState('');
+  const [filterSearch, setFilterSearch] = useState("");
   const [filterActive, setFilterActive] = useState(-1);
-  const [filterDate, setFilterDate] = useState('');
+  const [filterDate, setFilterDate] = useState("");
 
   const [isFormOpen, setIsFormOpen] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
@@ -32,8 +24,7 @@ export default function Surveys(pageProps) {
 
   const [isResponseDrawerOpen, setIsResponseDrawerOpen] = useState(false);
 
-  const [apiNotification, contextHolderNotification] =
-    notification.useNotification();
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
 
   useEffect(() => {
     if (!pageProps?.surveys) return;
@@ -46,118 +37,98 @@ export default function Surveys(pageProps) {
 
   const filteredSurveys = useMemo(() => {
     const filteredSearch =
-      filterSearch === ''
+      filterSearch === ""
         ? surveysList
         : surveysList.filter((survey) => {
-            return survey.survey_name
-              .toLowerCase()
-              .includes(filterSearch.toLowerCase());
+            return survey.survey_name.toLowerCase().includes(filterSearch.toLowerCase());
           });
 
-    const filteredActive =
-      filterActive === -1
-        ? filteredSearch
-        : filteredSearch.filter((survey) => survey.status === filterActive);
+    const filteredActive = filterActive === -1 ? filteredSearch : filteredSearch.filter((survey) => survey.status === filterActive);
 
     const dateInput = new Date(filterDate);
     const filteredDate =
-      filterDate === ''
+      filterDate === ""
         ? filteredActive
         : filteredActive.filter((survey) => {
             const date = new Date(survey.created_at);
 
-            return (
-              date.getFullYear() === dateInput.getFullYear() &&
-              date.getMonth() === dateInput.getMonth() &&
-              date.getDate() === dateInput.getDate()
-            );
+            return date.getFullYear() === dateInput.getFullYear() && date.getMonth() === dateInput.getMonth() && date.getDate() === dateInput.getDate();
           });
 
     return filteredDate;
   }, [surveysList, filterSearch, filterActive, filterDate]);
 
-  const filterSearchHandler = useCallback(
-    debounce((e) => setFilterSearch(e.target.value), 300)
-  );
+  const filterSearchHandler = useCallback(debounce((e) => setFilterSearch(e.target.value), 300));
 
-  const filterActiveHandler = useCallback(
-    debounce((value) => setFilterActive(Number(value)), 300)
-  );
+  const filterActiveHandler = useCallback(debounce((value) => setFilterActive(Number(value)), 300));
 
   const filterDateHandler = useCallback(
     debounce((_, valueString) => {
       setFilterDate(valueString);
-    }, 300)
+    }, 300),
   );
 
   const changeStatusHandler = async (id) => {
     try {
-      const res = await axios.put(
-        `${process.env.APP_BASEURL}api/survey/update-status/${id}`
-      );
-      if (!res?.data?.status) throw new Error('unknown error');
+      const res = await axios.put(`${process.env.APP_BASEURL}api/survey/update-status/${id}`);
+      if (!res?.data?.status) throw new Error("unknown error");
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: 'Gagal',
-        description: 'Terjadi kesalahan dalam mengubah status aktif',
+        message: "Gagal",
+        description: "Terjadi kesalahan dalam mengubah status aktif",
       });
     }
   };
 
   const columns = [
     {
-      name: 'No.',
+      name: "No.",
       selector: (row) => row.no,
-      width: '80px',
+      width: "80px",
       center: true,
       sortable: true,
     },
     {
-      name: 'Judul Survei',
+      name: "Judul Survei",
       selector: (row) => row.survey_name,
       sortable: true,
       grow: 2.5,
     },
     {
-      name: 'Tanggal',
+      name: "Tanggal",
       sortable: true,
-      width: '170px',
+      width: "170px",
       selector: (row) => {
         const date = new Date(row?.created_at);
-        const text = new Intl.DateTimeFormat('id-ID', {
-          year: 'numeric',
-          month: 'short',
-          day: 'numeric',
-          hour: '2-digit',
+        const text = new Intl.DateTimeFormat("id-ID", {
+          year: "numeric",
+          month: "short",
+          day: "numeric",
+          hour: "2-digit",
           hour12: false,
-          minute: '2-digit',
+          minute: "2-digit",
         }).format(date);
         return text;
       },
     },
     {
-      name: 'Responden',
-      selector: (row) => row?.total_respondent + ' orang',
-      width: '150px',
+      name: "Responden",
+      selector: (row) => row?.total_respondent + " orang",
+      width: "150px",
       sortable: true,
       right: true,
     },
     {
-      name: 'Status',
-      selector: (row) => (
-        <Switch
-          defaultChecked={row?.status}
-          onChange={async () => await changeStatusHandler(row.id)}
-        />
-      ),
-      width: '100px',
+      name: "Status",
+      selector: (row) => <Switch defaultChecked={row?.status} onChange={async () => await changeStatusHandler(row.id)} />,
+      width: "100px",
       center: true,
       sortable: true,
     },
     {
-      name: 'Aksi',
-      width: '200px',
+      name: "Aksi",
+      width: "200px",
       center: true,
       selector: (row) => (
         <div className="d-flex gap-2">
@@ -169,9 +140,8 @@ export default function Surveys(pageProps) {
               onClick={() => {
                 if (row?.total_respondent > 0) {
                   apiNotification.error({
-                    message: 'Gagal',
-                    description:
-                      'Tidak bisa mengubah survei karena telah memiliki responden',
+                    message: "Gagal",
+                    description: "Tidak bisa mengubah survei karena telah memiliki responden",
                   });
                   return;
                 }
@@ -190,17 +160,14 @@ export default function Surveys(pageProps) {
                 try {
                   if (row?.total_respondent > 0) {
                     apiNotification.error({
-                      message: 'Gagal',
-                      description:
-                        'Tidak bisa menghapus survei karena telah memiliki responden',
+                      message: "Gagal",
+                      description: "Tidak bisa menghapus survei karena telah memiliki responden",
                     });
                     return;
                   }
 
-                  const res = await axios.delete(
-                    `${process.env.APP_BASEURL}api/survey/${row?.id}`
-                  );
-                  if (!res?.data?.status) throw new Error('unknown error');
+                  const res = await axios.delete(`${process.env.APP_BASEURL}api/survey/${row?.id}`);
+                  if (!res?.data?.status) throw new Error("unknown error");
 
                   const newSurveys = surveysList.filter((s) => s.id !== row.id);
                   setSurveysList([...newSurveys]);
@@ -210,8 +177,8 @@ export default function Surveys(pageProps) {
                   });
                 } catch (error) {
                   apiNotification.error({
-                    message: 'Gagal',
-                    description: 'Terjadi kesalahan',
+                    message: "Gagal",
+                    description: "Terjadi kesalahan",
                   });
                 }
               }}
@@ -225,7 +192,6 @@ export default function Surveys(pageProps) {
               onClick={() => {
                 setIsResponseDrawerOpen(true);
                 setSelectedSurvey(row);
-                console.log(row);
               }}
             ></Button>
           </Tooltip>
@@ -256,11 +222,7 @@ export default function Surveys(pageProps) {
         apiNotification={apiNotification}
       />
 
-      <SurveyResponseDrawer
-        open={isResponseDrawerOpen}
-        setOpen={setIsResponseDrawerOpen}
-        selectedSurvey={selectedSurvey}
-      />
+      <SurveyResponseDrawer open={isResponseDrawerOpen} setOpen={setIsResponseDrawerOpen} selectedSurvey={selectedSurvey} />
 
       <Space direction="vertical" size="middle">
         <SurveySearchBar
@@ -272,12 +234,8 @@ export default function Surveys(pageProps) {
 
         <Row justify="end">
           <Col span={24}>
-            <Card bodyStyle={{ padding: '0px' }} style={{ overflow: 'hidden' }}>
-              <CustomDataTable
-                columns={columns}
-                data={filteredSurveys}
-                style={{ width: '100%' }}
-              />
+            <Card bodyStyle={{ padding: "0px" }} style={{ overflow: "hidden" }}>
+              <CustomDataTable columns={columns} data={filteredSurveys} style={{ width: "100%" }} />
             </Card>
           </Col>
         </Row>
@@ -287,7 +245,7 @@ export default function Surveys(pageProps) {
 }
 
 export async function getServerSideProps(ctx) {
-  let { token } = parseCookies(ctx);
+  const { token } = parseCookies(ctx);
   let surveys = [];
   await axios
     .get(`${process.env.APP_BASEURL}api/survey`, {

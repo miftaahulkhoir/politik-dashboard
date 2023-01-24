@@ -1,15 +1,14 @@
-import { Space } from 'antd';
-import axios from 'axios';
-import dynamic from 'next/dynamic';
-import Head from 'next/head';
-import { parseCookies } from 'nookies';
-import { useEffect, useState } from 'react';
-import SurveyDropdownSelector from '../components/pagecomponents/surveyAnalitics/SurveyDropdownSelector';
-import SurveyResultHeader from '../components/pagecomponents/surveyAnalitics/SurveyResultHeader';
+import { Space } from "antd";
+import axios from "axios";
+import dynamic from "next/dynamic";
+import Head from "next/head";
+import { parseCookies } from "nookies";
+import { useEffect, useState } from "react";
 
-const SurveyCharts = dynamic(() =>
-  import('../components/pagecomponents/surveyAnalitics/charts/SurveyCharts')
-);
+import SurveyDropdownSelector from "../components/pagecomponents/surveyAnalitics/SurveyDropdownSelector";
+import SurveyResultHeader from "../components/pagecomponents/surveyAnalitics/SurveyResultHeader";
+
+const SurveyCharts = dynamic(() => import("../components/pagecomponents/surveyAnalitics/charts/SurveyCharts"));
 
 export default function SurveyResults({ surveys }) {
   const [selectedSurveyID, setSelectedSurveyID] = useState();
@@ -46,12 +45,9 @@ export default function SurveyResults({ surveys }) {
         <h1>Analisis Survei</h1>
       </div>
 
-      <Space direction="vertical" style={{ width: '100%' }} size="large">
+      <Space direction="vertical" style={{ width: "100%" }} size="large">
         {/* row select survey */}
-        <SurveyDropdownSelector
-          surveys={surveys}
-          setSelectedSurveyID={setSelectedSurveyID}
-        />
+        <SurveyDropdownSelector surveys={surveys} setSelectedSurveyID={setSelectedSurveyID} />
 
         {survey ? (
           <>
@@ -63,21 +59,15 @@ export default function SurveyResults({ surveys }) {
         ) : (
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '32px 0',
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "32px 0",
             }}
           >
-            <img
-              style={{ width: '30%', maxHeight: '280px' }}
-              src="/images/people_with_up.svg"
-              alt="select"
-            />
-            <div style={{ fontSize: '16px', marginTop: '16px' }}>
-              Tolong pilih survei terlebih dahulu
-            </div>
+            <img style={{ width: "30%", maxHeight: "280px" }} src="/images/people_with_up.svg" alt="select" />
+            <div style={{ fontSize: "16px", marginTop: "16px" }}>Tolong pilih survei terlebih dahulu</div>
           </div>
         )}
       </Space>
@@ -86,7 +76,7 @@ export default function SurveyResults({ surveys }) {
 }
 
 export async function getServerSideProps(ctx) {
-  let { token } = parseCookies(ctx);
+  const { token } = parseCookies(ctx);
   let surveys = [];
   await axios
     .get(`${process.env.APP_BASEURL}api/survey`, {

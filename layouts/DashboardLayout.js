@@ -1,13 +1,7 @@
-import { useRouter } from 'next/router';
-import {
-  TbBrandGoogleAnalytics,
-  TbBrandWhatsapp,
-  TbDeviceAnalytics,
-  TbLayoutDashboard,
-  TbListCheck,
-  TbUser,
-} from 'react-icons/tb';
-import ProfileDropdown from '../components/pagecomponents/dashboardLayout/ProfileDropdown';
+import { useRouter } from "next/router";
+import { TbBrandGoogleAnalytics, TbBrandWhatsapp, TbDeviceAnalytics, TbLayoutDashboard, TbListCheck, TbUser } from "react-icons/tb";
+
+import ProfileDropdown from "../components/pagecomponents/dashboardLayout/ProfileDropdown";
 
 export default function DashboardLayout({ profile, children }) {
   const router = useRouter();
@@ -28,25 +22,14 @@ export default function DashboardLayout({ profile, children }) {
                 <div className="header-left">
                   <div className="logo-gridwrap">
                     <a className="codexbrand-logo">
-                      <img
-                        className="img-fluid"
-                        src={`${process.env.APP_BASEURL}images/logo/logo.png`}
-                        alt="theeme-logo"
-                      />
+                      <img className="img-fluid" src={`${process.env.APP_BASEURL}images/logo/logo.png`} alt="theeme-logo" />
                     </a>
                     <a className="codexdark-logo">
-                      <img
-                        className="img-fluid"
-                        src={`${process.env.APP_BASEURL}images/logo/dark-logo.png`}
-                        alt="theeme-logo"
-                      />
+                      <img className="img-fluid" src={`${process.env.APP_BASEURL}images/logo/dark-logo.png`} alt="theeme-logo" />
                     </a>
                   </div>
                   <div className="search-bar p-0">
-                    <p className="m-0">
-                      Selamat datang kembali,{' '}
-                      {profile?.occupation?.name?.toUpperCase()}
-                    </p>
+                    <p className="m-0">Selamat datang kembali, {profile?.occupation?.name?.toUpperCase()}</p>
                   </div>
                 </div>
                 <ProfileDropdown />
@@ -58,16 +41,8 @@ export default function DashboardLayout({ profile, children }) {
       <div className="codex-sidebar">
         <div className="logo-gridwrap">
           <a className="codexbrand-logo">
-            <img
-              style={{ width: '40px' }}
-              src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`}
-              alt="theeme-logo"
-            />
-            <img
-              className="img-fluid"
-              src={`${process.env.APP_BASEURL}images/logo/logo.png`}
-              alt="theeme-logo"
-            />
+            <img style={{ width: "40px" }} src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`} alt="theeme-logo" />
+            <img className="img-fluid" src={`${process.env.APP_BASEURL}images/logo/logo.png`} alt="theeme-logo" />
           </a>
           <a className="sidebar-action">
             <i className="fa fa-bars"></i>
@@ -75,22 +50,14 @@ export default function DashboardLayout({ profile, children }) {
         </div>
         <div className="codex-menuwrapper">
           <ul className="codex-menu custom-scroll" data-simplebar>
-            <li
-              className={asPath === '/' ? 'meu-item active' : 'menu-item'}
-              onClick={() => router.push('/')}
-            >
+            <li className={asPath === "/" ? "meu-item active" : "menu-item"} onClick={() => router.push("/")}>
               <a>
                 <TbLayoutDashboard size={24} />
                 <span>Dashboard</span>
               </a>
             </li>
             {profile?.occupation?.level < 3 && (
-              <li
-                className={
-                  asPath === '/surveys' ? 'meu-item active' : 'menu-item'
-                }
-                onClick={() => router.push('/surveys')}
-              >
+              <li className={asPath === "/surveys" ? "meu-item active" : "menu-item"} onClick={() => router.push("/surveys")}>
                 <a>
                   <TbListCheck size={24} />
                   <span>Manajemen Survei</span>
@@ -98,14 +65,7 @@ export default function DashboardLayout({ profile, children }) {
               </li>
             )}
             {profile?.occupation?.level < 3 && (
-              <li
-                className={
-                  asPath === '/survey-analysis'
-                    ? 'meu-item active'
-                    : 'menu-item'
-                }
-                onClick={() => router.push('/survey-analysis')}
-              >
+              <li className={asPath === "/survey-analysis" ? "meu-item active" : "menu-item"} onClick={() => router.push("/survey-analysis")}>
                 <a>
                   <TbDeviceAnalytics size={24} />
                   <span>Analisis Survei</span>
@@ -113,14 +73,7 @@ export default function DashboardLayout({ profile, children }) {
               </li>
             )}
             {profile?.occupation?.level < 3 && (
-              <li
-                className={
-                  asPath === '/sentiment-analysis'
-                    ? 'meu-item active'
-                    : 'menu-item'
-                }
-                onClick={() => router.push('/sentiment-analysis')}
-              >
+              <li className={asPath === "/sentiment-analysis" ? "meu-item active" : "menu-item"} onClick={() => router.push("/sentiment-analysis")}>
                 <a>
                   <TbBrandGoogleAnalytics size={24} />
                   <span>Analisis Sentimen</span>
@@ -128,12 +81,7 @@ export default function DashboardLayout({ profile, children }) {
               </li>
             )}
             {profile?.occupation?.level < 3 && (
-              <li
-                className={
-                  asPath === '/whatsapp-blast' ? 'meu-item active' : 'menu-item'
-                }
-                onClick={() => router.push('/whatsapp-blast')}
-              >
+              <li className={asPath === "/whatsapp-blast" ? "meu-item active" : "menu-item"} onClick={() => router.push("/whatsapp-blast")}>
                 <a>
                   <TbBrandWhatsapp size={24} />
                   <span>WhatsApp Blast</span>
@@ -170,12 +118,7 @@ export default function DashboardLayout({ profile, children }) {
               </a>
             </li> */}
             {profile?.occupation?.level < 3 && (
-              <li
-                className={
-                  asPath === '/users' ? 'meu-item active' : 'menu-item'
-                }
-                onClick={() => router.push('/users')}
-              >
+              <li className={asPath === "/users" ? "meu-item active" : "menu-item"} onClick={() => router.push("/users")}>
                 <a>
                   <TbUser size={24} />
                   <span>Manajemen Pengguna</span>
@@ -204,9 +147,7 @@ export default function DashboardLayout({ profile, children }) {
         </div>
       </div>
       <footer className="codex-footer">
-        <p className="p-0 m-0">
-          Copyright 2023 © Patrons Politik. All rights reserved.
-        </p>
+        <p className="p-0 m-0">Copyright 2023 © Patrons Politik. All rights reserved.</p>
       </footer>
     </>
   );

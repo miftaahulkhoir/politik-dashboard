@@ -1,34 +1,35 @@
-import Card from '../../elements/card/Card';
-// import ReactEcharts from 'echarts-for-react';
-import dynamic from 'next/dynamic';
-const ReactEcharts = dynamic(() => import('echarts-for-react'), { ssr: false });
+import Card from "../../elements/card/Card";
 
-import styles from './home.module.css';
+// import ReactEcharts from 'echarts-for-react';
+import dynamic from "next/dynamic";
+const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
+
+import styles from "./home.module.css";
 
 export default function SocialPieChart({ title, data, chartType }) {
-  let finalData = [];
+  const finalData = [];
   let radius = [];
 
   if (data != null) {
     if (chartType == "posneg") {
       data.forEach((value, index) => {
         if (value.key == "positive" || value.key == "negative")
-        finalData[index] = {
-          value: value.value,
-          name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
-        };
-      })
-      radius = ['0%', '70%'];
+          finalData[index] = {
+            value: value.value,
+            name: value.key.charAt(0).toUpperCase() + value.key.slice(1),
+          };
+      });
+      radius = ["0%", "70%"];
     } else {
       data.forEach((value, index) => {
         if (value.key != "undefined") {
           finalData[index] = {
             value: value.value,
-            name: value.key.charAt(0).toUpperCase() + value.key.slice(1)
+            name: value.key.charAt(0).toUpperCase() + value.key.slice(1),
           };
         }
-      })
-      radius = ['40%', '70%'];
+      });
+      radius = ["40%", "70%"];
     }
   }
 
@@ -40,35 +41,37 @@ export default function SocialPieChart({ title, data, chartType }) {
       },
     },
     tooltip: {
-      trigger: 'item'
+      trigger: "item",
     },
     legend: {
-      top: 'bottom',
+      top: "bottom",
     },
-    series: [{
-      name: title,
-      type: "pie",
-      radius: radius,
-      avoidLabelOverlap: false,
-      emphasis: {
+    series: [
+      {
+        name: title,
+        type: "pie",
+        radius: radius,
+        avoidLabelOverlap: false,
+        emphasis: {
+          label: {
+            show: true,
+            fontSize: 40,
+            fontWeight: "bold",
+          },
+        },
+        data: finalData,
+        emphasis: {
+          itemStyle: {
+            shadowBlur: 10,
+            shadowOffsetX: 0,
+            shadowColor: "rgba(0, 0, 0, 0.5)",
+          },
+        },
         label: {
-          show: true,
-          fontSize: 40,
-          fontWeight: 'bold'
-        }
-      },
-      data: finalData,
-      emphasis: {
-        itemStyle: {
-          shadowBlur: 10,
-          shadowOffsetX: 0,
-          shadowColor: 'rgba(0, 0, 0, 0.5)',
+          formatter: "{b}: {c} ({d}%)",
         },
       },
-      label: {
-        formatter: '{b}: {c} ({d}%)',
-      },
-    }],
+    ],
   };
   return (
     <Card>

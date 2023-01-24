@@ -1,22 +1,23 @@
-import EChartsReact from 'echarts-for-react';
-import { useMemo } from 'react';
-import SurveyChartCard from './SurveyChartCard';
+import EChartsReact from "echarts-for-react";
+import { useMemo } from "react";
+
+import SurveyChartCard from "./SurveyChartCard";
 
 export default function SurveyPieChart({ title, data }) {
   const option = useMemo(() => {
     return {
       tooltip: {
-        trigger: 'item',
+        trigger: "item",
       },
       legend: {
-        top: 'bottom',
+        top: "bottom",
       },
       series: [
         {
           name: title,
-          type: 'pie',
-          radius: '50%',
-          center: ['50%', '33%'],
+          type: "pie",
+          radius: "50%",
+          center: ["50%", "33%"],
           // data: [
           //   { value: 1048, name: 'Search Engine' },
           //   { value: 735, name: 'Direct' },
@@ -29,11 +30,11 @@ export default function SurveyPieChart({ title, data }) {
             itemStyle: {
               shadowBlur: 10,
               shadowOffsetX: 0,
-              shadowColor: 'rgba(0, 0, 0, 0.5)',
+              shadowColor: "rgba(0, 0, 0, 0.5)",
             },
           },
           label: {
-            formatter: '{b}: {c} ({d}%)',
+            formatter: "{b}: {c} ({d}%)",
           },
         },
       ],

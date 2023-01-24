@@ -1,11 +1,12 @@
-import NameAvatar from '../../elements/nameAvatar/NameAvatar';
-import styles from './home.module.css';
+import styles from "./home.module.css";
+
+import NameAvatar from "../../elements/nameAvatar/NameAvatar";
 
 export default function SocialSummaryCard({ title, subtitle, mentionSum, totalImpression, engagementRate, postLinkClicks }) {
   return (
     <div className={styles.social_summary_card}>
-      <div className='row'>
-        <div className='col-5'>
+      <div className="row">
+        <div className="col-5">
           <div className={styles.title_top_left}>{title}</div>
           <div className={styles.subtitle_top_left}>{subtitle}</div>
         </div>
@@ -26,7 +27,8 @@ export default function SocialSummaryCard({ title, subtitle, mentionSum, totalIm
   );
 }
 
-{/* <div className={styles.social_summary_card}>
+{
+  /* <div className={styles.social_summary_card}>
       <div className='row'>
         <div className='col-5'>
           <div className={styles.title_top_left}>{title}</div>
@@ -55,4 +57,5 @@ export default function SocialSummaryCard({ title, subtitle, mentionSum, totalIm
           <div className={styles.value}>{engagementRate}%</div>
         </div>
       </div>
-    </div> */}
+    </div> */
+}

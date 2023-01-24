@@ -1,23 +1,14 @@
-import {
-  Col,
-  DatePicker,
-  Input,
-  Row,
-  Select,
-  Space,
-  Spin,
-  Typography,
-  notification,
-} from 'antd';
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import Head from 'next/head';
-import { parseCookies } from 'nookies';
-import { useCallback, useEffect, useState } from 'react';
-import Card from '../components/elements/card/Card';
-import SocialPieChart from '../components/pagecomponents/home/SocialPieChart';
-import SocialSummaryCard from '../components/pagecomponents/home/SocialSummaryCard';
-import SocialTimeChart from '../components/pagecomponents/home/SocialTimeChart';
+import { Col, DatePicker, Input, Row, Select, Space, Spin, Typography, notification } from "antd";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import Head from "next/head";
+import { parseCookies } from "nookies";
+import { useCallback, useEffect, useState } from "react";
+
+import Card from "../components/elements/card/Card";
+import SocialPieChart from "../components/pagecomponents/home/SocialPieChart";
+import SocialSummaryCard from "../components/pagecomponents/home/SocialSummaryCard";
+import SocialTimeChart from "../components/pagecomponents/home/SocialTimeChart";
 const { RangePicker } = DatePicker;
 
 const { TextArea } = Input;
@@ -43,12 +34,11 @@ export default function SocialReports(pageProps) {
   const [engagementData, setEngagementData] = useState([]);
   const [engagementRateData, setEngagementRateData] = useState([]);
   const [videoViewsData, setVideoViewsData] = useState([]);
-  const [apiNotification, contextHolderNotification] =
-    notification.useNotification();
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
 
-  const [mtkUrl, setMtkUrl] = useState('');
-  const [mtkToken, setMtkToken] = useState('');
-  const [mtkOrgId, setMtkOrgId] = useState('');
+  const [mtkUrl, setMtkUrl] = useState("");
+  const [mtkToken, setMtkToken] = useState("");
+  const [mtkOrgId, setMtkOrgId] = useState("");
 
   const [isGroupAssigned, setIsGroupAssigned] = useState(false);
   const [isTopicAssigned, setIsTopicAssigned] = useState(false);
@@ -59,10 +49,10 @@ export default function SocialReports(pageProps) {
   const [isFormEdit, setIsFormEdit] = useState(false);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
 
-  const [filterSearch, setFilterSearch] = useState('');
+  const [filterSearch, setFilterSearch] = useState("");
   const [groupData, setGroupData] = useState([]);
-  const [selectedGroupData, setSelectedGroup] = useState('');
-  const [selectedTopicData, setSelectedTopic] = useState('');
+  const [selectedGroupData, setSelectedGroup] = useState("");
+  const [selectedTopicData, setSelectedTopic] = useState("");
   const [filterDate, setFilterDate] = useState([]);
 
   useEffect(() => {
@@ -71,7 +61,7 @@ export default function SocialReports(pageProps) {
     setMtkToken(pageProps.mediatoolkit.token);
     setMtkUrl(pageProps.mediatoolkit.url);
     setMtkOrgId(pageProps.mediatoolkit.orgid);
-    console.log('process:', pageProps);
+    console.log("process:", pageProps);
   }, []);
 
   useEffect(() => {
@@ -85,64 +75,52 @@ export default function SocialReports(pageProps) {
     debounce((value) => {
       setSelectedGroup(Number(value));
       setIsGroupAssigned(true);
-    }, 300)
+    }, 300),
   );
 
   const selectTopicHandler = useCallback(
     debounce((value) => {
       setSelectedTopic(Number(value));
       setIsTopicAssigned(true);
-    }, 300)
+    }, 300),
   );
 
   const selectDateHandler = useCallback(
     debounce((_, valueString) => {
-      let res = [];
+      const res = [];
       valueString.forEach((value, index) => {
-        res[index] =
-          new Date(
-            parseInt(value.slice(0, 4)),
-            parseInt(value.slice(5, 7)) - 1,
-            parseInt(value.slice(8, 10))
-          ).getTime() / 1000;
+        res[index] = new Date(parseInt(value.slice(0, 4)), parseInt(value.slice(5, 7)) - 1, parseInt(value.slice(8, 10))).getTime() / 1000;
       });
       setFilterDate(res);
       setIsDateAssigned(true);
-    }, 300)
+    }, 300),
   );
 
   const fetchSocialData = async () => {
     try {
       // call api
-      let request = {
+      const request = {
         keyword_id: selectedTopicData.toString(),
         from_time: filterDate[0].toString(),
         to_time: filterDate[1].toString(),
       };
-      await axios
-        .post(
-          `${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`,
-          request
-        )
-        .then((res) => {
-          setMentionData(res.data.data.mentions_over_time.data.entries);
-          setMentionSum(res.data.data.sum_of_mentions.data.total_value);
-          setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
-          setAllSource(res.data.data.sum_of_all_source.data.entries);
-          setSentiment(res.data.data.effective_sentiment.data.entries);
-          setMentionBySource(
-            res.data.data.mentions_over_time_by_source.data.entries
-          );
-          setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
-          setShowCharts(true);
-          setIsLoading(false);
-          if (!res?.data?.status) throw new Error('unknown error');
-        });
+      await axios.post(`${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`, request).then((res) => {
+        setMentionData(res.data.data.mentions_over_time.data.entries);
+        setMentionSum(res.data.data.sum_of_mentions.data.total_value);
+        setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
+        setAllSource(res.data.data.sum_of_all_source.data.entries);
+        setSentiment(res.data.data.effective_sentiment.data.entries);
+        setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);
+        setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
+        setShowCharts(true);
+        setIsLoading(false);
+        if (!res?.data?.status) throw new Error("unknown error");
+      });
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: 'Gagal',
-        description: 'Terjadi kesalahan dalam pengambilan data reports',
+        message: "Gagal",
+        description: "Terjadi kesalahan dalam pengambilan data reports",
       });
     }
   };
@@ -172,10 +150,8 @@ export default function SocialReports(pageProps) {
             <div className="col-12">
               <Card noPadding>
                 <SocialSummaryCard
-                  title={'Performance Summary'}
-                  subtitle={
-                    'View your key profile performance metrics from the reporting period.'
-                  }
+                  title={"Performance Summary"}
+                  subtitle={"View your key profile performance metrics from the reporting period."}
                   mentionSum={mentionSum}
                   totalImpression={totalImpression}
                   engagementRate={summaryEngagementRate}
@@ -185,49 +161,33 @@ export default function SocialReports(pageProps) {
             </div>
             <div className="col-12">
               <Card noPadding>
-                <SocialTimeChart
-                  title={'Mentions Over Time'}
-                  data={mentionData}
-                  chartType={'common'}
-                />
+                <SocialTimeChart title={"Mentions Over Time"} data={mentionData} chartType={"common"} />
               </Card>
             </div>
             <div className="col-12">
               <Card noPadding>
-                <SocialTimeChart
-                  title={'Mentions Over Time by Source'}
-                  data={mentionBySource}
-                  chartType={'detail'}
-                />
+                <SocialTimeChart title={"Mentions Over Time by Source"} data={mentionBySource} chartType={"detail"} />
               </Card>
             </div>
             <div className="col-12">
               <Card noPadding>
-                <SocialPieChart title={'All Sources'} data={allSource} />
+                <SocialPieChart title={"All Sources"} data={allSource} />
               </Card>
             </div>
             <div className="col-12">
               <Card noPadding>
-                <SocialTimeChart
-                  title={'Sentiment Over Time'}
-                  data={sentimentOverTime}
-                  chartType={'detail'}
-                />
+                <SocialTimeChart title={"Sentiment Over Time"} data={sentimentOverTime} chartType={"detail"} />
               </Card>
             </div>
             <Row gutter={18}>
               <Col span={12}>
                 <Card noPadding>
-                  <SocialPieChart title={'Sentiment Ratio'} data={sentiment} />
+                  <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
                 </Card>
               </Col>
               <Col span={12}>
                 <Card noPadding>
-                  <SocialPieChart
-                    title={'Positive-Negative Sentiment Ratio'}
-                    data={sentiment}
-                    chartType={'posneg'}
-                  />
+                  <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
                 </Card>
               </Col>
             </Row>
@@ -235,27 +195,21 @@ export default function SocialReports(pageProps) {
         ) : (
           <div
             style={{
-              display: 'flex',
-              flexDirection: 'column',
-              justifyContent: 'center',
-              alignItems: 'center',
-              padding: '40px 0',
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              padding: "40px 0",
             }}
           >
             {isLoading ? (
-              <Spin size="large" style={{ margin: '50px 0' }}>
+              <Spin size="large" style={{ margin: "50px 0" }}>
                 <div className="content" />
               </Spin>
             ) : (
               <>
-                <img
-                  style={{ width: '30%', maxHeight: '280px' }}
-                  src="/images/people_with_up.svg"
-                  alt="select"
-                />
-                <div style={{ fontSize: '16px', marginTop: '16px' }}>
-                  Tolong pilih topik terlebih dahulu
-                </div>
+                <img style={{ width: "30%", maxHeight: "280px" }} src="/images/people_with_up.svg" alt="select" />
+                <div style={{ fontSize: "16px", marginTop: "16px" }}>Tolong pilih topik terlebih dahulu</div>
               </>
             )}
           </div>
@@ -266,8 +220,9 @@ export default function SocialReports(pageProps) {
 }
 
 export async function getServerSideProps(ctx) {
-  let { token } = parseCookies(ctx);
-  let reports, mediatoolkit;
+  const { token } = parseCookies(ctx);
+  let reports;
+  let mediatoolkit;
 
   // get groups
   await axios
@@ -287,16 +242,9 @@ export async function getServerSideProps(ctx) {
   return { props: { reports, mediatoolkit } };
 }
 
-function SearchBar({
-  groupData,
-  selectGroupHandler,
-  selectTopicHandler,
-  selectDateHandler,
-  selectedGroupData,
-  addSurveyHandler,
-}) {
-  let groupList = [{}];
-  console.log('group data', groupData);
+function SearchBar({ groupData, selectGroupHandler, selectTopicHandler, selectDateHandler, selectedGroupData, addSurveyHandler }) {
+  const groupList = [{}];
+  console.log("group data", groupData);
   groupData.forEach((value, index) => {
     groupList[index] = {
       value: value.id,
@@ -304,9 +252,9 @@ function SearchBar({
     };
   });
 
-  let topicList = [{}];
-  if (selectedGroupData != '') {
-    let temp = groupData.find((value) => value.id == selectedGroupData);
+  const topicList = [{}];
+  if (selectedGroupData != "") {
+    const temp = groupData.find((value) => value.id == selectedGroupData);
     temp.keywords.forEach((value, index) => {
       topicList[index] = {
         value: value.id,
@@ -327,27 +275,13 @@ function SearchBar({
       <Col span={18}>
         <Row gutter={16}>
           <Col span={8}>
-            <Select
-              placeholder={'Pilih Group...'}
-              style={{ width: '100%' }}
-              onChange={selectGroupHandler}
-              options={groupList}
-            />
+            <Select placeholder={"Pilih Group..."} style={{ width: "100%" }} onChange={selectGroupHandler} options={groupList} />
           </Col>
           <Col span={8}>
-            <Select
-              placeholder={'Pilih Topik...'}
-              style={{ width: '100%' }}
-              onChange={selectTopicHandler}
-              options={topicList}
-            />
+            <Select placeholder={"Pilih Topik..."} style={{ width: "100%" }} onChange={selectTopicHandler} options={topicList} />
           </Col>
           <Col span={8}>
-            <RangePicker
-              style={{ width: '100%' }}
-              placeholder={['Tanggal Awal', 'Tanggal Akhir']}
-              onChange={selectDateHandler}
-            />
+            <RangePicker style={{ width: "100%" }} placeholder={["Tanggal Awal", "Tanggal Akhir"]} onChange={selectDateHandler} />
           </Col>
         </Row>
       </Col>

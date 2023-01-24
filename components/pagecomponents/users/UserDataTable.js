@@ -2,18 +2,10 @@ import { Button, Card, Col, Modal, Row } from "antd";
 import axios from "axios";
 import { useMemo } from "react";
 import { TbPencil, TbTrashX } from "react-icons/tb";
+
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
-export default function UserDataTable({
-  data,
-  currentUser,
-  setSelectedUser,
-  setIsFormEdit,
-  setIsDrawerActive,
-  apiNotification,
-  usersList,
-  setUsersList,
-}) {
+export default function UserDataTable({ data, currentUser, setSelectedUser, setIsFormEdit, setIsDrawerActive, apiNotification, usersList, setUsersList }) {
   const deleteUserHandler = (row) => {
     Modal.confirm({
       title: "Peringatan",
@@ -69,12 +61,7 @@ export default function UserDataTable({
       },
       {
         name: "Jenis Kelamin",
-        selector: (row) =>
-          row?.gender === "male"
-            ? "Laki-laki"
-            : row?.gender === "female"
-            ? "Perempuan"
-            : "-",
+        selector: (row) => (row?.gender === "male" ? "Laki-laki" : row?.gender === "female" ? "Perempuan" : "-"),
         width: "140px",
         sortable: true,
       },
@@ -85,32 +72,23 @@ export default function UserDataTable({
       {
         name: "Aksi",
         selector: (row) => {
-          const canModify =
-            currentUser?.occupation?.level + 1 === row?.occupation?.level;
+          const canModify = currentUser?.occupation?.level + 1 === row?.occupation?.level;
           return (
-            <div className='d-flex gap-2'>
+            <div className="d-flex gap-2">
               <Button
-                type='text'
+                type="text"
                 disabled={!canModify}
-                icon={
-                  <TbPencil
-                    size={20}
-                    color={canModify ? "#7287A5" : "#cccccc"}
-                  />
-                }
-                shape='circle'
-                onClick={() => updateUserHandler(row)}></Button>
+                icon={<TbPencil size={20} color={canModify ? "#7287A5" : "#cccccc"} />}
+                shape="circle"
+                onClick={() => updateUserHandler(row)}
+              ></Button>
               <Button
-                type='text'
+                type="text"
                 disabled={!canModify}
-                icon={
-                  <TbTrashX
-                    size={20}
-                    color={canModify ? "#B12E2E" : "#cccccc"}
-                  />
-                }
-                shape='circle'
-                onClick={() => deleteUserHandler(row)}></Button>
+                icon={<TbTrashX size={20} color={canModify ? "#B12E2E" : "#cccccc"} />}
+                shape="circle"
+                onClick={() => deleteUserHandler(row)}
+              ></Button>
             </div>
           );
         },
@@ -120,7 +98,7 @@ export default function UserDataTable({
     ];
   }, [currentUser]);
   return (
-    <Row justify='end'>
+    <Row justify="end">
       <Col span={24}>
         <Card bodyStyle={{ padding: "0px" }} style={{ overflow: "hidden" }}>
           <CustomDataTable columns={columns} data={data} pagination />

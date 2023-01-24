@@ -2,15 +2,8 @@ import axios from "axios";
 import "leaflet/dist/leaflet.css";
 import moment from "moment";
 import { useEffect, useState } from "react";
-import {
-  MapContainer,
-  Marker,
-  Polyline,
-  TileLayer,
-  Tooltip,
-  useMap,
-  useMapEvents,
-} from "react-leaflet";
+import { MapContainer, Marker, Polyline, TileLayer, Tooltip, useMap, useMapEvents } from "react-leaflet";
+
 import styles from "../../elements/map/Home.module.css";
 
 export default function HomeMap({
@@ -44,23 +37,16 @@ export default function HomeMap({
     setLogType(type);
     axios
       .get(
-        `${
-          process.env.APP_BASEURL
-        }api/data-mapping?userid=${userid}&from=${moment
+        `${process.env.APP_BASEURL}api/data-mapping?userid=${userid}&from=${moment.utc().local().format("Y-MM-DD")} 00:00:00&until=${moment
           .utc()
           .local()
-          .format("Y-MM-DD")} 00:00:00&until=${moment
-          .utc()
-          .local()
-          .format("Y-MM-DD")} 23:59:00`
+          .format("Y-MM-DD")} 23:59:00`,
       )
       .then((res) => {
-        let arr = [];
+        const arr = [];
         res.data.data.forEach((element, index) => {
           axios
-            .get(
-              `https://api.geoapify.com/v1/geocode/reverse?lat=${element?.latitude}&lon=${element?.longitude}&apiKey=5523a1bf84d64e849bdd9a6ca7af26e2`
-            )
+            .get(`https://api.geoapify.com/v1/geocode/reverse?lat=${element?.latitude}&lon=${element?.longitude}&apiKey=5523a1bf84d64e849bdd9a6ca7af26e2`)
             .then((res2) => {
               arr[index] = {
                 name: name,
@@ -83,12 +69,7 @@ export default function HomeMap({
   };
 
   return (
-    <MapContainer
-      center={center}
-      zoom={zoom}
-      zoomControl={false}
-      ref={setMap}
-      className={styles.homeMap}>
+    <MapContainer center={center} zoom={zoom} zoomControl={false} ref={setMap} className={styles.homeMap}>
       <HomeMapComponent
         setZoom={setZoom}
         recenter={recenter}
@@ -98,8 +79,8 @@ export default function HomeMap({
         setIconSize={setIconSize}
       />
       <TileLayer
-        className='map'
-        url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+        className="map"
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
       />
       {showKoordinator === true &&
@@ -109,9 +90,7 @@ export default function HomeMap({
             key={index}
             eventHandlers={{
               click: (e) => {
-                handleDetailCordinate(m.id, m.name, "koordinator"),
-                  setTempCenter([m.latitude, m.longitude]),
-                  setUserLogCordinate(true);
+                handleDetailCordinate(m.id, m.name, "koordinator"), setTempCenter([m.latitude, m.longitude]), setUserLogCordinate(true);
               },
             }}
             icon={
@@ -121,8 +100,9 @@ export default function HomeMap({
                 iconAnchor: [iconSize / 2, iconSize / 2],
               })
             }
-            position={[m?.latitude, m?.longitude]}>
-            <Tooltip direction='top' offset={[0, -10]} opacity={1} permanent>
+            position={[m?.latitude, m?.longitude]}
+          >
+            <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
               {m.name}
             </Tooltip>
           </Marker>
@@ -136,9 +116,7 @@ export default function HomeMap({
                 key={index}
                 eventHandlers={{
                   click: (e) => {
-                    handleDetailCordinate(m.id, m.name, "relawan"),
-                      setTempCenter([m.latitude, m.longitude]),
-                      setUserLogCordinate(true);
+                    handleDetailCordinate(m.id, m.name, "relawan"), setTempCenter([m.latitude, m.longitude]), setUserLogCordinate(true);
                   },
                 }}
                 icon={
@@ -148,16 +126,13 @@ export default function HomeMap({
                     iconAnchor: [iconSize / 2, iconSize / 2],
                   })
                 }
-                position={[m?.latitude, m?.longitude]}>
-                <Tooltip
-                  direction='top'
-                  offset={[0, -10]}
-                  opacity={1}
-                  permanent>
+                position={[m?.latitude, m?.longitude]}
+              >
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
                   {m.name}
                 </Tooltip>
               </Marker>
-            )
+            ),
         )}
       {showPemilih === true &&
         userLogCordinate === false &&
@@ -173,16 +148,13 @@ export default function HomeMap({
                     iconAnchor: [iconSize / 2, iconSize / 2],
                   })
                 }
-                position={[m?.latitude, m?.longitude]}>
-                <Tooltip
-                  direction='top'
-                  offset={[0, -10]}
-                  opacity={1}
-                  permanent>
+                position={[m?.latitude, m?.longitude]}
+              >
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
                   {m.name}
                 </Tooltip>
               </Marker>
-            )
+            ),
         )}
       {showBlackList === true &&
         userLogCordinate === false &&
@@ -198,8 +170,9 @@ export default function HomeMap({
                     iconAnchor: [iconSize / 2, iconSize / 2],
                   })
                 }
-                position={[m?.latitude, m?.longitude]}></Marker>
-            )
+                position={[m?.latitude, m?.longitude]}
+              ></Marker>
+            ),
         )}
       {userLogCordinate === true && (
         <>
@@ -213,8 +186,9 @@ export default function HomeMap({
                   iconAnchor: [iconSize / 2, iconSize / 2],
                 })
               }
-              position={[m?.latitude, m?.longitude]}>
-              <Tooltip direction='top' offset={[0, -10]} opacity={1} permanent>
+              position={[m?.latitude, m?.longitude]}
+            >
+              <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
                 {m.name}
               </Tooltip>
             </Marker>
@@ -229,14 +203,7 @@ export default function HomeMap({
   );
 }
 
-function HomeMapComponent({
-  setZoom,
-  recenter,
-  tempCenter,
-  setRecenter,
-  setCenter,
-  setIconSize,
-}) {
+function HomeMapComponent({ setZoom, recenter, tempCenter, setRecenter, setCenter, setIconSize }) {
   const scaleZoom = (input) => {
     return input / 19;
   };

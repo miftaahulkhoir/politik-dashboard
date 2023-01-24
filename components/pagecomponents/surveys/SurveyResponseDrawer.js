@@ -1,15 +1,12 @@
-import { Collapse, Drawer, Space } from 'antd';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import DataTable from 'react-data-table-component';
-import SurveyResponseDrawer2 from './SurveyResponseDrawer2';
-import styles from './surveyResponse.module.css';
+import { Collapse, Drawer, Space } from "antd";
+import axios from "axios";
+import { useEffect, useState } from "react";
+import DataTable from "react-data-table-component";
 
-export default function SurveyResponseDrawer({
-  open,
-  setOpen,
-  selectedSurvey,
-}) {
+import styles from "./surveyResponse.module.css";
+import SurveyResponseDrawer2 from "./SurveyResponseDrawer2";
+
+export default function SurveyResponseDrawer({ open, setOpen, selectedSurvey }) {
   const [responsesByRecruiters, setResponsesByRecruiters] = useState([]);
   const [selectedResponse, setSelectedResponse] = useState({});
 
@@ -18,7 +15,7 @@ export default function SurveyResponseDrawer({
   useEffect(() => {
     if (!selectedSurvey?.id) return;
     axios
-      .get('/api/response', {
+      .get("/api/response", {
         params: {
           surveyid: selectedSurvey.id,
         },
@@ -35,41 +32,27 @@ export default function SurveyResponseDrawer({
 
   const columns = [
     {
-      name: 'Nama',
+      name: "Nama",
       selector: (row) => row.respondent || row.id,
     },
   ];
 
   const onRowClicked = (row, e) => {
-    console.log('selected response', row);
+    console.log("selected response", row);
     setSelectedResponse(row);
     setIsDrawer2Open(true);
   };
 
   return (
-    <Drawer
-      title={selectedSurvey?.survey_name}
-      placement="right"
-      closable={false}
-      width="50%"
-      open={open}
-      onClose={() => setOpen(false)}
-    >
-      <SurveyResponseDrawer2
-        open={isDrawer2Open}
-        setOpen={setIsDrawer2Open}
-        selectedResponse={selectedResponse}
-      />
+    <Drawer title={selectedSurvey?.survey_name} placement="right" closable={false} width="50%" open={open} onClose={() => setOpen(false)}>
+      <SurveyResponseDrawer2 open={isDrawer2Open} setOpen={setIsDrawer2Open} selectedResponse={selectedResponse} />
 
-      <Space direction="vertical" style={{ width: '100%' }}>
+      <Space direction="vertical" style={{ width: "100%" }}>
         {responsesByRecruiters.map((rbr) => (
           <Collapse key={rbr.recruiter_id}>
-            <Collapse.Panel
-              header={`${rbr.recruiter} (${rbr.responses.length} responden)`}
-              className={styles.custom_ant}
-            >
+            <Collapse.Panel header={`${rbr.recruiter} (${rbr.responses.length} responden)`} className={styles.custom_ant}>
               <DataTable
-                style={{ padding: '0' }}
+                style={{ padding: "0" }}
                 highlightOnHover
                 noTableHead
                 dense
@@ -81,8 +64,8 @@ export default function SurveyResponseDrawer({
                 customStyles={{
                   rows: {
                     style: {
-                      padding: '12px 0',
-                      fontSize: '14px',
+                      padding: "12px 0",
+                      fontSize: "14px",
                     },
                   },
                 }}

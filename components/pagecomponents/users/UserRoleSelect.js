@@ -1,14 +1,11 @@
-import { Button, Space } from 'antd';
-import axios from 'axios';
-import clsx from 'clsx';
-import { useEffect, useMemo, useState } from 'react';
-import styles from './users.module.css';
+import { Button, Space } from "antd";
+import axios from "axios";
+import clsx from "clsx";
+import { useEffect, useMemo, useState } from "react";
 
-export default function UserRoleSelect({
-  currentUser,
-  activeLevel,
-  setActiveLevel,
-}) {
+import styles from "./users.module.css";
+
+export default function UserRoleSelect({ currentUser, activeLevel, setActiveLevel }) {
   const [occupations, setOccupations] = useState([]);
 
   useEffect(() => {
@@ -34,10 +31,7 @@ export default function UserRoleSelect({
     <Space size="middle">
       {filteredOccupations.map((occupation) => (
         <Button
-          className={clsx(
-            styles.button,
-            activeLevel === occupation?.level ? styles.button_active : ''
-          )}
+          className={clsx(styles.button, activeLevel === occupation?.level ? styles.button_active : "")}
           type="link"
           onClick={() => setActiveLevel(occupation?.level)}
           key={occupation?.level}

@@ -1,6 +1,7 @@
-import { Avatar, Dropdown } from 'antd';
-import { TbLogout, TbUser } from 'react-icons/tb';
-import { logoutUser } from '../../../utils/auth';
+import { Avatar, Dropdown } from "antd";
+import { TbLogout, TbUser } from "react-icons/tb";
+
+import { logoutUser } from "../../../utils/auth";
 
 export default function ProfileDropdown() {
   const items = [
@@ -17,8 +18,8 @@ export default function ProfileDropdown() {
     //   onClick: () => Router.push('/ongoing'),
     // },
     {
-      key: '3',
-      label: 'Keluar',
+      key: "3",
+      label: "Keluar",
       icon: <TbLogout size={16} />,
       danger: true,
       onClick: async function () {

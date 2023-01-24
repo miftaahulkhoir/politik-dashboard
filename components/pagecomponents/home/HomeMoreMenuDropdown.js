@@ -1,6 +1,6 @@
-import { Button, Dropdown } from 'antd';
-import Router from 'next/router';
-import { TbChevronDown, TbUser } from 'react-icons/tb';
+import { Button, Dropdown } from "antd";
+import Router from "next/router";
+import { TbChevronDown, TbUser } from "react-icons/tb";
 
 export default function HomeMoreMenuDropdown() {
   const items = [
@@ -23,10 +23,10 @@ export default function HomeMoreMenuDropdown() {
     //   onClick: () => Router.push('/ongoing'),
     // },
     {
-      key: '4',
-      label: 'Manajemen Pengguna',
+      key: "4",
+      label: "Manajemen Pengguna",
       icon: <TbUser size={16} />,
-      onClick: () => Router.push('/users'),
+      onClick: () => Router.push("/users"),
     },
     // {
     //   key: '5',

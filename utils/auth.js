@@ -1,6 +1,6 @@
-import axios from 'axios';
-import Router from 'next/router';
-import { destroyCookie } from 'nookies';
+import axios from "axios";
+import Router from "next/router";
+import { destroyCookie } from "nookies";
 
 export const loginUser = async (username, password) => {
   try {
@@ -29,11 +29,11 @@ export const logoutUser = async () => {
   try {
     await axios.post(`/api/logout`).then((res) => {
       if (res.data.status) {
-        Router.push('/login');
+        Router.push("/login");
       }
     });
-    destroyCookie(null, 'token');
-    Router.push('/login');
+    destroyCookie(null, "token");
+    Router.push("/login");
   } catch (error) {
     console.error(error);
   }
