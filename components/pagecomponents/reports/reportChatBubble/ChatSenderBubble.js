@@ -10,15 +10,9 @@ export default function ChatSenderBubble({ chat, time, sent = false, read = fals
       <Row wrap={false} className={styles.chat_sender} gutter={8}>
         <Col>{chat}</Col>
         <Col>
-          <Space style={{ fontSize: "12px" }}>
+          <Space style={{ fontSize: "12px", color: "#7287A5" }}>
             <div>{time}</div>
-            {read ? (
-              <TbChecks color="#016CEE" size={16} />
-            ) : sent ? (
-              <TbChecks color="#7287A5" size={16} />
-            ) : (
-              <TbCheck color="#7287A5" size={16} />
-            )}
+            {read ? <TbChecks color="#016CEE" size={16} /> : sent ? <TbChecks size={16} /> : <TbCheck size={16} />}
           </Space>
         </Col>
       </Row>

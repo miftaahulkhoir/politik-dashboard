@@ -1,6 +1,7 @@
 .chat_wrapper {
   display: flex;
   margin: 8px 0;
+  align-items: flex-end;
 }
 
 .chat_wrapper_sender {
@@ -21,6 +22,7 @@
   border-radius: 16px 16px 0 16px;
   border: 1px solid #d6e9ff;
   width: fit-content;
+  max-width: calc(100% - 24px);
 }
 
 .chat_receiver {
@@ -29,6 +31,7 @@
   border-radius: 16px 16px 16px 0;
   border: 1px solid #d6e9ff;
   width: fit-content;
+  max-width: calc(100% - 24px);
 }
 
 .chat_system {

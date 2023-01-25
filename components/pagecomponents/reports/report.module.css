@@ -8,3 +8,11 @@
 .chat_input:active {
   border: 1px solid #016cee;
 }
+
+.chat_input_empty::after {
+  content: "Tulis pesan";
+  position: absolute;
+  top: 8px;
+  left: 20px;
+  color: #777;
+}

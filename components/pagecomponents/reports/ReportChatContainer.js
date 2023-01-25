@@ -26,6 +26,12 @@ export default function ReportChatContainer() {
       >
         <ReportChatBubble type="system" chat="Jumat, 30 Desember 2022" />
         <ReportChatBubble type="sender" time={new Date()} chat="gg gemink" read />
+        <ReportChatBubble
+          type="sender"
+          time={new Date()}
+          chat="Cauliflower cheese rubber cheese cheese on toast. Cottage cheese cow lancashire st. agur blue cheese ricotta mozzarella jarlsberg blue castello. Airedale camembert de normandie queso cheesecake manchego lancashire squirty cheese pecorino. Cheese slices emmental cow camembert de normandie cheddar stinking bishop."
+          read
+        />
         <ReportChatBubble type="receiver" time={new Date()} chat="halo bang,, login" />
         <ReportChatBubble type="sender" time={new Date()} chat="masuk bang" sent />
         <ReportChatBubble type="sender" time={new Date()} chat="hahaha" />

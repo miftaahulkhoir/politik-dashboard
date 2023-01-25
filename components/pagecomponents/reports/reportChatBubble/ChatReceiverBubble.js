@@ -9,9 +9,8 @@ export default function ChatReceiverBubble({ chat, time }) {
       <Row wrap={false} className={styles.chat_receiver} gutter={8}>
         <Col>{chat}</Col>
         <Col>
-          <Space style={{ fontSize: "12px" }}>
+          <Space style={{ fontSize: "12px", color: "#7287A5" }}>
             <div>{time}</div>
-            <div>v</div>
           </Space>
         </Col>
       </Row>
