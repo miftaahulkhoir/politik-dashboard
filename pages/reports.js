@@ -30,3 +30,7 @@ export default function Reports() {
     </>
   );
 }
+
+export async function getServerSideProps(ctx) {
+  return { props: {} };
+}
