@@ -1,6 +1,12 @@
 {
   "extends": ["eslint:recommended", "next/core-web-vitals", "google", "prettier"],
   "plugins": ["import", "prettier"],
+  "parserOptions": {
+    "ecmaVersion": 2020
+  },
+  "env": {
+    "es6": true
+  },
   "rules": {
     "prettier/prettier": "error",
     "@next/next/no-img-element": "off",

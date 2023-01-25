@@ -1,8 +1,72 @@
+import axios from "axios";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
 import ReportChatBubble from "./reportChatBubble/ReportChatBubble";
 import ReportChatHeader from "./ReportChatHeader";
 import ReportChatInputBar from "./ReportChatInputBar";
 
-export default function ReportChatContainer() {
+export default function ReportChatContainer({ selectedReport }) {
+  const [chats, setChats] = useState([]);
+
+  useEffect(() => {
+    if (!selectedReport?.id) return;
+    axios
+      .get(`/api/complaints/chat/${selectedReport?.id}`)
+      .then((res) => {
+        setChats(res?.data?.data || []);
+      })
+      .catch((err) => {});
+  }, [selectedReport]);
+
+  // receiver itu orang yang melaporkan
+  const isReceiver = useCallback(
+    (chat) => {
+      return selectedReport?.sender_id === chat?.sender_id;
+    },
+    [selectedReport],
+  );
+
+  const getType = useCallback(
+    (chat) => {
+      if (chat?.sender_id === selectedReport?.sender_id) return "receiver";
+      if (chat?.sender_id) return "sender";
+      return "system";
+    },
+    [selectedReport],
+  );
+
+  // contains chats from sender, receiver, and system
+  const allChats = useMemo(() => {
+    const chatsWithDate = chats.map((chat) => {
+      const date = new Date(chat?.created_at);
+
+      chat.date = new Intl.DateTimeFormat("id-ID", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      }).format(date);
+      return chat;
+    });
+
+    const dates = [...new Set(chatsWithDate.map((c) => c.date))];
+
+    dates.forEach((date) => {
+      const id = chatsWithDate.findIndex((chat) => chat.date === date);
+      chatsWithDate.splice(id, 0, { date: date });
+    });
+
+    const categorizedChats = chatsWithDate.map((chat) => {
+      chat.type = getType(chat);
+      if (chat.type === "system") {
+        chat.message = chat.date;
+      }
+      return chat;
+    });
+
+    return categorizedChats;
+  }, [chats, getType]);
+
   return (
     <div
       style={{
@@ -13,7 +77,7 @@ export default function ReportChatContainer() {
         borderLeft: "1px solid #EEEEEE",
       }}
     >
-      <ReportChatHeader name="Ananda Pratama" />
+      <ReportChatHeader name={selectedReport?.sender_name} />
       <div
         style={{
           width: "100%",
@@ -24,18 +88,17 @@ export default function ReportChatContainer() {
           padding: "16px",
         }}
       >
-        <ReportChatBubble type="system" chat="Jumat, 30 Desember 2022" />
-        <ReportChatBubble type="sender" time={new Date()} chat="gg gemink" read />
-        <ReportChatBubble
-          type="sender"
-          time={new Date()}
-          chat="Cauliflower cheese rubber cheese cheese on toast. Cottage cheese cow lancashire st. agur blue cheese ricotta mozzarella jarlsberg blue castello. Airedale camembert de normandie queso cheesecake manchego lancashire squirty cheese pecorino. Cheese slices emmental cow camembert de normandie cheddar stinking bishop."
-          read
-        />
-        <ReportChatBubble type="receiver" time={new Date()} chat="halo bang,, login" />
-        <ReportChatBubble type="sender" time={new Date()} chat="masuk bang" sent />
-        <ReportChatBubble type="sender" time={new Date()} chat="hahaha" />
-        <ReportChatBubble type="sender" time={new Date()} chat="p login" />
+        {allChats.map((chat) => {
+          return (
+            <ReportChatBubble
+              key={chat?.id}
+              type={chat?.type}
+              time={chat?.created_at}
+              chat={chat?.message}
+              imgUrl={chat?.link_image}
+            />
+          );
+        })}
       </div>
       <ReportChatInputBar />
     </div>
