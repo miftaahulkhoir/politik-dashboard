@@ -1,13 +1,14 @@
-import { Space, notification } from 'antd';
-import axios from 'axios';
-import debounce from 'lodash.debounce';
-import Head from 'next/head';
-import { parseCookies } from 'nookies';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import UserDataTable from '../components/pagecomponents/users/UserDataTable';
-import UserFormDrawer from '../components/pagecomponents/users/UserFormDrawer';
-import UserRoleSelect from '../components/pagecomponents/users/UserRoleSelect';
-import UserSearchBar from '../components/pagecomponents/users/UserSearchBar';
+import { Space, notification } from "antd";
+import axios from "axios";
+import debounce from "lodash.debounce";
+import Head from "next/head";
+import { parseCookies } from "nookies";
+import { useCallback, useEffect, useMemo, useState } from "react";
+
+import UserDataTable from "../components/pagecomponents/users/UserDataTable";
+import UserFormDrawer from "../components/pagecomponents/users/UserFormDrawer";
+import UserRoleSelect from "../components/pagecomponents/users/UserRoleSelect";
+import UserSearchBar from "../components/pagecomponents/users/UserSearchBar";
 
 export default function Users(pageProps) {
   const [usersList, setUsersList] = useState([]);
@@ -19,8 +20,7 @@ export default function Users(pageProps) {
   const [currentUser, setCurrentUser] = useState({});
   const [activeRoleLevel, setActiveRoleLevel] = useState(1);
 
-  const [apiNotification, contextHolderNotification] =
-    notification.useNotification();
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
 
   useEffect(() => {
     const users = [];
@@ -41,12 +41,12 @@ export default function Users(pageProps) {
   }, []);
 
   // filters
-  const [filterSearch, setFilterSearch] = useState('');
-  const [filterDate, setFilterDate] = useState('');
+  const [filterSearch, setFilterSearch] = useState("");
+  const [filterDate, setFilterDate] = useState("");
 
   const filteredUsers = useMemo(() => {
     const filteredSearch =
-      filterSearch === ''
+      filterSearch === ""
         ? usersList
         : usersList.filter((user) => {
             return user.name.toLowerCase().includes(filterSearch.toLowerCase());
@@ -54,7 +54,7 @@ export default function Users(pageProps) {
 
     const dateInput = new Date(filterDate);
     const filteredDate =
-      filterDate === ''
+      filterDate === ""
         ? filteredSearch
         : filteredSearch.filter((survey) => {
             const date = new Date(survey.created_at);
@@ -71,14 +71,14 @@ export default function Users(pageProps) {
 
   const filterSearchHandler = useCallback(
     debounce((e) => setFilterSearch(e.target.value), 300),
-    []
+    [],
   );
 
   const filterDateHandler = useCallback(
     debounce((_, valueString) => {
       setFilterDate(valueString);
     }, 300),
-    []
+    [],
   );
 
   const filteredRoleUsers = useMemo(() => {
@@ -111,11 +111,7 @@ export default function Users(pageProps) {
       </div>
 
       <Space direction="vertical" size="middle">
-        <UserRoleSelect
-          currentUser={currentUser}
-          activeLevel={activeRoleLevel}
-          setActiveLevel={setActiveRoleLevel}
-        />
+        <UserRoleSelect currentUser={currentUser} activeLevel={activeRoleLevel} setActiveLevel={setActiveRoleLevel} />
 
         <UserSearchBar
           filterSearchHandler={filterSearchHandler}
@@ -139,7 +135,7 @@ export default function Users(pageProps) {
 }
 
 export async function getServerSideProps(ctx) {
-  let { token } = parseCookies(ctx);
+  const { token } = parseCookies(ctx);
   let users = [];
   await axios
     .get(`${process.env.APP_BASEURL}api/users`, {

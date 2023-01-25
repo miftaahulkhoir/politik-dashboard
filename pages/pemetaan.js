@@ -1,9 +1,11 @@
-import dynamic from 'next/dynamic';
-import { parseCookies } from 'nookies';
-import { useEffect, useState } from 'react';
-import Card from '../components/elements/card/Card';
-import styles from '../components/elements/map/Home.module.css';
-const Map = dynamic(() => import('../components/elements/map/Map'), {
+/* eslint-disable no-loss-of-precision */
+import dynamic from "next/dynamic";
+import { parseCookies } from "nookies";
+import { useEffect, useState } from "react";
+
+import Card from "../components/elements/card/Card";
+import styles from "../components/elements/map/Home.module.css";
+const Map = dynamic(() => import("../components/elements/map/Map"), {
   ssr: false,
 });
 
@@ -11,10 +13,8 @@ export default function Pemetaan({ users }) {
   const [isMounted, setIsMounted] = useState(false);
   const [markers, setMarkers] = useState([1, 2, 3, 4, 5]);
   const [zoom, setZoom] = useState(5.1);
-  const [cordinate, setCordinate] = useState([
-    -2.0459326720699523, 122.07302997496033,
-  ]);
-  const colors = ['#22a7f0', '#2ecc71', '#e74c3c', '#f1c40f', '#2c3e50'];
+  const [cordinate, setCordinate] = useState([-2.0459326720699523, 122.07302997496033]);
+  const colors = ["#22a7f0", "#2ecc71", "#e74c3c", "#f1c40f", "#2c3e50"];
 
   useEffect(() => {
     setIsMounted(true);
@@ -66,13 +66,7 @@ export default function Pemetaan({ users }) {
         </div>
         {isMounted && (
           <div className="map">
-            <Map
-              className={styles.homeMap}
-              center={cordinate}
-              cordinate={cordinate}
-              zoom={zoom}
-              zoomTo={zoom}
-            >
+            <Map className={styles.homeMap} center={cordinate} cordinate={cordinate} zoom={zoom} zoomTo={zoom}>
               {({ TileLayer, CircleMarker, Marker, Polygon, Tooltip }) => (
                 <>
                   <TileLayer
@@ -109,6 +103,6 @@ export default function Pemetaan({ users }) {
 }
 
 export async function getServerSideProps(ctx) {
-  let { token } = parseCookies(ctx);
+  const { token } = parseCookies(ctx);
   return { props: {} };
 }

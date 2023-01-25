@@ -1,0 +1,28 @@
+{
+  "extends": ["eslint:recommended", "next/core-web-vitals", "google", "prettier"],
+  "plugins": ["import", "prettier"],
+  "rules": {
+    "prettier/prettier": "error",
+    "@next/next/no-img-element": "off",
+    "no-empty": "warn",
+    "no-console": ["warn", { "allow": ["error"] }],
+    // "no-console": "error",
+    "require-jsdoc": "off",
+    "no-unused-vars": "warn",
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": "off",
+    "import/order": [
+      "error",
+      {
+        "groups": ["external", "builtin", "internal", "sibling", "parent", "index"],
+        "newlines-between": "always",
+        "alphabetize": {
+          /* sort in ascending order. Options: ["ignore", "asc", "desc"] */
+          "order": "asc",
+          /* ignore case. Options: [true, false] */
+          "caseInsensitive": true
+        }
+      }
+    ]
+  }
+}

@@ -1,12 +1,11 @@
-import { useCallback, useEffect } from "react";
-import L, { map, marker, Point } from "leaflet";
-import * as ReactLeaflet from "react-leaflet";
+import L from "leaflet";
+import { default as iconRetinaUrl, default as iconUrl } from "leaflet/dist/images/marker-icon.png";
+import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
+import { useEffect } from "react";
+import * as ReactLeaflet from "react-leaflet";
 
 import styles from "./Map.module.css";
-import iconRetinaUrl from "leaflet/dist/images/marker-icon.png";
-import iconUrl from "leaflet/dist/images/marker-icon.png";
-import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 
 const { MapContainer, useMap } = ReactLeaflet;
 
@@ -15,13 +14,7 @@ function Zoom({ cordinate, zoomTo }) {
   map.flyTo(cordinate, zoomTo);
 }
 
-export default function Map({
-  children,
-  className,
-  cordinate,
-  zoomTo,
-  ...rest
-}) {
+export default function Map({ children, className, cordinate, zoomTo, ...rest }) {
   let mapClassName = styles.map;
 
   if (className) {

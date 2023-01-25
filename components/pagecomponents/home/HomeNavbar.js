@@ -1,8 +1,10 @@
 import { Button } from "antd";
 import { useRouter } from "next/router";
-import ProfileDropdown from "../dashboardLayout/ProfileDropdown";
+
 import HomeMoreMenuDropdown from "./HomeMoreMenuDropdown";
 import styles from "./homeNavbar.module.css";
+
+import ProfileDropdown from "../dashboardLayout/ProfileDropdown";
 
 export default function HomeNavbar() {
   const router = useRouter();
@@ -18,8 +20,8 @@ export default function HomeNavbar() {
     <header>
       <nav className={styles.navbar}>
         <div className={styles.brand}>
-          <img src='/images/logo/icon-logo.png' alt='Patrons' />
-          <img src='/images/logo/logo.png' alt='Patrons' />
+          <img src="/images/logo/icon-logo.png" alt="Patrons" />
+          <img src="/images/logo/logo.png" alt="Patrons" />
         </div>
         <div className={styles.items_container}>
           <div className={styles.links_container}>
@@ -27,10 +29,7 @@ export default function HomeNavbar() {
               // <div role="button" key={i} onClick={() => router.push(link.path)}>
               //   {link.name}
               // </div>
-              <Button
-                type='text'
-                key={i}
-                onClick={() => router.push(link.path)}>
+              <Button type="text" key={i} onClick={() => router.push(link.path)}>
                 {link.name}
               </Button>
             ))}

@@ -1,16 +1,18 @@
-import { Input } from 'antd';
-import axios from 'axios';
-import Head from 'next/head';
-import { useRouter } from 'next/router';
-import React, { useState } from 'react';
-import { logoutUser } from '../utils/auth';
+import { Input } from "antd";
+import axios from "axios";
+import Head from "next/head";
+import Link from "next/link";
+import { useRouter } from "next/router";
+import React, { useState } from "react";
+
+import { logoutUser } from "../utils/auth";
 
 export default function Login({ pageProps }) {
   const router = useRouter();
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const [showErrorMsg, setShowErrorMsg] = useState(false);
-  const [errorMsg, setErrorMsg] = useState('');
+  const [errorMsg, setErrorMsg] = useState("");
 
   const handleLogin = (event) => {
     event.preventDefault();
@@ -22,16 +24,14 @@ export default function Login({ pageProps }) {
       .then(async (res) => {
         if (res?.data?.data?.occupation_level > 2) {
           await logoutUser();
-          setErrorMsg(
-            'Untuk sementara, hanya bisa diakses oleh admin dan koordinator'
-          );
+          setErrorMsg("Untuk sementara, hanya bisa diakses oleh admin dan koordinator");
           setShowErrorMsg(true);
         } else {
-          router.push('/');
+          router.push("/");
         }
       })
       .catch((err) => {
-        setErrorMsg('Cek kembali email dan password Anda');
+        setErrorMsg("Cek kembali email dan password Anda");
         setShowErrorMsg(true);
       });
   };
@@ -46,16 +46,8 @@ export default function Login({ pageProps }) {
           <div className="auth-header">
             <div className="codex-brand">
               <a>
-                <img
-                  style={{ width: '60px' }}
-                  src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`}
-                  alt=""
-                />
-                <img
-                  className="img-fluid light-logo"
-                  src={`${process.env.APP_BASEURL}images/logo/logo.png`}
-                  alt=""
-                />
+                <img style={{ width: "60px" }} src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`} alt="" />
+                <img className="img-fluid light-logo" src={`${process.env.APP_BASEURL}images/logo/logo.png`} alt="" />
               </a>
             </div>
           </div>
@@ -84,20 +76,14 @@ export default function Login({ pageProps }) {
             <div className="form-group mb-0">
               <div className="auth-remember">
                 <div className="form-check custom-chek">
-                  <input
-                    className="form-check-input"
-                    id="agree"
-                    type="checkbox"
-                    value=""
-                    required=""
-                  />
+                  <input className="form-check-input" id="agree" type="checkbox" value="" required="" />
                   <label className="form-check-label" htmlFor="agree">
                     Ingat saya
                   </label>
                 </div>
-                <a className="text-primary f-pwd" href="/ongoing">
+                <Link className="text-primary f-pwd" href="/ongoing">
                   Lupa password?
-                </a>
+                </Link>
               </div>
             </div>
             <div className="form-group">

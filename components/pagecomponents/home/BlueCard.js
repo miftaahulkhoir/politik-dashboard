@@ -1,5 +1,6 @@
-import NameAvatar from '../../elements/nameAvatar/NameAvatar';
-import styles from './home.module.css';
+import styles from "./home.module.css";
+
+import NameAvatar from "../../elements/nameAvatar/NameAvatar";
 
 export default function BlueCard() {
   return (
@@ -12,11 +13,11 @@ export default function BlueCard() {
         <div className="col-6">
           <div className={styles.title_top_right}>Koordinator berprestasi:</div>
           <div className={styles.multi_avatar_container}>
-            <NameAvatar shortName="AP" style={{ borderColor: '#016CEE' }} />
-            <NameAvatar shortName="AP" style={{ borderColor: '#016CEE' }} />
-            <NameAvatar shortName="AP" style={{ borderColor: '#016CEE' }} />
-            <NameAvatar shortName="AP" style={{ borderColor: '#016CEE' }} />
-            <NameAvatar shortName="AP" style={{ borderColor: '#016CEE' }} />
+            <NameAvatar shortName="AP" style={{ borderColor: "#016CEE" }} />
+            <NameAvatar shortName="AP" style={{ borderColor: "#016CEE" }} />
+            <NameAvatar shortName="AP" style={{ borderColor: "#016CEE" }} />
+            <NameAvatar shortName="AP" style={{ borderColor: "#016CEE" }} />
+            <NameAvatar shortName="AP" style={{ borderColor: "#016CEE" }} />
           </div>
         </div>
       </div>

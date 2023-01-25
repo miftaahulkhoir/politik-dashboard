@@ -1,17 +1,10 @@
-import {
-  Button,
-  Col,
-  Drawer,
-  Input,
-  Row,
-  Space,
-  Switch,
-  Typography,
-} from 'antd';
-import axios from 'axios';
-import { useEffect, useState } from 'react';
-import defaultSurveyQuestion from '../../../utils/constants/defaultSurveyQuestion';
-import SurveyFormCard from './SurveyFormCard';
+import { Button, Col, Drawer, Input, Row, Space, Switch, Typography } from "antd";
+import axios from "axios";
+import { useEffect, useState } from "react";
+
+import SurveyFormCard from "./SurveyFormCard";
+
+import defaultSurveyQuestion from "../../../utils/constants/defaultSurveyQuestion";
 
 export default function SurveyFormDrawer({
   open,
@@ -22,19 +15,15 @@ export default function SurveyFormDrawer({
   apiNotification,
   setSurveysList,
 }) {
-  const [title, setTitle] = useState('');
+  const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
-  const [questions, setQuestions] = useState([
-    { ...defaultSurveyQuestion.text },
-  ]);
+  const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);
 
   useEffect(() => {
     if (!isEdit) return;
     (async function () {
       try {
-        const res = await axios.get(
-          `${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`
-        );
+        const res = await axios.get(`${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`);
         const data = res?.data?.data;
         setTitle(data?.survey_name);
         setIsActive(data?.status ? 1 : 0);
@@ -44,7 +33,7 @@ export default function SurveyFormDrawer({
   }, [isEdit, selectedSurveyId]);
 
   const clearForm = () => {
-    setTitle('');
+    setTitle("");
     setIsActive(false);
     setQuestions([{ ...defaultSurveyQuestion.text }]);
   };
@@ -63,8 +52,8 @@ export default function SurveyFormDrawer({
     const newQuestions = questions.map((question, i) => {
       const newQuestion = question;
       newQuestion.question_number = i + 1;
-      newQuestion.section = 'section1';
-      newQuestion.question_subject = 'subject1';
+      newQuestion.section = "section1";
+      newQuestion.question_subject = "subject1";
       newQuestion.options = newQuestion?.options?.map((option, j) => {
         const newOption = option;
         newOption.value = j + 1;
@@ -99,7 +88,7 @@ export default function SurveyFormDrawer({
 
   const createSurvey = async (survey) => {
     try {
-      const res = await axios.post('/api/survey', survey);
+      const res = await axios.post("/api/survey", survey);
       const newSurvey = res.data.data;
 
       setSurveysList((prevSurveys) => {
@@ -108,14 +97,14 @@ export default function SurveyFormDrawer({
       });
 
       apiNotification.success({
-        message: 'Berhasil',
-        description: 'Survei telah ditambahkan',
+        message: "Berhasil",
+        description: "Survei telah ditambahkan",
       });
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: 'Gagal',
-        description: 'Terjadi kesalahan saat menambahkan survei',
+        message: "Gagal",
+        description: "Terjadi kesalahan saat menambahkan survei",
       });
     }
   };
@@ -128,38 +117,34 @@ export default function SurveyFormDrawer({
       // TODO: update the state
 
       apiNotification.success({
-        message: 'Berhasil',
-        description: 'Survei telah diedit',
+        message: "Berhasil",
+        description: "Survei telah diedit",
       });
     } catch (error) {
       console.error(error);
       apiNotification.error({
-        message: 'Gagal',
-        description: 'Terjadi kesalahan saat menyimpan perubahan survei',
+        message: "Gagal",
+        description: "Terjadi kesalahan saat menyimpan perubahan survei",
       });
     }
   };
 
   return (
     <Drawer
-      title={isEdit ? 'Pengubahan Survei' : 'Penambahan Survei'}
+      title={isEdit ? "Pengubahan Survei" : "Penambahan Survei"}
       placement="right"
       onClose={onClose}
       open={open}
       closable={false}
       width="60%"
-      headerStyle={{ border: 'none', fontSize: '32px' }}
-      bodyStyle={{ background: '#EEEEEE', padding: '0px', overflowX: 'hidden' }}
+      headerStyle={{ border: "none", fontSize: "32px" }}
+      bodyStyle={{ background: "#EEEEEE", padding: "0px", overflowX: "hidden" }}
       stye
     >
-      <Row gutter={32} style={{ padding: '24px', background: 'white' }}>
+      <Row gutter={32} style={{ padding: "24px", background: "white" }}>
         <Col span={16}>
           <Typography.Title level={5}>Judul Survei</Typography.Title>
-          <Input.TextArea
-            rows={2}
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-          />
+          <Input.TextArea rows={2} value={title} onChange={(e) => setTitle(e.target.value)} />
         </Col>
         <Col span={8}>
           <Typography.Title level={5}>Status</Typography.Title>
@@ -171,20 +156,11 @@ export default function SurveyFormDrawer({
         </Col>
       </Row>
       {questions.map((question, index) => (
-        <SurveyFormCard
-          key={index}
-          index={index}
-          questions={questions}
-          setQuestions={setQuestions}
-        />
+        <SurveyFormCard key={index} index={index} questions={questions} setQuestions={setQuestions} />
       ))}
-      <Row justify="space-between" style={{ margin: '24px' }}>
+      <Row justify="space-between" style={{ margin: "24px" }}>
         <Button onClick={addQuestionHandler}>Tambah Pertanyaan</Button>
-        <Button
-          type="primary"
-          onClick={submitHandler}
-          style={{ fontWeight: 600, letterSpacing: '0.8px' }}
-        >
+        <Button type="primary" onClick={submitHandler} style={{ fontWeight: 600, letterSpacing: "0.8px" }}>
           SIMPAN
         </Button>
       </Row>

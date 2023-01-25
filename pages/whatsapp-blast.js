@@ -1,6 +1,6 @@
+import { notification } from "antd";
 import axios from "axios";
 import Head from "next/head";
-import { notification } from "antd";
 import { parseCookies } from "nookies";
 import { useState } from "react";
 
@@ -10,8 +10,7 @@ export default function Blast(pageProps) {
   const [kirimRelawan, setKirimRelawan] = useState(false);
   const [kirimPemilih, setKirimPemilih] = useState(false);
   const [customNumber, setCustomNumber] = useState(false);
-  const [apiNotification, contextHolderNotification] =
-    notification.useNotification();
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [newNumber, setNewNumber] = useState("");
   const [pesan, setPesan] = useState("");
 
@@ -61,20 +60,20 @@ export default function Blast(pageProps) {
         <title>WhatsApp Blast · Patrons</title>
       </Head>
 
-      <div className='col-12 pdv-3 mb-12'>
+      <div className="col-12 pdv-3 mb-12">
         <h1>WhatsApp Blast</h1>
       </div>
       {contextHolderNotification}
-      <div className='col-12 mb-24'>
-        <div className='card'>
-          <div className='card-body'>
-            <ul className='px-0'>
+      <div className="col-12 mb-24">
+        <div className="card">
+          <div className="card-body">
+            <ul className="px-0">
               <h5>Pilih Penerima Pesan</h5>
               <hr />
               {profile.occupation?.level < 2 && (
                 <li>
                   <input
-                    type='checkbox'
+                    type="checkbox"
                     defaultChecked={kirimKoordinator}
                     onClick={() => setKirimKoordinator(!kirimKoordinator)}
                   />{" "}
@@ -83,48 +82,37 @@ export default function Blast(pageProps) {
               )}
               {profile.occupation?.level < 3 && (
                 <li>
-                  <input
-                    type='checkbox'
-                    defaultChecked={kirimRelawan}
-                    onClick={() => setKirimRelawan(!kirimRelawan)}
-                  />{" "}
+                  <input type="checkbox" defaultChecked={kirimRelawan} onClick={() => setKirimRelawan(!kirimRelawan)} />{" "}
                   Semua Relawan
                 </li>
               )}
               {profile.occupation?.level < 3 && (
                 <li>
-                  <input
-                    type='checkbox'
-                    defaultChecked={kirimPemilih}
-                    onClick={() => setKirimPemilih(!kirimPemilih)}
-                  />{" "}
+                  <input type="checkbox" defaultChecked={kirimPemilih} onClick={() => setKirimPemilih(!kirimPemilih)} />{" "}
                   Semua Pemilih
                 </li>
               )}
               <li>
-                <input
-                  type='checkbox'
-                  defaultChecked={customNumber}
-                  onClick={() => setCustomNumber(!customNumber)}
-                />{" "}
+                <input type="checkbox" defaultChecked={customNumber} onClick={() => setCustomNumber(!customNumber)} />{" "}
                 Custom Number
               </li>
             </ul>
-            <div className='form-group'>
+            <div className="form-group">
               <label>
                 <h5>Custom Number</h5>
               </label>
               <input
-                className='form-control'
+                className="form-control"
                 onChange={(e) => setNewNumber(e.target.value)}
-                disabled={customNumber === false}></input>
+                disabled={customNumber === false}
+              ></input>
             </div>
-            <div className='form-group'>
+            <div className="form-group">
               <label>
                 <h5>Pesan</h5>
               </label>
               <textarea
-                className='form-control'
+                className="form-control"
                 rows={10}
                 onChange={(e) => setPesan(e.target.value)}
                 disabled={
@@ -132,13 +120,11 @@ export default function Blast(pageProps) {
                   kirimRelawan === false &&
                   kirimPemilih === false &&
                   customNumber === false
-                }></textarea>
+                }
+              ></textarea>
             </div>
-            <div className='form-group d-flex justify-content-end'>
-              <button
-                className='btn btn-sm btn-primary'
-                disabled={pesan === ""}
-                onClick={() => handleBlastPesan()}>
+            <div className="form-group d-flex justify-content-end">
+              <button className="btn btn-sm btn-primary" disabled={pesan === ""} onClick={() => handleBlastPesan()}>
                 Kirim Pesan
               </button>
             </div>
@@ -150,7 +136,7 @@ export default function Blast(pageProps) {
 }
 
 export async function getServerSideProps(ctx) {
-  let { token } = parseCookies(ctx);
+  const { token } = parseCookies(ctx);
   let koordinator = [];
   let relawan = [];
   let pemilih = [];

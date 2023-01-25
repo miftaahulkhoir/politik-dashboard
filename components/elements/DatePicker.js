@@ -1,4 +1,4 @@
-import { useRef } from 'react';
+import { useRef } from "react";
 
 export default function DatePicker(props) {
   const ref = useRef();
@@ -7,8 +7,8 @@ export default function DatePicker(props) {
       type="date"
       className="form-control"
       ref={ref}
-      onFocus={() => (ref.current.type = 'date')}
-      onBlur={() => (ref.current.type = 'text')}
+      onFocus={() => (ref.current.type = "date")}
+      onBlur={() => (ref.current.type = "text")}
       {...props}
     />
   );

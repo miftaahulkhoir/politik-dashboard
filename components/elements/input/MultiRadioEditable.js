@@ -1,5 +1,6 @@
-import { TbCircle } from 'react-icons/tb';
-import MultiInputEditable from './MultiInputEditable';
+import { TbCircle } from "react-icons/tb";
+
+import MultiInputEditable from "./MultiInputEditable";
 
 export default function MultiRadioEditable({ labels, setLabels }) {
   return (

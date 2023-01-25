@@ -1,5 +1,6 @@
-import { TbSquare } from 'react-icons/tb';
-import MultiInputEditable from './MultiInputEditable';
+import { TbSquare } from "react-icons/tb";
+
+import MultiInputEditable from "./MultiInputEditable";
 
 export default function MultiCheckboxEditable({ labels, setLabels }) {
   return (

@@ -6,35 +6,23 @@ import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { useEffect, useMemo, useState } from "react";
 import { TbDotsVertical } from "react-icons/tb";
+
 import Card from "../components/elements/card/Card";
 import NameAvatar from "../components/elements/nameAvatar/NameAvatar";
 import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+
 const Centrifuge = require("centrifuge");
 
-const HomeMap = dynamic(
-  () => import("../components/pagecomponents/home/HomeMap"),
-  {
-    ssr: false,
-  }
-);
+const HomeMap = dynamic(() => import("../components/pagecomponents/home/HomeMap"), {
+  ssr: false,
+});
 
-const CustomDataTable = dynamic(
-  () => import("../components/elements/customDataTable/CustomDataTable"),
-  { ssr: false }
-);
+const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
 
-export default function Index({
-  profile,
-  users,
-  koordinator,
-  relawan,
-  pemilih,
-  daftarhitam,
-  kecamatan,
-}) {
+export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("data");
@@ -56,51 +44,43 @@ export default function Index({
     setIsMounted(true);
     koordinator.forEach((element, index) => {
       axios
-        .get(
-          `${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`
-        )
+        .get(`${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`)
         .then((res) => {
-          let lastLoc = { ...element };
+          const lastLoc = { ...element };
           lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
           lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
           setKoordinator((prev) => [...prev, lastLoc]);
         })
         .catch((err) => {
-          let lastLoc = { ...element };
+          const lastLoc = { ...element };
           setKoordinator((prev) => [...prev, lastLoc]);
         });
     });
     relawan.forEach((element, index) => {
       axios
-        .get(
-          `${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`
-        )
+        .get(`${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`)
         .then((res) => {
-          let lastLoc = { ...element };
+          const lastLoc = { ...element };
           lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
           lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
           setRelawan((prev) => [...prev, lastLoc]);
         })
         .catch((err) => {
-          let lastLoc = { ...element };
+          const lastLoc = { ...element };
           setRelawan((prev) => [...prev, lastLoc]);
         });
     });
     pemilih.forEach((element, index) => {
       axios
-        .get(
-          `${process.env.APP_BASEURL}api/response?respondentid=${element.id}`
-        )
+        .get(`${process.env.APP_BASEURL}api/response?respondentid=${element.id}`)
         .then((res) => {
-          let lastLoc = { ...element };
-          lastLoc.latitude =
-            res.data.data[0]?.location?.latitude || lastLoc.latitude;
-          lastLoc.longitude =
-            res.data.data[0]?.location?.longitude || lastLoc.longitude;
+          const lastLoc = { ...element };
+          lastLoc.latitude = res.data.data[0]?.location?.latitude || lastLoc.latitude;
+          lastLoc.longitude = res.data.data[0]?.location?.longitude || lastLoc.longitude;
           setPemilih((prev) => [...prev, lastLoc]);
         })
         .catch((err) => {
-          let lastLoc = { ...element };
+          const lastLoc = { ...element };
           setPemilih((prev) => [...prev, lastLoc]);
         });
     });
@@ -114,8 +94,8 @@ export default function Index({
     if (showKoordinator === true) {
       dataKoordinator.forEach((element) => {
         centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          let newarr = [...dataKoordinator];
-          let id = newarr.findIndex((x) => x.id === element.id);
+          const newarr = [...dataKoordinator];
+          const id = newarr.findIndex((x) => x.id === element.id);
           newarr[id].latitude = ctx.data.latitude;
           newarr[id].longitude = ctx.data.longitude;
           setKoordinator(newarr);
@@ -132,8 +112,8 @@ export default function Index({
     if (showRelawan === true) {
       dataRelawan.forEach((element) => {
         centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          let newarr = [...dataRelawan];
-          let id = newarr.findIndex((x) => x.id === element.id);
+          const newarr = [...dataRelawan];
+          const id = newarr.findIndex((x) => x.id === element.id);
           newarr[id].latitude = ctx.data.latitude;
           newarr[id].longitude = ctx.data.longitude;
           setRelawan(newarr);
@@ -161,9 +141,9 @@ export default function Index({
       name: "Nama Koordinator",
       grow: 3,
       selector: (row) => (
-        <div className='d-flex align-items-center'>
+        <div className="d-flex align-items-center">
           <NameAvatar longName={row.name} />
-          <div className='ml-12'>{row.name}</div>
+          <div className="ml-12">{row.name}</div>
         </div>
       ),
     },
@@ -177,9 +157,7 @@ export default function Index({
     },
     {
       name: "",
-      selector: (row) => (
-        <span style={{ color: "#016CEE" }}>{row.occupation.name}</span>
-      ),
+      selector: (row) => <span style={{ color: "#016CEE" }}>{row.occupation.name}</span>,
     },
     {
       name: "",
@@ -221,53 +199,40 @@ export default function Index({
       {profile?.occupation?.level === 1 ? (
         <>
           <HomeNavbar />
-          <div className='left-content'>
-            <div className='card'>
-              <div className='card-body p-0'>
-                <ul className='nav'>
+          <div className="left-content">
+            <div className="card">
+              <div className="card-body p-0">
+                <ul className="nav">
                   {userLogCordinate === true && (
-                    <li
-                      className={
-                        userLogCordinate === true
-                          ? "nav-item actives"
-                          : "nav-item"
-                      }>
-                      <a className='nav-link' onClick={() => handleCenter()}>
-                        <i className='fa fa-close'></i>
+                    <li className={userLogCordinate === true ? "nav-item actives" : "nav-item"}>
+                      <a className="nav-link" onClick={() => handleCenter()}>
+                        <i className="fa fa-close"></i>
                       </a>
                     </li>
                   )}
                   {userLogCordinate === false && (
                     <>
-                      <li
-                        className={
-                          position === "data" ? "nav-item actives" : "nav-item"
-                        }>
-                        <a
-                          className='nav-link'
-                          onClick={() => setPosition("data")}>
-                          <i className='fa fa-list'></i>
+                      <li className={position === "data" ? "nav-item actives" : "nav-item"}>
+                        <a className="nav-link" onClick={() => setPosition("data")}>
+                          <i className="fa fa-list"></i>
                         </a>
                       </li>
                       <li
-                        className={
-                          position === "persebaran"
-                            ? "nav-item actives"
-                            : "nav-item"
-                        }
-                        onClick={() => setPosition("persebaran")}>
-                        <a className='nav-link'>Persebaran</a>
+                        className={position === "persebaran" ? "nav-item actives" : "nav-item"}
+                        onClick={() => setPosition("persebaran")}
+                      >
+                        <a className="nav-link">Persebaran</a>
                       </li>
                     </>
                   )}
                 </ul>
               </div>
-              <div className='col-12 search-list'>
+              <div className="col-12 search-list">
                 {position === "data" && userLogCordinate === false && (
                   <>
                     <h4>Data Koordinator</h4>
                     <hr />
-                    <table className='table table-striped'>
+                    <table className="table table-striped">
                       <thead>
                         <tr>
                           <th>Total Koordinator</th>
@@ -286,7 +251,7 @@ export default function Index({
                     <br />
                     <h4>Data Relawan</h4>
                     <hr />
-                    <table className='table table-striped'>
+                    <table className="table table-striped">
                       <thead>
                         <tr>
                           <th>Total Pemilih</th>
@@ -306,50 +271,54 @@ export default function Index({
                 )}
                 {position === "persebaran" && userLogCordinate === false && (
                   <>
-                    <div className='form-group d-flex justify-content-left'>
+                    <div className="form-group d-flex justify-content-left">
                       <input
-                        type='checkbox'
+                        type="checkbox"
                         defaultChecked={showKoordinator}
                         onClick={() => {
                           setShowKoordinator(!showKoordinator);
-                        }}></input>
-                      <div className='circle-cordinator'></div>
+                        }}
+                      ></input>
+                      <div className="circle-cordinator"></div>
                       <label>Koordinator</label>
                     </div>
-                    <div className='form-group d-flex justify-content-left'>
+                    <div className="form-group d-flex justify-content-left">
                       <input
-                        type='checkbox'
+                        type="checkbox"
                         defaultChecked={showRelawan}
                         onClick={() => {
                           setShowRelawan(!showRelawan);
-                        }}></input>
-                      <div className='circle-relawan'></div>
+                        }}
+                      ></input>
+                      <div className="circle-relawan"></div>
                       <label>Relawan</label>
                     </div>
-                    <div className='form-group d-flex justify-content-left'>
+                    <div className="form-group d-flex justify-content-left">
                       <input
-                        type='checkbox'
+                        type="checkbox"
                         defaultChecked={showPemilih}
                         onClick={() => {
                           setShowPemilih(!showPemilih);
-                        }}></input>
-                      <div className='circle-pemilih'></div>
+                        }}
+                      ></input>
+                      <div className="circle-pemilih"></div>
                       <label>Pemilih</label>
                     </div>
-                    <div className='form-group d-flex justify-content-left'>
+                    <div className="form-group d-flex justify-content-left">
                       <input
-                        type='checkbox'
+                        type="checkbox"
                         defaultChecked={showBlackList}
                         onClick={() => {
                           setShowBlackList(!showBlackList);
-                        }}></input>
-                      <div className='circle-hitam'></div>
+                        }}
+                      ></input>
+                      <div className="circle-hitam"></div>
                       <label>Daftar Hitam</label>
                     </div>
                   </>
                 )}
                 {userLogCordinate === true && (
-                  <table className='table table-bordered my-2'>
+                  <table className="table table-bordered my-2">
                     <thead>
                       <tr>
                         <th>Lokasi</th>
@@ -357,15 +326,10 @@ export default function Index({
                       </tr>
                     </thead>
                     <tbody>
-                      {logCordinate.map((cordinate) => (
-                        <tr>
+                      {logCordinate.map((cordinate, index) => (
+                        <tr key={index}>
                           <td>{cordinate.locationName}</td>
-                          <td>
-                            {moment
-                              .utc(cordinate.timestamp)
-                              .local()
-                              .format("H:mm D/M/Y")}
-                          </td>
+                          <td>{moment.utc(cordinate.timestamp).local().format("H:mm D/M/Y")}</td>
                         </tr>
                       ))}
                     </tbody>
@@ -376,7 +340,7 @@ export default function Index({
           </div>
 
           {isMounted && (
-            <div className='map'>
+            <div className="map">
               <HomeMap
                 showKoordinator={showKoordinator}
                 dataKoordinator={dataKoordinator}
@@ -403,49 +367,34 @@ export default function Index({
         </>
       ) : (
         <>
-          <div className='col-12 pdv-3 mb-12'>
+          <div className="col-12 pdv-3 mb-12">
             <h1>Dashboard</h1>
           </div>
 
-          <div className='col-3 mb-24'>
-            <SummaryCard title='Total relawan' number={425} stat={-0.051} />
+          <div className="col-3 mb-24">
+            <SummaryCard title="Total relawan" number={425} stat={-0.051} />
           </div>
-          <div className='col-3 mb-24'>
-            <SummaryCard title='Total pemilih' number={6875} stat={0.128} />
+          <div className="col-3 mb-24">
+            <SummaryCard title="Total pemilih" number={6875} stat={0.128} />
           </div>
-          <div className='col-3 mb-24'>
-            <SummaryCard
-              title='Total logistik'
-              subtitle='satuan rupiah'
-              number={192092251}
-              stat={-0.121}
-            />
+          <div className="col-3 mb-24">
+            <SummaryCard title="Total logistik" subtitle="satuan rupiah" number={192092251} stat={-0.121} />
           </div>
-          <div className='col-3 mb-24'>
-            <SummaryCard
-              title='Pemilih baru'
-              subtitle='2 Des 2022'
-              number={6875}
-              stat={0.041}
-            />
+          <div className="col-3 mb-24">
+            <SummaryCard title="Pemilih baru" subtitle="2 Des 2022" number={6875} stat={0.041} />
           </div>
-          <div className='col-6 mb-24'>
+          <div className="col-6 mb-24">
             <Card noPadding>
-              <ChartCard
-                dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]}
-                dataY={[140, 232, 101, 264, 90, 340]}
-              />
+              <ChartCard dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]} dataY={[140, 232, 101, 264, 90, 340]} />
             </Card>
           </div>
-          <div className='col-6 mb-24'>
+          <div className="col-6 mb-24">
             <BlueCard />
           </div>
-          <div className='col-12 mb-24'>
+          <div className="col-12 mb-24">
             <Card>
-              <div className='d-flex justify-content-between mb-12 mt-8'>
-                <h2 style={{ fontSize: "16px", fontWeight: 600 }}>
-                  Peringkat Koordinator
-                </h2>
+              <div className="d-flex justify-content-between mb-12 mt-8">
+                <h2 style={{ fontSize: "16px", fontWeight: 600 }}>Peringkat Koordinator</h2>
               </div>
               <CustomDataTable columns={columns} data={ranks} />
             </Card>
@@ -457,7 +406,7 @@ export default function Index({
 }
 
 export async function getServerSideProps(ctx) {
-  let { token } = parseCookies(ctx);
+  const { token } = parseCookies(ctx);
   let kecamatan = [];
   let koordinator = [];
   let relawan = [];

@@ -6,7 +6,9 @@
   "scripts": {
     "dev": "next dev -p 3004",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "lint": "eslint --ext .js .",
+    "lint:fix": "eslint --ext .js --fix ."
   },
   "author": "synapsis.id",
   "license": "ISC",
@@ -29,5 +31,14 @@
     "react-leaflet": "^4.2.0",
     "styled-components": "^5.3.6",
     "swr": "^2.0.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.32.0",
+    "eslint-config-google": "^0.14.0",
+    "eslint-config-next": "^13.1.5",
+    "eslint-config-prettier": "^8.6.0",
+    "eslint-plugin-import": "^2.27.5",
+    "eslint-plugin-prettier": "^4.2.1",
+    "prettier": "^2.8.3"
   }
 }

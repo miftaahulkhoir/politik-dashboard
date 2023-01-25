@@ -1,41 +1,42 @@
-import Card from '../../elements/card/Card';
-// import ReactEcharts from 'echarts-for-react';
-import dynamic from 'next/dynamic';
-const ReactEcharts = dynamic(() => import('echarts-for-react'), { ssr: false });
+import dynamic from "next/dynamic";
 
-import styles from './home.module.css';
+import styles from "./home.module.css";
+
+import Card from "../../elements/card/Card";
+
+const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
 export default function ChartCard({ dataX, dataY }) {
   const option = {
-    color: ['#80FFA5'],
+    color: ["#80FFA5"],
     title: {
-      text: 'Progress anggota',
+      text: "Progress anggota",
       textStyle: {
         fontSize: 16,
       },
     },
     tooltip: {
-      trigger: 'axis',
+      trigger: "axis",
       axisPointer: {
-        type: 'cross',
+        type: "cross",
       },
     },
     legend: {
-      data: ['Progress anggota'],
+      data: ["Progress anggota"],
       itemStyle: {
-        color: 'rgba(1, 108, 238, 1)',
+        color: "rgba(1, 108, 238, 1)",
       },
       right: 0,
     },
     grid: {
-      left: '3%',
-      right: '4%',
-      bottom: '3%',
+      left: "3%",
+      right: "4%",
+      bottom: "3%",
       containLabel: true,
     },
     xAxis: [
       {
-        type: 'category',
+        type: "category",
         boundaryGap: false,
         // data: ['Jan', 'Feb', 'Mar', 'Apr', 'Jun', 'Jul'],
         data: dataX,
@@ -43,13 +44,13 @@ export default function ChartCard({ dataX, dataY }) {
     ],
     yAxis: [
       {
-        type: 'value',
+        type: "value",
       },
     ],
     series: [
       {
-        name: 'Progress anggota',
-        type: 'line',
+        name: "Progress anggota",
+        type: "line",
         smooth: true,
         showSymbol: false,
         areaStyle: {
@@ -64,14 +65,14 @@ export default function ChartCard({ dataX, dataY }) {
           //     color: 'rgba(1, 108, 238, 0.2)',
           //   },
           // ]),
-          color: 'rgba(1, 108, 238, 0.7)',
+          color: "rgba(1, 108, 238, 0.7)",
         },
         lineStyle: {
           width: 2,
-          color: 'rgba(1, 108, 238, 1)',
+          color: "rgba(1, 108, 238, 1)",
         },
         emphasis: {
-          focus: 'series',
+          focus: "series",
         },
         // data: [140, 232, 101, 264, 90, 340],
         data: dataY,
