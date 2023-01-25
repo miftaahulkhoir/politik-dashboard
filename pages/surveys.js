@@ -3,13 +3,14 @@ import axios from "axios";
 import debounce from "lodash.debounce";
 import Head from "next/head";
 import { parseCookies } from "nookies";
-import { useCallback, useEffect, useMemo, useState } from "react";
-import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
+import { useEffect, useMemo, useState } from "react";
+import { TbDownload, TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import CustomDataTable from "../components/elements/customDataTable/CustomDataTable";
 import SurveyFormDrawer from "../components/pagecomponents/surveys/SurveyFormDrawer";
 import SurveyResponseDrawer from "../components/pagecomponents/surveys/SurveyResponseDrawer";
 import SurveySearchBar from "../components/pagecomponents/surveys/SurveySearchBar";
+import downloadFileFromURL from "../utils/services/downloadFileFromURL";
 
 export default function Surveys(pageProps) {
   const [surveysList, setSurveysList] = useState([]);
@@ -63,15 +64,13 @@ export default function Surveys(pageProps) {
     return filteredDate;
   }, [surveysList, filterSearch, filterActive, filterDate]);
 
-  const filterSearchHandler = useCallback(debounce((e) => setFilterSearch(e.target.value), 300));
+  const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
 
-  const filterActiveHandler = useCallback(debounce((value) => setFilterActive(Number(value)), 300));
+  const filterActiveHandler = debounce((value) => setFilterActive(Number(value)), 300);
 
-  const filterDateHandler = useCallback(
-    debounce((_, valueString) => {
-      setFilterDate(valueString);
-    }, 300),
-  );
+  const filterDateHandler = debounce((_, valueString) => {
+    setFilterDate(valueString);
+  }, 300);
 
   const changeStatusHandler = async (id) => {
     try {
@@ -199,6 +198,16 @@ export default function Surveys(pageProps) {
               onClick={() => {
                 setIsResponseDrawerOpen(true);
                 setSelectedSurvey(row);
+              }}
+            ></Button>
+          </Tooltip>
+          <Tooltip title="Unduh excel">
+            <Button
+              type="text"
+              icon={<TbDownload size={20} color="#016CEE" />}
+              shape="circle"
+              onClick={() => {
+                downloadFileFromURL(`/api/exports/${row.id}`);
               }}
             ></Button>
           </Tooltip>
