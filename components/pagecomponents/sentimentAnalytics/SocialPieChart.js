@@ -1,6 +1,6 @@
 import dynamic from "next/dynamic";
 
-import styles from "./home.module.css";
+import styles from "../home/home.module.css";
 
 import Card from "../../elements/card/Card";
 

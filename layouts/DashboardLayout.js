@@ -7,6 +7,7 @@ import {
   TbListCheck,
   TbMessageReport,
   TbUser,
+  TbAd2,
 } from "react-icons/tb";
 
 import ProfileDropdown from "../components/pagecomponents/dashboardLayout/ProfileDropdown";
@@ -106,6 +107,17 @@ export default function DashboardLayout({ profile, children }) {
                 <a>
                   <TbBrandGoogleAnalytics size={24} />
                   <span>Analisis Sentimen</span>
+                </a>
+              </li>
+            )}
+            {profile?.occupation?.level < 3 && (
+              <li
+                className={asPath === "/panel-ads" ? "meu-item active" : "menu-item"}
+                onClick={() => router.push("/panel-ads")}
+              >
+                <a>
+                  <TbAd2 size={24} />
+                  <span>Panel Ads</span>
                 </a>
               </li>
             )}

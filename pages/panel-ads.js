@@ -133,11 +133,11 @@ export default function SocialReports(pageProps) {
   return (
     <>
       <Head>
-        <title>Analisis Sentimen · Patrons</title>
+        <title>Panel Ads · Patrons</title>
       </Head>
 
       <div className="col-12 pdv-3 mb-12">
-        <h1>Analisis Sentimen</h1>
+        <h1>Panel Ads</h1>
       </div>
 
       <Space direction="vertical" size="middle">
@@ -150,75 +150,42 @@ export default function SocialReports(pageProps) {
           addSurveyHandler={() => setIsFormOpen(true)}
         />
 
-        {showCharts ? (
-          <>
-            <div className="col-12">
-              <Card noPadding>
-                <SocialSummaryCard
-                  title={"Performance Summary"}
-                  subtitle={"View your key profile performance metrics from the reporting period."}
-                  mentionSum={mentionSum}
-                  totalImpression={totalImpression}
-                  engagementRate={summaryEngagementRate}
-                  postLinkClicks={summaryPostLinkClicks}
-                />
-              </Card>
-            </div>
-            <div className="col-12">
-              <Card noPadding>
-                <SocialTimeChart title={"Mentions Over Time"} data={mentionData} chartType={"common"} />
-              </Card>
-            </div>
-            <div className="col-12">
-              <Card noPadding>
-                <SocialTimeChart title={"Mentions Over Time by Source"} data={mentionBySource} chartType={"detail"} />
-              </Card>
-            </div>
-            <div className="col-12">
-              <Card noPadding>
-                <SocialPieChart title={"All Sources"} data={allSource} />
-              </Card>
-            </div>
-            <div className="col-12">
-              <Card noPadding>
-                <SocialTimeChart title={"Sentiment Over Time"} data={sentimentOverTime} chartType={"detail"} />
-              </Card>
-            </div>
-            <Row gutter={18}>
-              <Col span={12}>
-                <Card noPadding>
-                  <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
-                </Card>
-              </Col>
-              <Col span={12}>
-                <Card noPadding>
-                  <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
-                </Card>
-              </Col>
-            </Row>
-          </>
-        ) : (
-          <div
-            style={{
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "center",
-              alignItems: "center",
-              padding: "40px 0",
-            }}
-          >
-            {isLoading ? (
-              <Spin size="large" style={{ margin: "50px 0" }}>
-                <div className="content" />
-              </Spin>
-            ) : (
-              <>
-                <img style={{ width: "30%", maxHeight: "280px" }} src="/images/people_with_up.svg" alt="select" />
-                <div style={{ fontSize: "16px", marginTop: "16px" }}>Tolong pilih topik terlebih dahulu</div>
-              </>
-            )}
-          </div>
-        )}
+        <div className="col-12">
+          <Card noPadding>
+            <SocialSummaryCard
+              title={"Performance Summary"}
+              subtitle={"View your key profile performance metrics from the reporting period."}
+              mentionSum={mentionSum}
+              totalImpression={totalImpression}
+              engagementRate={summaryEngagementRate}
+              postLinkClicks={summaryPostLinkClicks}
+            />
+          </Card>
+        </div>
+        <Row gutter={18}>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialTimeChart title={"Mentions Over Time"} data={mentionData} chartType={"common"} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialTimeChart title={"Sentiment Over Time"} data={sentimentOverTime} chartType={"detail"} />
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={18}>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
+            </Card>
+          </Col>
+          <Col span={12}>
+            <Card noPadding>
+              <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
+            </Card>
+          </Col>
+        </Row>
       </Space>
     </>
   );

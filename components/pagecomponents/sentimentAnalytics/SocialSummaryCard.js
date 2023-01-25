@@ -1,4 +1,4 @@
-import styles from "./home.module.css";
+import styles from "../home/home.module.css";
 
 import NameAvatar from "../../elements/nameAvatar/NameAvatar";
 

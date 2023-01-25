@@ -41,6 +41,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     ctx.pathname === "/surveys" ||
     ctx.pathname === "/survey-analysis" ||
     ctx.pathname === "/sentiment-analysis" ||
+    ctx.pathname === "/panel-ads" ||
     ctx.pathname === "/whatsapp-blast" ||
     ctx.pathname === "/users" ||
     ctx.pathname === "/reports" ||
