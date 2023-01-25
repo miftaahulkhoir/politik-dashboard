@@ -1,7 +1,12 @@
 import { Button, Col, DatePicker, Input, Row, Select } from "antd";
 import { TbPlus, TbSearch } from "react-icons/tb";
 
-export default function SurveySearchBar({ filterSearchHandler, filterActiveHandler, filterDateHandler, addSurveyHandler }) {
+export default function SurveySearchBar({
+  filterSearchHandler,
+  filterActiveHandler,
+  filterDateHandler,
+  addSurveyHandler,
+}) {
   return (
     <Row justify="space-between">
       <Col span={18}>

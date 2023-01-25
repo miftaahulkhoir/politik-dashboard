@@ -5,7 +5,16 @@ import { TbPencil, TbTrashX } from "react-icons/tb";
 
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
-export default function UserDataTable({ data, currentUser, setSelectedUser, setIsFormEdit, setIsDrawerActive, apiNotification, usersList, setUsersList }) {
+export default function UserDataTable({
+  data,
+  currentUser,
+  setSelectedUser,
+  setIsFormEdit,
+  setIsDrawerActive,
+  apiNotification,
+  usersList,
+  setUsersList,
+}) {
   const deleteUserHandler = (row) => {
     Modal.confirm({
       title: "Peringatan",

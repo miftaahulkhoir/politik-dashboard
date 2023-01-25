@@ -2,7 +2,16 @@ import { Button, Col, Drawer, Input, Radio, Row, Select } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-export default function UserFormDrawer({ open, setOpen, isEdit, setIsEdit, selectedUser, apiNotification, setUsersList, currentUser }) {
+export default function UserFormDrawer({
+  open,
+  setOpen,
+  isEdit,
+  setIsEdit,
+  selectedUser,
+  apiNotification,
+  setUsersList,
+  currentUser,
+}) {
   // input form states
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");

@@ -17,7 +17,10 @@ function MyApp({ Component, pageProps }) {
   const router = useRouter();
   return (
     <>
-      {(router.pathname !== "/login" && router.pathname !== "/register" && router.pathname !== "/" && pageProps.profile?.occupation?.level === 1) ||
+      {(router.pathname !== "/login" &&
+        router.pathname !== "/register" &&
+        router.pathname !== "/" &&
+        pageProps.profile?.occupation?.level === 1) ||
       (router.pathname !== "/login" && router.pathname !== "/register" && pageProps.profile?.occupation?.level > 1) ? (
         <DashboardLayout {...pageProps}>
           <Component {...pageProps} />

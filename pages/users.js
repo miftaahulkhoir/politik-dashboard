@@ -59,7 +59,11 @@ export default function Users(pageProps) {
         : filteredSearch.filter((survey) => {
             const date = new Date(survey.created_at);
 
-            return date.getFullYear() === dateInput.getFullYear() && date.getMonth() === dateInput.getMonth() && date.getDate() === dateInput.getDate();
+            return (
+              date.getFullYear() === dateInput.getFullYear() &&
+              date.getMonth() === dateInput.getMonth() &&
+              date.getDate() === dateInput.getDate()
+            );
           });
 
     return filteredDate;
@@ -78,7 +82,9 @@ export default function Users(pageProps) {
   );
 
   const filteredRoleUsers = useMemo(() => {
-    return filteredUsers.filter((user) => user?.occupation?.level === activeRoleLevel).map((user, i) => ({ ...user, no: i + 1 }));
+    return filteredUsers
+      .filter((user) => user?.occupation?.level === activeRoleLevel)
+      .map((user, i) => ({ ...user, no: i + 1 }));
   }, [activeRoleLevel, filteredUsers]);
 
   return (
@@ -107,7 +113,11 @@ export default function Users(pageProps) {
       <Space direction="vertical" size="middle">
         <UserRoleSelect currentUser={currentUser} activeLevel={activeRoleLevel} setActiveLevel={setActiveRoleLevel} />
 
-        <UserSearchBar filterSearchHandler={filterSearchHandler} filterDateHandler={filterDateHandler} addUserHandler={() => setIsDrawerActive(true)} />
+        <UserSearchBar
+          filterSearchHandler={filterSearchHandler}
+          filterDateHandler={filterDateHandler}
+          addUserHandler={() => setIsDrawerActive(true)}
+        />
 
         <UserDataTable
           data={filteredRoleUsers}

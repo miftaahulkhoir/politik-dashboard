@@ -2,7 +2,14 @@ import styles from "./home.module.css";
 
 import NameAvatar from "../../elements/nameAvatar/NameAvatar";
 
-export default function SocialSummaryCard({ title, subtitle, mentionSum, totalImpression, engagementRate, postLinkClicks }) {
+export default function SocialSummaryCard({
+  title,
+  subtitle,
+  mentionSum,
+  totalImpression,
+  engagementRate,
+  postLinkClicks,
+}) {
   return (
     <div className={styles.social_summary_card}>
       <div className="row">

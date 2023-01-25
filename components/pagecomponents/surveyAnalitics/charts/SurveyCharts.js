@@ -25,7 +25,9 @@ export default function SurveyCharts({ survey }) {
     if (!counts) return dates;
 
     const dateCounts = dates.map((date) => {
-      const count = counts.find((count) => new Date(count.date).toLocaleDateString() === date.date.toLocaleDateString());
+      const count = counts.find(
+        (count) => new Date(count.date).toLocaleDateString() === date.date.toLocaleDateString(),
+      );
       date.count = count?.count || 0;
       return date;
     });
@@ -63,7 +65,11 @@ export default function SurveyCharts({ survey }) {
 
   return (
     <div className={styles.charts_container}>
-      <SurveyLineChart title="Jumlah Responden" dataX={dateCounts.map((d) => d.formattedDate)} dataY={dateCounts.map((d) => d?.count || 0)} />
+      <SurveyLineChart
+        title="Jumlah Responden"
+        dataX={dateCounts.map((d) => d.formattedDate)}
+        dataY={dateCounts.map((d) => d?.count || 0)}
+      />
       {chartElements}
     </div>
   );

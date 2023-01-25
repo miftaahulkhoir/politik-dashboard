@@ -55,13 +55,23 @@ export default function Login({ pageProps }) {
           <form onSubmit={handleLogin}>
             <div className="form-group">
               <label className="form-label">Email</label>
-              <Input onChange={(e) => setEmail(e.target.value)} name="email" required placeholder="Masukkan Email Anda" />
+              <Input
+                onChange={(e) => setEmail(e.target.value)}
+                name="email"
+                required
+                placeholder="Masukkan Email Anda"
+              />
             </div>
             <div className="form-group">
               <label className="form-label" htmlFor="Password">
                 Password
               </label>
-              <Input.Password placeholder="Masukkan Password Anda" name="password" required onChange={(e) => setPassword(e.target.value)} />
+              <Input.Password
+                placeholder="Masukkan Password Anda"
+                name="password"
+                required
+                onChange={(e) => setPassword(e.target.value)}
+              />
             </div>
             <div className="form-group mb-0">
               <div className="auth-remember">

@@ -44,13 +44,23 @@ export default function SurveyResponseDrawer({ open, setOpen, selectedSurvey }) 
   };
 
   return (
-    <Drawer title={selectedSurvey?.survey_name} placement="right" closable={false} width="50%" open={open} onClose={() => setOpen(false)}>
+    <Drawer
+      title={selectedSurvey?.survey_name}
+      placement="right"
+      closable={false}
+      width="50%"
+      open={open}
+      onClose={() => setOpen(false)}
+    >
       <SurveyResponseDrawer2 open={isDrawer2Open} setOpen={setIsDrawer2Open} selectedResponse={selectedResponse} />
 
       <Space direction="vertical" style={{ width: "100%" }}>
         {responsesByRecruiters.map((rbr) => (
           <Collapse key={rbr.recruiter_id}>
-            <Collapse.Panel header={`${rbr.recruiter} (${rbr.responses.length} responden)`} className={styles.custom_ant}>
+            <Collapse.Panel
+              header={`${rbr.recruiter} (${rbr.responses.length} responden)`}
+              className={styles.custom_ant}
+            >
               <DataTable
                 style={{ padding: "0" }}
                 highlightOnHover

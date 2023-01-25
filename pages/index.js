@@ -217,7 +217,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                           <i className="fa fa-list"></i>
                         </a>
                       </li>
-                      <li className={position === "persebaran" ? "nav-item actives" : "nav-item"} onClick={() => setPosition("persebaran")}>
+                      <li
+                        className={position === "persebaran" ? "nav-item actives" : "nav-item"}
+                        onClick={() => setPosition("persebaran")}
+                      >
                         <a className="nav-link">Persebaran</a>
                       </li>
                     </>

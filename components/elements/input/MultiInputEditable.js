@@ -1,7 +1,13 @@
 import { Button, Col, Divider, Row, Space, Typography } from "antd";
 import { TbPlus, TbX } from "react-icons/tb";
 
-export default function MultiInputEditable({ listIcon, labels, setLabels, hideDeleteButton = false, hideAddButton = false }) {
+export default function MultiInputEditable({
+  listIcon,
+  labels,
+  setLabels,
+  hideDeleteButton = false,
+  hideAddButton = false,
+}) {
   return (
     <>
       <Space

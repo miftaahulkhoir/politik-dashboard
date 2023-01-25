@@ -38,16 +38,18 @@ export default function HomeMap({
     setLogType(type);
     axios
       .get(
-        `${process.env.APP_BASEURL}api/data-mapping?userid=${userid}&from=${moment.utc().local().format("Y-MM-DD")} 00:00:00&until=${moment
+        `${process.env.APP_BASEURL}api/data-mapping?userid=${userid}&from=${moment
           .utc()
           .local()
-          .format("Y-MM-DD")} 23:59:00`,
+          .format("Y-MM-DD")} 00:00:00&until=${moment.utc().local().format("Y-MM-DD")} 23:59:00`,
       )
       .then((res) => {
         const arr = [];
         res.data.data.forEach((element, index) => {
           axios
-            .get(`https://api.geoapify.com/v1/geocode/reverse?lat=${element?.latitude}&lon=${element?.longitude}&apiKey=5523a1bf84d64e849bdd9a6ca7af26e2`)
+            .get(
+              `https://api.geoapify.com/v1/geocode/reverse?lat=${element?.latitude}&lon=${element?.longitude}&apiKey=5523a1bf84d64e849bdd9a6ca7af26e2`,
+            )
             .then((res2) => {
               arr[index] = {
                 name: name,
@@ -91,7 +93,9 @@ export default function HomeMap({
             key={index}
             eventHandlers={{
               click: (e) => {
-                handleDetailCordinate(m.id, m.name, "koordinator"), setTempCenter([m.latitude, m.longitude]), setUserLogCordinate(true);
+                handleDetailCordinate(m.id, m.name, "koordinator"),
+                  setTempCenter([m.latitude, m.longitude]),
+                  setUserLogCordinate(true);
               },
             }}
             icon={
@@ -117,7 +121,9 @@ export default function HomeMap({
                 key={index}
                 eventHandlers={{
                   click: (e) => {
-                    handleDetailCordinate(m.id, m.name, "relawan"), setTempCenter([m.latitude, m.longitude]), setUserLogCordinate(true);
+                    handleDetailCordinate(m.id, m.name, "relawan"),
+                      setTempCenter([m.latitude, m.longitude]),
+                      setUserLogCordinate(true);
                   },
                 }}
                 icon={

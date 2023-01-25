@@ -6,7 +6,15 @@ import SurveyFormCard from "./SurveyFormCard";
 
 import defaultSurveyQuestion from "../../../utils/constants/defaultSurveyQuestion";
 
-export default function SurveyFormDrawer({ open, setOpen, isEdit, setIsEdit, selectedSurveyId, apiNotification, setSurveysList }) {
+export default function SurveyFormDrawer({
+  open,
+  setOpen,
+  isEdit,
+  setIsEdit,
+  selectedSurveyId,
+  apiNotification,
+  setSurveysList,
+}) {
   const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);

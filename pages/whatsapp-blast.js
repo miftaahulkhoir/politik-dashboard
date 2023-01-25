@@ -72,28 +72,40 @@ export default function Blast(pageProps) {
               <hr />
               {profile.occupation?.level < 2 && (
                 <li>
-                  <input type="checkbox" defaultChecked={kirimKoordinator} onClick={() => setKirimKoordinator(!kirimKoordinator)} /> Semua Koordinator
+                  <input
+                    type="checkbox"
+                    defaultChecked={kirimKoordinator}
+                    onClick={() => setKirimKoordinator(!kirimKoordinator)}
+                  />{" "}
+                  Semua Koordinator
                 </li>
               )}
               {profile.occupation?.level < 3 && (
                 <li>
-                  <input type="checkbox" defaultChecked={kirimRelawan} onClick={() => setKirimRelawan(!kirimRelawan)} /> Semua Relawan
+                  <input type="checkbox" defaultChecked={kirimRelawan} onClick={() => setKirimRelawan(!kirimRelawan)} />{" "}
+                  Semua Relawan
                 </li>
               )}
               {profile.occupation?.level < 3 && (
                 <li>
-                  <input type="checkbox" defaultChecked={kirimPemilih} onClick={() => setKirimPemilih(!kirimPemilih)} /> Semua Pemilih
+                  <input type="checkbox" defaultChecked={kirimPemilih} onClick={() => setKirimPemilih(!kirimPemilih)} />{" "}
+                  Semua Pemilih
                 </li>
               )}
               <li>
-                <input type="checkbox" defaultChecked={customNumber} onClick={() => setCustomNumber(!customNumber)} /> Custom Number
+                <input type="checkbox" defaultChecked={customNumber} onClick={() => setCustomNumber(!customNumber)} />{" "}
+                Custom Number
               </li>
             </ul>
             <div className="form-group">
               <label>
                 <h5>Custom Number</h5>
               </label>
-              <input className="form-control" onChange={(e) => setNewNumber(e.target.value)} disabled={customNumber === false}></input>
+              <input
+                className="form-control"
+                onChange={(e) => setNewNumber(e.target.value)}
+                disabled={customNumber === false}
+              ></input>
             </div>
             <div className="form-group">
               <label>
@@ -103,7 +115,12 @@ export default function Blast(pageProps) {
                 className="form-control"
                 rows={10}
                 onChange={(e) => setPesan(e.target.value)}
-                disabled={kirimKoordinator === false && kirimRelawan === false && kirimPemilih === false && customNumber === false}
+                disabled={
+                  kirimKoordinator === false &&
+                  kirimRelawan === false &&
+                  kirimPemilih === false &&
+                  customNumber === false
+                }
               ></textarea>
             </div>
             <div className="form-group d-flex justify-content-end">

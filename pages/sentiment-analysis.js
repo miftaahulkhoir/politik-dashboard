@@ -89,7 +89,12 @@ export default function SocialReports(pageProps) {
     debounce((_, valueString) => {
       const res = [];
       valueString.forEach((value, index) => {
-        res[index] = new Date(parseInt(value.slice(0, 4)), parseInt(value.slice(5, 7)) - 1, parseInt(value.slice(8, 10))).getTime() / 1000;
+        res[index] =
+          new Date(
+            parseInt(value.slice(0, 4)),
+            parseInt(value.slice(5, 7)) - 1,
+            parseInt(value.slice(8, 10)),
+          ).getTime() / 1000;
       });
       setFilterDate(res);
       setIsDateAssigned(true);
@@ -242,7 +247,14 @@ export async function getServerSideProps(ctx) {
   return { props: { reports, mediatoolkit } };
 }
 
-function SearchBar({ groupData, selectGroupHandler, selectTopicHandler, selectDateHandler, selectedGroupData, addSurveyHandler }) {
+function SearchBar({
+  groupData,
+  selectGroupHandler,
+  selectTopicHandler,
+  selectDateHandler,
+  selectedGroupData,
+  addSurveyHandler,
+}) {
   const groupList = [{}];
   console.log("group data", groupData);
   groupData.forEach((value, index) => {
@@ -275,13 +287,27 @@ function SearchBar({ groupData, selectGroupHandler, selectTopicHandler, selectDa
       <Col span={18}>
         <Row gutter={16}>
           <Col span={8}>
-            <Select placeholder={"Pilih Group..."} style={{ width: "100%" }} onChange={selectGroupHandler} options={groupList} />
+            <Select
+              placeholder={"Pilih Group..."}
+              style={{ width: "100%" }}
+              onChange={selectGroupHandler}
+              options={groupList}
+            />
           </Col>
           <Col span={8}>
-            <Select placeholder={"Pilih Topik..."} style={{ width: "100%" }} onChange={selectTopicHandler} options={topicList} />
+            <Select
+              placeholder={"Pilih Topik..."}
+              style={{ width: "100%" }}
+              onChange={selectTopicHandler}
+              options={topicList}
+            />
           </Col>
           <Col span={8}>
-            <RangePicker style={{ width: "100%" }} placeholder={["Tanggal Awal", "Tanggal Akhir"]} onChange={selectDateHandler} />
+            <RangePicker
+              style={{ width: "100%" }}
+              placeholder={["Tanggal Awal", "Tanggal Akhir"]}
+              onChange={selectDateHandler}
+            />
           </Col>
         </Row>
       </Col>
