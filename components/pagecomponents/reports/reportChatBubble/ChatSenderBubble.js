@@ -1,5 +1,6 @@
 import { Col, Row, Space } from "antd";
 import clsx from "clsx";
+import { TbCheck, TbChecks } from "react-icons/tb";
 
 import styles from "./chatBubble.module.css";
 
@@ -11,7 +12,13 @@ export default function ChatSenderBubble({ chat, time, sent = false, read = fals
         <Col>
           <Space style={{ fontSize: "12px" }}>
             <div>{time}</div>
-            <div>v</div>
+            {read ? (
+              <TbChecks color="#016CEE" size={16} />
+            ) : sent ? (
+              <TbChecks color="#7287A5" size={16} />
+            ) : (
+              <TbCheck color="#7287A5" size={16} />
+            )}
           </Space>
         </Col>
       </Row>

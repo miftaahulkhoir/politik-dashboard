@@ -25,13 +25,11 @@ export default function ReportChatContainer() {
         }}
       >
         <ReportChatBubble type="system" chat="Jumat, 30 Desember 2022" />
-        <ReportChatBubble
-          type="sender"
-          time={new Date()}
-          chat="ngga masuk akal coy buat clone whatsapp deadline 2 hari"
-        />
-        <ReportChatBubble type="sender" time={new Date()} chat="p login" />
+        <ReportChatBubble type="sender" time={new Date()} chat="gg gemink" read />
         <ReportChatBubble type="receiver" time={new Date()} chat="halo bang,, login" />
+        <ReportChatBubble type="sender" time={new Date()} chat="masuk bang" sent />
+        <ReportChatBubble type="sender" time={new Date()} chat="hahaha" />
+        <ReportChatBubble type="sender" time={new Date()} chat="p login" />
       </div>
       <ReportChatInputBar />
     </div>

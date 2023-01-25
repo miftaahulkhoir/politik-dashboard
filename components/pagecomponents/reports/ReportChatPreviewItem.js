@@ -1,6 +1,8 @@
 import { Avatar, Col, Row, Space } from "antd";
 import { useMemo } from "react";
 
+import hhmm from "../../../utils/helpers/date/hhmm";
+
 export default function ReportChatPreviewItem({ name, time, chat, numOfUnreadChat, topic }) {
   const shortName = useMemo(() => {
     const words = name.toUpperCase().split(" ");
@@ -18,10 +20,7 @@ export default function ReportChatPreviewItem({ name, time, chat, numOfUnreadCha
   }, [chat]);
 
   const formattedTime = useMemo(() => {
-    const date = new Date(time);
-    const hh = date.getHours();
-    const mm = date.getMinutes();
-    return hh + ":" + mm;
+    return hhmm(time);
   }, [time]);
 
   return (
