@@ -23,6 +23,9 @@
   border: 1px solid #d6e9ff;
   width: fit-content;
   max-width: calc(100% - 24px);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
 }
 
 .chat_receiver {
@@ -45,4 +48,9 @@
   border: 1px solid #d6e9ff;
   width: fit-content;
   margin: 4px 0;
+}
+
+.chat_image {
+  width: 30vw;
+  margin-bottom: 6px;
 }

@@ -1,11 +1,23 @@
 import { Col, Input, Row } from "antd";
+import axios from "axios";
 import Head from "next/head";
+import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 
 import ReportChatContainer from "../components/pagecomponents/reports/ReportChatContainer";
 import ReportChatPreviewContainer from "../components/pagecomponents/reports/ReportChatPreviewContainer";
 
 export default function Reports() {
+  const [reports, setReports] = useState([]);
+  const [selectedReport, setSelectedReport] = useState({});
+
+  useEffect(() => {
+    axios
+      .get("/api/complaints")
+      .then((res) => setReports(res?.data?.data || []))
+      .catch((err) => {});
+  }, []);
+
   return (
     <>
       <Head>
@@ -20,11 +32,15 @@ export default function Reports() {
 
           <Input placeholder="Pencarian" prefix={<TbSearch />} style={{ marginBottom: "24px" }} />
 
-          <ReportChatPreviewContainer />
+          <ReportChatPreviewContainer
+            reports={reports}
+            selectedReport={selectedReport}
+            setSelectedReport={setSelectedReport}
+          />
         </Col>
 
         <Col span={17}>
-          <ReportChatContainer />
+          <ReportChatContainer selectedReport={selectedReport} />
         </Col>
       </Row>
     </>

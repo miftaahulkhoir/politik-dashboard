@@ -1,9 +1,12 @@
 import { Avatar, Col, Row, Space } from "antd";
+import clsx from "clsx";
 import { useMemo } from "react";
+
+import styles from "./report.module.css";
 
 import hhmm from "../../../utils/helpers/date/hhmm";
 
-export default function ReportChatPreviewItem({ name, time, chat, numOfUnreadChat, topic }) {
+export default function ReportChatPreviewItem({ name, time, chat, numOfUnreadChat, topic, onClick, active }) {
   const shortName = useMemo(() => {
     const words = name.toUpperCase().split(" ");
     if (words.length === 0) return "";
@@ -24,7 +27,12 @@ export default function ReportChatPreviewItem({ name, time, chat, numOfUnreadCha
   }, [time]);
 
   return (
-    <Space direction="vertical" style={{ width: "100%", padding: "16px 0" }}>
+    <Space
+      direction="vertical"
+      className={clsx(styles.chat_preview_item, active && styles.chat_preview_item_active)}
+      role="button"
+      onClick={onClick}
+    >
       <Row gutter={8} align="middle">
         <Col>
           <Avatar
