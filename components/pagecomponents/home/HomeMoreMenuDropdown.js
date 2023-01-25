@@ -1,6 +1,6 @@
 import { Button, Dropdown } from "antd";
 import Router from "next/router";
-import { TbChevronDown, TbMessageReport, TbUser } from "react-icons/tb";
+import { TbChevronDown, TbUser } from "react-icons/tb";
 
 export default function HomeMoreMenuDropdown() {
   const items = [
@@ -16,12 +16,12 @@ export default function HomeMoreMenuDropdown() {
     //   icon: <TbCalendarEvent size={16} />,
     //   onClick: () => Router.push('/ongoing'),
     // },
-    {
-      key: "3",
-      label: "Pengaduan",
-      icon: <TbMessageReport size={16} />,
-      onClick: () => Router.push("/reports"),
-    },
+    // {
+    //   key: "3",
+    //   label: "Pengaduan",
+    //   icon: <TbMessageReport size={16} />,
+    //   onClick: () => Router.push("/reports"),
+    // },
     {
       key: "4",
       label: "Manajemen Pengguna",

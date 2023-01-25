@@ -5,7 +5,6 @@ import {
   TbDeviceAnalytics,
   TbLayoutDashboard,
   TbListCheck,
-  TbMessageReport,
   TbUser,
 } from "react-icons/tb";
 
@@ -140,7 +139,7 @@ export default function DashboardLayout({ profile, children }) {
                 </a>
               </li>
             )} */}
-            <li
+            {/* <li
               className={asPath === "/reports" ? "meu-item active" : "menu-item"}
               onClick={() => router.push("/reports")}
             >
@@ -148,7 +147,7 @@ export default function DashboardLayout({ profile, children }) {
                 <TbMessageReport size={24} />
                 <span>Pengaduan</span>
               </a>
-            </li>
+            </li> */}
             {profile?.occupation?.level < 3 && (
               <li
                 className={asPath === "/users" ? "meu-item active" : "menu-item"}
