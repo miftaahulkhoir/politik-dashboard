@@ -2,10 +2,7 @@ import styles from "./ads.module.css";
 
 import NameAvatar from "../../elements/nameAvatar/NameAvatar";
 
-export default function AdsCard({
-  title,
-  data,
-}) {
+export default function AdsCard({ title, data }) {
   return (
     <div className={styles.ads_summary_card}>
       <div className="row">

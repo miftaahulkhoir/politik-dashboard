@@ -1,8 +1,7 @@
 import dynamic from "next/dynamic";
 
-import styles from "../home/home.module.css";
-
 import Card from "../../elements/card/Card";
+import styles from "../home/home.module.css";
 
 const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
@@ -67,9 +66,9 @@ export default function AdsTimeChart({ title, data, chartType }) {
       });
     }
   } else {
-    timestamp = ['Mon', 'Tue', 'Wed', 'Thu'];
-    let temp = [150, 230, 224, 512];
-    legends = ['Data']
+    timestamp = ["Mon", "Tue", "Wed", "Thu"];
+    const temp = [150, 230, 224, 512];
+    legends = ["Data"];
     series[0] = {
       name: "Data",
       type: "line",

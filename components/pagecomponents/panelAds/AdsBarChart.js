@@ -1,8 +1,7 @@
 import dynamic from "next/dynamic";
 
-import styles from "../home/home.module.css";
-
 import Card from "../../elements/card/Card";
+import styles from "../home/home.module.css";
 
 // import ReactEcharts from 'echarts-for-react';
 const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
@@ -32,20 +31,20 @@ export default function AdsBarChart({ title, data, chartType }) {
   } else {
     finalData[0] = {
       value: 150,
-      name: 'Mon'
-    }
+      name: "Mon",
+    };
     finalData[1] = {
       value: 230,
-      name: 'Tue'
-    }
+      name: "Tue",
+    };
     finalData[2] = {
       value: 224,
-      name: 'Wed'
-    }
+      name: "Wed",
+    };
     finalData[3] = {
       value: 512,
-      name: 'Thu'
-    }
+      name: "Thu",
+    };
   }
 
   const option = {
@@ -62,11 +61,11 @@ export default function AdsBarChart({ title, data, chartType }) {
       top: "bottom",
     },
     xAxis: {
-      type: 'category',
-      data: finalData
+      type: "category",
+      data: finalData,
     },
     yAxis: {
-      type: 'value'
+      type: "value",
     },
     series: [
       {

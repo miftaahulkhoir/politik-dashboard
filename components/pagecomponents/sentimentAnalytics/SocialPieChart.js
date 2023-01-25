@@ -11,7 +11,7 @@ export default function SocialPieChart({ title, data, chartType }) {
   const finalData = [];
   let radius = [];
 
-  if (data != null) {
+  if (data.length > 0) {
     if (chartType == "posneg") {
       data.forEach((value, index) => {
         if (value.key == "positive" || value.key == "negative")

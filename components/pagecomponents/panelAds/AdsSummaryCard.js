@@ -1,6 +1,5 @@
-import styles from "../home/home.module.css";
-
 import NameAvatar from "../../elements/nameAvatar/NameAvatar";
+import styles from "../home/home.module.css";
 
 export default function AdsSummaryCard({
   title,

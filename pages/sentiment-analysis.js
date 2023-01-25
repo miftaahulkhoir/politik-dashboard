@@ -23,7 +23,7 @@ export default function SocialReports(pageProps) {
   const [showCharts, setShowCharts] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [mentionData, setMentionData] = useState(null);
+  const [mentionData, setMentionData] = useState([]);
   const [mentionSum, setMentionSum] = useState(null);
   const [totalImpression, setTotalImpression] = useState(null);
   const [allSource, setAllSource] = useState([]);

@@ -1,4 +1,4 @@
-import { Col, DatePicker, Input, Row, Select, Space, Spin, Typography, notification } from "antd";
+import { Col, DatePicker, Input, Row, Select, Space, Typography, notification } from "antd";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import Head from "next/head";
@@ -6,10 +6,9 @@ import { parseCookies } from "nookies";
 import { useCallback, useEffect, useState } from "react";
 
 import Card from "../components/elements/card/Card";
-import SocialPieChart from "../components/pagecomponents/sentimentAnalytics/SocialPieChart";
-import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
-import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
 import AdsBarChart from "../components/pagecomponents/panelAds/AdsBarChart";
+import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
+import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
 const { RangePicker } = DatePicker;
 
 const { TextArea } = Input;

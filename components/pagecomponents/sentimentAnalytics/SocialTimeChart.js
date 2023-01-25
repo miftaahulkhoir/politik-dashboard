@@ -12,7 +12,7 @@ export default function SocialTimeChart({ title, data, chartType }) {
   const legends = [];
   const colors = ["#08c4b2", "#6f5ed3", "#ce3665", "#ffcd1c", "#3896e3"];
 
-  if (data != null) {
+  if (data.length > 0) {
     if (chartType == "common") {
       const temp = [];
       data.forEach((value, index) => {
