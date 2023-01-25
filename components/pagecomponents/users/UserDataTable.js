@@ -1,6 +1,6 @@
 import { Button, Card, Col, Modal, Row } from "antd";
 import axios from "axios";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { TbPencil, TbTrashX } from "react-icons/tb";
 
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
@@ -15,41 +15,47 @@ export default function UserDataTable({
   usersList,
   setUsersList,
 }) {
-  const deleteUserHandler = (row) => {
-    Modal.confirm({
-      title: "Peringatan",
-      content: `Apakah kamu yakin ingin menghapus ${row.name}`,
-      okText: "Ya",
-      okType: "danger",
-      cancelText: "Tidak",
-      onOk: function () {
-        axios
-          .delete(`${process.env.APP_BASEURL}api/users/${row?.id}`)
-          .then(() => {
-            const newUsers = usersList.filter((s) => s.id !== row?.id);
-            setUsersList([...newUsers]);
+  const deleteUserHandler = useCallback(
+    (row) => {
+      Modal.confirm({
+        title: "Peringatan",
+        content: `Apakah kamu yakin ingin menghapus ${row.name}`,
+        okText: "Ya",
+        okType: "danger",
+        cancelText: "Tidak",
+        onOk: function () {
+          axios
+            .delete(`${process.env.APP_BASEURL}api/users/${row?.id}`)
+            .then(() => {
+              const newUsers = usersList.filter((s) => s.id !== row?.id);
+              setUsersList([...newUsers]);
 
-            apiNotification.success({
-              message: "Sukses",
-              description: `User ${row?.name} berhasil dihapus`,
+              apiNotification.success({
+                message: "Sukses",
+                description: `User ${row?.name} berhasil dihapus`,
+              });
+            })
+            .catch((err) => {
+              apiNotification.error({
+                message: "Gagal",
+                description: "Terjadi kesalahan",
+              });
+              console.error(err);
             });
-          })
-          .catch((err) => {
-            apiNotification.error({
-              message: "Gagal",
-              description: "Terjadi kesalahan",
-            });
-            console.error(err);
-          });
-      },
-    });
-  };
+        },
+      });
+    },
+    [apiNotification, setUsersList, usersList],
+  );
 
-  const updateUserHandler = (row) => {
-    setSelectedUser(row);
-    setIsFormEdit(true);
-    setIsDrawerActive(true);
-  };
+  const updateUserHandler = useCallback(
+    (row) => {
+      setSelectedUser(row);
+      setIsFormEdit(true);
+      setIsDrawerActive(true);
+    },
+    [setIsDrawerActive, setIsFormEdit, setSelectedUser],
+  );
 
   const columns = useMemo(() => {
     return [
@@ -105,7 +111,8 @@ export default function UserDataTable({
         center: true,
       },
     ];
-  }, [currentUser]);
+  }, [currentUser?.occupation?.level, deleteUserHandler, updateUserHandler]);
+
   return (
     <Row justify="end">
       <Col span={24}>
