@@ -1,8 +1,8 @@
-import styles from "./sentiment.module.css";
+import styles from "../home/home.module.css";
 
 import NameAvatar from "../../elements/nameAvatar/NameAvatar";
 
-export default function SocialSummaryCard({
+export default function AdsSummaryCard({
   title,
   subtitle,
   mentionSum,

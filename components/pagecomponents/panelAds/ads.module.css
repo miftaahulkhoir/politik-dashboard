@@ -1,0 +1,36 @@
+.ads_summary_card {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: white;
+  color: black;
+}
+
+.ads_summary_card .title_top_left {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.ads_summary_card .subtitle_top_left {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.ads_summary_card .label {
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #636363;
+}
+
+.ads_summary_card .value {
+  /* padding-left: 10px; */
+  text-align: center;
+  font-size: 40px;
+  font-weight: 600;
+  padding: 25px 0 35px 0;
+}
+
+.ads_chart {
+  height: 410px;
+}
+

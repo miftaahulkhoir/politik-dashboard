@@ -7,8 +7,9 @@ import { useCallback, useEffect, useState } from "react";
 
 import Card from "../components/elements/card/Card";
 import SocialPieChart from "../components/pagecomponents/sentimentAnalytics/SocialPieChart";
-import SocialSummaryCard from "../components/pagecomponents/sentimentAnalytics/SocialSummaryCard";
-import SocialTimeChart from "../components/pagecomponents/sentimentAnalytics/SocialTimeChart";
+import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
+import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
+import AdsBarChart from "../components/pagecomponents/panelAds/AdsBarChart";
 const { RangePicker } = DatePicker;
 
 const { TextArea } = Input;
@@ -23,7 +24,7 @@ export default function SocialReports(pageProps) {
   const [showCharts, setShowCharts] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [mentionData, setMentionData] = useState(null);
+  const [mentionData, setMentionData] = useState([]);
   const [mentionSum, setMentionSum] = useState(null);
   const [totalImpression, setTotalImpression] = useState(null);
   const [allSource, setAllSource] = useState([]);
@@ -150,39 +151,71 @@ export default function SocialReports(pageProps) {
           addSurveyHandler={() => setIsFormOpen(true)}
         />
 
-        <div className="col-12">
+        {/* <div className="col-12">
           <Card noPadding>
-            <SocialSummaryCard
-              title={"Performance Summary"}
-              subtitle={"View your key profile performance metrics from the reporting period."}
+            <AdsSummaryCard
+              title={"Ads Performance Summary"}
+              subtitle={"View your ads performance metrics from the reporting period."}
               mentionSum={mentionSum}
               totalImpression={totalImpression}
               engagementRate={summaryEngagementRate}
               postLinkClicks={summaryPostLinkClicks}
             />
           </Card>
-        </div>
+        </div> */}
         <Row gutter={18}>
           <Col span={12}>
             <Card noPadding>
-              <SocialTimeChart title={"Mentions Over Time"} data={mentionData} chartType={"common"} />
+              <AdsTimeChart title={"View-Through Conv."} data={mentionData} chartType={"common"} />
             </Card>
           </Col>
           <Col span={12}>
             <Card noPadding>
-              <SocialTimeChart title={"Sentiment Over Time"} data={sentimentOverTime} chartType={"detail"} />
+              <AdsBarChart title={"View-Through Conv."} data={sentimentOverTime} chartType={"detail"} />
             </Card>
           </Col>
         </Row>
         <Row gutter={18}>
-          <Col span={12}>
+          <Col span={6}>
             <Card noPadding>
-              <SocialPieChart title={"Sentiment Ratio"} data={sentiment} />
+              <AdsCard title={"View-Through Conv."} data={752} />
             </Card>
           </Col>
-          <Col span={12}>
+          <Col span={6}>
             <Card noPadding>
-              <SocialPieChart title={"Positive-Negative Sentiment Ratio"} data={sentiment} chartType={"posneg"} />
+              <AdsCard title={"Avg CPC"} data={"$194.86"} />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card noPadding>
+              <AdsCard title={"Clicks"} data={194} />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card noPadding>
+              <AdsCard title={"Conversion Rate"} data={"19.02%"} />
+            </Card>
+          </Col>
+        </Row>
+        <Row gutter={18}>
+          <Col span={6}>
+            <Card noPadding>
+              <AdsCard title={"Conversions"} data={262} />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card noPadding>
+              <AdsCard title={"Cost"} data={"$1,341.00"} />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card noPadding>
+              <AdsCard title={"Cost/Conversion"} data={"$214.14"} />
+            </Card>
+          </Col>
+          <Col span={6}>
+            <Card noPadding>
+              <AdsCard title={"Impressions"} data={128} />
             </Card>
           </Col>
         </Row>

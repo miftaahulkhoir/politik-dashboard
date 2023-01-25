@@ -1,17 +1,16 @@
 import dynamic from "next/dynamic";
 
-import styles from "./sentiment.module.css";
+import styles from "../home/home.module.css";
 
 import Card from "../../elements/card/Card";
 
 // import ReactEcharts from 'echarts-for-react';
 const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
-export default function SocialPieChart({ title, data, chartType }) {
+export default function AdsBarChart({ title, data, chartType }) {
   const finalData = [];
-  let radius = [];
 
-  if (data != null) {
+  if (data.length > 0) {
     if (chartType == "posneg") {
       data.forEach((value, index) => {
         if (value.key == "positive" || value.key == "negative")
@@ -20,7 +19,6 @@ export default function SocialPieChart({ title, data, chartType }) {
             name: value.key.charAt(0).toUpperCase() + value.key.slice(1),
           };
       });
-      radius = ["0%", "70%"];
     } else {
       data.forEach((value, index) => {
         if (value.key != "undefined") {
@@ -30,7 +28,23 @@ export default function SocialPieChart({ title, data, chartType }) {
           };
         }
       });
-      radius = ["40%", "70%"];
+    }
+  } else {
+    finalData[0] = {
+      value: 150,
+      name: 'Mon'
+    }
+    finalData[1] = {
+      value: 230,
+      name: 'Tue'
+    }
+    finalData[2] = {
+      value: 224,
+      name: 'Wed'
+    }
+    finalData[3] = {
+      value: 512,
+      name: 'Thu'
     }
   }
 
@@ -47,12 +61,18 @@ export default function SocialPieChart({ title, data, chartType }) {
     legend: {
       top: "bottom",
     },
+    xAxis: {
+      type: 'category',
+      data: finalData
+    },
+    yAxis: {
+      type: 'value'
+    },
     series: [
       {
         name: title,
-        type: "pie",
-        radius: radius,
-        avoidLabelOverlap: false,
+        type: "bar",
+        // avoidLabelOverlap: false,
         // emphasis: {
         //   label: {
         //     show: true,
@@ -61,16 +81,16 @@ export default function SocialPieChart({ title, data, chartType }) {
         //   },
         // },
         data: finalData,
-        emphasis: {
-          itemStyle: {
-            shadowBlur: 10,
-            shadowOffsetX: 0,
-            shadowColor: "rgba(0, 0, 0, 0.5)",
-          },
-        },
-        label: {
-          formatter: "{b}: {c} ({d}%)",
-        },
+        // emphasis: {
+        //   itemStyle: {
+        //     shadowBlur: 10,
+        //     shadowOffsetX: 0,
+        //     shadowColor: "rgba(0, 0, 0, 0.5)",
+        //   },
+        // },
+        // label: {
+        //   formatter: "{b}: {c} ({d}%)",
+        // },
       },
     ],
   };

@@ -1,18 +1,18 @@
 import dynamic from "next/dynamic";
 
-import styles from "./sentiment.module.css";
+import styles from "../home/home.module.css";
 
 import Card from "../../elements/card/Card";
 
 const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
-export default function SocialTimeChart({ title, data, chartType }) {
-  const timestamp = [];
+export default function AdsTimeChart({ title, data, chartType }) {
+  let timestamp = [];
   let series = [];
-  const legends = [];
+  let legends = [];
   const colors = ["#08c4b2", "#6f5ed3", "#ce3665", "#ffcd1c", "#3896e3"];
 
-  if (data != null) {
+  if (data.length > 0) {
     if (chartType == "common") {
       const temp = [];
       data.forEach((value, index) => {
@@ -65,50 +65,18 @@ export default function SocialTimeChart({ title, data, chartType }) {
           };
         }
       });
-      // dimensions[0] = "timestamp";
-
-      // data.forEach((value, index) => {
-      //   // assign value
-      //   let temp = [];
-      //   data.forEach((val, ind) => {
-      //     val.entries.forEach((v, i) => {
-      //       if (temp.length == 0) {
-      //         temp.push(new Date(value.entries[index].key*1000));
-      //       }
-      //       if (index == i) {
-      //         temp.push(v.value);
-      //       }
-      //     })
-      //     // formattedData[i] = [new Date(v.key*1000), v.value];
-      //   })
-
-      //   formattedData[index] = temp;
-
-      //   // set dimension of each dataset
-      //   dimensions[index+1] = value.key.charAt(0).toUpperCase() + value.key.slice(1);
-      //   legends[index] = value.key.charAt(0).toUpperCase() + value.key.slice(1);
-
-      //   // set series
-      //   series[index] = {
-      //     name: dimensions[index+1],
-      //     type: 'line',
-      //     smooth: true,
-      //     showSymbol: false,
-      //     areaStyle: {
-      //       opacity: 1,
-      //       color: colors[index],
-      //     },
-      //     color: colors[index],
-      //     emphasis: {
-      //       focus: 'series',
-      //     },
-      //     encode: {
-      //       x: "timestamp",
-      //       y: dimensions[index+1]
-      //     }
-      //   }
-      // })
     }
+  } else {
+    timestamp = ['Mon', 'Tue', 'Wed', 'Thu'];
+    let temp = [150, 230, 224, 512];
+    legends = ['Data']
+    series[0] = {
+      name: "Data",
+      type: "line",
+      smooth: true,
+      showSymbol: false,
+      data: temp,
+    };
   }
 
   const option = {
