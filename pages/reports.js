@@ -6,10 +6,14 @@ import { TbSearch } from "react-icons/tb";
 
 import ReportChatContainer from "../components/pagecomponents/reports/ReportChatContainer";
 import ReportChatPreviewContainer from "../components/pagecomponents/reports/ReportChatPreviewContainer";
+import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState({});
+
+  // drawer
+  const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
 
   useEffect(() => {
     axios
@@ -23,6 +27,12 @@ export default function Reports() {
       <Head>
         <title>Pengaduan · Patrons</title>
       </Head>
+
+      <ReportDetailDrawer
+        open={isReportDetailDrawerOpen}
+        setOpen={setIsReportDetailDrawerOpen}
+        selectedReport={selectedReport}
+      />
 
       <Row gutter={32}>
         <Col span={7}>
@@ -40,7 +50,7 @@ export default function Reports() {
         </Col>
 
         <Col span={17}>
-          <ReportChatContainer selectedReport={selectedReport} />
+          <ReportChatContainer selectedReport={selectedReport} setDrawerOpen={setIsReportDetailDrawerOpen} />
         </Col>
       </Row>
     </>

@@ -5,7 +5,7 @@ import ReportChatBubble from "./reportChatBubble/ReportChatBubble";
 import ReportChatHeader from "./ReportChatHeader";
 import ReportChatInputBar from "./ReportChatInputBar";
 
-export default function ReportChatContainer({ selectedReport }) {
+export default function ReportChatContainer({ selectedReport, setDrawerOpen }) {
   const [chats, setChats] = useState([]);
 
   useEffect(() => {
@@ -17,14 +17,6 @@ export default function ReportChatContainer({ selectedReport }) {
       })
       .catch((err) => {});
   }, [selectedReport]);
-
-  // receiver itu orang yang melaporkan
-  const isReceiver = useCallback(
-    (chat) => {
-      return selectedReport?.sender_id === chat?.sender_id;
-    },
-    [selectedReport],
-  );
 
   const getType = useCallback(
     (chat) => {
@@ -64,8 +56,15 @@ export default function ReportChatContainer({ selectedReport }) {
       return chat;
     });
 
+    categorizedChats.splice(1, 0, {
+      type: "detail",
+      created_at: selectedReport?.created_at,
+    });
+
+    console.log("chats", categorizedChats);
+
     return categorizedChats;
-  }, [chats, getType]);
+  }, [chats, getType, selectedReport?.created_at]);
 
   return (
     <div
@@ -96,6 +95,7 @@ export default function ReportChatContainer({ selectedReport }) {
               time={chat?.created_at}
               chat={chat?.message}
               imgUrl={chat?.link_image}
+              setDrawerOpen={setDrawerOpen}
             />
           );
         })}

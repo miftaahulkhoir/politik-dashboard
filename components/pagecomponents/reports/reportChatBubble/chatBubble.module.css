@@ -35,6 +35,8 @@
   border: 1px solid #d6e9ff;
   width: fit-content;
   max-width: calc(100% - 24px);
+  display: flex;
+  align-items: flex-end;
 }
 
 .chat_system {
@@ -53,4 +55,17 @@
 .chat_image {
   width: 30vw;
   margin-bottom: 6px;
+}
+
+/* CHAT DEtAIL REPORT */
+.chat_link {
+  font-size: 12px;
+  font-weight: 600;
+  color: #016cee;
+  transition: all 200ms;
+  margin-top: 8px;
+}
+
+.chat_link:hover {
+  color: #4389df;
 }
