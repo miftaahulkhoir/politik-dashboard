@@ -12,7 +12,7 @@ run-dev:
 	docker compose -f docker-compose.dev.yml up -d
 
 build:
-	docker image prune -a --filter "until=24h"
+	docker image prune -a -f --filter "until=24h"
 	docker build --no-cache -t synapsisid/patronpolitik:$(DOCKER_IMG_TAG) .
 
 dev:
