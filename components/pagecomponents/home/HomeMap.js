@@ -5,6 +5,7 @@ import moment from "moment";
 import { useState } from "react";
 import { MapContainer, Marker, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
 
+import capitalizeWords from "../../../utils/helpers/capitalizeWords";
 import styles from "../../elements/map/Home.module.css";
 
 export default function HomeMap({
@@ -27,6 +28,8 @@ export default function HomeMap({
   recenter,
   setRecenter,
   handleColor,
+  reports,
+  indexShownReportCategories,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -69,6 +72,11 @@ export default function HomeMap({
         map.flyTo([res.data.data[0]?.latitude, res.data.data[0]?.longitude]);
       })
       .catch((err) => {});
+  };
+
+  const getReportIconURLByID = (id) => {
+    if (id == 1) return "/images/map/markers/report-1.svg";
+    return "/images/map/markers/report-2.svg";
   };
 
   return (
@@ -206,6 +214,30 @@ export default function HomeMap({
           /> */}
         </>
       )}
+
+      {/* REPORTS */}
+      {userLogCordinate === false &&
+        reports.map(
+          (report, index) =>
+            report?.latitude &&
+            report?.longitude && (
+              <Marker
+                key={index}
+                icon={
+                  new L.Icon({
+                    iconUrl: getReportIconURLByID(report.category.id),
+                    iconSize: [iconSize, iconSize],
+                    iconAnchor: [iconSize / 2, iconSize / 2],
+                  })
+                }
+                position={[report?.latitude, report?.longitude]}
+              >
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                  {capitalizeWords(report?.title)}
+                </Tooltip>
+              </Marker>
+            ),
+        )}
     </MapContainer>
   );
 }

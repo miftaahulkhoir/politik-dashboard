@@ -13,6 +13,7 @@ import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+import capitalizeWords from "../utils/helpers/capitalizeWords";
 
 const Centrifuge = require("centrifuge");
 
@@ -92,19 +93,32 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   }, [showRelawan]);
 
   // PENGADUAN
+  const [reports, setReports] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`/api/complaints`)
+      .then((res) => setReports(res?.data?.data))
+      .catch((error) => {});
+  }, []);
+
   const [reportCategories, setReportCategories] = useState([]); // Array<{id: string, status_name: string}>
   const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
 
+  const filteredReports = useMemo(() => {
+    return reports.filter((report) => indexShownReportCategories.includes(report?.category.id)) || [];
+  }, [reports, indexShownReportCategories]);
+
   useEffect(() => {
     axios
-      .get(`/api/complaints/status`)
+      .get(`/api/complaints/category`)
       .then((res) => setReportCategories(res?.data?.data))
       .catch((error) => {});
   }, []);
 
-  useEffect(() => {
-    console.log("categories", reportCategories);
-  }, [reportCategories]);
+  const getReportColorByID = (id) => {
+    if (id == 1) return "#e74c3c";
+    return "#3498db";
+  };
 
   // END PENGADUAN
 
@@ -325,11 +339,23 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                             type="checkbox"
                             defaultChecked={shown}
                             onClick={() => {
-                              setShowBlackList(!showBlackList);
+                              shown
+                                ? setIndexShownReportCategories((prev) => [
+                                    ...prev.filter((index) => index !== category.id),
+                                  ])
+                                : setIndexShownReportCategories((prev) => [...prev, category.id]);
                             }}
                           ></input>
-                          <div className="circle-hitam"></div>
-                          <label>Daftar Hitam</label>
+                          <div
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              borderRadius: "30px",
+                              margin: "0px 10px",
+                              background: getReportColorByID(category.id),
+                            }}
+                          ></div>
+                          <label>{capitalizeWords(category?.category_name)}</label>
                         </div>
                       );
                     })}
@@ -381,6 +407,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 logCordinate={logCordinate}
                 setLogCordinate={setLogCordinate}
                 handleColor={handleColor}
+                reports={filteredReports}
+                indexShownReportCategories={indexShownReportCategories}
               />
             </div>
           )}
