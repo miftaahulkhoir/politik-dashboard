@@ -35,21 +35,25 @@ export default function Reports() {
       />
 
       <Row gutter={32}>
-        <Col span={7}>
-          <div className="col-12 pdv-3 mb-12">
-            <h1>Pengaduan</h1>
+        <Col span={7} style={{ height: "calc(100vh - 200px)", overflow: "auto", position: "relative" }}>
+          <div style={{ position: "sticky", top: "0px", background: "white", zIndex: 99 }}>
+            <div className="col-12 pdv-3 mb-12">
+              <h1>Pengaduan</h1>
+            </div>
+
+            <Input placeholder="Pencarian" prefix={<TbSearch />} style={{ marginBottom: "24px" }} />
           </div>
 
-          <Input placeholder="Pencarian" prefix={<TbSearch />} style={{ marginBottom: "24px" }} />
-
-          <ReportChatPreviewContainer
-            reports={reports}
-            selectedReport={selectedReport}
-            setSelectedReport={setSelectedReport}
-          />
+          <div style={{}}>
+            <ReportChatPreviewContainer
+              reports={reports}
+              selectedReport={selectedReport}
+              setSelectedReport={setSelectedReport}
+            />
+          </div>
         </Col>
 
-        <Col span={17}>
+        <Col span={17} style={{ height: "calc(100vh - 200px)", overflow: "auto" }}>
           <ReportChatContainer selectedReport={selectedReport} setDrawerOpen={setIsReportDetailDrawerOpen} />
         </Col>
       </Row>

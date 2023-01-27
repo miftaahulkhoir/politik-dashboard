@@ -53,6 +53,7 @@ export default function ReportChatContainer({ selectedReport, setDrawerOpen }) {
       if (chat.type === "system") {
         chat.message = chat.date;
       }
+
       return chat;
     });
 
@@ -60,8 +61,6 @@ export default function ReportChatContainer({ selectedReport, setDrawerOpen }) {
       type: "detail",
       created_at: selectedReport?.created_at,
     });
-
-    console.log("chats", categorizedChats);
 
     return categorizedChats;
   }, [chats, getType, selectedReport?.created_at]);
