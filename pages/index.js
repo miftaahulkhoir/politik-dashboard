@@ -26,9 +26,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("data");
-  const [dataKoordinator, setKoordinator] = useState([]);
-  const [dataRelawan, setRelawan] = useState([]);
-  const [dataPemilih, setPemilih] = useState([]);
+  const [dataKoordinator, setKoordinator] = useState(koordinator);
+  const [dataRelawan, setRelawan] = useState(relawan);
+  const [dataPemilih, setPemilih] = useState(pemilih);
   const [showKoordinator, setShowKoordinator] = useState(false);
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
@@ -42,48 +42,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
   useEffect(() => {
     setIsMounted(true);
-    koordinator.forEach((element, index) => {
-      axios
-        .get(`${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`)
-        .then((res) => {
-          const lastLoc = { ...element };
-          lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
-          setKoordinator((prev) => [...prev, lastLoc]);
-        })
-        .catch((err) => {
-          const lastLoc = { ...element };
-          setKoordinator((prev) => [...prev, lastLoc]);
-        });
-    });
-    relawan.forEach((element, index) => {
-      axios
-        .get(`${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`)
-        .then((res) => {
-          const lastLoc = { ...element };
-          lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
-          setRelawan((prev) => [...prev, lastLoc]);
-        })
-        .catch((err) => {
-          const lastLoc = { ...element };
-          setRelawan((prev) => [...prev, lastLoc]);
-        });
-    });
-    pemilih.forEach((element, index) => {
-      axios
-        .get(`${process.env.APP_BASEURL}api/response?respondentid=${element.id}`)
-        .then((res) => {
-          const lastLoc = { ...element };
-          lastLoc.latitude = res.data.data[0]?.location?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data[0]?.location?.longitude || lastLoc.longitude;
-          setPemilih((prev) => [...prev, lastLoc]);
-        })
-        .catch((err) => {
-          const lastLoc = { ...element };
-          setPemilih((prev) => [...prev, lastLoc]);
-        });
-    });
   }, []);
 
   useEffect(() => {
@@ -92,9 +50,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
       console.log("connected", ctx);
     });
     if (showKoordinator === true) {
-      dataKoordinator.forEach((element) => {
+      koordinator.forEach((element) => {
         centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          const newarr = [...dataKoordinator];
+          const newarr = [...koordinator];
           const id = newarr.findIndex((x) => x.id === element.id);
           newarr[id].latitude = ctx.data.latitude;
           newarr[id].longitude = ctx.data.longitude;
@@ -102,6 +60,17 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         });
       });
     }
+    // if (showKoordinator === true) {
+    //   dataKoordinator.forEach((element) => {
+    //     centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
+    //       const newarr = [...dataKoordinator];
+    //       const id = newarr.findIndex((x) => x.id === element.id);
+    //       newarr[id].latitude = ctx.data.latitude;
+    //       newarr[id].longitude = ctx.data.longitude;
+    //       setKoordinator(newarr);
+    //     });
+    //   });
+    // }
   }, [showKoordinator]);
 
   useEffect(() => {
@@ -110,9 +79,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
       console.log("connected", ctx);
     });
     if (showRelawan === true) {
-      dataRelawan.forEach((element) => {
+      relawan.forEach((element) => {
         centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          const newarr = [...dataRelawan];
+          const newarr = [...relawan];
           const id = newarr.findIndex((x) => x.id === element.id);
           newarr[id].latitude = ctx.data.latitude;
           newarr[id].longitude = ctx.data.longitude;
