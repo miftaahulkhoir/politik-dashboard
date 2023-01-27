@@ -106,9 +106,9 @@ export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
   const { req } = ctx;
   let baseURL = "";
-  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
+ if (req.headers.host === process.env.APP_BASEURL_DEFAULT.replace('https://',"").replace("http://","").replace("/","")) {
     baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
+  } else if (req.headers.host === process.env.APP_BASEURL_PATRON.replace('https://',"").replace("http://","").replace("/","")) {
     baseURL = process.env.APP_BASEURL_PATRON;
   }
 
