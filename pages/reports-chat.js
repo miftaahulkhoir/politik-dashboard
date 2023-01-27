@@ -4,9 +4,9 @@ import Head from "next/head";
 import { useEffect, useState } from "react";
 import { TbSearch } from "react-icons/tb";
 
-import ReportChatContainer from "../components/pagecomponents/reports/ReportChatContainer";
-import ReportChatPreviewContainer from "../components/pagecomponents/reports/ReportChatPreviewContainer";
-import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
+import ReportChatContainer from "../components/pagecomponents/reportsChat/ReportChatContainer";
+import ReportChatPreviewContainer from "../components/pagecomponents/reportsChat/ReportChatPreviewContainer";
+import ReportDetailDrawer from "../components/pagecomponents/reportsChat/ReportDetailDrawer";
 
 // UNUSED PAGE ===================================
 export default function ReportsChat() {

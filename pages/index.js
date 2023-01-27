@@ -91,6 +91,23 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     }
   }, [showRelawan]);
 
+  // PENGADUAN
+  const [reportCategories, setReportCategories] = useState([]); // Array<{id: string, status_name: string}>
+  const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
+
+  useEffect(() => {
+    axios
+      .get(`/api/complaints/status`)
+      .then((res) => setReportCategories(res?.data?.data))
+      .catch((error) => {});
+  }, []);
+
+  useEffect(() => {
+    console.log("categories", reportCategories);
+  }, [reportCategories]);
+
+  // END PENGADUAN
+
   const ranks = useMemo(() => {
     return users?.map((user, i) => {
       user.no = i + 1;
@@ -170,6 +187,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
           <HomeNavbar />
           <div className="left-content">
             <div className="card">
+              {/* CARD HEADER */}
               <div className="card-body p-0">
                 <ul className="nav">
                   {userLogCordinate === true && (
@@ -192,11 +210,19 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                       >
                         <a className="nav-link">Persebaran</a>
                       </li>
+                      <li
+                        className={position === "pengaduan" ? "nav-item actives" : "nav-item"}
+                        onClick={() => setPosition("pengaduan")}
+                      >
+                        <a className="nav-link">Pengaduan</a>
+                      </li>
                     </>
                   )}
                 </ul>
               </div>
+              {/* CARD BODY */}
               <div className="col-12 search-list">
+                {/* TAB TABLE OVERVIEW */}
                 {position === "data" && userLogCordinate === false && (
                   <>
                     <h4>Data Koordinator</h4>
@@ -238,6 +264,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                     </table>
                   </>
                 )}
+                {/* TAB SELECT ROLE */}
                 {position === "persebaran" && userLogCordinate === false && (
                   <>
                     <div className="form-group d-flex justify-content-left">
@@ -286,6 +313,30 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                     </div>
                   </>
                 )}
+
+                {/* TAB PENGADUAN */}
+                {position === "pengaduan" && userLogCordinate === false && (
+                  <>
+                    {reportCategories.map((category) => {
+                      const shown = indexShownReportCategories.includes(category.id);
+                      return (
+                        <div key={category.id} className="form-group d-flex justify-content-left">
+                          <input
+                            type="checkbox"
+                            defaultChecked={shown}
+                            onClick={() => {
+                              setShowBlackList(!showBlackList);
+                            }}
+                          ></input>
+                          <div className="circle-hitam"></div>
+                          <label>Daftar Hitam</label>
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+
+                {/* TAB USER COORDINATE */}
                 {userLogCordinate === true && (
                   <table className="table table-bordered my-2">
                     <thead>
