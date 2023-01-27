@@ -4,7 +4,7 @@ import ReportChatPreviewItem from "./ReportChatPreviewItem";
 
 export default function ReportChatPreviewContainer({ reports, selectedReport, setSelectedReport }) {
   return (
-    <Space style={{ width: "100%" }} size={0} direction="vertical">
+    <Space style={{ width: "100%", overflow: "auto" }} size={0} direction="vertical">
       {reports.map((report) => (
         <ReportChatPreviewItem
           key={report?.id}
