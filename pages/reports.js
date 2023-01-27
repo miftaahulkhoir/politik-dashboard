@@ -1,11 +1,8 @@
-import { Col, Input, Row } from "antd";
 import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
-import { TbSearch } from "react-icons/tb";
 
-import ReportChatContainer from "../components/pagecomponents/reports/ReportChatContainer";
-import ReportChatPreviewContainer from "../components/pagecomponents/reports/ReportChatPreviewContainer";
+import ReportDataTable from "../components/pagecomponents/reports/ReportDataTable";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 
 export default function Reports() {
@@ -28,35 +25,21 @@ export default function Reports() {
         <title>Pengaduan · Patrons</title>
       </Head>
 
+      <div className="col-12 pdv-3 mb-12">
+        <h1>Pengaduan</h1>
+      </div>
+
       <ReportDetailDrawer
         open={isReportDetailDrawerOpen}
         setOpen={setIsReportDetailDrawerOpen}
         selectedReport={selectedReport}
       />
 
-      <Row gutter={32}>
-        <Col span={7} style={{ height: "calc(100vh - 200px)", overflow: "auto", position: "relative" }}>
-          <div style={{ position: "sticky", top: "0px", background: "white", zIndex: 99 }}>
-            <div className="col-12 pdv-3 mb-12">
-              <h1>Pengaduan</h1>
-            </div>
-
-            <Input placeholder="Pencarian" prefix={<TbSearch />} style={{ marginBottom: "24px" }} />
-          </div>
-
-          <div style={{}}>
-            <ReportChatPreviewContainer
-              reports={reports}
-              selectedReport={selectedReport}
-              setSelectedReport={setSelectedReport}
-            />
-          </div>
-        </Col>
-
-        <Col span={17} style={{ height: "calc(100vh - 200px)", overflow: "auto" }}>
-          <ReportChatContainer selectedReport={selectedReport} setDrawerOpen={setIsReportDetailDrawerOpen} />
-        </Col>
-      </Row>
+      <ReportDataTable
+        data={reports}
+        setSelectedReport={setSelectedReport}
+        setIsDrawerOpen={setIsReportDetailDrawerOpen}
+      />
     </>
   );
 }
