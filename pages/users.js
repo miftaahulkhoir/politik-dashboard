@@ -33,7 +33,7 @@ export default function Users(pageProps) {
 
   useEffect(() => {
     axios
-      .get(`${baseURL}api/profile`)
+      .get(`${pageProps.baseURL}api/profile`)
       .then((res) => {
         setCurrentUser(res.data.data);
       })
@@ -140,10 +140,9 @@ export async function getServerSideProps(ctx) {
   let baseURL = "";
   if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_DEFAULT) {
     baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if(`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
+  } else if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
     baseURL = process.env.APP_BASEURL_PATRON;
   }
-  pageProps.baseURL = baseURL;
 
   let users = [];
   await axios
