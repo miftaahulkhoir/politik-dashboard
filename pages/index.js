@@ -2,7 +2,6 @@ import axios from "axios";
 import moment from "moment/moment";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { useEffect, useMemo, useState } from "react";
 import { TbDotsVertical } from "react-icons/tb";
@@ -24,7 +23,6 @@ const HomeMap = dynamic(() => import("../components/pagecomponents/home/HomeMap"
 const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
-  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("data");
   const [dataKoordinator, setKoordinator] = useState(koordinator);
@@ -457,9 +455,9 @@ export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
   const { req } = ctx;
   let baseURL = "";
- if (req.headers.host === process.env.APP_BASEURL_DEFAULT.replace('https://',"").replace("http://","").replace("/","")) {
+ if (req.headers.referer.includes(process.env.APP_BASEURL_DEFAULT)) {
     baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (req.headers.host === process.env.APP_BASEURL_PATRON.replace('https://',"").replace("http://","").replace("/","")) {
+  } else if (req.headers.referer.includes(process.env.APP_BASEURL_PATRON)) {
     baseURL = process.env.APP_BASEURL_PATRON;
   }
 
