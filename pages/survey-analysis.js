@@ -77,9 +77,18 @@ export default function SurveyResults({ surveys }) {
 
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if(`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  }
+  pageProps.baseURL = baseURL;
+
   let surveys = [];
   await axios
-    .get(`${process.env.APP_BASEURL}api/survey`, {
+    .get(`${baseURL}api/survey`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })

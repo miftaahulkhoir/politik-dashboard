@@ -33,7 +33,7 @@ export default function Users(pageProps) {
 
   useEffect(() => {
     axios
-      .get(`${process.env.APP_BASEURL}api/profile`)
+      .get(`${baseURL}api/profile`)
       .then((res) => {
         setCurrentUser(res.data.data);
       })
@@ -136,9 +136,18 @@ export default function Users(pageProps) {
 
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if(`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  }
+  pageProps.baseURL = baseURL;
+
   let users = [];
   await axios
-    .get(`${process.env.APP_BASEURL}api/users`, {
+    .get(`${baseURL}api/users`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })

@@ -35,6 +35,14 @@ function MyApp({ Component, pageProps }) {
 MyApp.getInitialProps = async ({ Component, ctx }) => {
   let pageProps = {};
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if(`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  }
+  pageProps.baseURL = baseURL;
 
   const protectedRoutes =
     ctx.pathname === "/" ||
@@ -52,7 +60,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     destroyCookie(ctx, "token");
     protectedRoutes && redirectUser(ctx, "/login");
   } else {
-    const res = await axios.get(`${process.env.APP_BASEURL}api/profile`, {
+    const res = await axios.get(`${baseURL}api/profile`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     });

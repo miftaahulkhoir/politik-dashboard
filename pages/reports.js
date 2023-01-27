@@ -45,5 +45,14 @@ export default function Reports() {
 }
 
 export async function getServerSideProps(ctx) {
+  const { req } = ctx;
+  let baseURL = "";
+  if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if(`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  }
+  pageProps.baseURL = baseURL;
+  
   return { props: {} };
 }

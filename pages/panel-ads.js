@@ -109,7 +109,7 @@ export default function SocialReports(pageProps) {
         from_time: filterDate[0].toString(),
         to_time: filterDate[1].toString(),
       };
-      await axios.post(`${process.env.APP_BASEURL}api/social/${mtkOrgId}/reports`, request).then((res) => {
+      await axios.post(`${baseURL}api/social/${mtkOrgId}/reports`, request).then((res) => {
         setMentionData(res.data.data.mentions_over_time.data.entries);
         setMentionSum(res.data.data.sum_of_mentions.data.total_value);
         setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
@@ -225,12 +225,21 @@ export default function SocialReports(pageProps) {
 
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if(`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  }
+  pageProps.baseURL = baseURL;
+
   let reports;
   let mediatoolkit;
 
   // get groups
   await axios
-    .get(`${process.env.APP_BASEURL}api/social/156097`, {
+    .get(`${baseURL}api/social/156097`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })

@@ -455,6 +455,15 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`http://${req.headers.host}/` !== process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if(`http://${req.headers.host}/` !== process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  }
+  pageProps.baseURL = baseURL;
+
   let kecamatan = [];
   let koordinator = [];
   let relawan = [];
@@ -462,7 +471,7 @@ export async function getServerSideProps(ctx) {
   let daftarhitam = [];
   let users = [];
   await axios
-    .get(`${process.env.APP_BASEURL}api/users`, {
+    .get(`${baseURL}api/users`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
@@ -475,7 +484,7 @@ export async function getServerSideProps(ctx) {
     })
     .catch((err) => {});
   await axios
-    .get(`${process.env.APP_BASEURL}api/distric`, {
+    .get(`${baseURL}api/distric`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
