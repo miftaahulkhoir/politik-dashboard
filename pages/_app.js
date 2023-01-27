@@ -15,7 +15,6 @@ import { redirectUser } from "../utils/auth";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
-  console.log(pageProps)
   return (
     <>
       {(router.pathname !== "/login" &&
@@ -38,9 +37,9 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
   const { token } = parseCookies(ctx);
   const { req } = ctx;
   let baseURL = "";
-  if(req.headers.referer.includes(process.env.APP_BASEURL_DEFAULT)) {
+  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
     baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if(req.headers.referer.includes(process.env.APP_BASEURL_PATRON)){
+  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
     baseURL = process.env.APP_BASEURL_PATRON;
   }
 
