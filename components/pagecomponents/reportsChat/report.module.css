@@ -1,0 +1,35 @@
+/* CHAT PREVIEW */
+
+.chat_preview_item {
+  width: 100%;
+  padding: 16px;
+  transition: all 150ms;
+}
+
+.chat_preview_item:hover {
+  background: #eff5fa;
+}
+
+.chat_preview_item_active {
+  background: #e4f3ff !important;
+}
+
+/* CHAT */
+.chat_input {
+  padding: 8px 16px;
+  background: white;
+  border-radius: 8px;
+  word-wrap: break-word;
+}
+
+.chat_input:active {
+  border: 1px solid #016cee;
+}
+
+.chat_input_empty::after {
+  content: "Tulis pesan";
+  position: absolute;
+  top: 8px;
+  left: 20px;
+  color: #777;
+}

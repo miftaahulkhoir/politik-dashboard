@@ -13,6 +13,7 @@ import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+import capitalizeWords from "../utils/helpers/capitalizeWords";
 
 const Centrifuge = require("centrifuge");
 
@@ -26,9 +27,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("data");
-  const [dataKoordinator, setKoordinator] = useState([]);
-  const [dataRelawan, setRelawan] = useState([]);
-  const [dataPemilih, setPemilih] = useState([]);
+  const [dataKoordinator, setKoordinator] = useState(koordinator);
+  const [dataRelawan, setRelawan] = useState(relawan);
+  const [dataPemilih, setPemilih] = useState(pemilih);
   const [showKoordinator, setShowKoordinator] = useState(false);
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
@@ -42,48 +43,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
   useEffect(() => {
     setIsMounted(true);
-    koordinator.forEach((element, index) => {
-      axios
-        .get(`${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`)
-        .then((res) => {
-          const lastLoc = { ...element };
-          lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
-          setKoordinator((prev) => [...prev, lastLoc]);
-        })
-        .catch((err) => {
-          const lastLoc = { ...element };
-          setKoordinator((prev) => [...prev, lastLoc]);
-        });
-    });
-    relawan.forEach((element, index) => {
-      axios
-        .get(`${process.env.APP_BASEURL}api/data-mapping/last?userid=${element.id}`)
-        .then((res) => {
-          const lastLoc = { ...element };
-          lastLoc.latitude = res.data.data?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data?.longitude || lastLoc.longitude;
-          setRelawan((prev) => [...prev, lastLoc]);
-        })
-        .catch((err) => {
-          const lastLoc = { ...element };
-          setRelawan((prev) => [...prev, lastLoc]);
-        });
-    });
-    pemilih.forEach((element, index) => {
-      axios
-        .get(`${process.env.APP_BASEURL}api/response?respondentid=${element.id}`)
-        .then((res) => {
-          const lastLoc = { ...element };
-          lastLoc.latitude = res.data.data[0]?.location?.latitude || lastLoc.latitude;
-          lastLoc.longitude = res.data.data[0]?.location?.longitude || lastLoc.longitude;
-          setPemilih((prev) => [...prev, lastLoc]);
-        })
-        .catch((err) => {
-          const lastLoc = { ...element };
-          setPemilih((prev) => [...prev, lastLoc]);
-        });
-    });
   }, []);
 
   useEffect(() => {
@@ -92,9 +51,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
       console.log("connected", ctx);
     });
     if (showKoordinator === true) {
-      dataKoordinator.forEach((element) => {
+      koordinator.forEach((element) => {
         centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          const newarr = [...dataKoordinator];
+          const newarr = [...koordinator];
           const id = newarr.findIndex((x) => x.id === element.id);
           newarr[id].latitude = ctx.data.latitude;
           newarr[id].longitude = ctx.data.longitude;
@@ -102,6 +61,17 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         });
       });
     }
+    // if (showKoordinator === true) {
+    //   dataKoordinator.forEach((element) => {
+    //     centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
+    //       const newarr = [...dataKoordinator];
+    //       const id = newarr.findIndex((x) => x.id === element.id);
+    //       newarr[id].latitude = ctx.data.latitude;
+    //       newarr[id].longitude = ctx.data.longitude;
+    //       setKoordinator(newarr);
+    //     });
+    //   });
+    // }
   }, [showKoordinator]);
 
   useEffect(() => {
@@ -110,9 +80,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
       console.log("connected", ctx);
     });
     if (showRelawan === true) {
-      dataRelawan.forEach((element) => {
+      relawan.forEach((element) => {
         centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          const newarr = [...dataRelawan];
+          const newarr = [...relawan];
           const id = newarr.findIndex((x) => x.id === element.id);
           newarr[id].latitude = ctx.data.latitude;
           newarr[id].longitude = ctx.data.longitude;
@@ -121,6 +91,36 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
       });
     }
   }, [showRelawan]);
+
+  // PENGADUAN
+  const [reports, setReports] = useState([]);
+  useEffect(() => {
+    axios
+      .get(`/api/complaints`)
+      .then((res) => setReports(res?.data?.data))
+      .catch((error) => {});
+  }, []);
+
+  const [reportCategories, setReportCategories] = useState([]); // Array<{id: string, status_name: string}>
+  const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
+
+  const filteredReports = useMemo(() => {
+    return reports.filter((report) => indexShownReportCategories.includes(report?.category.id)) || [];
+  }, [reports, indexShownReportCategories]);
+
+  useEffect(() => {
+    axios
+      .get(`/api/complaints/category`)
+      .then((res) => setReportCategories(res?.data?.data))
+      .catch((error) => {});
+  }, []);
+
+  const getReportColorByID = (id) => {
+    if (id == 1) return "#e74c3c";
+    return "#3498db";
+  };
+
+  // END PENGADUAN
 
   const ranks = useMemo(() => {
     return users?.map((user, i) => {
@@ -201,6 +201,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
           <HomeNavbar />
           <div className="left-content">
             <div className="card">
+              {/* CARD HEADER */}
               <div className="card-body p-0">
                 <ul className="nav">
                   {userLogCordinate === true && (
@@ -223,11 +224,19 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                       >
                         <a className="nav-link">Persebaran</a>
                       </li>
+                      <li
+                        className={position === "pengaduan" ? "nav-item actives" : "nav-item"}
+                        onClick={() => setPosition("pengaduan")}
+                      >
+                        <a className="nav-link">Pengaduan</a>
+                      </li>
                     </>
                   )}
                 </ul>
               </div>
+              {/* CARD BODY */}
               <div className="col-12 search-list">
+                {/* TAB TABLE OVERVIEW */}
                 {position === "data" && userLogCordinate === false && (
                   <>
                     <h4>Data Koordinator</h4>
@@ -269,6 +278,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                     </table>
                   </>
                 )}
+                {/* TAB SELECT ROLE */}
                 {position === "persebaran" && userLogCordinate === false && (
                   <>
                     <div className="form-group d-flex justify-content-left">
@@ -317,6 +327,42 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                     </div>
                   </>
                 )}
+
+                {/* TAB PENGADUAN */}
+                {position === "pengaduan" && userLogCordinate === false && (
+                  <>
+                    {reportCategories.map((category) => {
+                      const shown = indexShownReportCategories.includes(category.id);
+                      return (
+                        <div key={category.id} className="form-group d-flex justify-content-left">
+                          <input
+                            type="checkbox"
+                            defaultChecked={shown}
+                            onClick={() => {
+                              shown
+                                ? setIndexShownReportCategories((prev) => [
+                                    ...prev.filter((index) => index !== category.id),
+                                  ])
+                                : setIndexShownReportCategories((prev) => [...prev, category.id]);
+                            }}
+                          ></input>
+                          <div
+                            style={{
+                              width: "20px",
+                              height: "20px",
+                              borderRadius: "30px",
+                              margin: "0px 10px",
+                              background: getReportColorByID(category.id),
+                            }}
+                          ></div>
+                          <label>{capitalizeWords(category?.category_name)}</label>
+                        </div>
+                      );
+                    })}
+                  </>
+                )}
+
+                {/* TAB USER COORDINATE */}
                 {userLogCordinate === true && (
                   <table className="table table-bordered my-2">
                     <thead>
@@ -361,6 +407,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 logCordinate={logCordinate}
                 setLogCordinate={setLogCordinate}
                 handleColor={handleColor}
+                reports={filteredReports}
+                indexShownReportCategories={indexShownReportCategories}
               />
             </div>
           )}

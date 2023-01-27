@@ -1,6 +1,6 @@
 import { Col, Drawer, Row, Space } from "antd";
 import { useMemo } from "react";
-import { TbCalendar } from "react-icons/tb";
+import { TbCalendar, TbMapPin } from "react-icons/tb";
 
 export default function ReportDetailDrawer({ open = true, setOpen, selectedReport }) {
   const onClose = () => {
@@ -38,12 +38,12 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
         <Section title="Detail pengaduan">
           <Space direction="vertical" style={{ width: "100%", color: "#7287A5" }} size={12}>
             <img src={selectedReport?.link_image} alt="gambar pengaduan" style={{ width: "100%" }} />
-            {/* <Row gutter={8} align="middle">
+            <Row gutter={8} align="middle">
               <Col>
                 <TbMapPin size={24} />
               </Col>
               <Col flex={1}>{selectedReport?.address || "Tidak mengirimkan lokasi"}</Col>
-            </Row> */}
+            </Row>
             <Row gutter={8} align="middle">
               <Col>
                 <TbCalendar size={24} />
