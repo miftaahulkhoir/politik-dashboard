@@ -109,7 +109,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   useEffect(() => {
     axios
       .get(`/api/complaints/category`)
-      .then((res) => setReportCategories(res?.data?.data))
+      .then((res) => setReportCategories(res?.data?.data === null ? [] : res?.data?.data))
       .catch((error) => {});
   }, []);
 
