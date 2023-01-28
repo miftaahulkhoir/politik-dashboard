@@ -127,9 +127,19 @@ export default function Surveys(pageProps) {
 
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  } else {
+    baseURL = process.env.APP_BASEURL_LOCAL;
+  }
+
   let surveys = [];
   await axios
-    .get(`${process.env.APP_BASEURL}api/survey`, {
+    .get(`${baseURL}api/survey`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })

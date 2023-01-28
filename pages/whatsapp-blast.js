@@ -35,7 +35,7 @@ export default function Blast(pageProps) {
       });
     }
     axios
-      .post(`${process.env.APP_BASEURL}api/wa/send`, {
+      .post(`${pageProps.baseURL}api/wa/send`, {
         secretkey: "KyaRxzcVpqwe",
         phone: customNumber === true ? newNumber : noPhone,
         message: pesan,
@@ -137,12 +137,22 @@ export default function Blast(pageProps) {
 
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  } else {
+    baseURL = process.env.APP_BASEURL_LOCAL;
+  }
+
   let koordinator = [];
   let relawan = [];
   let pemilih = [];
   let users = [];
   await axios
-    .get(`${process.env.APP_BASEURL}api/users`, {
+    .get(`${baseURL}api/users`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })

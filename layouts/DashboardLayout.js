@@ -12,7 +12,7 @@ import {
 
 import ProfileDropdown from "../components/pagecomponents/dashboardLayout/ProfileDropdown";
 
-export default function DashboardLayout({ profile, children }) {
+export default function DashboardLayout({ profile,baseURL, children }) {
   const router = useRouter();
   const { asPath } = router;
 
@@ -33,14 +33,14 @@ export default function DashboardLayout({ profile, children }) {
                     <a className="codexbrand-logo">
                       <img
                         className="img-fluid"
-                        src={`${process.env.APP_BASEURL}images/logo/logo.png`}
+                        src={`${baseURL}images/logo/logo.png`}
                         alt="theeme-logo"
                       />
                     </a>
                     <a className="codexdark-logo">
                       <img
                         className="img-fluid"
-                        src={`${process.env.APP_BASEURL}images/logo/dark-logo.png`}
+                        src={`${baseURL}images/logo/dark-logo.png`}
                         alt="theeme-logo"
                       />
                     </a>
@@ -60,10 +60,10 @@ export default function DashboardLayout({ profile, children }) {
           <a className="codexbrand-logo">
             <img
               style={{ width: "40px" }}
-              src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`}
+              src={`${baseURL}images/logo/icon-logo.png`}
               alt="theeme-logo"
             />
-            <img className="img-fluid" src={`${process.env.APP_BASEURL}images/logo/logo.png`} alt="theeme-logo" />
+            <img className="img-fluid" src={`${baseURL}images/logo/logo.png`} alt="theeme-logo" />
           </a>
           <a className="sidebar-action">
             <i className="fa fa-bars"></i>

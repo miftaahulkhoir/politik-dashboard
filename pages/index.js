@@ -2,7 +2,6 @@ import axios from "axios";
 import moment from "moment/moment";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useRouter } from "next/router";
 import { parseCookies } from "nookies";
 import { useEffect, useMemo, useState } from "react";
 import { TbDotsVertical } from "react-icons/tb";
@@ -24,7 +23,6 @@ const HomeMap = dynamic(() => import("../components/pagecomponents/home/HomeMap"
 const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
-  const router = useRouter();
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("data");
   const [dataKoordinator, setKoordinator] = useState(koordinator);
@@ -97,7 +95,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   useEffect(() => {
     axios
       .get(`/api/complaints`)
-      .then((res) => setReports(res?.data?.data))
+      .then((res) => setReports(res?.data?.data === null ? [] : res?.data?.data))
       .catch((error) => {});
   }, []);
 
@@ -105,13 +103,13 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
 
   const filteredReports = useMemo(() => {
-    return reports.filter((report) => indexShownReportCategories.includes(report?.category.id)) || [];
+    return reports?.filter((report) => indexShownReportCategories.includes(report?.category.id)) || [];
   }, [reports, indexShownReportCategories]);
 
   useEffect(() => {
     axios
       .get(`/api/complaints/category`)
-      .then((res) => setReportCategories(res?.data?.data))
+      .then((res) => setReportCategories(res?.data?.data === null ? [] : res?.data?.data))
       .catch((error) => {});
   }, []);
 
@@ -455,6 +453,16 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
+  const { req } = ctx;
+  let baseURL = "";
+  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
+    baseURL = process.env.APP_BASEURL_DEFAULT;
+  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
+    baseURL = process.env.APP_BASEURL_PATRON;
+  } else {
+    baseURL = process.env.APP_BASEURL_LOCAL;
+  }
+
   let kecamatan = [];
   let koordinator = [];
   let relawan = [];
@@ -462,7 +470,7 @@ export async function getServerSideProps(ctx) {
   let daftarhitam = [];
   let users = [];
   await axios
-    .get(`${process.env.APP_BASEURL}api/users`, {
+    .get(`${baseURL}api/users`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
@@ -475,7 +483,7 @@ export async function getServerSideProps(ctx) {
     })
     .catch((err) => {});
   await axios
-    .get(`${process.env.APP_BASEURL}api/distric`, {
+    .get(`${baseURL}api/distric`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })

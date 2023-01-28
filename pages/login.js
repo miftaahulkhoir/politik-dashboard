@@ -7,7 +7,7 @@ import React, { useState } from "react";
 
 import { logoutUser } from "../utils/auth";
 
-export default function Login({ pageProps }) {
+export default function Login(pageProps) {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -17,7 +17,7 @@ export default function Login({ pageProps }) {
   const handleLogin = (event) => {
     event.preventDefault();
     axios
-      .post(`${process.env.APP_BASEURL}api/login`, {
+      .post(`${pageProps.baseURL}api/login`, {
         email: email,
         password: password,
       })
@@ -46,8 +46,8 @@ export default function Login({ pageProps }) {
           <div className="auth-header">
             <div className="codex-brand">
               <a>
-                <img style={{ width: "60px" }} src={`${process.env.APP_BASEURL}images/logo/icon-logo.png`} alt="" />
-                <img className="img-fluid light-logo" src={`${process.env.APP_BASEURL}images/logo/logo.png`} alt="" />
+                <img style={{ width: "60px" }} src={`${pageProps.baseURL}images/logo/icon-logo.png`} alt="" />
+                <img className="img-fluid light-logo" src={`${pageProps.baseURL}images/logo/logo.png`} alt="" />
               </a>
             </div>
           </div>

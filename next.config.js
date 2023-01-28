@@ -10,7 +10,9 @@ module.exports = {
     APP_POWERED_BY: process.env.APP_POWERED_BY,
     APP_LINKPOWERED_BY: process.env.APP_LINKPOWERED_BY,
     API_SOURCE: process.env.API_SOURCE,
-    APP_BASEURL: process.env.APP_BASEURL,
+    APP_BASEURL_DEFAULT: process.env.APP_BASEURL_DEFAULT,
+    APP_BASEURL_PATRON: process.env.APP_BASEURL_PATRON,
+    APP_BASEURL_LOCAL: process.env.APP_BASEURL_LOCAL,
     WEBSOCKET_CREDENTIALS_HOST: process.env.WEBSOCKET_CREDENTIALS_HOST,
   },
   async rewrites() {
