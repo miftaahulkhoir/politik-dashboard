@@ -189,11 +189,9 @@ export default function UserFormDrawer({
     >
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Nama Lengkap</Input.Title>
-          <Input value={name} onChange={(e) => setName(e.target.value)} />
+          <Input placeholder="Nama Lengkap" value={name} onChange={(e) => setName(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Jenis Kelamin</Input.Title>
           <Radio.Group
             value={gender}
             onChange={(e) => {
@@ -208,27 +206,30 @@ export default function UserFormDrawer({
           ></Radio.Group>
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>NIK</Input.Title>
-          <Input value={nik} onChange={(e) => setNik(e.target.value)} />
+          <Input placeholder="NIK" value={nik} onChange={(e) => setNik(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Nomor WhatsApp</Input.Title>
-          <Input value={wa} onChange={(e) => setWa(e.target.value)} />
+          <Input placeholder="Nomor WhatsApp" value={wa} onChange={(e) => setWa(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Email</Input.Title>
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Input placeholder="Alamat Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Password</Input.Title>
-          <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
+          <Input.Password
+            placeholder="Kata Sandi"
+            value={password}
+            disabled={isEdit}
+            onChange={(e) => setPassword(e.target.value)}
+          />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Jabatan</Input.Title>
           <Select
-            value={occupation}
+            showSearch
+            placeholder="Pilih Role"
+            value={occupation || undefined}
             onChange={(value) => setOccupation(value)}
             style={{ width: "100%" }}
+            filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
             options={occupations
               // .filter((o) => o.level > currentUser?.occupation?.level)
               .filter((o) => o.level === currentUser?.occupation?.level + 1)
@@ -236,30 +237,32 @@ export default function UserFormDrawer({
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Kabupaten</Input.Title>
           <Select
-            value={regency}
+            showSearch
+            placeholder="Pilih Kota/Kabupaten"
+            value={regency || undefined}
             onChange={(value) => setRegency(value)}
             style={{ width: "100%" }}
+            filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
             options={regencies.map((r) => ({ label: r.name, value: r.id }))}
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Kecamatan</Input.Title>
           <Select
-            value={distric}
+            showSearch
+            placeholder="Pilih Kecamatan"
+            value={distric || undefined}
             onChange={(value) => setDistric(value)}
             style={{ width: "100%" }}
+            filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
             options={districs.map((d) => ({ label: d.name, value: d.id }))}
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Lokasi (Latitude)</Input.Title>
-          <Input value={latitude} onChange={(e) => setLatitude(e.target.value)} />
+          <Input placeholder="Lokasi (latitude)" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Lokasi (Longitude)</Input.Title>
-          <Input value={longitude} onChange={(e) => setLongitude(e.target.value)} />
+          <Input placeholder="Lokasi (longitude)" value={longitude} onChange={(e) => setLongitude(e.target.value)} />
         </Col>
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
           <Button type="primary" onClick={submitHandler} style={{ fontWeight: 600, letterSpacing: "0.8px" }}>
