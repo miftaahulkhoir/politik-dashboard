@@ -95,7 +95,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   useEffect(() => {
     axios
       .get(`/api/complaints`)
-      .then((res) => setReports(res?.data?.data))
+      .then((res) => setReports(res?.data?.data === null ? [] : res?.data?.data))
       .catch((error) => {});
   }, []);
 
@@ -103,7 +103,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
 
   const filteredReports = useMemo(() => {
-    return reports.filter((report) => indexShownReportCategories.includes(report?.category.id)) || [];
+    return reports?.filter((report) => indexShownReportCategories.includes(report?.category.id)) || [];
   }, [reports, indexShownReportCategories]);
 
   useEffect(() => {
