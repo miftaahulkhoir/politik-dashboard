@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Input, Radio, Row, Select } from "antd";
+import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -189,11 +189,11 @@ export default function UserFormDrawer({
     >
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Nama Lengkap</Input.Title>
+          <Typography.Title level={5}>Nama Lengkap</Typography.Title>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Jenis Kelamin</Input.Title>
+          <Typography.Title level={5}>Jenis Kelamin</Typography.Title>
           <Radio.Group
             value={gender}
             onChange={(e) => {
@@ -208,23 +208,23 @@ export default function UserFormDrawer({
           ></Radio.Group>
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>NIK</Input.Title>
+          <Typography.Title level={5}>NIK</Typography.Title>
           <Input value={nik} onChange={(e) => setNik(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Nomor WhatsApp</Input.Title>
+          <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
           <Input value={wa} onChange={(e) => setWa(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Email</Input.Title>
+          <Typography.Title level={5}>Email</Typography.Title>
           <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Password</Input.Title>
+          <Typography.Title level={5}>Password</Typography.Title>
           <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Jabatan</Input.Title>
+          <Typography.Title level={5}>Jabatan</Typography.Title>
           <Select
             value={occupation}
             onChange={(value) => setOccupation(value)}
@@ -236,7 +236,7 @@ export default function UserFormDrawer({
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Kabupaten</Input.Title>
+          <Typography.Title level={5}>Kabupaten</Typography.Title>
           <Select
             value={regency}
             onChange={(value) => setRegency(value)}
@@ -245,7 +245,7 @@ export default function UserFormDrawer({
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Kecamatan</Input.Title>
+          <Typography.Title level={5}>Kecamatan</Typography.Title>
           <Select
             value={distric}
             onChange={(value) => setDistric(value)}
@@ -254,11 +254,11 @@ export default function UserFormDrawer({
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Lokasi (Latitude)</Input.Title>
+          <Typography.Title level={5}>Lokasi (Latitude)</Typography.Title>
           <Input value={latitude} onChange={(e) => setLatitude(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Title level={5}>Lokasi (Longitude)</Input.Title>
+          <Typography.Title level={5}>Lokasi (Longitude)</Typography.Title>
           <Input value={longitude} onChange={(e) => setLongitude(e.target.value)} />
         </Col>
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
