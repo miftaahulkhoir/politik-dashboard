@@ -194,8 +194,8 @@ export default function DashboardLayout({ profile,baseURL, children }) {
         </div>
       </div>
       <footer className="codex-footer">
-        <p className="p-0 m-0">Copyright 2023 © Patrons Politik. All rights reserved.</p>
+        <p className="p-0 m-0">Copyright 2023 © Patrons Analitik. All rights reserved.</p>
       </footer>
     </>
-  );
+  );    
 }
