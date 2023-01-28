@@ -11,6 +11,8 @@ import "../public/css/vendor/font-awesome.css";
 import "../public/css/vendor/icoicon/icoicon.css";
 import "../public/css/vendor/simplebar.css";
 import "../public/css/vendor/themify-icons.css";
+import "../styles/ant-override.css";
+import "../styles/globals.css";
 import { redirectUser } from "../utils/auth";
 
 function MyApp({ Component, pageProps }) {
