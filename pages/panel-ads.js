@@ -231,6 +231,8 @@ export async function getServerSideProps(ctx) {
     baseURL = process.env.APP_BASEURL_DEFAULT;
   } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
     baseURL = process.env.APP_BASEURL_PATRON;
+  } else {
+    baseURL = process.env.APP_BASEURL_LOCAL;
   }
 
   let reports;
