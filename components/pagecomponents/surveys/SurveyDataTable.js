@@ -15,6 +15,7 @@ export default function SurveyDataTable({
   setIsFormEdit,
   setIsFormOpen,
   setSelectedSurveyId,
+  pageProps,
 }) {
   const columns = [
     {
@@ -131,7 +132,7 @@ export default function SurveyDataTable({
                     okType: "danger",
                     cancelText: "Tidak",
                     onOk: async function () {
-                      const res = await axios.delete(`${process.env.APP_BASEURL}api/survey/${row?.id}`);
+                      const res = await axios.delete(`${pageProps.baseURL}api/survey/${row?.id}`);
                       if (!res?.data?.status) throw new Error("unknown error");
 
                       const newSurveys = surveysList.filter((s) => s.id !== row.id);
@@ -157,9 +158,9 @@ export default function SurveyDataTable({
     },
   ];
 
-  const changeStatusHandler = async (id) => {
+  const changeStatusHandler = async (id, pageProps) => {
     try {
-      const res = await axios.put(`${process.env.APP_BASEURL}api/survey/update-status/${id}`);
+      const res = await axios.put(`${pageProps.baseURL}api/survey/update-status/${id}`);
       if (!res?.data?.status) throw new Error("unknown error");
     } catch (error) {
       console.error(error);

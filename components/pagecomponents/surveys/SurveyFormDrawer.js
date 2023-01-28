@@ -14,23 +14,27 @@ export default function SurveyFormDrawer({
   selectedSurveyId,
   apiNotification,
   setSurveysList,
+  pageProps,
 }) {
   const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);
 
-  useEffect(() => {
-    if (!isEdit) return;
-    (async function () {
-      try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`);
-        const data = res?.data?.data;
-        setTitle(data?.survey_name);
-        setIsActive(data?.status ? 1 : 0);
-        setQuestions(data?.questions);
-      } catch (error) {}
-    })();
-  }, [isEdit, selectedSurveyId]);
+  useEffect(
+    (pageProps) => {
+      if (!isEdit) return;
+      (async function () {
+        try {
+          const res = await axios.get(`${pageProps.baseURL}api/survey/${selectedSurveyId}`);
+          const data = res?.data?.data;
+          setTitle(data?.survey_name);
+          setIsActive(data?.status ? 1 : 0);
+          setQuestions(data?.questions);
+        } catch (error) {}
+      })();
+    },
+    [isEdit, selectedSurveyId],
+  );
 
   const clearForm = () => {
     setTitle("");

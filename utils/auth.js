@@ -2,9 +2,9 @@ import axios from "axios";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
 
-export const loginUser = async (username, password) => {
+export const loginUser = async (username, password, pageProps) => {
   try {
-    const res = await axios.post(`${process.env.APP_BASEURL}login`, {
+    const res = await axios.post(`${pageProps.baseURL}login`, {
       username: username,
       password: password,
     });

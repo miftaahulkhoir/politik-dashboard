@@ -31,18 +31,18 @@ export default function UserFormDrawer({
   const [districs, setDistrics] = useState([]);
 
   useEffect(() => {
-    (async function () {
+    (async function (pageProps) {
       try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/occupations`);
+        const res = await axios.get(`${pageProps.baseURL}api/occupations`);
         setOccupations(res.data.data);
       } catch (error) {}
     })();
   }, []);
 
   useEffect(() => {
-    (async function () {
+    (async function (pageProps) {
       try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/regency`);
+        const res = await axios.get(`${pageProps.baseURL}api/regency`);
         setRegencies(res.data.data);
         setDistric("");
       } catch (error) {}
@@ -51,39 +51,42 @@ export default function UserFormDrawer({
 
   useEffect(() => {
     if (!regency) return;
-    (async function () {
+    (async function (pageProps) {
       try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/distric?regencyid=${regency}`);
+        const res = await axios.get(`${pageProps.baseURL}api/distric?regencyid=${regency}`);
         setDistrics(res.data.data);
       } catch (error) {}
     })();
   }, [regency]);
 
   // fill form if edit
-  useEffect(() => {
-    if (!isEdit) return;
-    // get regency and district list
+  useEffect(
+    (pageProps) => {
+      if (!isEdit) return;
+      // get regency and district list
 
-    if (selectedUser?.distric_id) {
-      axios.get(`${process.env.APP_BASEURL}api/distric/${selectedUser.distric_id}`).then((res) => {
-        setRegency(res.data.data.regency_id);
-        // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
+      if (selectedUser?.distric_id) {
+        axios.get(`${pageProps.baseURL}api/distric/${selectedUser.distric_id}`).then((res) => {
+          setRegency(res.data.data.regency_id);
+          // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
+        });
+      }
+
+      axios.get(`${pageProps.baseURL}api/users/${selectedUser.id}`).then((res) => {
+        const data = res.data.data;
+        setOccupation(data.occupation_id);
+        setName(data.name);
+        setNik(data.nik);
+        setEmail(data.email);
+        setWa(data.phone);
+        setGender(data.gender);
+        setDistric(data.distric_id);
+        setLatitude(data.latitude);
+        setLongitude(data.longitude);
       });
-    }
-
-    axios.get(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`).then((res) => {
-      const data = res.data.data;
-      setOccupation(data.occupation_id);
-      setName(data.name);
-      setNik(data.nik);
-      setEmail(data.email);
-      setWa(data.phone);
-      setGender(data.gender);
-      setDistric(data.distric_id);
-      setLatitude(data.latitude);
-      setLongitude(data.longitude);
-    });
-  }, [isEdit, selectedUser.distric_id, selectedUser.id]);
+    },
+    [isEdit, selectedUser.distric_id, selectedUser.id],
+  );
 
   const clearForm = () => {
     setOccupation("");
@@ -106,9 +109,9 @@ export default function UserFormDrawer({
   };
 
   // handler
-  const updateUser = (data) => {
+  const updateUser = (data, pageProps) => {
     axios
-      .put(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`, data)
+      .put(`${pageProps.baseURL}api/users/${selectedUser.id}`, data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",
@@ -135,10 +138,10 @@ export default function UserFormDrawer({
       .catch((err) => {});
   };
 
-  const addUser = (data) => {
+  const addUser = (data, pageProps) => {
     console.log(data);
     axios
-      .post(`${process.env.APP_BASEURL}api/users/create`, data)
+      .post(`${pageProps.baseURL}api/users/create`, data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",

@@ -30,6 +30,7 @@ export default function HomeMap({
   handleColor,
   reports,
   indexShownReportCategories,
+  pageProps,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -41,7 +42,7 @@ export default function HomeMap({
     setLogType(type);
     axios
       .get(
-        `${process.env.APP_BASEURL}api/data-mapping?userid=${userid}&from=${moment
+        `${pageProps.baseURL}api/data-mapping?userid=${userid}&from=${moment
           .utc()
           .local()
           .format("Y-MM-DD")} 00:00:00&until=${moment.utc().local().format("Y-MM-DD")} 23:59:00`,
