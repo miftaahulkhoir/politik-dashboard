@@ -455,11 +455,11 @@ export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
   const { req } = ctx;
   let baseURL = "";
-  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
-      baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
-    baseURL = process.env.APP_BASEURL_PATRON;
-  }
+  // if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
+  //     baseURL = process.env.APP_BASEURL_DEFAULT;
+  // } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
+  //   baseURL = process.env.APP_BASEURL_PATRON;
+  // }
 
   let kecamatan = [];
   let koordinator = [];
