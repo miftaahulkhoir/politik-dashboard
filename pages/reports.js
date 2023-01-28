@@ -1,9 +1,9 @@
-import axios from "axios";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
 import ReportDataTable from "../components/pagecomponents/reports/ReportDataTable";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
+import { getAllReports } from "../utils/services/reports";
 
 export default function Reports() {
   const [reports, setReports] = useState([]);
@@ -13,8 +13,7 @@ export default function Reports() {
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
 
   useEffect(() => {
-    axios
-      .get("/api/complaints")
+    getAllReports()
       .then((res) => setReports(res?.data?.data || []))
       .catch((err) => {});
   }, []);
