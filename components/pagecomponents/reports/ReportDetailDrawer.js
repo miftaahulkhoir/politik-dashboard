@@ -1,8 +1,11 @@
-import { Col, Drawer, Row, Space } from "antd";
+import { Button, Col, Drawer, Modal, Row, Space } from "antd";
 import { useMemo } from "react";
 import { TbCalendar } from "react-icons/tb";
 
-export default function ReportDetailDrawer({ open = true, setOpen, selectedReport }) {
+import ReportChangeStatusModal from "./ReportChangeStatusModal";
+import ReportStatusPill from "./ReportStatusPill";
+
+export default function ReportDetailDrawer({ open = true, setOpen, selectedReport, setReports }) {
   const onClose = () => {
     setOpen(false);
   };
@@ -19,6 +22,22 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
     return formatted;
   }, [selectedReport?.created_at]);
 
+  const onChangeStatusClick = (report) => {
+    const modal = Modal.confirm();
+    modal.update({
+      icon: null,
+      footer: null,
+      maskClosable: true,
+      width: "500px",
+      bodyStyle: {
+        width: "100%",
+      },
+      content: (
+        <ReportChangeStatusModal selectedReport={report} onClose={() => modal.destroy()} setReports={setReports} />
+      ),
+    });
+  };
+
   return (
     <Drawer
       title="Detail Pengaduan"
@@ -30,6 +49,17 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
       <Space direction="vertical" size="large">
+        <Section title="Status:" horizontal>
+          <Space direction="vertical" size={4}>
+            <ReportStatusPill id={selectedReport?.complaint_status?.id || "0"} />
+            {selectedReport?.complaint_status?.id != 2 && (
+              <Button type="link" style={{ margin: 0, padding: 0 }} onClick={() => onChangeStatusClick(selectedReport)}>
+                Ubah status
+              </Button>
+            )}
+          </Space>
+        </Section>
+
         <Section title="Pengaduan">
           <div style={{ marginBottom: "4px", fontWeight: 600 }}>{selectedReport?.title}</div>
           <div style={{ color: "#7287A5" }}>{selectedReport?.content}</div>
@@ -57,9 +87,9 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
   );
 }
 
-function Section({ children, title }) {
+function Section({ children, title, horizontal = false }) {
   return (
-    <Space direction="vertical" style={{ width: "100%" }}>
+    <Space direction={horizontal ? "horizontal" : "vertical"} style={{ width: "100%", alignItems: "baseline" }}>
       <div style={{ fontSize: "12px", fontWeight: 600, color: "#7287A5" }}>{title}</div>
       <div>{children}</div>
     </Space>

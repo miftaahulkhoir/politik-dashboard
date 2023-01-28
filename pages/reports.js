@@ -33,6 +33,7 @@ export default function Reports() {
         open={isReportDetailDrawerOpen}
         setOpen={setIsReportDetailDrawerOpen}
         selectedReport={selectedReport}
+        setReports={setReports}
       />
 
       <ReportDataTable
