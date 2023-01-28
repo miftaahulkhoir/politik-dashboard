@@ -454,7 +454,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 export async function getServerSideProps(ctx) {
   const { token } = parseCookies(ctx);
   const { req } = ctx;
-  let baseURL = "";
+  const baseURL = "";
   // if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
   //     baseURL = process.env.APP_BASEURL_DEFAULT;
   // } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
