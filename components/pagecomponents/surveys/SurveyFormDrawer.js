@@ -23,7 +23,7 @@ export default function SurveyFormDrawer({
     if (!isEdit) return;
     (async function () {
       try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/survey/${selectedSurveyId}`);
+        const res = await axios.get(`/api/survey/${selectedSurveyId}`);
         const data = res?.data?.data;
         setTitle(data?.survey_name);
         setIsActive(data?.status ? 1 : 0);

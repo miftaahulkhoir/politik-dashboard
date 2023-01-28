@@ -33,7 +33,7 @@ export default function UserFormDrawer({
   useEffect(() => {
     (async function () {
       try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/occupations`);
+        const res = await axios.get(`/api/occupations`);
         setOccupations(res.data.data);
       } catch (error) {}
     })();
@@ -42,7 +42,7 @@ export default function UserFormDrawer({
   useEffect(() => {
     (async function () {
       try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/regency`);
+        const res = await axios.get(`/api/regency`);
         setRegencies(res.data.data);
         setDistric("");
       } catch (error) {}
@@ -53,7 +53,7 @@ export default function UserFormDrawer({
     if (!regency) return;
     (async function () {
       try {
-        const res = await axios.get(`${process.env.APP_BASEURL}api/distric?regencyid=${regency}`);
+        const res = await axios.get(`/api/distric?regencyid=${regency}`);
         setDistrics(res.data.data);
       } catch (error) {}
     })();
@@ -65,13 +65,13 @@ export default function UserFormDrawer({
     // get regency and district list
 
     if (selectedUser?.distric_id) {
-      axios.get(`${process.env.APP_BASEURL}api/distric/${selectedUser.distric_id}`).then((res) => {
+      axios.get(`/api/distric/${selectedUser.distric_id}`).then((res) => {
         setRegency(res.data.data.regency_id);
         // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
       });
     }
 
-    axios.get(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`).then((res) => {
+    axios.get(`/api/users/${selectedUser.id}`).then((res) => {
       const data = res.data.data;
       setOccupation(data.occupation_id);
       setName(data.name);
@@ -108,7 +108,7 @@ export default function UserFormDrawer({
   // handler
   const updateUser = (data) => {
     axios
-      .put(`${process.env.APP_BASEURL}api/users/${selectedUser.id}`, data)
+      .put(`/api/users/${selectedUser.id}`, data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",
@@ -138,7 +138,7 @@ export default function UserFormDrawer({
   const addUser = (data) => {
     console.log(data);
     axios
-      .post(`${process.env.APP_BASEURL}api/users/create`, data)
+      .post(`/api/users/create`, data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",

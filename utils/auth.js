@@ -4,7 +4,7 @@ import { destroyCookie } from "nookies";
 
 export const loginUser = async (username, password) => {
   try {
-    const res = await axios.post(`${process.env.APP_BASEURL}login`, {
+    const res = await axios.post(`/login`, {
       username: username,
       password: password,
     });
