@@ -23,9 +23,9 @@ export default function UserDataTable({
         okText: "Ya",
         okType: "danger",
         cancelText: "Tidak",
-        onOk: function (pageProps) {
+        onOk: function () {
           axios
-            .delete(`${pageProps.baseURL}api/users/${row?.id}`)
+            .delete(`/api/users/${row?.id}`)
             .then(() => {
               const newUsers = usersList.filter((s) => s.id !== row?.id);
               setUsersList([...newUsers]);

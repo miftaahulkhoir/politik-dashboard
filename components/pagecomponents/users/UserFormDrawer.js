@@ -31,18 +31,18 @@ export default function UserFormDrawer({
   const [districs, setDistrics] = useState([]);
 
   useEffect(() => {
-    (async function (pageProps) {
+    (async function () {
       try {
-        const res = await axios.get(`${pageProps.baseURL}api/occupations`);
+        const res = await axios.get(`/api/occupations`);
         setOccupations(res.data.data);
       } catch (error) {}
     })();
   }, []);
 
   useEffect(() => {
-    (async function (pageProps) {
+    (async function () {
       try {
-        const res = await axios.get(`${pageProps.baseURL}api/regency`);
+        const res = await axios.get(`/api/regency`);
         setRegencies(res.data.data);
         setDistric("");
       } catch (error) {}
@@ -51,42 +51,39 @@ export default function UserFormDrawer({
 
   useEffect(() => {
     if (!regency) return;
-    (async function (pageProps) {
+    (async function () {
       try {
-        const res = await axios.get(`${pageProps.baseURL}api/distric?regencyid=${regency}`);
+        const res = await axios.get(`/api/distric?regencyid=${regency}`);
         setDistrics(res.data.data);
       } catch (error) {}
     })();
   }, [regency]);
 
   // fill form if edit
-  useEffect(
-    (pageProps) => {
-      if (!isEdit) return;
-      // get regency and district list
+  useEffect(() => {
+    if (!isEdit) return;
+    // get regency and district list
 
-      if (selectedUser?.distric_id) {
-        axios.get(`${pageProps.baseURL}api/distric/${selectedUser.distric_id}`).then((res) => {
-          setRegency(res.data.data.regency_id);
-          // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
-        });
-      }
-
-      axios.get(`${pageProps.baseURL}api/users/${selectedUser.id}`).then((res) => {
-        const data = res.data.data;
-        setOccupation(data.occupation_id);
-        setName(data.name);
-        setNik(data.nik);
-        setEmail(data.email);
-        setWa(data.phone);
-        setGender(data.gender);
-        setDistric(data.distric_id);
-        setLatitude(data.latitude);
-        setLongitude(data.longitude);
+    if (selectedUser?.distric_id) {
+      axios.get(`/api/distric/${selectedUser.distric_id}`).then((res) => {
+        setRegency(res.data.data.regency_id);
+        // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
       });
-    },
-    [isEdit, selectedUser.distric_id, selectedUser.id],
-  );
+    }
+
+    axios.get(`/api/users/${selectedUser.id}`).then((res) => {
+      const data = res.data.data;
+      setOccupation(data.occupation_id);
+      setName(data.name);
+      setNik(data.nik);
+      setEmail(data.email);
+      setWa(data.phone);
+      setGender(data.gender);
+      setDistric(data.distric_id);
+      setLatitude(data.latitude);
+      setLongitude(data.longitude);
+    });
+  }, [isEdit, selectedUser.distric_id, selectedUser.id]);
 
   const clearForm = () => {
     setOccupation("");
@@ -109,9 +106,9 @@ export default function UserFormDrawer({
   };
 
   // handler
-  const updateUser = (data, pageProps) => {
+  const updateUser = (data) => {
     axios
-      .put(`${pageProps.baseURL}api/users/${selectedUser.id}`, data)
+      .put(`/api/users/${selectedUser.id}`, data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",
@@ -138,10 +135,10 @@ export default function UserFormDrawer({
       .catch((err) => {});
   };
 
-  const addUser = (data, pageProps) => {
+  const addUser = (data) => {
     console.log(data);
     axios
-      .post(`${pageProps.baseURL}api/users/create`, data)
+      .post(`/api/users/create`, data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",
