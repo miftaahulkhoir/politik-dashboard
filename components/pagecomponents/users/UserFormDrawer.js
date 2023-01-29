@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Input, Radio, Row, Select } from "antd";
+import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
@@ -189,9 +189,11 @@ export default function UserFormDrawer({
     >
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input placeholder="Nama Lengkap" value={name} onChange={(e) => setName(e.target.value)} />
+          <Typography.Title level={5}>Nama Lengkap</Typography.Title>
+          <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
+          <Typography.Title level={5}>Jenis Kelamin</Typography.Title>
           <Radio.Group
             value={gender}
             onChange={(e) => {
@@ -206,23 +208,23 @@ export default function UserFormDrawer({
           ></Radio.Group>
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input placeholder="NIK" value={nik} onChange={(e) => setNik(e.target.value)} />
+          <Typography.Title level={5}>NIK</Typography.Title>
+          <Input value={nik} onChange={(e) => setNik(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input placeholder="Nomor WhatsApp" value={wa} onChange={(e) => setWa(e.target.value)} />
+          <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
+          <Input value={wa} onChange={(e) => setWa(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input placeholder="Alamat Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+          <Typography.Title level={5}>Email</Typography.Title>
+          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input.Password
-            placeholder="Kata Sandi"
-            value={password}
-            disabled={isEdit}
-            onChange={(e) => setPassword(e.target.value)}
-          />
+          <Typography.Title level={5}>Password</Typography.Title>
+          <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
+          <Typography.Title level={5}>Jabatan</Typography.Title>
           <Select
             showSearch
             placeholder="Pilih Role"
@@ -237,6 +239,7 @@ export default function UserFormDrawer({
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
+          <Typography.Title level={5}>Kabupaten</Typography.Title>
           <Select
             showSearch
             placeholder="Pilih Kota/Kabupaten"
@@ -248,6 +251,7 @@ export default function UserFormDrawer({
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
+          <Typography.Title level={5}>Kecamatan</Typography.Title>
           <Select
             showSearch
             placeholder="Pilih Kecamatan"
@@ -259,10 +263,12 @@ export default function UserFormDrawer({
           />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input placeholder="Lokasi (latitude)" value={latitude} onChange={(e) => setLatitude(e.target.value)} />
+          <Typography.Title level={5}>Lokasi (Latitude)</Typography.Title>
+          <Input value={latitude} onChange={(e) => setLatitude(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Input placeholder="Lokasi (longitude)" value={longitude} onChange={(e) => setLongitude(e.target.value)} />
+          <Typography.Title level={5}>Lokasi (Longitude)</Typography.Title>
+          <Input value={longitude} onChange={(e) => setLongitude(e.target.value)} />
         </Col>
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
           <Button type="primary" onClick={submitHandler} style={{ fontWeight: 600, letterSpacing: "0.8px" }}>

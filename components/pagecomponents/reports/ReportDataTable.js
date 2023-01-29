@@ -1,5 +1,7 @@
-import { Button, Card, Col, Row } from "antd";
+import { Button, Card, Col, Row, Tooltip } from "antd";
 import { TbEye } from "react-icons/tb";
+
+import ReportStatusPill from "./ReportStatusPill";
 
 import dayMonthYear from "../../../utils/helpers/date/dayMonthYear";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
@@ -10,19 +12,10 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
     setIsDrawerOpen(true);
   };
 
-  console.log("data", data);
-
   const columns = [
-    // {
-    //   name: "No",
-    //   selector: (row) => row.no,
-    //   width: "80px",
-    //   center: true,
-    //   sortable: true,
-    // },
     {
       name: "Kategori",
-      selector: (row) => "kategori",
+      selector: (row) => row?.category?.category_name,
     },
     {
       name: "Judul",
@@ -31,10 +24,11 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
     {
       name: "Waktu",
       selector: (row) => dayMonthYear(row?.created_at),
+      sortable: true,
     },
     {
       name: "Status",
-      selector: (row) => row?.complaint_status?.status_name,
+      selector: (row) => <ReportStatusPill id={row?.complaint_status?.id} />,
       sortable: true,
     },
     {
@@ -42,12 +36,14 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
       selector: (row) => {
         return (
           <div className="d-flex gap-2">
-            <Button
-              type="text"
-              icon={<TbEye size={20} color="#7287A5" />}
-              shape="circle"
-              onClick={() => openDetailDrawerHandler(row)}
-            ></Button>
+            <Tooltip title="Lihat detail pengaduan">
+              <Button
+                type="text"
+                icon={<TbEye size={20} color="#7287A5" />}
+                shape="circle"
+                onClick={() => openDetailDrawerHandler(row)}
+              ></Button>
+            </Tooltip>
           </div>
         );
       },
