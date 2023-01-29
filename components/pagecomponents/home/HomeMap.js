@@ -29,6 +29,8 @@ export default function HomeMap({
   setRecenter,
   handleColor,
   reports,
+  setSelectedReport,
+  setIsReportDetailDrawerOpen,
   indexShownReportCategories,
   baseURL,
 }) {
@@ -232,6 +234,12 @@ export default function HomeMap({
                   })
                 }
                 position={[report?.latitude, report?.longitude]}
+                eventHandlers={{
+                  click: (e) => {
+                    setSelectedReport(report);
+                    setIsReportDetailDrawerOpen(true);
+                  },
+                }}
               >
                 <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
                   {capitalizeWords(report?.title)}

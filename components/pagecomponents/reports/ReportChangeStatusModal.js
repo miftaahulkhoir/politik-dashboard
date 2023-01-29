@@ -7,7 +7,7 @@ import ReportStatusPill from "./ReportStatusPill";
 import weekdayToYear from "../../../utils/helpers/date/weekdayToYear";
 import { updateReportStatus } from "../../../utils/services/reports";
 
-export default function ReportChangeStatusModal({ selectedReport, onClose, setReports }) {
+export default function ReportChangeStatusModal({ selectedReport, onClose, setReports, apiNotification }) {
   const [loading, setLoading] = useState(false);
 
   const okHandler = async (id, reportStatusID) => {
@@ -24,8 +24,17 @@ export default function ReportChangeStatusModal({ selectedReport, onClose, setRe
         return newReports;
       });
 
+      apiNotification.success({
+        message: "Sukses",
+        description: "Status pengaduan berhasil diubah.",
+      });
+
       onClose();
     } catch (error) {
+      apiNotification.error({
+        message: "Gagal",
+        description: "Terjadi kesalahan",
+      });
       console.error(error);
     } finally {
       setLoading(false);

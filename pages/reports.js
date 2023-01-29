@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import Head from "next/head";
 import { useEffect, useState } from "react";
 
@@ -6,6 +7,8 @@ import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetai
 import { getAllReports } from "../utils/services/reports";
 
 export default function Reports() {
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
+
   const [reports, setReports] = useState([]);
   const [selectedReport, setSelectedReport] = useState({});
 
@@ -24,6 +27,8 @@ export default function Reports() {
         <title>Pengaduan · Patrons</title>
       </Head>
 
+      {contextHolderNotification}
+
       <div className="col-12 pdv-3 mb-12">
         <h1>Pengaduan</h1>
       </div>
@@ -33,6 +38,7 @@ export default function Reports() {
         setOpen={setIsReportDetailDrawerOpen}
         selectedReport={selectedReport}
         setReports={setReports}
+        apiNotification={apiNotification}
       />
 
       <ReportDataTable

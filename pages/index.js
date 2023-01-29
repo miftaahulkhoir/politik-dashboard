@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import axios from "axios";
 import moment from "moment/moment";
 import dynamic from "next/dynamic";
@@ -12,7 +13,9 @@ import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import capitalizeWords from "../utils/helpers/capitalizeWords";
+import { getAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
 
@@ -23,6 +26,8 @@ const HomeMap = dynamic(() => import("../components/pagecomponents/home/HomeMap"
 const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
+
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("data");
   const [dataKoordinator, setKoordinator] = useState(koordinator);
@@ -92,9 +97,11 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
   // PENGADUAN
   const [reports, setReports] = useState([]);
+  const [selectedReport, setSelectedReport] = useState({});
+  const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
+
   useEffect(() => {
-    axios
-      .get(`/api/complaints`)
+    getAllReports()
       .then((res) => setReports(res?.data?.data === null ? [] : res?.data?.data))
       .catch((error) => {});
   }, []);
@@ -194,6 +201,17 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
       <Head>
         <title>Dashboard · Patrons</title>
       </Head>
+
+      {contextHolderNotification}
+
+      <ReportDetailDrawer
+        open={isReportDetailDrawerOpen}
+        setOpen={setIsReportDetailDrawerOpen}
+        selectedReport={selectedReport}
+        setReports={setReports}
+        apiNotification={apiNotification}
+      />
+
       {profile?.occupation?.level === 1 ? (
         <>
           <HomeNavbar />
@@ -407,6 +425,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 handleColor={handleColor}
                 reports={filteredReports}
                 indexShownReportCategories={indexShownReportCategories}
+                setSelectedReport={setSelectedReport}
+                setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
               />
             </div>
           )}
