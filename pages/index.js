@@ -1,3 +1,4 @@
+import { notification } from "antd";
 import axios from "axios";
 import moment from "moment/moment";
 import dynamic from "next/dynamic";
@@ -25,6 +26,8 @@ const HomeMap = dynamic(() => import("../components/pagecomponents/home/HomeMap"
 const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
+
   const [isMounted, setIsMounted] = useState(false);
   const [position, setPosition] = useState("data");
   const [dataKoordinator, setKoordinator] = useState(koordinator);
@@ -199,11 +202,14 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         <title>Dashboard · Patrons</title>
       </Head>
 
+      {contextHolderNotification}
+
       <ReportDetailDrawer
         open={isReportDetailDrawerOpen}
         setOpen={setIsReportDetailDrawerOpen}
         selectedReport={selectedReport}
         setReports={setReports}
+        apiNotification={apiNotification}
       />
 
       {profile?.occupation?.level === 1 ? (

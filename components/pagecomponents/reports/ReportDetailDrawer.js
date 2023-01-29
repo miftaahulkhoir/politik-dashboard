@@ -5,7 +5,7 @@ import { TbCalendar } from "react-icons/tb";
 import ReportChangeStatusModal from "./ReportChangeStatusModal";
 import ReportStatusPill from "./ReportStatusPill";
 
-export default function ReportDetailDrawer({ open = true, setOpen, selectedReport, setReports }) {
+export default function ReportDetailDrawer({ open = true, setOpen, selectedReport, setReports, apiNotification }) {
   const onClose = () => {
     setOpen(false);
   };
@@ -33,7 +33,12 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
         width: "100%",
       },
       content: (
-        <ReportChangeStatusModal selectedReport={report} onClose={() => modal.destroy()} setReports={setReports} />
+        <ReportChangeStatusModal
+          selectedReport={report}
+          onClose={() => modal.destroy()}
+          setReports={setReports}
+          apiNotification={apiNotification}
+        />
       ),
     });
   };
