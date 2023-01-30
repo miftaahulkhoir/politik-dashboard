@@ -1,14 +1,14 @@
 import { Button, Card, Modal, Switch, Tooltip } from "antd";
-import axios from "axios";
 import { TbDownload, TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import downloadFileFromURL from "../../../utils/services/downloadFileFromURL";
+import { deleteSurvey, updateSurveyStatus } from "../../../utils/services/surveys";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
 export default function SurveyDataTable({
   filteredSurveys,
-  surveysList,
-  setSurveysList,
+  surveys,
+  setSurveys,
   apiNotification,
   setSelectedSurvey,
   setIsResponseDrawerOpen,
@@ -131,11 +131,11 @@ export default function SurveyDataTable({
                     okType: "danger",
                     cancelText: "Tidak",
                     onOk: async function () {
-                      const res = await axios.delete(`/api/survey/${row?.id}`);
+                      const res = await deleteSurvey(row?.id);
                       if (!res?.data?.status) throw new Error("unknown error");
 
-                      const newSurveys = surveysList.filter((s) => s.id !== row.id);
-                      setSurveysList([...newSurveys]);
+                      const newSurveys = surveys.filter((s) => s.id !== row.id);
+                      setSurveys([...newSurveys]);
 
                       apiNotification.success({
                         message: "Berhasil",
@@ -157,9 +157,9 @@ export default function SurveyDataTable({
     },
   ];
 
-  const changeStatusHandler = async (id, pageProps) => {
+  const changeStatusHandler = async (id) => {
     try {
-      const res = await axios.put(`${pageProps.baseURL}api/survey/update-status/${id}`);
+      const res = await updateSurveyStatus(id);
       if (!res?.data?.status) throw new Error("unknown error");
     } catch (error) {
       console.error(error);

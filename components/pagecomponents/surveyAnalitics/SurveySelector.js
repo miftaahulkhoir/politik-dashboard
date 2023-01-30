@@ -1,7 +1,6 @@
 import { Divider, Space } from "antd";
 
 export default function SurveySelector({ surveys, selectedSurvey, setSelectedSurvey }) {
-  console.log(surveys);
   return (
     <Space
       direction="vertical"
