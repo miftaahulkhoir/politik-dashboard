@@ -1,5 +1,4 @@
 import { Space, notification } from "antd";
-import axios from "axios";
 import debounce from "lodash.debounce";
 import Head from "next/head";
 import { parseCookies } from "nookies";
@@ -9,36 +8,24 @@ import UserDataTable from "../components/pagecomponents/users/UserDataTable";
 import UserFormDrawer from "../components/pagecomponents/users/UserFormDrawer";
 import UserRoleSelect from "../components/pagecomponents/users/UserRoleSelect";
 import UserSearchBar from "../components/pagecomponents/users/UserSearchBar";
+import { useFindProfile } from "../utils/services/profiles";
+import { useFindAllUsers } from "../utils/services/users";
 
 export default function Users(pageProps) {
-  const [usersList, setUsersList] = useState([]);
+  const [users, setUsers] = useState([]);
+  const { users: fetchUsers } = useFindAllUsers();
+  useEffect(() => {
+    setUsers(fetchUsers);
+  }, [fetchUsers]);
 
   const [isDrawerActive, setIsDrawerActive] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
 
-  const [currentUser, setCurrentUser] = useState({});
+  const { profile: currentUser } = useFindProfile();
   const [activeRoleLevel, setActiveRoleLevel] = useState(1);
 
   const [apiNotification, contextHolderNotification] = notification.useNotification();
-
-  useEffect(() => {
-    const users = [];
-    pageProps.users.forEach((element, index) => {
-      users.push({ no: index + 1, ...element });
-    });
-    console.log(users);
-    setUsersList([...users]);
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`${pageProps.baseURL}api/profile`)
-      .then((res) => {
-        setCurrentUser(res.data.data);
-      })
-      .catch((err) => {});
-  }, []);
 
   // filters
   const [filterSearch, setFilterSearch] = useState("");
@@ -47,8 +34,8 @@ export default function Users(pageProps) {
   const filteredUsers = useMemo(() => {
     const filteredSearch =
       filterSearch === ""
-        ? usersList
-        : usersList.filter((user) => {
+        ? users
+        : users.filter((user) => {
             return user.name.toLowerCase().includes(filterSearch.toLowerCase());
           });
 
@@ -67,7 +54,7 @@ export default function Users(pageProps) {
           });
 
     return filteredDate;
-  }, [usersList, filterSearch, filterDate]);
+  }, [users, filterSearch, filterDate]);
 
   const filterSearchHandler = useCallback(
     debounce((e) => setFilterSearch(e.target.value), 300),
@@ -98,7 +85,7 @@ export default function Users(pageProps) {
         isEdit={isFormEdit}
         setIsEdit={setIsFormEdit}
         selectedUser={selectedUser}
-        setUsersList={setUsersList}
+        setUsers={setUsers}
         currentUser={currentUser}
       />
 
@@ -126,8 +113,8 @@ export default function Users(pageProps) {
           setIsFormEdit={setIsFormEdit}
           setIsDrawerActive={setIsDrawerActive}
           apiNotification={apiNotification}
-          usersList={usersList}
-          setUsersList={setUsersList}
+          users={users}
+          setUsers={setUsers}
         />
       </Space>
     </>
@@ -146,16 +133,5 @@ export async function getServerSideProps(ctx) {
     baseURL = process.env.APP_BASEURL_LOCAL;
   }
 
-  let users = [];
-  await axios
-    .get(`${baseURL}api/users`, {
-      withCredentials: true,
-      headers: { Cookie: `token=${token}` },
-    })
-    .then((res) => {
-      users = res.data.data;
-    })
-    .catch((err) => {});
-
-  return { props: { users } };
+  return { props: { baseURL: baseURL } };
 }
