@@ -4,22 +4,21 @@ import { useEffect, useState } from "react";
 
 import ReportDataTable from "../components/pagecomponents/reports/ReportDataTable";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
-import { getAllReports } from "../utils/services/reports";
+import { useFindAllReports } from "../utils/services/reports";
 
 export default function Reports() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
+  const { reports: fetchReports } = useFindAllReports();
   const [reports, setReports] = useState([]);
+  useEffect(() => {
+    setReports(fetchReports);
+  }, [fetchReports]);
+
   const [selectedReport, setSelectedReport] = useState({});
 
   // drawer
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
-
-  useEffect(() => {
-    getAllReports()
-      .then((res) => setReports(res?.data?.data || []))
-      .catch((err) => {});
-  }, []);
 
   return (
     <>
