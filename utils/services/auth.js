@@ -7,7 +7,7 @@ export const loginUser = async (email, password, remember) => {
     email: email,
     password: password,
   });
-
+  console.clear();
   return res;
 };
 
@@ -32,4 +32,5 @@ export const logoutUser = async () => {
   } catch (error) {
     console.error(error);
   }
+  console.clear();
 };
