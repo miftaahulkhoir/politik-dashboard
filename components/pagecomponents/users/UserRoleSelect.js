@@ -21,11 +21,11 @@ export default function UserRoleSelect({ currentUser, activeLevel, setActiveLeve
 
   useEffect(() => {
     setActiveLevel(currentUser?.occupation?.level + 1);
-  }, [currentUser]);
+  }, [currentUser, setActiveLevel]);
 
   const filteredOccupations = useMemo(() => {
     return occupations.filter((o) => o.level > currentUser.occupation?.level);
-  }, [occupations]);
+  }, [currentUser.occupation?.level, occupations]);
 
   return (
     <Space size="middle">

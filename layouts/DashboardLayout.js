@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
 import {
+  TbAd2,
   TbBrandGoogleAnalytics,
   TbBrandWhatsapp,
   TbDeviceAnalytics,
@@ -7,12 +8,11 @@ import {
   TbListCheck,
   TbMessageReport,
   TbUser,
-  TbAd2,
 } from "react-icons/tb";
 
 import ProfileDropdown from "../components/pagecomponents/dashboardLayout/ProfileDropdown";
 
-export default function DashboardLayout({ profile,baseURL, children }) {
+export default function DashboardLayout({ profile, baseURL, children }) {
   const router = useRouter();
   const { asPath } = router;
 
@@ -31,18 +31,10 @@ export default function DashboardLayout({ profile,baseURL, children }) {
                 <div className="header-left">
                   <div className="logo-gridwrap">
                     <a className="codexbrand-logo">
-                      <img
-                        className="img-fluid"
-                        src={`${baseURL}images/logo/logo.png`}
-                        alt="theeme-logo"
-                      />
+                      <img className="img-fluid" src={`${baseURL}images/logo/logo.png`} alt="theeme-logo" />
                     </a>
                     <a className="codexdark-logo">
-                      <img
-                        className="img-fluid"
-                        src={`${baseURL}images/logo/dark-logo.png`}
-                        alt="theeme-logo"
-                      />
+                      <img className="img-fluid" src={`${baseURL}images/logo/dark-logo.png`} alt="theeme-logo" />
                     </a>
                   </div>
                   <div className="search-bar p-0">
@@ -58,11 +50,7 @@ export default function DashboardLayout({ profile,baseURL, children }) {
       <div className="codex-sidebar">
         <div className="logo-gridwrap">
           <a className="codexbrand-logo">
-            <img
-              style={{ width: "40px" }}
-              src={`${baseURL}images/logo/icon-logo.png`}
-              alt="theeme-logo"
-            />
+            <img style={{ width: "40px" }} src={`${baseURL}images/logo/icon-logo.png`} alt="theeme-logo" />
             <img className="img-fluid" src={`${baseURL}images/logo/logo.png`} alt="theeme-logo" />
           </a>
           <a className="sidebar-action">
@@ -197,5 +185,5 @@ export default function DashboardLayout({ profile,baseURL, children }) {
         <p className="p-0 m-0">Copyright 2023 © Patrons Analitik. All rights reserved.</p>
       </footer>
     </>
-  );    
+  );
 }

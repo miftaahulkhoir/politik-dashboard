@@ -99,6 +99,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const { reports: fetchReports } = useFindAllReports();
   const [reports, setReports] = useState([]);
   useEffect(() => {
+    if (!fetchReports?.length) return;
     setReports(fetchReports);
   }, [fetchReports]);
 

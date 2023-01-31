@@ -13,6 +13,7 @@ export default function Surveys() {
   const { surveys: fetchSurveys } = useFindAllSurveys();
   const [surveys, setSurveys] = useState([]);
   useEffect(() => {
+    if (!fetchSurveys?.length) return;
     setSurveys(fetchSurveys);
   }, [fetchSurveys]);
 

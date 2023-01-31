@@ -3,12 +3,8 @@ import { useMemo } from "react";
 import { TbSearch } from "react-icons/tb";
 
 import capitalizeWords from "../../../utils/helpers/capitalizeWords";
-import { useFindAllReportCategories } from "../../../utils/services/reports";
 
-export default function ReportSearchBar({ filterSearchHandler, filterCategoryHandler, filterDateHandler }) {
-  const { categories } = useFindAllReportCategories();
-  console.log("categories", categories);
-
+export default function ReportSearchBar({ filterSearchHandler, filterCategoryHandler, filterDateHandler, categories }) {
   const categoryOptions = useMemo(() => {
     const newCategories = categories.map((category) => ({
       label: capitalizeWords(category.category_name),

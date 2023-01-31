@@ -1,8 +1,7 @@
 import { Space, notification } from "antd";
 import debounce from "lodash.debounce";
 import Head from "next/head";
-import { parseCookies } from "nookies";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import UserDataTable from "../components/pagecomponents/users/UserDataTable";
 import UserFormDrawer from "../components/pagecomponents/users/UserFormDrawer";
@@ -11,10 +10,11 @@ import UserSearchBar from "../components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "../utils/services/profiles";
 import { useFindAllUsers } from "../utils/services/users";
 
-export default function Users(pageProps) {
+export default function Users() {
   const [users, setUsers] = useState([]);
   const { users: fetchUsers } = useFindAllUsers();
   useEffect(() => {
+    if (!fetchUsers?.length) return;
     setUsers(fetchUsers);
   }, [fetchUsers]);
 
@@ -56,17 +56,11 @@ export default function Users(pageProps) {
     return filteredDate;
   }, [users, filterSearch, filterDate]);
 
-  const filterSearchHandler = useCallback(
-    debounce((e) => setFilterSearch(e.target.value), 300),
-    [],
-  );
+  const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
 
-  const filterDateHandler = useCallback(
-    debounce((_, valueString) => {
-      setFilterDate(valueString);
-    }, 300),
-    [],
-  );
+  const filterDateHandler = debounce((_, valueString) => {
+    setFilterDate(valueString);
+  }, 300);
 
   const filteredRoleUsers = useMemo(() => {
     return filteredUsers
@@ -122,16 +116,5 @@ export default function Users(pageProps) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { token } = parseCookies(ctx);
-  const { req } = ctx;
-  let baseURL = "";
-  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
-    baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
-    baseURL = process.env.APP_BASEURL_PATRON;
-  } else {
-    baseURL = process.env.APP_BASEURL_LOCAL;
-  }
-
-  return { props: { baseURL: baseURL } };
+  return { props: {} };
 }

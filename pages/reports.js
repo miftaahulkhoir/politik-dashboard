@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import ReportDataTable from "../components/pagecomponents/reports/ReportDataTable";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import ReportSearchBar from "../components/pagecomponents/reports/ReportSearchBar";
-import { useFindAllReports } from "../utils/services/reports";
+import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
 
 export default function Reports() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -14,11 +14,13 @@ export default function Reports() {
   const { reports: fetchReports } = useFindAllReports();
   const [reports, setReports] = useState([]);
   useEffect(() => {
-    console.log("reports", fetchReports);
+    if (!fetchReports?.length) return;
     setReports(fetchReports);
   }, [fetchReports]);
 
   const [selectedReport, setSelectedReport] = useState({});
+
+  const { categories } = useFindAllReportCategories();
 
   // drawer
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
@@ -96,6 +98,7 @@ export default function Reports() {
           filterSearchHandler={filterSearchHandler}
           filterCategoryHandler={filterCategoryHandler}
           filterDateHandler={filterDateHandler}
+          categories={categories}
         />
 
         <ReportDataTable
