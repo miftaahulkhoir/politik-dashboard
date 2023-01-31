@@ -46,7 +46,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
   useEffect(() => {
     setIsMounted(true);
-  }, [isMounted]);
+  }, []);
 
   useEffect(() => {
     centrifuge.connect();
