@@ -24,13 +24,11 @@ export default function Login() {
         } else {
           router.push("/");
         }
-        console.clear();
       })
       .catch((err) => {
         console.error(err);
         setErrorMsg("Cek kembali email dan password Anda");
         setShowErrorMsg(true);
-        console.clear();
       });
   };
 
