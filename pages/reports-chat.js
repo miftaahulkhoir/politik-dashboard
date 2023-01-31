@@ -21,7 +21,7 @@ export default function ReportsChat() {
       .get("/api/complaints")
       .then((res) => setReports(res?.data?.data || []))
       .catch((err) => {});
-  }, []);
+  }, [reports]);
 
   return (
     <>
