@@ -18,7 +18,7 @@ export const useFindOneSurvey = (id) => {
 };
 
 export const createSurvey = async (survey) => {
-  return await axios.post("/api/survey/create", survey);
+  return await axios.post("/api/survey", survey);
 };
 
 export const updateSurvey = async (id, survey) => {
