@@ -3,6 +3,7 @@ import { TbEye } from "react-icons/tb";
 
 import ReportStatusPill from "./ReportStatusPill";
 
+import capitalizeWords from "../../../utils/helpers/capitalizeWords";
 import dayMonthYear from "../../../utils/helpers/date/dayMonthYear";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
@@ -14,22 +15,31 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
 
   const columns = [
     {
-      name: "Kategori",
-      selector: (row) => row?.category?.category_name,
-    },
-    {
       name: "Judul",
       selector: (row) => row?.title,
+    },
+    {
+      name: "Kategori",
+      selector: (row) => capitalizeWords(row?.category?.category_name),
     },
     {
       name: "Waktu",
       selector: (row) => dayMonthYear(row?.created_at),
       sortable: true,
+      sortFunction: (a, b) => {
+        return new Date(a?.created_at).getTime() - new Date(b?.created_at).getTime();
+      },
+      width: "120px",
+      center: true,
     },
     {
       name: "Status",
       selector: (row) => <ReportStatusPill id={row?.complaint_status?.id} />,
       sortable: true,
+      sortFunction: (a, b) => {
+        return Number(a?.complaint_status?.id || "100") - Number(b?.complaint_status?.id || "100");
+      },
+      center: true,
     },
     {
       name: "Aksi",
@@ -47,7 +57,7 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
           </div>
         );
       },
-      // width: "130px",
+      width: "80px",
       center: true,
     },
   ];

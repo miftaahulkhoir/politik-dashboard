@@ -15,7 +15,7 @@ import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import capitalizeWords from "../utils/helpers/capitalizeWords";
-import { getAllReports } from "../utils/services/reports";
+import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
 
@@ -96,29 +96,21 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   }, [showRelawan]);
 
   // PENGADUAN
+  const { reports: fetchReports } = useFindAllReports();
   const [reports, setReports] = useState([]);
+  useEffect(() => {
+    setReports(fetchReports);
+  }, [fetchReports]);
+
   const [selectedReport, setSelectedReport] = useState({});
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
 
-  useEffect(() => {
-    getAllReports()
-      .then((res) => setReports(res?.data?.data === null ? [] : res?.data?.data))
-      .catch((error) => {});
-  }, []);
-
-  const [reportCategories, setReportCategories] = useState([]); // Array<{id: string, status_name: string}>
+  const { categories: reportCategories } = useFindAllReportCategories();
   const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
 
   const filteredReports = useMemo(() => {
-    return reports?.filter((report) => indexShownReportCategories.includes(report?.category.id)) || [];
+    return reports?.filter((report) => indexShownReportCategories.includes(report?.category?.id)) || [];
   }, [reports, indexShownReportCategories]);
-
-  useEffect(() => {
-    axios
-      .get(`/api/complaints/category`)
-      .then((res) => setReportCategories(res?.data?.data === null ? [] : res?.data?.data))
-      .catch((error) => {});
-  }, []);
 
   const getReportColorByID = (id) => {
     if (id == 1) return "#e74c3c";

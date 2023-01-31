@@ -1,10 +1,10 @@
 import { Button, Col, Drawer, Input, Row, Space, Switch, Typography } from "antd";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 
 import SurveyFormCard from "./SurveyFormCard";
 
 import defaultSurveyQuestion from "../../../utils/constants/defaultSurveyQuestion";
+import { createSurvey, updateSurvey, useFindOneSurvey } from "../../../utils/services/surveys";
 
 export default function SurveyFormDrawer({
   open,
@@ -13,24 +13,20 @@ export default function SurveyFormDrawer({
   setIsEdit,
   selectedSurveyId,
   apiNotification,
-  setSurveysList,
+  setSurveys,
 }) {
   const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);
 
+  const { survey } = useFindOneSurvey(selectedSurveyId);
   useEffect(() => {
     if (!isEdit) return;
-    (async function () {
-      try {
-        const res = await axios.get(`/api/survey/${selectedSurveyId}`);
-        const data = res?.data?.data;
-        setTitle(data?.survey_name);
-        setIsActive(data?.status ? 1 : 0);
-        setQuestions(data?.questions);
-      } catch (error) {}
-    })();
-  }, [isEdit, selectedSurveyId]);
+    if (!survey) return;
+    setTitle(survey?.survey_name);
+    setIsActive(survey?.status ? 1 : 0);
+    setQuestions(survey?.questions);
+  }, [isEdit, survey]);
 
   const clearForm = () => {
     setTitle("");
@@ -48,8 +44,8 @@ export default function SurveyFormDrawer({
     clearForm();
   };
 
-  const getFormattedSurvey = () => {
-    const newQuestions = questions.map((question, i) => {
+  const getFormattedSurvey = useCallback(() => {
+    const newQuestions = questions?.map((question, i) => {
       const newQuestion = question;
       newQuestion.question_number = i + 1;
       newQuestion.section = "section1";
@@ -69,15 +65,15 @@ export default function SurveyFormDrawer({
     };
 
     return survey;
-  };
+  }, [isActive, questions, title]);
 
   const submitHandler = async () => {
     try {
       const survey = getFormattedSurvey();
       if (isEdit) {
-        await updateSurvey(survey);
+        await updateSurveyHandler(survey);
       } else {
-        await createSurvey(survey);
+        await createSurveyHandler(survey);
       }
 
       onClose();
@@ -86,15 +82,12 @@ export default function SurveyFormDrawer({
     }
   };
 
-  const createSurvey = async (survey) => {
+  const createSurveyHandler = async (survey) => {
     try {
-      const res = await axios.post("/api/survey", survey);
+      const res = await createSurvey(survey);
       const newSurvey = res.data.data;
 
-      setSurveysList((prevSurveys) => {
-        newSurvey.no = prevSurveys.length + 1;
-        return [...prevSurveys, newSurvey];
-      });
+      setSurveys((prevSurveys) => [...prevSurveys, newSurvey]);
 
       apiNotification.success({
         message: "Berhasil",
@@ -109,12 +102,12 @@ export default function SurveyFormDrawer({
     }
   };
 
-  const updateSurvey = async (survey) => {
+  const updateSurveyHandler = async (survey) => {
     try {
-      const res = await axios.put(`/api/survey/${selectedSurveyId}`, survey);
+      const res = await updateSurvey(selectedSurveyId, survey);
       const newSurvey = res.data.data;
 
-      // TODO: update the state
+      setSurveys((prevSurveys) => prevSurveys.map((survey) => (survey?.id === newSurvey?.id ? newSurvey : survey)));
 
       apiNotification.success({
         message: "Berhasil",
@@ -155,7 +148,7 @@ export default function SurveyFormDrawer({
           </Space>
         </Col>
       </Row>
-      {questions.map((question, index) => (
+      {questions?.map((question, index) => (
         <SurveyFormCard key={index} index={index} questions={questions} setQuestions={setQuestions} />
       ))}
       <Row justify="space-between" style={{ margin: "24px" }}>

@@ -1,7 +1,7 @@
 import { Avatar, Dropdown } from "antd";
 import { TbLogout, TbUser } from "react-icons/tb";
 
-import { logoutUser } from "../../../utils/auth";
+import { logoutUser } from "../../../utils/services/auth";
 
 export default function ProfileDropdown() {
   const items = [

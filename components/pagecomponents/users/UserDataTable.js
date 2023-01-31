@@ -1,8 +1,8 @@
 import { Button, Card, Col, Modal, Row } from "antd";
-import axios from "axios";
 import { useCallback, useMemo } from "react";
 import { TbPencil, TbTrashX } from "react-icons/tb";
 
+import { deleteUser } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
 export default function UserDataTable({
@@ -12,8 +12,8 @@ export default function UserDataTable({
   setIsFormEdit,
   setIsDrawerActive,
   apiNotification,
-  usersList,
-  setUsersList,
+  users,
+  setUsers,
 }) {
   const deleteUserHandler = useCallback(
     (row) => {
@@ -24,11 +24,10 @@ export default function UserDataTable({
         okType: "danger",
         cancelText: "Tidak",
         onOk: function () {
-          axios
-            .delete(`/api/users/${row?.id}`)
+          deleteUser(row?.id)
             .then(() => {
-              const newUsers = usersList.filter((s) => s.id !== row?.id);
-              setUsersList([...newUsers]);
+              const newUsers = users.filter((s) => s.id !== row?.id);
+              setUsers([...newUsers]);
 
               apiNotification.success({
                 message: "Sukses",
@@ -45,7 +44,7 @@ export default function UserDataTable({
         },
       });
     },
-    [apiNotification, setUsersList, usersList],
+    [apiNotification, setUsers, users],
   );
 
   const updateUserHandler = useCallback(

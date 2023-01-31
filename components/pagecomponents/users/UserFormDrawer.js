@@ -2,6 +2,8 @@ import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
+import { createUser, updateUser, useFindOneUser } from "../../../utils/services/users";
+
 export default function UserFormDrawer({
   open,
   setOpen,
@@ -9,7 +11,7 @@ export default function UserFormDrawer({
   setIsEdit,
   selectedUser,
   apiNotification,
-  setUsersList,
+  setUsers,
   currentUser,
 }) {
   // input form states
@@ -70,20 +72,20 @@ export default function UserFormDrawer({
         // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
       });
     }
-
-    axios.get(`/api/users/${selectedUser.id}`).then((res) => {
-      const data = res.data.data;
-      setOccupation(data.occupation_id);
-      setName(data.name);
-      setNik(data.nik);
-      setEmail(data.email);
-      setWa(data.phone);
-      setGender(data.gender);
-      setDistric(data.distric_id);
-      setLatitude(data.latitude);
-      setLongitude(data.longitude);
-    });
   }, [isEdit, selectedUser.distric_id, selectedUser.id]);
+
+  const { user: selectedUserComplete } = useFindOneUser(selectedUser?.id);
+  useEffect(() => {
+    setOccupation(selectedUserComplete.occupation_id);
+    setName(selectedUserComplete.name);
+    setNik(selectedUserComplete.nik);
+    setEmail(selectedUserComplete.email);
+    setWa(selectedUserComplete.phone);
+    setGender(selectedUserComplete.gender);
+    setDistric(selectedUserComplete.distric_id);
+    setLatitude(selectedUserComplete.latitude);
+    setLongitude(selectedUserComplete.longitude);
+  }, [selectedUserComplete]);
 
   const clearForm = () => {
     setOccupation("");
@@ -106,16 +108,15 @@ export default function UserFormDrawer({
   };
 
   // handler
-  const updateUser = (data) => {
-    axios
-      .put(`/api/users/${selectedUser.id}`, data)
+  const updateUserHandler = (data) => {
+    updateUser(selectedUser?.id, data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",
           description: "Perubahan user telah disimpan",
         });
 
-        setUsersList((prevUsers) => [
+        setUsers((prevUsers) => [
           ...prevUsers.map((u) => {
             if (u.id !== selectedUser.id) return u;
             // data.id = selectedUser.id;
@@ -135,17 +136,15 @@ export default function UserFormDrawer({
       .catch((err) => {});
   };
 
-  const addUser = (data) => {
-    console.log(data);
-    axios
-      .post(`/api/users/create`, data)
+  const addUserHandler = (data) => {
+    createUser(data)
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",
           description: "User baru ditambahkan",
         });
 
-        setUsersList((prevUsers) => {
+        setUsers((prevUsers) => {
           const data = res.data.data;
           data.no = prevUsers.length + 1;
           return [...prevUsers, data];
@@ -171,9 +170,9 @@ export default function UserFormDrawer({
       longitude: longitude,
     };
     if (!isEdit) {
-      addUser(data);
+      addUserHandler(data);
     } else {
-      updateUser(data);
+      updateUserHandler(data);
     }
   };
 

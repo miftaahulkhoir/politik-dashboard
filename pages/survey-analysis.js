@@ -1,39 +1,18 @@
 import { Space } from "antd";
-import axios from "axios";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { parseCookies } from "nookies";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import SurveyDropdownSelector from "../components/pagecomponents/surveyAnalitics/SurveyDropdownSelector";
 import SurveyResultHeader from "../components/pagecomponents/surveyAnalitics/SurveyResultHeader";
+import { useFindAllSurveys, useFindOneSurveyResult } from "../utils/services/surveys";
 
 const SurveyCharts = dynamic(() => import("../components/pagecomponents/surveyAnalitics/charts/SurveyCharts"));
 
-export default function SurveyResults({ surveys }) {
+export default function SurveyResults() {
   const [selectedSurveyID, setSelectedSurveyID] = useState();
-  const [survey, setSurvey] = useState();
-
-  useEffect(() => {
-    if (!selectedSurveyID) return;
-    axios
-      .get(`/api/survey-result/${selectedSurveyID}`)
-      .then((res) => setSurvey(res.data.data))
-      .catch((err) => {});
-  }, [selectedSurveyID]);
-
-  // const tabItems = [
-  //   {
-  //     key: '1',
-  //     label: `Rangkuman`,
-  //     children: <SurveyCharts survey={survey} />,
-  //   },
-  //   {
-  //     key: '2',
-  //     label: `Jawaban responden`,
-  //     children: `Under development`,
-  //   },
-  // ];
+  const { surveys } = useFindAllSurveys();
+  const { survey } = useFindOneSurveyResult(selectedSurveyID);
 
   return (
     <>
@@ -49,7 +28,7 @@ export default function SurveyResults({ surveys }) {
         {/* row select survey */}
         <SurveyDropdownSelector surveys={surveys} setSelectedSurveyID={setSelectedSurveyID} />
 
-        {survey ? (
+        {survey?.id ? (
           <>
             <SurveyResultHeader survey={survey} />
 
@@ -76,27 +55,5 @@ export default function SurveyResults({ surveys }) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { token } = parseCookies(ctx);
-  const { req } = ctx;
-  let baseURL = "";
-  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
-    baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
-    baseURL = process.env.APP_BASEURL_PATRON;
-  } else {
-    baseURL = process.env.APP_BASEURL_LOCAL;
-  }
-
-  let surveys = [];
-  await axios
-    .get(`${baseURL}api/survey`, {
-      withCredentials: true,
-      headers: { Cookie: `token=${token}` },
-    })
-    .then((res) => {
-      surveys = res.data.data || [];
-    })
-    .catch((err) => {});
-
-  return { props: { surveys } };
+  return { props: {} };
 }
