@@ -1,9 +1,11 @@
-import { notification } from "antd";
+import { Space, notification } from "antd";
+import debounce from "lodash.debounce";
 import Head from "next/head";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import ReportDataTable from "../components/pagecomponents/reports/ReportDataTable";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
+import ReportSearchBar from "../components/pagecomponents/reports/ReportSearchBar";
 import { useFindAllReports } from "../utils/services/reports";
 
 export default function Reports() {
@@ -12,6 +14,7 @@ export default function Reports() {
   const { reports: fetchReports } = useFindAllReports();
   const [reports, setReports] = useState([]);
   useEffect(() => {
+    console.log("reports", fetchReports);
     setReports(fetchReports);
   }, [fetchReports]);
 
@@ -19,6 +22,54 @@ export default function Reports() {
 
   // drawer
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
+
+  // filter
+  const [filterSearch, setFilterSearch] = useState("");
+  const [filterCategory, setFilterCategory] = useState("");
+  const [filterDate, setFilterDate] = useState("");
+
+  const filteredReports = useMemo(() => {
+    const filteredSearch =
+      filterSearch === ""
+        ? reports
+        : reports.filter((report) => {
+            return report.title.toLowerCase().includes(filterSearch.toLowerCase());
+          });
+
+    const filteredCategory =
+      filterCategory === ""
+        ? filteredSearch
+        : filteredSearch.filter((report) => report?.category?.id == filterCategory);
+
+    const dateInput = new Date(filterDate);
+    const filteredDate =
+      filterDate === ""
+        ? filteredCategory
+        : filteredCategory.filter((report) => {
+            const date = new Date(report.created_at);
+
+            return (
+              date.getFullYear() === dateInput.getFullYear() &&
+              date.getMonth() === dateInput.getMonth() &&
+              date.getDate() === dateInput.getDate()
+            );
+          });
+
+    const formatted = filteredDate.map((report, index) => {
+      report.no = index + 1;
+      return report;
+    });
+
+    return formatted;
+  }, [filterSearch, reports, filterCategory, filterDate]);
+
+  const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
+
+  const filterCategoryHandler = debounce((value) => setFilterCategory(value), 300);
+
+  const filterDateHandler = debounce((_, valueString) => {
+    setFilterDate(valueString);
+  }, 300);
 
   return (
     <>
@@ -40,11 +91,19 @@ export default function Reports() {
         apiNotification={apiNotification}
       />
 
-      <ReportDataTable
-        data={reports}
-        setSelectedReport={setSelectedReport}
-        setIsDrawerOpen={setIsReportDetailDrawerOpen}
-      />
+      <Space direction="vertical" size="middle">
+        <ReportSearchBar
+          filterSearchHandler={filterSearchHandler}
+          filterCategoryHandler={filterCategoryHandler}
+          filterDateHandler={filterDateHandler}
+        />
+
+        <ReportDataTable
+          data={filteredReports}
+          setSelectedReport={setSelectedReport}
+          setIsDrawerOpen={setIsReportDetailDrawerOpen}
+        />
+      </Space>
     </>
   );
 }

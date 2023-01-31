@@ -3,6 +3,7 @@ import { TbEye } from "react-icons/tb";
 
 import ReportStatusPill from "./ReportStatusPill";
 
+import capitalizeWords from "../../../utils/helpers/capitalizeWords";
 import dayMonthYear from "../../../utils/helpers/date/dayMonthYear";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
@@ -14,12 +15,12 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
 
   const columns = [
     {
-      name: "Kategori",
-      selector: (row) => row?.category?.category_name,
-    },
-    {
       name: "Judul",
       selector: (row) => row?.title,
+    },
+    {
+      name: "Kategori",
+      selector: (row) => capitalizeWords(row?.category?.category_name),
     },
     {
       name: "Waktu",
