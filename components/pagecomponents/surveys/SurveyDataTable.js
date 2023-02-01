@@ -62,6 +62,7 @@ export default function SurveyDataTable({
       width: "100px",
       center: true,
       sortable: true,
+      sortFunction: (a, b) => Number(a?.status) - Number(b?.status),
     },
     {
       name: "Aksi",
