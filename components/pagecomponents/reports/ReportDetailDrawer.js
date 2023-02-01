@@ -1,6 +1,6 @@
 import { Button, Col, Drawer, Modal, Row, Space } from "antd";
 import { useMemo } from "react";
-import { TbCalendar } from "react-icons/tb";
+import { TbCalendar, TbMapPin } from "react-icons/tb";
 
 import ReportChangeStatusModal from "./ReportChangeStatusModal";
 import ReportStatusPill from "./ReportStatusPill";
@@ -72,13 +72,18 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
 
         <Section title="Detail pengaduan">
           <Space direction="vertical" style={{ width: "100%", color: "#7287A5" }} size={12}>
-            <img src={selectedReport?.link_image} alt="gambar pengaduan" style={{ width: "100%" }} />
-            {/* <Row gutter={8} align="middle">
+            {selectedReport?.link_image && (
+              <img src={selectedReport?.link_image} alt="Foto tidak tersedia" style={{ width: "100%" }} />
+            )}
+            <Row gutter={8} align="middle">
               <Col>
                 <TbMapPin size={24} />
               </Col>
-              <Col flex={1}>{selectedReport?.address || "Tidak mengirimkan lokasi"}</Col>
-            </Row> */}
+              <Col flex={1}>
+                Latitude: {Number(selectedReport?.latitude)?.toFixed(5)} — Longitude:{" "}
+                {Number(selectedReport?.longitude)?.toFixed(5)}
+              </Col>
+            </Row>
             <Row gutter={8} align="middle">
               <Col>
                 <TbCalendar size={24} />
