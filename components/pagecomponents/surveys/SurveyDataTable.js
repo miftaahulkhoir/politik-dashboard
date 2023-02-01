@@ -67,93 +67,97 @@ export default function SurveyDataTable({
       name: "Aksi",
       width: "200px",
       center: true,
-      selector: (row) => (
-        <div className="d-flex gap-2">
-          <Tooltip title="Unduh excel">
-            <Button
-              type="text"
-              icon={<TbDownload size={20} color="#29a229" />}
-              shape="circle"
-              onClick={() => {
-                downloadFileFromURL(`/api/exports/${row.id}`);
-              }}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Lihat responden">
-            <Button
-              type="text"
-              icon={<TbEye size={20} color="#016CEE" />}
-              shape="circle"
-              onClick={() => {
-                setIsResponseDrawerOpen(true);
-                setSelectedSurvey(row);
-              }}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Ubah survei">
-            <Button
-              type="text"
-              icon={<TbPencil size={20} color="#7287A5" />}
-              shape="circle"
-              onClick={() => {
-                if (row?.total_respondent > 0) {
-                  apiNotification.error({
-                    message: "Gagal",
-                    description: "Tidak bisa mengubah survei karena telah memiliki responden",
-                  });
-                  return;
-                }
-                setIsFormEdit(true);
-                setSelectedSurveyId(row.id);
-                setIsFormOpen(true);
-              }}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Hapus survei">
-            <Button
-              type="text"
-              icon={<TbTrashX size={20} color="#B12E2E" />}
-              shape="circle"
-              onClick={async () => {
-                try {
+      selector: (row) => {
+        const canDownload = row?.total_respondent > 0;
+        return (
+          <div className="d-flex gap-2">
+            <Tooltip title="Unduh excel">
+              <Button
+                type="text"
+                disabled={!canDownload}
+                icon={<TbDownload size={20} color={canDownload ? "#29a229" : "#cccccc"} />}
+                shape="circle"
+                onClick={() => {
+                  downloadFileFromURL(`/api/exports/${row.id}`);
+                }}
+              ></Button>
+            </Tooltip>
+            <Tooltip title="Lihat responden">
+              <Button
+                type="text"
+                icon={<TbEye size={20} color="#016CEE" />}
+                shape="circle"
+                onClick={() => {
+                  setIsResponseDrawerOpen(true);
+                  setSelectedSurvey(row);
+                }}
+              ></Button>
+            </Tooltip>
+            <Tooltip title="Ubah survei">
+              <Button
+                type="text"
+                icon={<TbPencil size={20} color="#7287A5" />}
+                shape="circle"
+                onClick={() => {
                   if (row?.total_respondent > 0) {
                     apiNotification.error({
                       message: "Gagal",
-                      description: "Tidak bisa menghapus survei karena telah memiliki responden",
+                      description: "Tidak bisa mengubah survei karena telah memiliki responden",
                     });
                     return;
                   }
-
-                  Modal.confirm({
-                    title: "Peringatan",
-                    content: `Apakah kamu yakin ingin menghapus ${row.survey_name}`,
-                    okText: "Ya",
-                    okType: "danger",
-                    cancelText: "Tidak",
-                    onOk: async function () {
-                      const res = await deleteSurvey(row?.id);
-                      if (!res?.data?.status) throw new Error("unknown error");
-
-                      const newSurveys = surveys.filter((s) => s.id !== row.id);
-                      setSurveys([...newSurveys]);
-
-                      apiNotification.success({
-                        message: "Berhasil",
-                        description: `Survei ${row?.survey_name} berhasil dihapus`,
+                  setIsFormEdit(true);
+                  setSelectedSurveyId(row.id);
+                  setIsFormOpen(true);
+                }}
+              ></Button>
+            </Tooltip>
+            <Tooltip title="Hapus survei">
+              <Button
+                type="text"
+                icon={<TbTrashX size={20} color="#B12E2E" />}
+                shape="circle"
+                onClick={async () => {
+                  try {
+                    if (row?.total_respondent > 0) {
+                      apiNotification.error({
+                        message: "Gagal",
+                        description: "Tidak bisa menghapus survei karena telah memiliki responden",
                       });
-                    },
-                  });
-                } catch (error) {
-                  apiNotification.error({
-                    message: "Gagal",
-                    description: "Terjadi kesalahan",
-                  });
-                }
-              }}
-            ></Button>
-          </Tooltip>
-        </div>
-      ),
+                      return;
+                    }
+
+                    Modal.confirm({
+                      title: "Peringatan",
+                      content: `Apakah kamu yakin ingin menghapus ${row.survey_name}`,
+                      okText: "Ya",
+                      okType: "danger",
+                      cancelText: "Tidak",
+                      onOk: async function () {
+                        const res = await deleteSurvey(row?.id);
+                        if (!res?.data?.status) throw new Error("unknown error");
+
+                        const newSurveys = surveys.filter((s) => s.id !== row.id);
+                        setSurveys([...newSurveys]);
+
+                        apiNotification.success({
+                          message: "Berhasil",
+                          description: `Survei ${row?.survey_name} berhasil dihapus`,
+                        });
+                      },
+                    });
+                  } catch (error) {
+                    apiNotification.error({
+                      message: "Gagal",
+                      description: "Terjadi kesalahan",
+                    });
+                  }
+                }}
+              ></Button>
+            </Tooltip>
+          </div>
+        );
+      },
     },
   ];
 
