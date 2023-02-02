@@ -6,7 +6,7 @@ export default function SurveyChartCard({ title, children, fitTitleHeight = fals
       size="small"
       style={{
         padding: "0",
-        maxHeight: "490px",
+        // maxHeight: "490px",
         overflow: "auto",
         position: "relative",
       }}
@@ -18,7 +18,8 @@ export default function SurveyChartCard({ title, children, fitTitleHeight = fals
         level={5}
         style={{
           fontWeight: 600,
-          height: fitTitleHeight ? "auto" : "5em",
+          minHeight: fitTitleHeight ? "0px" : "5em",
+          height: fitTitleHeight ? "auto" : "max-content",
           background: "white",
           position: "sticky",
           top: "0px",
@@ -28,7 +29,15 @@ export default function SurveyChartCard({ title, children, fitTitleHeight = fals
       >
         {title}
       </Typography.Title>
-      <div>{children}</div>
+
+      <div
+        style={{
+          maxHeight: "330px",
+          overflow: "auto",
+        }}
+      >
+        {children}
+      </div>
     </Card>
   );
 }
