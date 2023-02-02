@@ -6,6 +6,7 @@ import { useState } from "react";
 import { MapContainer, Marker, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
 
 import capitalizeWords from "../../../utils/helpers/capitalizeWords";
+import trimString from "../../../utils/helpers/trimString";
 import styles from "../../elements/map/Home.module.css";
 
 export default function HomeMap({
@@ -119,7 +120,7 @@ export default function HomeMap({
             position={[m?.latitude, m?.longitude]}
           >
             <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-              {m.name}
+              {trimString(m?.name, 30)}
             </Tooltip>
           </Marker>
         ))}
@@ -147,7 +148,7 @@ export default function HomeMap({
                 position={[m?.latitude, m?.longitude]}
               >
                 <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                  {m.name}
+                  {trimString(m?.name, 30)}
                 </Tooltip>
               </Marker>
             ),
@@ -169,7 +170,7 @@ export default function HomeMap({
                 position={[m?.latitude, m?.longitude]}
               >
                 <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                  {m.name}
+                  {trimString(m?.name, 30)}
                 </Tooltip>
               </Marker>
             ),
@@ -207,7 +208,7 @@ export default function HomeMap({
               position={[m?.latitude, m?.longitude]}
             >
               <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                {m.name}
+                {trimString(m?.name, 30)}
               </Tooltip>
             </Marker>
           ))}
@@ -242,7 +243,7 @@ export default function HomeMap({
                 }}
               >
                 <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                  {capitalizeWords(report?.title)}
+                  {trimString(capitalizeWords(report?.title), 30)}
                 </Tooltip>
               </Marker>
             ),
