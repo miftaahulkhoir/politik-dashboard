@@ -76,6 +76,7 @@ export default function UserFormDrawer({
 
   const { user: selectedUserComplete } = useFindOneUser(selectedUser?.id);
   useEffect(() => {
+    if (!isEdit) return;
     setOccupation(selectedUserComplete.occupation_id);
     setName(selectedUserComplete.name);
     setNik(selectedUserComplete.nik);
@@ -85,7 +86,7 @@ export default function UserFormDrawer({
     setDistric(selectedUserComplete.distric_id);
     setLatitude(selectedUserComplete.latitude);
     setLongitude(selectedUserComplete.longitude);
-  }, [selectedUserComplete]);
+  }, [isEdit, selectedUserComplete]);
 
   const clearForm = () => {
     setOccupation("");
