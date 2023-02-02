@@ -28,7 +28,8 @@ export default function SurveyDataTable({
       name: "Judul Survei",
       selector: (row) => row.survey_name,
       sortable: true,
-      grow: 2.5,
+      grow: 1000,
+      maxWidth: "600px",
     },
     {
       name: "Tanggal",
@@ -41,7 +42,6 @@ export default function SurveyDataTable({
           month: "short",
           day: "numeric",
           hour: "2-digit",
-          hour12: false,
           minute: "2-digit",
         }).format(date);
         return text;
@@ -63,6 +63,12 @@ export default function SurveyDataTable({
       center: true,
       sortable: true,
       sortFunction: (a, b) => Number(a?.status) - Number(b?.status),
+    },
+    {
+      name: "",
+      compact: true,
+      minWidth: "0px",
+      grow: 1,
     },
     {
       name: "Aksi",

@@ -11,7 +11,7 @@ export default function ReportSearchBar({ filterSearchHandler, filterCategoryHan
       value: category.id,
     }));
     newCategories.unshift({
-      label: "Semua",
+      label: "Semua Kategori",
       value: "",
     });
     return newCategories;
@@ -26,7 +26,7 @@ export default function ReportSearchBar({ filterSearchHandler, filterCategoryHan
         <Select defaultValue="" style={{ width: "100%" }} options={categoryOptions} onChange={filterCategoryHandler} />
       </Col>
       <Col span={6}>
-        <DatePicker style={{ width: "100%" }} placeholder="Tanggal" onChange={filterDateHandler} />
+        <DatePicker style={{ width: "100%" }} placeholder="Waktu" onChange={filterDateHandler} />
       </Col>
     </Row>
   );
