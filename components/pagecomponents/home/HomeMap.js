@@ -5,6 +5,8 @@ import moment from "moment";
 import { useState } from "react";
 import { MapContainer, Marker, TileLayer, Tooltip, useMapEvents } from "react-leaflet";
 
+import HomeGeoJSON from "./HomeGeoJSON";
+
 import capitalizeWords from "../../../utils/helpers/capitalizeWords";
 import trimString from "../../../utils/helpers/trimString";
 import styles from "../../elements/map/Home.module.css";
@@ -98,109 +100,24 @@ export default function HomeMap({
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
       />
-      {showKoordinator === true &&
-        userLogCordinate === false &&
-        dataKoordinator.map((m, index) => (
-          <Marker
-            key={index}
-            eventHandlers={{
-              click: (e) => {
-                handleDetailCordinate(m.id, m.name, "koordinator"),
-                  setTempCenter([m.latitude, m.longitude]),
-                  setUserLogCordinate(true);
-              },
-            }}
-            icon={
-              new L.Icon({
-                iconUrl: "/images/map/markers/user-koordinator.svg",
-                iconSize: [iconSize, iconSize],
-                iconAnchor: [iconSize / 2, iconSize / 2],
-              })
-            }
-            position={[m?.latitude, m?.longitude]}
-          >
-            <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-              {trimString(m?.name, 30)}
-            </Tooltip>
-          </Marker>
-        ))}
-      {showRelawan === true &&
-        userLogCordinate === false &&
-        dataRelawan.map(
-          (m, index) =>
-            m.longitude !== "" && (
-              <Marker
-                key={index}
-                eventHandlers={{
-                  click: (e) => {
-                    handleDetailCordinate(m.id, m.name, "relawan"),
-                      setTempCenter([m.latitude, m.longitude]),
-                      setUserLogCordinate(true);
-                  },
-                }}
-                icon={
-                  new L.Icon({
-                    iconUrl: "/images/map/markers/user-relawan.svg",
-                    iconSize: [iconSize, iconSize],
-                    iconAnchor: [iconSize / 2, iconSize / 2],
-                  })
-                }
-                position={[m?.latitude, m?.longitude]}
-              >
-                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                  {trimString(m?.name, 30)}
-                </Tooltip>
-              </Marker>
-            ),
-        )}
-      {showPemilih === true &&
-        userLogCordinate === false &&
-        dataPemilih.map(
-          (m, index) =>
-            m.longitude !== "" && (
-              <Marker
-                key={index}
-                icon={
-                  new L.Icon({
-                    iconUrl: "/images/map/markers/user-pemilih.svg",
-                    iconSize: [iconSize, iconSize],
-                    iconAnchor: [iconSize / 2, iconSize / 2],
-                  })
-                }
-                position={[m?.latitude, m?.longitude]}
-              >
-                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                  {trimString(m?.name, 30)}
-                </Tooltip>
-              </Marker>
-            ),
-        )}
-      {showBlackList === true &&
-        userLogCordinate === false &&
-        dataBlackList.map(
-          (m, index) =>
-            m.longitude !== "" && (
-              <Marker
-                key={index}
-                icon={
-                  new L.Icon({
-                    iconUrl: "/images/map/markers/user-blacklist.svg",
-                    iconSize: [iconSize, iconSize],
-                    iconAnchor: [iconSize / 2, iconSize / 2],
-                  })
-                }
-                position={[m?.latitude, m?.longitude]}
-              ></Marker>
-            ),
-        )}
-      {userLogCordinate === true && (
-        <>
-          {logCordinate.map((m, index) => (
+
+      {/* MARKERS */}
+      <div>
+        {showKoordinator === true &&
+          userLogCordinate === false &&
+          dataKoordinator.map((m, index) => (
             <Marker
               key={index}
+              eventHandlers={{
+                click: (e) => {
+                  handleDetailCordinate(m.id, m.name, "koordinator"),
+                    setTempCenter([m.latitude, m.longitude]),
+                    setUserLogCordinate(true);
+                },
+              }}
               icon={
                 new L.Icon({
-                  iconUrl: `/images/map/markers/user-${logType}.svg`,
+                  iconUrl: "/images/map/markers/user-koordinator.svg",
                   iconSize: [iconSize, iconSize],
                   iconAnchor: [iconSize / 2, iconSize / 2],
                 })
@@ -212,42 +129,134 @@ export default function HomeMap({
               </Tooltip>
             </Marker>
           ))}
-          {/* <Polyline
-            pathOptions={{ color: "red" }}
-            positions={polygonCordinate}
-          /> */}
-        </>
-      )}
-
-      {/* REPORTS */}
-      {userLogCordinate === false &&
-        reports.map(
-          (report, index) =>
-            report?.latitude &&
-            report?.longitude && (
+        {showRelawan === true &&
+          userLogCordinate === false &&
+          dataRelawan.map(
+            (m, index) =>
+              m.longitude !== "" && (
+                <Marker
+                  key={index}
+                  eventHandlers={{
+                    click: (e) => {
+                      handleDetailCordinate(m.id, m.name, "relawan"),
+                        setTempCenter([m.latitude, m.longitude]),
+                        setUserLogCordinate(true);
+                    },
+                  }}
+                  icon={
+                    new L.Icon({
+                      iconUrl: "/images/map/markers/user-relawan.svg",
+                      iconSize: [iconSize, iconSize],
+                      iconAnchor: [iconSize / 2, iconSize / 2],
+                    })
+                  }
+                  position={[m?.latitude, m?.longitude]}
+                >
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                    {trimString(m?.name, 30)}
+                  </Tooltip>
+                </Marker>
+              ),
+          )}
+        {showPemilih === true &&
+          userLogCordinate === false &&
+          dataPemilih.map(
+            (m, index) =>
+              m.longitude !== "" && (
+                <Marker
+                  key={index}
+                  icon={
+                    new L.Icon({
+                      iconUrl: "/images/map/markers/user-pemilih.svg",
+                      iconSize: [iconSize, iconSize],
+                      iconAnchor: [iconSize / 2, iconSize / 2],
+                    })
+                  }
+                  position={[m?.latitude, m?.longitude]}
+                >
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                    {trimString(m?.name, 30)}
+                  </Tooltip>
+                </Marker>
+              ),
+          )}
+        {showBlackList === true &&
+          userLogCordinate === false &&
+          dataBlackList.map(
+            (m, index) =>
+              m.longitude !== "" && (
+                <Marker
+                  key={index}
+                  icon={
+                    new L.Icon({
+                      iconUrl: "/images/map/markers/user-blacklist.svg",
+                      iconSize: [iconSize, iconSize],
+                      iconAnchor: [iconSize / 2, iconSize / 2],
+                    })
+                  }
+                  position={[m?.latitude, m?.longitude]}
+                ></Marker>
+              ),
+          )}
+        {userLogCordinate === true && (
+          <>
+            {logCordinate.map((m, index) => (
               <Marker
                 key={index}
                 icon={
                   new L.Icon({
-                    iconUrl: getReportIconURLByID(report.category.id),
+                    iconUrl: `/images/map/markers/user-${logType}.svg`,
                     iconSize: [iconSize, iconSize],
                     iconAnchor: [iconSize / 2, iconSize / 2],
                   })
                 }
-                position={[report?.latitude, report?.longitude]}
-                eventHandlers={{
-                  click: (e) => {
-                    setSelectedReport(report);
-                    setIsReportDetailDrawerOpen(true);
-                  },
-                }}
+                position={[m?.latitude, m?.longitude]}
               >
                 <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                  {trimString(capitalizeWords(report?.title), 30)}
+                  {trimString(m?.name, 30)}
                 </Tooltip>
               </Marker>
-            ),
+            ))}
+            {/* <Polyline
+            pathOptions={{ color: "red" }}
+            positions={polygonCordinate}
+          /> */}
+          </>
         )}
+
+        {/* REPORTS */}
+        {userLogCordinate === false &&
+          reports.map(
+            (report, index) =>
+              report?.latitude &&
+              report?.longitude && (
+                <Marker
+                  key={index}
+                  icon={
+                    new L.Icon({
+                      iconUrl: getReportIconURLByID(report.category.id),
+                      iconSize: [iconSize, iconSize],
+                      iconAnchor: [iconSize / 2, iconSize / 2],
+                    })
+                  }
+                  position={[report?.latitude, report?.longitude]}
+                  eventHandlers={{
+                    click: (e) => {
+                      setSelectedReport(report);
+                      setIsReportDetailDrawerOpen(true);
+                    },
+                  }}
+                >
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                    {trimString(capitalizeWords(report?.title), 30)}
+                  </Tooltip>
+                </Marker>
+              ),
+          )}
+      </div>
+
+      {/* GEOJSON */}
+      <HomeGeoJSON />
     </MapContainer>
   );
 }
