@@ -109,7 +109,7 @@ export default function SocialReports(pageProps) {
         from_time: filterDate[0].toString(),
         to_time: filterDate[1].toString(),
       };
-      await axios.post(`${pageProps.baseURL}api/social/${mtkOrgId}/reports`, request).then((res) => {
+      await axios.post(`${pageProps.baseURL}api/sentiment/${mtkOrgId}/reports`, request).then((res) => {
         setMentionData(res.data.data.mentions_over_time.data.entries);
         setMentionSum(res.data.data.sum_of_mentions.data.total_value);
         setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
@@ -240,7 +240,7 @@ export async function getServerSideProps(ctx) {
 
   // get groups
   await axios
-    .get(`${baseURL}api/social/157456`, {
+    .get(`${baseURL}api/sentiment/157456`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
