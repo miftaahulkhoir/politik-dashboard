@@ -1,8 +1,8 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { GeoJSON } from "react-leaflet";
 
-export default function HomeGeoJSON() {
+export default function HomeGeoJSON({ zoom }) {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -88,24 +88,116 @@ export default function HomeGeoJSON() {
     };
   }
 
-  const style = {
-    fillColor: "red",
-    fillOpacity: 0.5,
-  };
+  const [selectedFeatures, setSelectedFeatures] = useState([
+    "CIKOLE",
+    "GUDANGKAHURIPAN",
+    "JAYAGIRI",
+    "CIBODAS",
+    "LANGENSARI",
+    "MEKARWANGI",
+    "CIBOGO",
+    "SUKAJAYA",
+    "SUNTENJAYA",
+    "WANGUNHARJA",
+    "WANGUNSARI",
+    "KARYAWANGI",
+    "CIHANJUANG",
+    "CIHANJUANGRAHAYU",
+    "CIHIDEUNG",
+    "CIWARUGA",
+    "CIGUGURGIRANG",
+    "SARIWANGI",
+    "JAMBUDIPA",
+    "PADAASIH",
+    "PASIRHALANG",
+    "PASIRLANGU",
+    "CIPADA",
+    "KERTAWANGI",
+    "TUGUMUKTI",
+    "SADANGMEKAR",
+    "CIPTAGUMATI",
+    "CIKALONG",
+    "CISOMANGBARAT",
+    "GANJARSARI",
+    "KANANGASARI",
+    "MANDALASARI",
+    "MANDALAMUKTI",
+    "MEKARJAYA",
+    "PUTERAN",
+    "RENDE",
+    "TENJOLAUT",
+    "WANGUNJAYA",
+    "CIPEUNDEUY",
+    "CIHARASHAS",
+    "BOJONGMEKAR",
+    "CIROYOM",
+    "JATIMEKAR",
+    "MARGALAKSANA",
+    "MARGALUYU",
+    "NANGGELENG",
+    "NYENANG",
+    "SIRNARAJA",
+    "SIRNAGALIH",
+    "SUKAHAJI",
+    "NGAMPRAH",
+    "CIMAREME",
+    "CILAME",
+    "TANIMULYA",
+    "CIMANGGU",
+    "BOJONGKONENG",
+    "MARGAJAYA",
+    "MEKARSARI",
+    "GADOBANGKONG",
+    "SUKATANI",
+    "PAKUHAJI",
+    "CIPTAHARJA",
+    "CIPATAT",
+    "CITATAH",
+    "RAJAMANDALAKULON",
+    "MANDALAWANGI",
+    "KERTAMUKTI",
+    "NYALINDUNG",
+    "GUNUNGMASIGIT",
+    "CIRAWAMEKAR",
+    "SUMURBANDUNG",
+    "SARIMUKTI",
+    "KERTAMULYA",
+    "PADALARANG",
+    "CIMERANG",
+    "CAMPAKA MEKAR",
+    "TAGOGAPU",
+    "CIBURUY",
+    "KERTAJAYA",
+    "JAYAMEKAR",
+    "LAKSANAMEKAR",
+    "BATUJAJAR TIMUR",
+  ]);
 
   useEffect(() => {
-    loadAndSaveGeoJSON();
+    // loadAndSaveGeoJSON();
+    axios.get("/geojson/bandung_bandungbarat_v2.json").then((res) => setData(res.data));
   }, []);
 
-  const onEachFeature = (feature, layer) => {
+  const onEachFeature = useCallback((feature, layer) => {
+    if (selectedFeatures.includes(feature.properties.village)) {
+      layer.options.fillColor = "yellow";
+    } else {
+      layer.options.fillColor = "red";
+    }
+
     layer.on("click", (e) => {
-      console.log("clicked", e);
-      console.log("feature", feature);
-      e.target.setStyle({
-        fillColor: "green",
-      });
+      // e.target.setStyle({
+      //   fillColor: "green",
+      // });
     });
-  };
+  }, []);
+
+  const style = useMemo(() => {
+    return {
+      fillOpacity: 0.5,
+      weight: zoom < 12 ? 0 : Math.pow(zoom, 1.2) * 0.1,
+    };
+  }, [zoom]);
 
   return <>{data ? <GeoJSON data={data} style={style} onEachFeature={onEachFeature} /> : <></>}</>;
 }

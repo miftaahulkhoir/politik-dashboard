@@ -256,7 +256,7 @@ export default function HomeMap({
       </div>
 
       {/* GEOJSON */}
-      <HomeGeoJSON />
+      <HomeGeoJSON zoom={zoom} />
     </MapContainer>
   );
 }
@@ -269,7 +269,7 @@ function HomeMapComponent({ setZoom, recenter, tempCenter, setRecenter, setCente
   const mapEvents = useMapEvents({
     zoomend: () => {
       const zoom = mapEvents.getZoom();
-      // setZoom(zoom);
+      setZoom(zoom);
       // setCenter(mapEvents.getCenter());
       setIconSize(40 * scaleZoom(zoom) + 1);
     },
