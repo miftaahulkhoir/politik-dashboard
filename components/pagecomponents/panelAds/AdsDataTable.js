@@ -32,15 +32,15 @@ export default function UserDataTable({
       },
       {
         name: "Status",
-        selector: (row) => row?.campaign.status[0]+row.campaign.status.slice(1).toLowerCase() || "-",
+        selector: (row) => row?.campaign.status[0] + row.campaign.status.slice(1).toLowerCase() || "-",
         // maxWidth: "600px",
         width: "100px",
         grow: 1000,
       },
       {
         name: "Tipe Ads",
-        // selector: (row) => (row?.gender === "male" ? "Laki-laki" : row?.gender === "female" ? "Perempuan" : "-"),
-        selector: (row) => row?.campaign.advertisingChannelType[0]+row?.campaign.advertisingChannelType.slice(1).toLowerCase() || "-",
+        selector: (row) =>
+          row?.campaign.advertisingChannelType[0] + row?.campaign.advertisingChannelType.slice(1).toLowerCase() || "-",
         width: "160px",
         sortable: true,
       },
@@ -52,7 +52,8 @@ export default function UserDataTable({
       },
       {
         name: "Budget/Hari",
-        selector: (row) => row.customer.currencyCode+" "+row?.campaignBudget.amountMicros.slice(0, -6)+".00" || "0.00",
+        selector: (row) =>
+          row.customer.currencyCode + " " + row?.campaignBudget.amountMicros.slice(0, -6) + ".00" || "0.00",
         minWidth: "130px",
         maxWidth: "400px",
       },
@@ -76,13 +77,13 @@ export default function UserDataTable({
       },
       {
         name: "Avg. CPC",
-        selector: (row) => row?.metrics.averageCpc || row.customer.currencyCode+"0.00",
+        selector: (row) => row?.metrics.averageCpc || row.customer.currencyCode + "0.00",
         minWidth: "110px",
         maxWidth: "400px",
       },
       {
         name: "Cost",
-        selector: (row) => row?.metrics.costMicros || row.customer.currencyCode+"0.00",
+        selector: (row) => row?.metrics.costMicros || row.customer.currencyCode + "0.00",
         minWidth: "110px",
         maxWidth: "400px",
       },
@@ -100,7 +101,7 @@ export default function UserDataTable({
       },
       {
         name: "Cost/Conv.",
-        selector: (row) => row?.metrics.costPerConversions || row.customer.currencyCode+"0.00",
+        selector: (row) => row?.metrics.costPerConversions || row.customer.currencyCode + "0.00",
         minWidth: "110px",
         maxWidth: "400px",
       },

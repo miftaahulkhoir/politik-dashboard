@@ -8,9 +8,9 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 import Card from "../components/elements/card/Card";
 import AdsBarChart from "../components/pagecomponents/panelAds/AdsBarChart";
 import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
-import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
-import AdsSearchBar from "../components/pagecomponents/panelAds/AdsSearchBar";
 import AdsDataTable from "../components/pagecomponents/panelAds/AdsDataTable";
+import AdsSearchBar from "../components/pagecomponents/panelAds/AdsSearchBar";
+import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
 import { useGetCampaignsById } from "../utils/services/panelAds";
 const { RangePicker } = DatePicker;
 
@@ -69,8 +69,7 @@ export default function SocialReports(pageProps) {
   }, [fetchCampaigns]);
 
   const filteredCampaigns = useMemo(() => {
-    return campaigns
-      .map((campaigns, i) => ({ ...campaigns, no: i + 1 }));
+    return campaigns.map((campaigns, i) => ({ ...campaigns, no: i + 1 }));
   }, [campaigns]);
 
   return (
@@ -85,9 +84,7 @@ export default function SocialReports(pageProps) {
 
       <Space direction="vertical" size="middle">
         <h4>Profil: 481-235-7154</h4>
-        <AdsDataTable
-          data={filteredCampaigns}
-        />
+        <AdsDataTable data={filteredCampaigns} />
       </Space>
     </>
   );
