@@ -2,6 +2,7 @@ import { Button, Card, Col, Modal, Row } from "antd";
 import { useCallback, useMemo } from "react";
 import { TbPencil, TbTrashX } from "react-icons/tb";
 
+import enumBiddingType from "../../../utils/helpers/panelAds";
 import { deleteUser } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
@@ -34,19 +35,19 @@ export default function UserDataTable({
         name: "Status",
         selector: (row) => row?.campaign.status[0] + row.campaign.status.slice(1).toLowerCase() || "-",
         // maxWidth: "600px",
-        width: "100px",
+        width: "120px",
         grow: 1000,
       },
       {
         name: "Tipe Ads",
         selector: (row) =>
           row?.campaign.advertisingChannelType[0] + row?.campaign.advertisingChannelType.slice(1).toLowerCase() || "-",
-        width: "160px",
+        width: "120px",
         sortable: true,
       },
       {
         name: "Strategi Ads",
-        selector: (row) => row?.campaign.biddingStrategyType || "-",
+        selector: (row) => enumBiddingType(row?.campaign.biddingStrategyType || "-"),
         minWidth: "210px",
         maxWidth: "400px",
       },
