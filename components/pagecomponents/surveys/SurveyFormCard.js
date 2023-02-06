@@ -9,11 +9,11 @@ import YesNoQuestion from "../../elements/input/YesNoQuestion";
 export default function SurveyFormCard({ index, questions, setQuestions }) {
   const type = useMemo(() => {
     return questions[index].input_type;
-  }, [questions]);
+  }, [index, questions]);
 
   const labels = useMemo(() => {
     return questions[index]?.options?.map((option) => option.option_name);
-  }, [questions]);
+  }, [index, questions]);
 
   const setLabels = useCallback(
     (values) => {
@@ -23,7 +23,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
       }));
       setQuestions([...newQuestions]);
     },
-    [questions],
+    [index, questions, setQuestions],
   );
 
   const formElement = useMemo(() => {
@@ -32,6 +32,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
     if (type === "dropdown") return <DropdownInputEditable labels={labels} setLabels={setLabels} />;
     if (type === "radio_button") return <MultiRadioEditable labels={labels} setLabels={setLabels} />;
     if (type === "yes_no_question") return <YesNoQuestion labels={labels} setLabels={setLabels} />;
+    if (type === "location") return <Input value="Kabupaten/Kota, Kecamatan, Desa/Kelurahan" disabled />;
   }, [type, labels, setLabels]);
 
   return (
@@ -74,6 +75,10 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
               {
                 value: "yes_no_question",
                 label: "Ya dan Tidak",
+              },
+              {
+                value: "location",
+                label: "Lokasi",
               },
             ]}
             value={type}
