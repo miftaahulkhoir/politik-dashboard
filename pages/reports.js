@@ -6,7 +6,7 @@ import { useEffect, useMemo, useState } from "react";
 import ReportDataTable from "../components/pagecomponents/reports/ReportDataTable";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import ReportSearchBar from "../components/pagecomponents/reports/ReportSearchBar";
-import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
+import { useFindAllReportCategories, useFindAllReportStatuses, useFindAllReports } from "../utils/services/reports";
 
 export default function Reports() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -21,6 +21,7 @@ export default function Reports() {
   const [selectedReport, setSelectedReport] = useState({});
 
   const { categories } = useFindAllReportCategories();
+  const { statuses } = useFindAllReportStatuses();
 
   // drawer
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
@@ -91,6 +92,7 @@ export default function Reports() {
         selectedReport={selectedReport}
         setReports={setReports}
         apiNotification={apiNotification}
+        statuses={statuses}
       />
 
       <Space direction="vertical" size="middle">

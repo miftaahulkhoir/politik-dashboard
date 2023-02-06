@@ -31,3 +31,11 @@ export const useFindAllReportCategories = () => {
 
   return { categories, error, isLoading };
 };
+
+// report status
+export const useFindAllReportStatuses = () => {
+  const { data, error, isLoading } = useSWR("/api/complaints/status", fetcher);
+  const statuses = data?.data || [];
+
+  return { statuses, error, isLoading };
+};
