@@ -1,7 +1,22 @@
-import { Button, Col, DatePicker, Input, Row } from "antd";
+import { Button, Col, DatePicker, Input, Row, Select } from "antd";
 import { TbPlus, TbSearch } from "react-icons/tb";
 
-export default function UserSearchBar({ filterSearchHandler, filterDateHandler, addUserHandler }) {
+export default function UserSearchBar({ filterSearchHandler, filterDateHandler, filterGenderHandler, addUserHandler }) {
+  const genderOptions = [
+    {
+      label: "Semua Jenis Kelamin",
+      value: "",
+    },
+    {
+      label: "Laki-laki",
+      value: "male",
+    },
+    {
+      label: "Perempuan",
+      value: "female",
+    },
+  ];
+
   return (
     <Row justify="space-between">
       <Col span={18}>
@@ -11,6 +26,9 @@ export default function UserSearchBar({ filterSearchHandler, filterDateHandler, 
           </Col>
           <Col span={8}>
             <DatePicker style={{ width: "100%" }} placeholder="Tanggal pendaftaran" onChange={filterDateHandler} />
+          </Col>
+          <Col span={8}>
+            <Select defaultValue="" style={{ width: "100%" }} options={genderOptions} onChange={filterGenderHandler} />
           </Col>
         </Row>
       </Col>

@@ -30,21 +30,26 @@ export default function Users() {
   // filters
   const [filterSearch, setFilterSearch] = useState("");
   const [filterDate, setFilterDate] = useState("");
+  const [filterGender, setFilterGender] = useState("");
 
   const filteredUsers = useMemo(() => {
     const filteredSearch =
       filterSearch === ""
         ? users
         : users.filter((user) => {
-            return user.name.toLowerCase().includes(filterSearch.toLowerCase());
+            return (
+              user?.name?.toLowerCase().includes(filterSearch.toLowerCase()) ||
+              user?.nik?.toLowerCase().includes(filterSearch.toLowerCase()) ||
+              user?.email?.toLowerCase().includes(filterSearch.toLowerCase())
+            );
           });
 
     const dateInput = new Date(filterDate);
     const filteredDate =
       filterDate === ""
         ? filteredSearch
-        : filteredSearch.filter((survey) => {
-            const date = new Date(survey.created_at);
+        : filteredSearch.filter((user) => {
+            const date = new Date(user.created_at);
 
             return (
               date.getFullYear() === dateInput.getFullYear() &&
@@ -53,14 +58,24 @@ export default function Users() {
             );
           });
 
-    return filteredDate;
-  }, [users, filterSearch, filterDate]);
+    const filteredGender =
+      filterGender === "" ? filteredDate : filteredDate.filter((user) => user?.gender === filterGender);
+
+    const formattedUsers = filteredGender.map((user, index) => {
+      user.no = index + 1;
+      return user;
+    });
+
+    return formattedUsers;
+  }, [users, filterSearch, filterDate, filterGender]);
 
   const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
 
   const filterDateHandler = debounce((_, valueString) => {
     setFilterDate(valueString);
   }, 300);
+
+  const filterGenderHandler = debounce((value) => setFilterGender(value), 300);
 
   const filteredRoleUsers = useMemo(() => {
     return filteredUsers
@@ -97,6 +112,7 @@ export default function Users() {
         <UserSearchBar
           filterSearchHandler={filterSearchHandler}
           filterDateHandler={filterDateHandler}
+          filterGenderHandler={filterGenderHandler}
           addUserHandler={() => setIsDrawerActive(true)}
         />
 
