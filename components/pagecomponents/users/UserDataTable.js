@@ -69,12 +69,14 @@ export default function UserDataTable({
         name: "NIK",
         selector: (row) => row?.nik || "-",
         width: "180px",
+        sortable: true,
       },
       {
         name: "Nama",
         selector: (row) => row?.name,
         maxWidth: "600px",
         grow: 1000,
+        sortable: true,
       },
       {
         name: "Jenis Kelamin",
@@ -87,6 +89,7 @@ export default function UserDataTable({
         selector: (row) => row?.email || "-",
         minWidth: "250px",
         maxWidth: "400px",
+        sortable: true,
       },
       {
         name: "",
