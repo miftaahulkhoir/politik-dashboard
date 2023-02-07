@@ -11,6 +11,7 @@ import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
 import AdsDataTable from "../components/pagecomponents/panelAds/AdsDataTable";
 import AdsSearchBar from "../components/pagecomponents/panelAds/AdsSearchBar";
 import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
+import googleProfileFormatter from "../utils/helpers/googleProfileFormatter";
 import { useGetCampaignsById } from "../utils/services/panelAds";
 const { RangePicker } = DatePicker;
 
@@ -59,13 +60,12 @@ export default function SocialReports(pageProps) {
   const [filterDate, setFilterDate] = useState([]);
 
   const [campaigns, setCampaigns] = useState([]);
-  const { campaigns: fetchCampaigns } = useGetCampaignsById("4812357154");
+  const { campaigns: fetchCampaigns } = useGetCampaignsById(pageProps.profile.google_ads_manager_id);
+  const [gProfile, setGProfile] = useState(pageProps.profile.google_ads_manager_id);
 
   useEffect(() => {
-    console.log("br1");
     if (!fetchCampaigns?.length) return;
     setCampaigns(fetchCampaigns);
-    console.log("campaigns:", fetchCampaigns);
   }, [fetchCampaigns]);
 
   const filteredCampaigns = useMemo(() => {
@@ -83,7 +83,7 @@ export default function SocialReports(pageProps) {
       </div>
 
       <Space direction="vertical" size="middle">
-        <h4>Profil: 481-235-7154</h4>
+        <h4>Profil: {googleProfileFormatter(gProfile)}</h4>
         <AdsDataTable data={filteredCampaigns} />
       </Space>
     </>

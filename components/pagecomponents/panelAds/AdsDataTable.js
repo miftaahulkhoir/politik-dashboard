@@ -2,7 +2,7 @@ import { Button, Card, Col, Modal, Row } from "antd";
 import { useCallback, useMemo } from "react";
 import { TbPencil, TbTrashX } from "react-icons/tb";
 
-import enumBiddingType from "../../../utils/helpers/panelAds";
+import biddingTypeFormatter from "../../../utils/helpers/biddingTypeFormatter";
 import { deleteUser } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
@@ -47,7 +47,7 @@ export default function UserDataTable({
       },
       {
         name: "Strategi Ads",
-        selector: (row) => enumBiddingType(row?.campaign.biddingStrategyType || "-"),
+        selector: (row) => biddingTypeFormatter(row?.campaign.biddingStrategyType || "-"),
         minWidth: "210px",
         maxWidth: "400px",
       },
