@@ -30,6 +30,7 @@ export default function Reports() {
   const [filterSearch, setFilterSearch] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [filterDate, setFilterDate] = useState("");
+  const [filterStatus, setFilterStatus] = useState("");
 
   const filteredReports = useMemo(() => {
     const filteredSearch =
@@ -58,13 +59,19 @@ export default function Reports() {
             );
           });
 
-    const formatted = filteredDate.map((report, index) => {
+    console.log(reports);
+    const filteredStatus =
+      filterStatus === ""
+        ? filteredDate
+        : filteredDate.filter((report) => report?.complaint_status?.id === filterStatus);
+
+    const formatted = filteredStatus.map((report, index) => {
       report.no = index + 1;
       return report;
     });
 
     return formatted;
-  }, [filterSearch, reports, filterCategory, filterDate]);
+  }, [filterSearch, reports, filterCategory, filterDate, filterStatus]);
 
   const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
 
@@ -73,6 +80,8 @@ export default function Reports() {
   const filterDateHandler = debounce((_, valueString) => {
     setFilterDate(valueString);
   }, 300);
+
+  const filterStatusHandler = debounce((value) => setFilterStatus(value), 300);
 
   return (
     <>
@@ -100,7 +109,9 @@ export default function Reports() {
           filterSearchHandler={filterSearchHandler}
           filterCategoryHandler={filterCategoryHandler}
           filterDateHandler={filterDateHandler}
+          filterStatusHandler={filterStatusHandler}
           categories={categories}
+          statuses={statuses}
         />
 
         <ReportDataTable

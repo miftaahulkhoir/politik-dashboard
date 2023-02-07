@@ -1,4 +1,4 @@
-const reportStatus = {
+const reportStatuses = {
   0: {
     name: "Pengaduan baru",
     bgColor: "#E4F3FF",
@@ -16,6 +16,6 @@ const reportStatus = {
   },
 };
 
-Object.freeze(reportStatus);
+Object.freeze(reportStatuses);
 
-export default reportStatus;
+export default reportStatuses;
