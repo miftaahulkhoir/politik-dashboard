@@ -2,6 +2,7 @@ import { Button, Card, Col, Modal, Row } from "antd";
 import { useCallback, useMemo } from "react";
 import { TbPencil, TbTrashX } from "react-icons/tb";
 
+import formateDateTime from "../../../utils/helpers/formatDateTime";
 import { deleteUser } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
@@ -77,6 +78,21 @@ export default function UserDataTable({
         maxWidth: "600px",
         grow: 1000,
         sortable: true,
+      },
+      {
+        name: "Tanggal",
+        selector: (row) =>
+          formateDateTime(row?.created_at, {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          }),
+        sortable: true,
+        sortFunction: (a, b) => {
+          return new Date(a?.created_at).getTime() - new Date(b?.created_at).getTime();
+        },
+        width: "130px",
+        center: true,
       },
       {
         name: "Jenis Kelamin",
