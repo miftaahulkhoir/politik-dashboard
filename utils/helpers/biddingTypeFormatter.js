@@ -1,4 +1,4 @@
-export default function enumBiddingType(data) {
+export default function biddingTypeFormatter(data) {
   let res;
   switch (data) {
     case "MAXIMIZE_CONVERSIONS":
