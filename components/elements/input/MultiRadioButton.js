@@ -14,7 +14,7 @@ export default function MultiRadioButton({ inputs = [], value, setValue }) {
           borderRadius: "8px",
         }}
       >
-        <Radio.Group value={value} onChange={(e) => setValue(e.target.value)}>
+        <Radio.Group value={value} onChange={(e) => setValue(e.target.value)} style={{ width: "100%" }}>
           {inputs.map((input, index) => (
             <div key={index}>
               <Row justify="space-between" align="middle" style={{ padding: "8px 16px" }}>
@@ -22,7 +22,7 @@ export default function MultiRadioButton({ inputs = [], value, setValue }) {
                   <Radio value={input?.value}>{input?.label}</Radio>
                 </Col>
               </Row>
-              {index < inputs.length - 1 ? <Divider style={{ margin: "0" }}></Divider> : null}
+              {index < inputs.length - 1 ? <Divider style={{ margin: "0", width: "100%" }}></Divider> : null}
             </div>
           ))}
         </Radio.Group>
