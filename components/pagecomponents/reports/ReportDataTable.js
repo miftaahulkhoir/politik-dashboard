@@ -34,12 +34,14 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
       selector: (row) => row?.title,
       grow: 1000,
       maxWidth: "600px",
+      sortable: true,
     },
     {
       name: "Kategori",
       selector: (row) => capitalizeWords(row?.category?.category_name),
       minWidth: "200px",
       maxWidth: "300px",
+      sortable: true,
     },
     {
       name: "Waktu",
