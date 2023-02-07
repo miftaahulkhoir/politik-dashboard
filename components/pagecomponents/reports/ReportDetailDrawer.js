@@ -66,8 +66,20 @@ export default function ReportDetailDrawer({
     >
       <Space direction="vertical" size="large">
         <Section title="Status:" horizontal>
-          <Space direction="vertical" size={4}>
+          <Space direction="vertical" size={8}>
             <ReportStatusPill id={selectedReport?.complaint_status?.id || "0"} />
+            {selectedReport?.complaint_status_desc ? (
+              <div
+                style={{
+                  padding: "4px 12px",
+                  borderRadius: "6px",
+                  border: "1px solid #eeeeee",
+                  flex: 1,
+                }}
+              >
+                {selectedReport?.complaint_status_desc}
+              </div>
+            ) : null}
             <Button type="link" style={{ margin: 0, padding: 0 }} onClick={() => onChangeStatusClick(selectedReport)}>
               Ubah status
             </Button>

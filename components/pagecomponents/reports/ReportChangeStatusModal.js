@@ -12,12 +12,15 @@ export default function ReportChangeStatusModal({ selectedReport, onClose, setRe
   const [desc, setDesc] = useState(selectedReport?.complaint_status_desc);
 
   const inputs = useMemo(() => {
-    const res = statuses.map((status) => ({
+    const filteredStatuses = statuses.filter(
+      (status) => Number(status?.id) >= Number(selectedReport?.complaint_status?.id),
+    );
+    const res = filteredStatuses.map((status) => ({
       value: status.id,
       label: <ReportStatusPill id={status.id} />,
     }));
     return res;
-  }, [statuses]);
+  }, [selectedReport?.complaint_status?.id, statuses]);
 
   const okHandler = async (id, reportStatusID, desc) => {
     try {
@@ -60,7 +63,7 @@ export default function ReportChangeStatusModal({ selectedReport, onClose, setRe
 
       <Space direction="vertical">
         <div style={{ fontWeight: 600 }}>Catatan</div>
-        <Input.TextArea rows={1} value={desc} onChange={(e) => setDesc(e.target.value)}></Input.TextArea>
+        <Input.TextArea rows={1} autoSize value={desc} onChange={(e) => setDesc(e.target.value)}></Input.TextArea>
       </Space>
 
       <Space>
