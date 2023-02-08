@@ -38,7 +38,6 @@ export default function SurveyResponseDrawer({ open, setOpen, selectedSurvey }) 
   ];
 
   const onRowClicked = (row, e) => {
-    console.log("selected response", row);
     setSelectedResponse(row);
     setIsDrawer2Open(true);
   };
@@ -100,11 +99,19 @@ function groupResponsesByRecruiters(arr) {
   });
 
   const result = Object.values(groupedArr).map((resp) => {
+    resp.sort((a, b) => {
+      return new Date(a?.created_at) - new Date(b?.created_at);
+    });
+
     return {
       recruiter_id: resp[0].recruiter_id,
       recruiter: resp[0].recruiter,
       responses: resp,
     };
+  });
+
+  result.sort((a, b) => {
+    return b?.responses?.length - a?.responses?.length;
   });
 
   return result;
