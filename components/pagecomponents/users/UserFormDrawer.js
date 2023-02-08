@@ -98,7 +98,6 @@ export default function UserFormDrawer({
             if (user?.id === selectedUser?.id) {
               return { ...user, ...data };
             }
-            console.log("user", user);
             return user;
           });
           return [...newUsers];
