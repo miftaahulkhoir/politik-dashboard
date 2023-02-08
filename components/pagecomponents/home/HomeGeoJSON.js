@@ -175,7 +175,7 @@ export default function HomeGeoJSON({ zoom }) {
 
   useEffect(() => {
     // loadAndSaveGeoJSON();
-    axios.get("/geojson/bandung_bandungbarat_v2.json").then((res) => setData(res.data));
+    axios.get("/geojson/bandung_bandungbarat_v4.json").then((res) => setData(res.data));
   }, []);
 
   const onEachFeature = useCallback((feature, layer) => {
