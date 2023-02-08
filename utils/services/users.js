@@ -28,3 +28,22 @@ export const updateUser = async (id, user) => {
 export const deleteUser = async (id) => {
   return await axios.delete(`/api/users/${id}`);
 };
+
+// user role / occupation
+export const updateUserOccupation = async (userID, occupationID) => {
+  return await axios.put(`/api/users/update-occupation/${userID}`, {
+    occupation_id: occupationID,
+  });
+};
+
+// role occupation
+export const findAllOccupations = async () => {
+  return await axios.get("/api/occupations");
+};
+
+export const useFindAllOccupations = () => {
+  const { data, error, isLoading } = useSWR("/api/occupations", fetcher);
+  const occupations = data?.data || [];
+
+  return { occupations, error, isLoading };
+};
