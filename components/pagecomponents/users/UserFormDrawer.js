@@ -2,7 +2,7 @@ import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { createUser, updateUser, useFindOneUser } from "../../../utils/services/users";
+import { createUser, updateUser } from "../../../utils/services/users";
 
 export default function UserFormDrawer({
   open,
@@ -64,29 +64,8 @@ export default function UserFormDrawer({
   // fill form if edit
   useEffect(() => {
     if (!isEdit) return;
-    // get regency and district list
-
-    if (selectedUser?.distric_id) {
-      axios.get(`/api/distric/${selectedUser.distric_id}`).then((res) => {
-        setRegency(res.data.data.regency_id);
-        // fetch semua distric di regency itu, sudah dihandle useEffect atasnya
-      });
-    }
-  }, [isEdit, selectedUser.distric_id, selectedUser.id]);
-
-  const { user: selectedUserComplete } = useFindOneUser(selectedUser?.id);
-  useEffect(() => {
-    if (!isEdit) return;
-    setOccupation(selectedUserComplete.occupation_id);
-    setName(selectedUserComplete.name);
-    setNik(selectedUserComplete.nik);
-    setEmail(selectedUserComplete.email);
-    setWa(selectedUserComplete.phone);
-    setGender(selectedUserComplete.gender);
-    setDistric(selectedUserComplete.distric_id);
-    setLatitude(selectedUserComplete.latitude);
-    setLongitude(selectedUserComplete.longitude);
-  }, [isEdit, selectedUserComplete]);
+    setName(selectedUser?.name);
+  }, [isEdit, selectedUser]);
 
   const clearForm = () => {
     setOccupation("");
@@ -104,35 +83,33 @@ export default function UserFormDrawer({
 
   const onClose = () => {
     setOpen(false);
-    setIsEdit(false);
-    clearForm();
+    setTimeout(() => {
+      setIsEdit(false);
+      clearForm();
+    }, 500);
   };
 
   // handler
   const updateUserHandler = (data) => {
     updateUser(selectedUser?.id, data)
       .then((res) => {
+        setUsers((prevUsers) => {
+          const newUsers = prevUsers.map((user) => {
+            if (user?.id === selectedUser?.id) {
+              return { ...user, ...data };
+            }
+            console.log("user", user);
+            return user;
+          });
+          return [...newUsers];
+        });
+
         apiNotification.success({
           message: "Berhasil",
           description: "Perubahan user telah disimpan",
         });
 
-        setUsers((prevUsers) => [
-          ...prevUsers.map((u) => {
-            if (u.id !== selectedUser.id) return u;
-            // data.id = selectedUser.id;
-            // data.no = u.no;
-            const newData = {
-              ...u,
-              ...data,
-            };
-            return newData;
-          }),
-        ]);
-
-        setIsEdit(false);
-        setOpen(false);
-        clearForm();
+        onClose();
       })
       .catch((err) => {});
   };
@@ -151,28 +128,30 @@ export default function UserFormDrawer({
           return [...prevUsers, data];
         });
 
-        setOpen(false);
-        clearForm();
+        onClose();
       })
       .catch((err) => {});
   };
 
   const submitHandler = () => {
-    const data = {
-      occupation_id: occupation,
-      nik: nik,
-      name: name,
-      email: email,
-      password: password,
-      phone: wa,
-      gender: gender,
-      distric_id: distric,
-      latitude: latitude,
-      longitude: longitude,
-    };
     if (!isEdit) {
+      const data = {
+        occupation_id: occupation,
+        nik: nik,
+        name: name,
+        email: email,
+        password: password,
+        phone: wa,
+        gender: gender,
+        distric_id: distric,
+        latitude: latitude,
+        longitude: longitude,
+      };
       addUserHandler(data);
     } else {
+      const data = {
+        name: name,
+      };
       updateUserHandler(data);
     }
   };
@@ -192,84 +171,89 @@ export default function UserFormDrawer({
           <Typography.Title level={5}>Nama Lengkap</Typography.Title>
           <Input value={name} onChange={(e) => setName(e.target.value)} />
         </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Jenis Kelamin</Typography.Title>
-          <Radio.Group
-            value={gender}
-            onChange={(e) => {
-              setGender(e.target.value);
-            }}
-            optionType="button"
-            buttonStyle="solid"
-            options={[
-              { label: "Laki-laki", value: "male" },
-              { label: "Perempuan", value: "female" },
-            ]}
-          ></Radio.Group>
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>NIK</Typography.Title>
-          <Input value={nik} onChange={(e) => setNik(e.target.value)} />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
-          <Input value={wa} onChange={(e) => setWa(e.target.value)} />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Email</Typography.Title>
-          <Input value={email} onChange={(e) => setEmail(e.target.value)} />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Password</Typography.Title>
-          <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Jabatan</Typography.Title>
-          <Select
-            showSearch
-            placeholder="Pilih Role"
-            value={occupation || undefined}
-            onChange={(value) => setOccupation(value)}
-            style={{ width: "100%" }}
-            filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
-            options={occupations
-              // .filter((o) => o.level > currentUser?.occupation?.level)
-              .filter((o) => o.level === currentUser?.occupation?.level + 1)
-              .map((o) => ({ label: o.name, value: o.id }))}
-          />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Kabupaten</Typography.Title>
-          <Select
-            showSearch
-            placeholder="Pilih Kota/Kabupaten"
-            value={regency || undefined}
-            onChange={(value) => setRegency(value)}
-            style={{ width: "100%" }}
-            filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
-            options={regencies.map((r) => ({ label: r.name, value: r.id }))}
-          />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Kecamatan</Typography.Title>
-          <Select
-            showSearch
-            placeholder="Pilih Kecamatan"
-            value={distric || undefined}
-            onChange={(value) => setDistric(value)}
-            style={{ width: "100%" }}
-            filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
-            options={districs.map((d) => ({ label: d.name, value: d.id }))}
-          />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Lokasi (Latitude)</Typography.Title>
-          <Input value={latitude} onChange={(e) => setLatitude(e.target.value)} />
-        </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Lokasi (Longitude)</Typography.Title>
-          <Input value={longitude} onChange={(e) => setLongitude(e.target.value)} />
-        </Col>
+        {!isEdit ? (
+          <>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Jenis Kelamin</Typography.Title>
+              <Radio.Group
+                value={gender}
+                onChange={(e) => {
+                  setGender(e.target.value);
+                }}
+                optionType="button"
+                buttonStyle="solid"
+                options={[
+                  { label: "Laki-laki", value: "male" },
+                  { label: "Perempuan", value: "female" },
+                ]}
+              ></Radio.Group>
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>NIK</Typography.Title>
+              <Input value={nik} onChange={(e) => setNik(e.target.value)} />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
+              <Input value={wa} onChange={(e) => setWa(e.target.value)} />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Email</Typography.Title>
+              <Input value={email} onChange={(e) => setEmail(e.target.value)} />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Password</Typography.Title>
+              <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Jabatan</Typography.Title>
+              <Select
+                showSearch
+                placeholder="Pilih Role"
+                value={occupation || undefined}
+                onChange={(value) => setOccupation(value)}
+                style={{ width: "100%" }}
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                options={occupations
+                  // .filter((o) => o.level > currentUser?.occupation?.level)
+                  .filter((o) => o.level === currentUser?.occupation?.level + 1)
+                  .map((o) => ({ label: o.name, value: o.id }))}
+              />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Kabupaten</Typography.Title>
+              <Select
+                showSearch
+                placeholder="Pilih Kota/Kabupaten"
+                value={regency || undefined}
+                onChange={(value) => setRegency(value)}
+                style={{ width: "100%" }}
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                options={regencies.map((r) => ({ label: r.name, value: r.id }))}
+              />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Kecamatan</Typography.Title>
+              <Select
+                showSearch
+                placeholder="Pilih Kecamatan"
+                value={distric || undefined}
+                onChange={(value) => setDistric(value)}
+                style={{ width: "100%" }}
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                options={districs.map((d) => ({ label: d.name, value: d.id }))}
+              />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Lokasi (Latitude)</Typography.Title>
+              <Input value={latitude} onChange={(e) => setLatitude(e.target.value)} />
+            </Col>
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Lokasi (Longitude)</Typography.Title>
+              <Input value={longitude} onChange={(e) => setLongitude(e.target.value)} />
+            </Col>
+          </>
+        ) : null}
+
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
           <Button type="primary" onClick={submitHandler} style={{ fontWeight: 600, letterSpacing: "0.8px" }}>
             SIMPAN
