@@ -1,9 +1,10 @@
-import { Col, DatePicker, Input, Row, Select, Space, Typography, notification } from "antd";
+import { Button, Col, DatePicker, Input, Row, Select, Space, Typography, notification } from "antd";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import { useCallback, useEffect, useMemo, useState } from "react";
+import { TbPencil, TbTrashX } from "react-icons/tb";
 
 import Card from "../components/elements/card/Card";
 import AdsBarChart from "../components/pagecomponents/panelAds/AdsBarChart";
@@ -12,7 +13,7 @@ import AdsDataTable from "../components/pagecomponents/panelAds/AdsDataTable";
 import AdsSearchBar from "../components/pagecomponents/panelAds/AdsSearchBar";
 import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
 import googleProfileFormatter from "../utils/helpers/googleProfileFormatter";
-import { useGetCampaignsById } from "../utils/services/panelAds";
+import { useGetCampaignsById, useGetGoogleCustomerName } from "../utils/services/panelAds";
 const { RangePicker } = DatePicker;
 
 const { TextArea } = Input;
@@ -61,12 +62,20 @@ export default function SocialReports(pageProps) {
 
   const [campaigns, setCampaigns] = useState([]);
   const { campaigns: fetchCampaigns } = useGetCampaignsById(pageProps.profile.google_ads_id);
-  const [gProfile, setGProfile] = useState(pageProps.profile.google_ads_id);
+  const [gProfile, setGProfile] = useState("");
+  const [gProfileName, setGProfileName] = useState("");
+  const { gProfileName: fetchGProfileName } = useGetGoogleCustomerName(pageProps.profile.google_ads_id);
 
   useEffect(() => {
     if (!fetchCampaigns?.length) return;
     setCampaigns(fetchCampaigns);
   }, [fetchCampaigns]);
+
+  useEffect(() => {
+    if (fetchGProfileName == "") return;
+    setGProfile(pageProps.profile.google_ads_id);
+    setGProfileName(fetchGProfileName);
+  }, [fetchGProfileName]);
 
   const filteredCampaigns = useMemo(() => {
     return campaigns.map((campaigns, i) => ({ ...campaigns, no: i + 1 }));
@@ -83,7 +92,7 @@ export default function SocialReports(pageProps) {
       </div>
 
       <Space direction="vertical" size="middle">
-        <h4>Profil: {googleProfileFormatter(gProfile)}</h4>
+        <Profile name={gProfileName || "-"} id={gProfile || ""} />
         <AdsDataTable data={filteredCampaigns} />
       </Space>
     </>
@@ -92,4 +101,21 @@ export default function SocialReports(pageProps) {
 
 export async function getServerSideProps(ctx) {
   return { props: {} };
+}
+
+function Profile(data) {
+  const idStyle = {
+    fontSize: "1.5rem",
+  };
+  const nameStyle = {
+    fontSize: "1.5rem",
+    fontWeight: "500",
+  };
+  return (
+    <div>
+      <span style={nameStyle}>{data.name}: </span>
+      <span style={idStyle}>{googleProfileFormatter(data.id)}</span>
+      <Button type="text" icon={<TbPencil size={24} color={"#7287A5"} />} shape="square" />
+    </div>
+  );
 }

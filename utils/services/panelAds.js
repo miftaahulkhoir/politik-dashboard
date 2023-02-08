@@ -9,3 +9,10 @@ export const useGetCampaignsById = (id) => {
 
   return { campaigns, error, isLoading };
 };
+
+export const useGetGoogleCustomerName = (id) => {
+  const { data, error, isLoading } = useSWR(`/api/google-ads/${id}/name`, fetcher);
+  const gProfileName = data?.data.results[0].customer.descriptiveName || "";
+
+  return { gProfileName, error, isLoading };
+}
