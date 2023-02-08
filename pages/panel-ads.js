@@ -60,8 +60,8 @@ export default function SocialReports(pageProps) {
   const [filterDate, setFilterDate] = useState([]);
 
   const [campaigns, setCampaigns] = useState([]);
-  const { campaigns: fetchCampaigns } = useGetCampaignsById(pageProps.profile.google_ads_manager_id);
-  const [gProfile, setGProfile] = useState(pageProps.profile.google_ads_manager_id);
+  const { campaigns: fetchCampaigns } = useGetCampaignsById(pageProps.profile.google_ads_id);
+  const [gProfile, setGProfile] = useState(pageProps.profile.google_ads_id);
 
   useEffect(() => {
     if (!fetchCampaigns?.length) return;
