@@ -15,6 +15,7 @@ export default function SurveyDataTable({
   setIsFormEdit,
   setIsFormOpen,
   setSelectedSurveyId,
+  occupationLevel,
 }) {
   const columns = [
     {
@@ -75,7 +76,8 @@ export default function SurveyDataTable({
       width: "200px",
       center: true,
       selector: (row) => {
-        const canDownload = row?.total_respondent > 0;
+        const isAdmin = occupationLevel === 1;
+        const canDownload = row?.total_respondent > 0 && isAdmin;
         return (
           <div className="d-flex gap-2">
             <Tooltip title="Unduh excel">
@@ -103,7 +105,8 @@ export default function SurveyDataTable({
             <Tooltip title="Ubah survei">
               <Button
                 type="text"
-                icon={<TbPencil size={20} color="#7287A5" />}
+                disabled={!isAdmin}
+                icon={<TbPencil size={20} color={isAdmin ? "#7287A5" : "#cccccc"} />}
                 shape="circle"
                 onClick={() => {
                   if (row?.total_respondent > 0) {
@@ -122,7 +125,8 @@ export default function SurveyDataTable({
             <Tooltip title="Hapus survei">
               <Button
                 type="text"
-                icon={<TbTrashX size={20} color="#B12E2E" />}
+                disabled={!isAdmin}
+                icon={<TbTrashX size={20} color={isAdmin ? "#B12E2E" : "#cccccc"} />}
                 shape="circle"
                 onClick={async () => {
                   try {

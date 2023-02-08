@@ -9,7 +9,7 @@ import SurveyResponseDrawer from "../components/pagecomponents/surveys/SurveyRes
 import SurveySearchBar from "../components/pagecomponents/surveys/SurveySearchBar";
 import { useFindAllSurveys } from "../utils/services/surveys";
 
-export default function Surveys() {
+export default function Surveys({ profile }) {
   const { surveys: fetchSurveys } = useFindAllSurveys();
   const [surveys, setSurveys] = useState([]);
   useEffect(() => {
@@ -104,6 +104,7 @@ export default function Surveys() {
           filterSearchHandler={filterSearchHandler}
           filterActiveHandler={filterActiveHandler}
           filterDateHandler={filterDateHandler}
+          occupationLevel={profile?.occupation?.level}
           addSurveyHandler={() => setIsFormOpen(true)}
         />
 
@@ -117,6 +118,7 @@ export default function Surveys() {
           setIsFormEdit={setIsFormEdit}
           setIsFormOpen={setIsFormOpen}
           setSelectedSurveyId={setSelectedSurveyId}
+          occupationLevel={profile?.occupation?.level}
         />
       </Space>
     </>

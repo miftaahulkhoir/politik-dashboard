@@ -5,6 +5,7 @@ export default function SurveySearchBar({
   filterSearchHandler,
   filterActiveHandler,
   filterDateHandler,
+  occupationLevel,
   addSurveyHandler,
 }) {
   return (
@@ -40,11 +41,13 @@ export default function SurveySearchBar({
           </Col>
         </Row>
       </Col>
-      <Col>
-        <Button icon={<TbPlus />} type="primary" onClick={addSurveyHandler}>
-          Tambah Survei
-        </Button>
-      </Col>
+      {occupationLevel === 1 ? (
+        <Col>
+          <Button icon={<TbPlus />} type="primary" onClick={addSurveyHandler}>
+            Tambah Survei
+          </Button>
+        </Col>
+      ) : null}
     </Row>
   );
 }
