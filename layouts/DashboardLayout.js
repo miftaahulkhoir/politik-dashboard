@@ -1,4 +1,6 @@
+import { Grid } from "antd";
 import { useRouter } from "next/router";
+import { useMemo, useState } from "react";
 import {
   TbAd2,
   TbBrandGoogleAnalytics,
@@ -11,17 +13,30 @@ import {
 } from "react-icons/tb";
 
 import ProfileDropdown from "../components/pagecomponents/dashboardLayout/ProfileDropdown";
+import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
+import MobileNavbarToggler from "../components/templates/navbar/MobileNavbarToggler";
 
 export default function DashboardLayout({ profile, baseURL, children }) {
   const router = useRouter();
   const { asPath } = router;
 
+  const [isNavbarActive, setIsNavbarActive] = useState(false);
+
+  const screens = Grid.useBreakpoint();
+
+  const smallDevice = useMemo(() => {
+    const val = !screens.xl && !screens.xxl;
+    return val;
+  }, [screens]);
+
   return (
     <>
+      <MobileNavbarBody active={isNavbarActive} setActive={setIsNavbarActive} xs={screens.xs} />
+
       <div className="codex-loader d-none">
         <div className="loader-item one"></div>
         <div className="loader-item two"></div>
-        <div className="loader-item three"> </div>
+        <div className="loader-item three"></div>
       </div>
       <header className="codex-header" style={{ zIndex: 99 }}>
         <div className="custom-container">
@@ -41,7 +56,7 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                     <p className="m-0">Selamat datang kembali, {profile?.occupation?.name?.toUpperCase()}</p>
                   </div>
                 </div>
-                <ProfileDropdown />
+                {smallDevice ? <MobileNavbarToggler setActive={setIsNavbarActive} /> : <ProfileDropdown />}
               </div>
             </div>
           </div>

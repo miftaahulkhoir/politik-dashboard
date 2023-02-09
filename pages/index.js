@@ -1,4 +1,4 @@
-import { notification } from "antd";
+import { Grid, notification } from "antd";
 import axios from "axios";
 import moment from "moment/moment";
 import dynamic from "next/dynamic";
@@ -15,6 +15,7 @@ import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import HomeMapRightPanel from "../components/pagecomponents/home/map/HomeMapRightPanel";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
+import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
 import capitalizeWords from "../utils/helpers/capitalizeWords";
 import {
   useFindAllDistrictsByRegencyID,
@@ -211,6 +212,16 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     setRecenter(true);
   };
 
+  // MOBILE NAVBAR
+  const [isNavbarActive, setIsNavbarActive] = useState(false);
+
+  const screens = Grid.useBreakpoint();
+
+  const smallDevice = useMemo(() => {
+    const val = !screens.xl && !screens.xxl;
+    return val;
+  }, [screens]);
+
   return (
     <>
       <Head>
@@ -229,7 +240,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
       {profile?.occupation?.level === 1 ? (
         <>
-          <HomeNavbar />
+          <MobileNavbarBody active={isNavbarActive} setActive={setIsNavbarActive} xs={screens.xs} />
+
+          <HomeNavbar xs={screens.xs} smallDevice={smallDevice} setActive={setIsNavbarActive} />
           <div className="left-content">
             <div className="card">
               {/* CARD HEADER */}
