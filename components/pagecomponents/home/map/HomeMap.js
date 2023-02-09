@@ -7,9 +7,9 @@ import { MapContainer, Marker, TileLayer, Tooltip, useMapEvents } from "react-le
 
 import HomeGeoJSON from "./HomeGeoJSON";
 
-import capitalizeWords from "../../../utils/helpers/capitalizeWords";
-import trimString from "../../../utils/helpers/trimString";
-import styles from "../../elements/map/Home.module.css";
+import capitalizeWords from "../../../../utils/helpers/capitalizeWords";
+import trimString from "../../../../utils/helpers/trimString";
+import styles from "../../../elements/map/Home.module.css";
 
 export default function HomeMap({
   showKoordinator,

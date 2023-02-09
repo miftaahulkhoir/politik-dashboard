@@ -13,13 +13,19 @@ import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+import HomeMapRightPanel from "../components/pagecomponents/home/map/HomeMapRightPanel";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import capitalizeWords from "../utils/helpers/capitalizeWords";
+import {
+  useFindAllDistrictsByRegencyID,
+  useFindAllRegencies,
+  useFindAllVillagesByDistrictID,
+} from "../utils/services/locations";
 import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
 
-const HomeMap = dynamic(() => import("../components/pagecomponents/home/HomeMap"), {
+const HomeMap = dynamic(() => import("../components/pagecomponents/home/map/HomeMap"), {
   ssr: false,
 });
 
@@ -119,6 +125,22 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   };
 
   // END PENGADUAN
+
+  // TEMATIK ===================================
+
+  // filter lokasi
+  const [regency, setRegency] = useState(null);
+  const [district, setDistrict] = useState(null);
+  const [village, setVillage] = useState(null);
+
+  const { regencies } = useFindAllRegencies();
+  const { districts } = useFindAllDistrictsByRegencyID(regency);
+  const { villages } = useFindAllVillagesByDistrictID(district);
+
+  // filter tipe tematik
+  const [thematicType, setThematicType] = useState(null);
+
+  // END TEMATIK ===================================
 
   const ranks = useMemo(() => {
     return users?.map((user, i) => {
@@ -423,6 +445,20 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               />
             </div>
           )}
+
+          <HomeMapRightPanel
+            regencies={regencies}
+            districts={districts}
+            villages={villages}
+            regency={regency}
+            district={district}
+            village={village}
+            setRegency={setRegency}
+            setDistrict={setDistrict}
+            setVillage={setVillage}
+            thematicType={thematicType}
+            setThematicType={setThematicType}
+          />
         </>
       ) : (
         <>
