@@ -1,5 +1,5 @@
-import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd";
-import React, { useEffect, useState } from "react";
+import { Button, Col, Drawer, Grid, Input, Radio, Row, Select, Typography } from "antd";
+import React, { useEffect, useMemo, useState } from "react";
 
 import { useFindAllDistrictsByRegencyID, useFindAllRegencies } from "../../../utils/services/locations";
 import { createUser, updateUser, useFindAllOccupations, useFindOneUser } from "../../../utils/services/users";
@@ -14,6 +14,12 @@ export default function UserFormDrawer({
   setUsers,
   currentUser,
 }) {
+  const screen = Grid.useBreakpoint();
+
+  const isSM = useMemo(() => {
+    return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
+  }, [screen]);
+
   // input form states
   const [name, setName] = useState("");
   const [gender, setGender] = useState("");
@@ -145,8 +151,8 @@ export default function UserFormDrawer({
       placement="right"
       onClose={onClose}
       open={open}
-      closable={false}
-      width="500px"
+      closable={true}
+      width={isSM ? "100%" : "500px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
       <Row>

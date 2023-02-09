@@ -4,16 +4,14 @@ import { useEffect, useState } from "react";
 
 import styles from "./surveyResponse.module.css";
 
-export default function SurveyResponseDrawer2({ open, setOpen, selectedResponse }) {
+export default function SurveyResponseDrawer2({ open, setOpen, selectedResponse, isSM }) {
   const [answers, setAnswers] = useState([]);
 
   useEffect(() => {
     if (!selectedResponse?.id || !open) return;
-    console.log("sss", selectedResponse);
     axios
       .get(`/api/response/${selectedResponse.id}`)
       .then((res) => {
-        console.log("ans", res.data.data.answers);
         const anss = res.data.data.answers;
         const answers = anss.map((ans) => {
           return {
@@ -37,8 +35,8 @@ export default function SurveyResponseDrawer2({ open, setOpen, selectedResponse 
     <Drawer
       title={selectedResponse?.respondent || selectedResponse?.id}
       placement="right"
-      closable={false}
-      width="50%"
+      closable={true}
+      width={isSM ? "100%" : "600px"}
       open={open}
       onClose={() => setOpen(false)}
     >

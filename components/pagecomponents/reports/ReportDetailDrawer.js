@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Modal, Row, Space } from "antd";
+import { Button, Col, Drawer, Grid, Modal, Row, Space } from "antd";
 import { useCallback, useMemo } from "react";
 import { TbCalendar, TbMapPin } from "react-icons/tb";
 
@@ -13,6 +13,12 @@ export default function ReportDetailDrawer({
   apiNotification,
   statuses,
 }) {
+  const screen = Grid.useBreakpoint();
+
+  const isSM = useMemo(() => {
+    return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
+  }, [screen]);
+
   const onClose = () => {
     setOpen(false);
   };
@@ -60,8 +66,8 @@ export default function ReportDetailDrawer({
       placement="right"
       onClose={onClose}
       open={open}
-      closable={false}
-      width="500px"
+      closable={true}
+      width={isSM ? "100%" : "500px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
       <Space direction="vertical" size="large">
@@ -81,7 +87,7 @@ export default function ReportDetailDrawer({
               </div>
             ) : null}
             <Button type="link" style={{ margin: 0, padding: 0 }} onClick={() => onChangeStatusClick(selectedReport)}>
-              Ubah status
+              {selectedReport?.complaint_status?.id == 2 ? "Ubah catatan" : "Ubah status"}
             </Button>
           </Space>
         </Section>

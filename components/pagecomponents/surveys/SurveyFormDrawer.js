@@ -1,5 +1,5 @@
-import { Button, Col, Drawer, Input, Row, Space, Switch, Typography } from "antd";
-import { useCallback, useEffect, useState } from "react";
+import { Button, Col, Drawer, Grid, Input, Row, Space, Switch, Typography } from "antd";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import SurveyFormCard from "./SurveyFormCard";
 
@@ -15,6 +15,12 @@ export default function SurveyFormDrawer({
   apiNotification,
   setSurveys,
 }) {
+  const screen = Grid.useBreakpoint();
+
+  const isSM = useMemo(() => {
+    return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
+  }, [screen]);
+
   const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);
@@ -128,8 +134,8 @@ export default function SurveyFormDrawer({
       placement="right"
       onClose={onClose}
       open={open}
-      closable={false}
-      width="60%"
+      closable={true}
+      width={isSM ? "100%" : "750px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
       bodyStyle={{ background: "#EEEEEE", padding: "0px", overflowX: "hidden" }}
       stye
