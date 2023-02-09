@@ -1,9 +1,6 @@
-import { Button, Space } from "antd";
+import { Menu } from "antd";
 import axios from "axios";
-import clsx from "clsx";
 import { useEffect, useMemo, useState } from "react";
-
-import styles from "./users.module.css";
 
 export default function UserRoleSelect({ currentUser, activeLevel, setActiveLevel }) {
   const [occupations, setOccupations] = useState([]);
@@ -27,18 +24,20 @@ export default function UserRoleSelect({ currentUser, activeLevel, setActiveLeve
     return occupations.filter((o) => o.level > currentUser.occupation?.level);
   }, [currentUser.occupation?.level, occupations]);
 
-  return (
-    <Space size="middle">
-      {filteredOccupations.map((occupation) => (
-        <Button
-          className={clsx(styles.button, activeLevel === occupation?.level ? styles.button_active : "")}
-          type="link"
-          onClick={() => setActiveLevel(occupation?.level)}
-          key={occupation?.level}
-        >
-          {occupation.name}
-        </Button>
-      ))}
-    </Space>
+  const items = filteredOccupations.map(
+    (occupation) => {
+      return {
+        // key: occupation?.id,
+        label: occupation?.name,
+        key: occupation?.level,
+      };
+    },
+    [filteredOccupations],
   );
+
+  const onClick = (e) => {
+    setActiveLevel(Number(e?.key));
+  };
+
+  return <Menu mode="horizontal" onClick={onClick} items={items} selectedKeys={[String(activeLevel)]} />;
 }
