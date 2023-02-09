@@ -45,7 +45,7 @@ export default function SurveyResponseDrawer2({ open, setOpen, selectedResponse 
       <Space direction="vertical" size="large" style={{ width: "100%" }}>
         {answers.map((ans) => (
           <div key={ans.id}>
-            <div>{ans.question}</div>
+            <div className={styles.ans_title}>{ans.question}</div>
             <div className={styles.ans_answer}>{answerText(ans)}</div>
           </div>
         ))}
