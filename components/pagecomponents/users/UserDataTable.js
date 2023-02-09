@@ -183,7 +183,7 @@ export default function UserDataTable({
                   onClick={() => blacklistUserHandler(row)}
                 ></Button>
               </Tooltip>
-              <Tooltip title="Edit pengguna">
+              <Tooltip title="Hapus pengguna">
                 <Button
                   type="text"
                   disabled={!canModify}
