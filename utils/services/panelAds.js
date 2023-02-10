@@ -16,3 +16,7 @@ export const useGetGoogleCustomerName = (id) => {
 
   return { gProfileName, error, isLoading };
 }
+
+export const updateGoogleCustomer = async (data) => {
+  return await axios.put(`/api/profile/update/google-ads-id/${data.google_ads_id}`, data);
+};
