@@ -63,9 +63,9 @@ export default function AdsFormDrawer({
     updateGoogleCustomer(data)
       .then((res) => {
         console.log("update:", res);
-        setUserId(res.data.google_ads_id);
-        setUserName(res.data.google_ads_name);
-        setTable(res.data.results);
+        setUserId(res.data.data.google_ads_id);
+        setUserName(res.data.data.google_ads_name);
+        setTable(res.data.data.results);
 
         apiNotification.success({
           message: "Berhasil",
