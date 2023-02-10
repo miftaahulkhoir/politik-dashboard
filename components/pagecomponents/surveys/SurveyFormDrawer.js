@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Grid, Input, Row, Space, Switch, Typography } from "antd";
+import { Button, Col, Drawer, Grid, Input, Row, Space, Switch, Tooltip, Typography } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 
 import SurveyFormCard from "./SurveyFormCard";
@@ -24,6 +24,22 @@ export default function SurveyFormDrawer({
   const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);
+
+  // empty checking
+  const hasEmpty = useMemo(() => {
+    const titleEmpty = title === "";
+    const questionEmpty = questions.some((question) => {
+      if (question.question_name === "") return true;
+      if (question?.options) {
+        return question.options.some((option) => option.option_name === "");
+      }
+      return false;
+    });
+
+    return titleEmpty || questionEmpty;
+  }, [title, questions]);
+
+  // end empty checking
 
   const { survey } = useFindOneSurvey(selectedSurveyId);
   useEffect(() => {
@@ -159,9 +175,19 @@ export default function SurveyFormDrawer({
       ))}
       <Row justify="space-between" style={{ margin: "24px" }}>
         <Button onClick={addQuestionHandler}>Tambah Pertanyaan</Button>
-        <Button type="primary" onClick={submitHandler} style={{ fontWeight: 600, letterSpacing: "0.8px" }}>
-          SIMPAN
-        </Button>
+        <Tooltip
+          placement="topRight"
+          title={hasEmpty ? "Judul serta semua pertanyaan dan opsi jawaban tidak boleh kosong!" : ""}
+        >
+          <Button
+            type="primary"
+            onClick={submitHandler}
+            style={{ fontWeight: 600, letterSpacing: "0.8px" }}
+            disabled={hasEmpty}
+          >
+            SIMPAN
+          </Button>
+        </Tooltip>
       </Row>
     </Drawer>
   );
