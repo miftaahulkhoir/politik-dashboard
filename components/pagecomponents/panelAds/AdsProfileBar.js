@@ -1,6 +1,7 @@
 import { Button, Card, Col, DatePicker, Modal, Row, Select } from "antd";
-import googleProfileFormatter from "../../../utils/helpers/googleProfileFormatter";
 import { TbPencil, TbTrashX } from "react-icons/tb";
+
+import googleProfileFormatter from "../../../utils/helpers/googleProfileFormatter";
 
 export default function AdsProfileBar({ id, name, editProfileHandler }) {
   const idStyle = {

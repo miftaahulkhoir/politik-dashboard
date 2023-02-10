@@ -92,7 +92,6 @@ export default function SocialReports(pageProps) {
         setUserId={setGProfile}
         setTable={setCampaigns}
       />
-      
       <Head>
         <title>Panel Ads · Patrons</title>
       </Head>
@@ -107,9 +106,7 @@ export default function SocialReports(pageProps) {
           id={gProfile || ""}
           editProfileHandler={() => setIsDrawerActive(true)}
         />
-        <AdsDataTable
-          data={filteredCampaigns}
-        />
+        <AdsDataTable data={filteredCampaigns} />
       </Space>
     </>
   );
