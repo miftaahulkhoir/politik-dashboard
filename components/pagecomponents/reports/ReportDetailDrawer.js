@@ -1,9 +1,11 @@
 import { Button, Col, Drawer, Grid, Modal, Row, Space } from "antd";
-import { useCallback, useMemo } from "react";
-import { TbCalendar, TbMapPin } from "react-icons/tb";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { TbCalendar, TbMapPin, TbUser } from "react-icons/tb";
 
 import ReportChangeStatusModal from "./ReportChangeStatusModal";
 import ReportStatusPill from "./ReportStatusPill";
+
+import { reverseGeocoding } from "../../../utils/services/locations";
 
 export default function ReportDetailDrawer({
   open = true,
@@ -60,6 +62,11 @@ export default function ReportDetailDrawer({
     [apiNotification, statuses, setReports],
   );
 
+  const [location, setLocation] = useState("");
+  useEffect(() => {
+    reverseGeocoding(selectedReport?.latitude, selectedReport?.longitude).then((res) => setLocation(res));
+  }, [selectedReport]);
+
   return (
     <Drawer
       title="Detail Pengaduan"
@@ -102,16 +109,19 @@ export default function ReportDetailDrawer({
             {selectedReport?.link_image && (
               <img src={selectedReport?.link_image} alt="Foto tidak tersedia" style={{ width: "100%" }} />
             )}
-            <Row gutter={8} align="middle">
+            <Row wrap={false} gutter={8} align="middle">
+              <Col>
+                <TbUser size={24} />
+              </Col>
+              <Col flex={1}>{selectedReport?.sender_name}</Col>
+            </Row>
+            <Row wrap={false} gutter={8} align="middle">
               <Col>
                 <TbMapPin size={24} />
               </Col>
-              <Col flex={1}>
-                Latitude: {Number(selectedReport?.latitude)?.toFixed(5)} — Longitude:{" "}
-                {Number(selectedReport?.longitude)?.toFixed(5)}
-              </Col>
+              <Col flex={1}>{location}</Col>
             </Row>
-            <Row gutter={8} align="middle">
+            <Row wrap={false} gutter={8} align="middle">
               <Col>
                 <TbCalendar size={24} />
               </Col>
