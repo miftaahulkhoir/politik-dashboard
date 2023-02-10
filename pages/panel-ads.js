@@ -88,6 +88,8 @@ export default function SocialReports(pageProps) {
 
   return (
     <>
+      {contextHolderNotification}
+
       <AdsFormDrawer
         open={isDrawerActive}
         setOpen={setIsDrawerActive}
