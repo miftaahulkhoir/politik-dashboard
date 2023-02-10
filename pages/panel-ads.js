@@ -79,8 +79,8 @@ export default function SocialReports(pageProps) {
   }, [fetchGProfileName]);
 
   const filteredCampaigns = useMemo(() => {
-    if (campaigns.length == 0) {
-      let empty = [];
+    if (campaigns == null) {
+      const empty = [];
       return empty;
     }
     return campaigns.map((campaigns, i) => ({ ...campaigns, no: i + 1 }));

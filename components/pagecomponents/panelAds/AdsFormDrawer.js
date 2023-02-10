@@ -62,7 +62,7 @@ export default function AdsFormDrawer({
   const updateAdsHandler = (data) => {
     updateGoogleCustomer(data)
       .then((res) => {
-        console.log("update:", res);
+        // console.log("update:", res.data.data.google_ads_id, res.data.data.google_ads_name, res.data.data.results);
         setUserId(res.data.data.google_ads_id);
         setUserName(res.data.data.google_ads_name);
         setTable(res.data.data.results);
