@@ -61,6 +61,7 @@ export default function SocialReports(pageProps) {
 
   const [isDrawerActive, setIsDrawerActive] = useState(false);
 
+  const [isFetched, setIsFetched] = useState(false);
   const [campaigns, setCampaigns] = useState([]);
   const { campaigns: fetchCampaigns } = useGetCampaignsById(pageProps.profile.google_ads_id);
   const [gProfile, setGProfile] = useState("");
@@ -69,7 +70,10 @@ export default function SocialReports(pageProps) {
 
   useEffect(() => {
     if (!fetchCampaigns?.length) return;
-    setCampaigns(fetchCampaigns);
+    if (!isFetched) {
+      setIsFetched(true);
+      setCampaigns(fetchCampaigns);
+    }
   }, [fetchCampaigns]);
 
   useEffect(() => {
