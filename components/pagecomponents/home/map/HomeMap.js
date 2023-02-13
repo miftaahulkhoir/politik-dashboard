@@ -196,7 +196,11 @@ export default function HomeMap({
                     })
                   }
                   position={[m?.latitude, m?.longitude]}
-                ></Marker>
+                >
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                    {trimString(m?.name, 30)}
+                  </Tooltip>
+                </Marker>
               ),
           )}
         {userLogCordinate === true && (
