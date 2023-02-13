@@ -6,7 +6,7 @@ import DropdownInputEditable from "../../elements/input/DropdownInputEditable";
 import MultiRadioEditable from "../../elements/input/MultiRadioEditable";
 import YesNoQuestion from "../../elements/input/YesNoQuestion";
 
-export default function SurveyFormCard({ index, questions, setQuestions }) {
+export default function SurveyFormCard({ index, questions, setQuestions, isSM }) {
   const type = useMemo(() => {
     return questions[index].input_type;
   }, [index, questions]);
@@ -37,8 +37,8 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
 
   return (
     <Card style={{ margin: "24px" }}>
-      <Row gutter={32}>
-        <Col span={16}>
+      <Row style={{ gap: "16px", flexDirection: isSM ? "column-reverse" : "row" }}>
+        <Col span={isSM ? 24 : 16}>
           <Typography.Title level={5}>Pertanyaan</Typography.Title>
           <Input.TextArea
             rows={2}
@@ -50,7 +50,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
             }}
           />
         </Col>
-        <Col span={8}>
+        <Col span={isSM ? 24 : 8}>
           <Typography.Title level={5}>Jenis Jawaban</Typography.Title>
           <Select
             defaultValue="text"
@@ -93,7 +93,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
       </Row>
       <Divider />
       <Row gutter={32}>
-        <Col span={16}>{formElement}</Col>
+        <Col span={isSM ? 24 : 16}>{formElement}</Col>
       </Row>
     </Card>
   );

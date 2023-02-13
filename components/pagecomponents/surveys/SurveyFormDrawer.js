@@ -156,12 +156,14 @@ export default function SurveyFormDrawer({
       bodyStyle={{ background: "#EEEEEE", padding: "0px", overflowX: "hidden" }}
       stye
     >
-      <Row gutter={32} style={{ padding: "24px", background: "white" }}>
-        <Col span={16}>
+      <Row
+        style={{ padding: "24px", background: "white", flexDirection: isSM ? "column-reverse" : "row", gap: "16px" }}
+      >
+        <Col span={isSM ? 24 : 16}>
           <Typography.Title level={5}>Judul Survei</Typography.Title>
           <Input.TextArea rows={2} value={title} onChange={(e) => setTitle(e.target.value)} />
         </Col>
-        <Col span={8}>
+        <Col span={isSM ? 24 : 8}>
           <Typography.Title level={5}>Status</Typography.Title>
           <Space>
             <Typography.Text>Tidak Aktif</Typography.Text>
@@ -171,7 +173,7 @@ export default function SurveyFormDrawer({
         </Col>
       </Row>
       {questions?.map((question, index) => (
-        <SurveyFormCard key={index} index={index} questions={questions} setQuestions={setQuestions} />
+        <SurveyFormCard key={index} index={index} questions={questions} setQuestions={setQuestions} isSM={isSM} />
       ))}
       <Row justify="space-between" style={{ margin: "24px" }}>
         <Button onClick={addQuestionHandler}>Tambah Pertanyaan</Button>
