@@ -1,6 +1,7 @@
 import { Button, Card, Select, Space } from "antd";
 
 export default function HomeMapFilterLocation({
+  className,
   regencies,
   districts,
   villages,
@@ -12,7 +13,7 @@ export default function HomeMapFilterLocation({
   setVillage,
 }) {
   return (
-    <Card size="small" title="Lokasi">
+    <Card size="small" title="Lokasi" className={className}>
       <Space direction="vertical">
         <Select
           showSearch

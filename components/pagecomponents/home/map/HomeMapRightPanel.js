@@ -1,4 +1,5 @@
-import React from "react";
+import clsx from "clsx";
+import React, { useState } from "react";
 
 import HomeMapFilterLocation from "./HomeMapFilterLocation";
 import HomeMapFilterThematic from "./HomeMapFilterThematic";
@@ -6,20 +7,30 @@ import styles from "./homeMapRightPanel.module.css";
 
 function HomeMapRightPanel({
   regencies,
-  districts,
-  villages,
   regency,
-  district,
-  village,
   setRegency,
+  districts,
+  district,
   setDistrict,
+  villages,
+  village,
   setVillage,
   thematicType,
   setThematicType,
+  surveys,
+  surveyID,
+  setSurveyID,
+  questions,
+  questionID,
+  setQuestionID,
 }) {
+  const [locationActive, setLocationActive] = useState(true);
+  const [thematicActive, setThematicActive] = useState(true);
+
   return (
     <div className={styles.container}>
       <HomeMapFilterLocation
+        className={clsx(locationActive ? "" : styles.card_inactive)}
         regencies={regencies}
         districts={districts}
         villages={villages}
@@ -31,7 +42,17 @@ function HomeMapRightPanel({
         setVillage={setVillage}
       />
 
-      <HomeMapFilterThematic thematicType={thematicType} setThematicType={setThematicType} />
+      <HomeMapFilterThematic
+        className={clsx(thematicActive ? "" : styles.card_inactive)}
+        thematicType={thematicType}
+        setThematicType={setThematicType}
+        surveys={surveys}
+        surveyID={surveyID}
+        setSurveyID={setSurveyID}
+        questions={questions}
+        questionID={questionID}
+        setQuestionID={setQuestionID}
+      />
     </div>
   );
 }

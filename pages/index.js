@@ -23,6 +23,7 @@ import {
   useFindAllVillagesByDistrictID,
 } from "../utils/services/locations";
 import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
+import { useFindAllQuestionsBySurvey, useFindAllSurveys, useFindOneSurveyResult } from "../utils/services/surveys";
 
 const Centrifuge = require("centrifuge");
 
@@ -128,8 +129,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   // END PENGADUAN
 
   // TEMATIK ===================================
-
-  // filter lokasi
+  // filter lokasi =====
   const [regency, setRegency] = useState(null);
   const [district, setDistrict] = useState(null);
   const [village, setVillage] = useState(null);
@@ -138,8 +138,32 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const { districts } = useFindAllDistrictsByRegencyID(regency);
   const { villages } = useFindAllVillagesByDistrictID(district);
 
-  // filter tipe tematik
+  // filter tipe tematik =====
   const [thematicType, setThematicType] = useState(null);
+  const [surveyID, setSurveyID] = useState(null);
+  const [questionID, setQuestionID] = useState(null);
+
+  // data survey
+  const { surveys } = useFindAllSurveys();
+  const { survey } = useFindOneSurveyResult(surveyID, {
+    villageID: village,
+    districtID: district,
+    regencyID: regency,
+    questionID: questionID,
+  });
+  const { questions } = useFindAllQuestionsBySurvey(surveyID);
+
+  console.log("survey", survey);
+
+  // main thematic data =====
+  const [dataThematics, setDataThematics] = useState([]);
+  useEffect(() => {
+    // survey
+    if (thematicType === 0) {
+      // console.log()
+    }
+    setDataThematics([]);
+  }, [thematicType, survey]);
 
   // END TEMATIK ===================================
 
@@ -461,16 +485,22 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
           <HomeMapRightPanel
             regencies={regencies}
-            districts={districts}
-            villages={villages}
             regency={regency}
-            district={district}
-            village={village}
             setRegency={setRegency}
+            districts={districts}
+            district={district}
             setDistrict={setDistrict}
+            villages={villages}
+            village={village}
             setVillage={setVillage}
             thematicType={thematicType}
             setThematicType={setThematicType}
+            surveys={surveys}
+            surveyID={surveyID}
+            setSurveyID={setSurveyID}
+            questions={questions}
+            questionID={questionID}
+            setQuestionID={setQuestionID}
           />
         </>
       ) : (

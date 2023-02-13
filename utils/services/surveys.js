@@ -3,6 +3,8 @@ import useSWR from "swr";
 
 import fetcher from "./fetcher";
 
+import removeNullUndefinedField from "../helpers/date/removeNullUndefinedField";
+
 export const useFindAllSurveys = () => {
   const { data, error, isLoading } = useSWR("/api/survey", fetcher);
   const surveys = data?.data || [];
@@ -33,9 +35,29 @@ export const deleteSurvey = async (id) => {
   return await axios.delete(`/api/survey/${id}`);
 };
 
+// questions
+export const useFindAllQuestionsBySurvey = (surveyID) => {
+  const { data, error, isLoading } = useSWR(`/api/question?surveyid=${surveyID}`, fetcher);
+  const questions = data?.data || [];
+
+  return { questions, error, isLoading };
+};
+
 // survey result
-export const useFindOneSurveyResult = (id) => {
-  const { data, error, isLoading } = useSWR(`/api/survey-result/${id}`, fetcher);
+export const useFindOneSurveyResult = (surveyID, paramsArg = {}) => {
+  const { villageID, districtID, regencyID, questionID } = paramsArg;
+  const params = {
+    villageid: villageID,
+    districtid: districtID,
+    regencyid: regencyID,
+    questionid: questionID,
+  };
+  const cleanParams = removeNullUndefinedField(params);
+
+  console.log("clean params", cleanParams);
+  const paramsURL = new URLSearchParams(cleanParams).toString();
+
+  const { data, error, isLoading } = useSWR(`/api/survey-result/${surveyID}?${paramsURL}`, fetcher);
   const survey = data?.data || {};
 
   return { survey, error, isLoading };
