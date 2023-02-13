@@ -89,6 +89,7 @@ export default function Surveys({ profile }) {
         isEdit={isFormEdit}
         setIsEdit={setIsFormEdit}
         selectedSurveyId={selectedSurveyId}
+        setSelectedSurveyId={setSelectedSurveyId}
         setSurveys={setSurveys}
         apiNotification={apiNotification}
       />

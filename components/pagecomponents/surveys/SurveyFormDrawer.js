@@ -12,6 +12,7 @@ export default function SurveyFormDrawer({
   isEdit,
   setIsEdit,
   selectedSurveyId,
+  setSelectedSurveyId,
   apiNotification,
   setSurveys,
 }) {
@@ -28,7 +29,7 @@ export default function SurveyFormDrawer({
   // empty checking
   const hasEmpty = useMemo(() => {
     const titleEmpty = title === "";
-    const questionEmpty = questions.some((question) => {
+    const questionEmpty = questions?.some((question) => {
       if (question.question_name === "") return true;
       if (question?.options) {
         return question.options.some((option) => option.option_name === "");
@@ -61,6 +62,7 @@ export default function SurveyFormDrawer({
   };
 
   const onClose = () => {
+    setSelectedSurveyId(null);
     setOpen(false);
     setIsEdit(false);
     clearForm();
