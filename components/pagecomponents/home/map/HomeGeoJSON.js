@@ -1,13 +1,12 @@
 import axios from "axios";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GeoJSON } from "react-leaflet";
 
-export default function HomeGeoJSON({ zoom }) {
-  const [data, setData] = useState(null);
+import getRandomColor from "../../../../utils/helpers/getRandomColor";
 
-  useEffect(() => {
-    console.log("data changed", data);
-  }, [data]);
+export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse }) {
+  const [data, setData] = useState(null);
+  const [resetSignal, setResetSignal] = useState(false);
 
   function loadAndSaveGeoJSON() {
     const dbName = "geojson";
@@ -36,7 +35,6 @@ export default function HomeGeoJSON({ zoom }) {
       // load the data
       const query = store.get(0);
       query.onsuccess = async function () {
-        console.log("query", query.result);
         if (query.result) {
           setData(query.result);
           console.log("geojson loaded from indexeddb");
@@ -88,101 +86,18 @@ export default function HomeGeoJSON({ zoom }) {
     };
   }
 
-  const [selectedFeatures, setSelectedFeatures] = useState([
-    "CIKOLE",
-    "GUDANGKAHURIPAN",
-    "JAYAGIRI",
-    "CIBODAS",
-    "LANGENSARI",
-    "MEKARWANGI",
-    "CIBOGO",
-    "SUKAJAYA",
-    "SUNTENJAYA",
-    "WANGUNHARJA",
-    "WANGUNSARI",
-    "KARYAWANGI",
-    "CIHANJUANG",
-    "CIHANJUANGRAHAYU",
-    "CIHIDEUNG",
-    "CIWARUGA",
-    "CIGUGURGIRANG",
-    "SARIWANGI",
-    "JAMBUDIPA",
-    "PADAASIH",
-    "PASIRHALANG",
-    "PASIRLANGU",
-    "CIPADA",
-    "KERTAWANGI",
-    "TUGUMUKTI",
-    "SADANGMEKAR",
-    "CIPTAGUMATI",
-    "CIKALONG",
-    "CISOMANGBARAT",
-    "GANJARSARI",
-    "KANANGASARI",
-    "MANDALASARI",
-    "MANDALAMUKTI",
-    "MEKARJAYA",
-    "PUTERAN",
-    "RENDE",
-    "TENJOLAUT",
-    "WANGUNJAYA",
-    "CIPEUNDEUY",
-    "CIHARASHAS",
-    "BOJONGMEKAR",
-    "CIROYOM",
-    "JATIMEKAR",
-    "MARGALAKSANA",
-    "MARGALUYU",
-    "NANGGELENG",
-    "NYENANG",
-    "SIRNARAJA",
-    "SIRNAGALIH",
-    "SUKAHAJI",
-    "NGAMPRAH",
-    "CIMAREME",
-    "CILAME",
-    "TANIMULYA",
-    "CIMANGGU",
-    "BOJONGKONENG",
-    "MARGAJAYA",
-    "MEKARSARI",
-    "GADOBANGKONG",
-    "SUKATANI",
-    "PAKUHAJI",
-    "CIPTAHARJA",
-    "CIPATAT",
-    "CITATAH",
-    "RAJAMANDALAKULON",
-    "MANDALAWANGI",
-    "KERTAMUKTI",
-    "NYALINDUNG",
-    "GUNUNGMASIGIT",
-    "CIRAWAMEKAR",
-    "SUMURBANDUNG",
-    "SARIMUKTI",
-    "KERTAMULYA",
-    "PADALARANG",
-    "CIMERANG",
-    "CAMPAKA MEKAR",
-    "TAGOGAPU",
-    "CIBURUY",
-    "KERTAJAYA",
-    "JAYAMEKAR",
-    "LAKSANAMEKAR",
-    "BATUJAJAR TIMUR",
-  ]);
-
   useEffect(() => {
     // loadAndSaveGeoJSON();
     axios.get("/geojson/bandung_bandungbarat_v4.json").then((res) => setData(res.data));
   }, []);
 
   const onEachFeature = useCallback((feature, layer) => {
-    if (selectedFeatures.includes(feature.properties.village)) {
-      layer.options.fillColor = "yellow";
+    if (feature?.properties?.selected) {
+      layer.options.fillColor = getRandomColor();
+      layer.options.fillOpacity = 0.7;
     } else {
-      layer.options.fillColor = "red";
+      layer.options.fillColor = "#016CEE";
+      layer.options.fillOpacity = 0.2;
     }
 
     layer.on("click", (e) => {
@@ -194,10 +109,30 @@ export default function HomeGeoJSON({ zoom }) {
 
   const style = useMemo(() => {
     return {
-      fillOpacity: 0.5,
       weight: zoom < 12 ? 0 : Math.pow(zoom, 1.2) * 0.1,
     };
-  }, [zoom]);
+  }, [zoom, resetSignal]);
 
-  return <>{data ? <GeoJSON data={data} style={style} onEachFeature={onEachFeature} /> : <></>}</>;
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!thematicQuestionSurveyResponse?.id) return;
+
+    setData((prevData) => {
+      const newFeatures = prevData?.features?.map((feature) => {
+        feature.properties.selected = thematicQuestionSurveyResponse.village_id == feature?.properties.village_id;
+        return feature;
+      });
+      return { ...prevData, features: newFeatures };
+    });
+  }, [thematicQuestionSurveyResponse]);
+
+  useEffect(() => {
+    if (!ref.current) return;
+
+    ref.current.clearLayers().addData(data);
+    setResetSignal((s) => !s);
+  }, [data]);
+
+  return <>{data ? <GeoJSON ref={ref} data={data} style={style} onEachFeature={onEachFeature} /> : <></>}</>;
 }

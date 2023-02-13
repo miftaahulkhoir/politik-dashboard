@@ -54,7 +54,6 @@ export const useFindOneSurveyResult = (surveyID, paramsArg = {}) => {
   };
   const cleanParams = removeNullUndefinedField(params);
 
-  console.log("clean params", cleanParams);
   const paramsURL = new URLSearchParams(cleanParams).toString();
 
   const { data, error, isLoading } = useSWR(`/api/survey-result/${surveyID}?${paramsURL}`, fetcher);

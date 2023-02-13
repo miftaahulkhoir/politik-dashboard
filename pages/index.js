@@ -154,6 +154,13 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const { questions } = useFindAllQuestionsBySurvey(surveyID);
 
   console.log("survey", survey);
+  const thematicQuestionSurveyResponse = useMemo(() => {
+    if (!survey?.id) return {};
+    const data = survey?.questions[0];
+    data.village_id = village;
+    console.log("data response", data);
+    return data;
+  }, [survey, village]);
 
   // main thematic data =====
   const [dataThematics, setDataThematics] = useState([]);
@@ -479,6 +486,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 indexShownReportCategories={indexShownReportCategories}
                 setSelectedReport={setSelectedReport}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
+                thematicQuestionSurveyResponse={thematicQuestionSurveyResponse}
               />
             </div>
           )}
