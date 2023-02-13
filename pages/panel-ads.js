@@ -4,15 +4,14 @@ import debounce from "lodash.debounce";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import { useCallback, useEffect, useMemo, useState } from "react";
-import { TbPencil, TbTrashX } from "react-icons/tb";
 
 import Card from "../components/elements/card/Card";
 import AdsBarChart from "../components/pagecomponents/panelAds/AdsBarChart";
 import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
 import AdsDataTable from "../components/pagecomponents/panelAds/AdsDataTable";
-import AdsSearchBar from "../components/pagecomponents/panelAds/AdsSearchBar";
+import AdsFormDrawer from "../components/pagecomponents/panelAds/AdsFormDrawer";
+import AdsProfileBar from "../components/pagecomponents/panelAds/AdsProfileBar";
 import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
-import googleProfileFormatter from "../utils/helpers/googleProfileFormatter";
 import { useGetCampaignsById, useGetGoogleCustomerName } from "../utils/services/panelAds";
 const { RangePicker } = DatePicker;
 
@@ -51,7 +50,7 @@ export default function SocialReports(pageProps) {
   const [isDataFetched, setIsDataFetched] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isFormEdit, setIsFormEdit] = useState(false);
+  const [isFormEdit, setIsFormEdit] = useState(true);
   const [selectedSurveyId, setSelectedSurveyId] = useState(null);
 
   const [filterSearch, setFilterSearch] = useState("");
@@ -59,6 +58,8 @@ export default function SocialReports(pageProps) {
   const [selectedGroupData, setSelectedGroup] = useState("");
   const [selectedTopicData, setSelectedTopic] = useState("");
   const [filterDate, setFilterDate] = useState([]);
+
+  const [isDrawerActive, setIsDrawerActive] = useState(false);
 
   const [campaigns, setCampaigns] = useState([]);
   const { campaigns: fetchCampaigns } = useGetCampaignsById(pageProps.profile.google_ads_id);
@@ -78,11 +79,25 @@ export default function SocialReports(pageProps) {
   }, [fetchGProfileName]);
 
   const filteredCampaigns = useMemo(() => {
+    if (campaigns == null) {
+      const empty = [];
+      return empty;
+    }
     return campaigns.map((campaigns, i) => ({ ...campaigns, no: i + 1 }));
   }, [campaigns]);
 
   return (
     <>
+      {contextHolderNotification}
+
+      <AdsFormDrawer
+        open={isDrawerActive}
+        setOpen={setIsDrawerActive}
+        apiNotification={apiNotification}
+        setUserName={setGProfileName}
+        setUserId={setGProfile}
+        setTable={setCampaigns}
+      />
       <Head>
         <title>Panel Ads · Patrons</title>
       </Head>
@@ -92,7 +107,11 @@ export default function SocialReports(pageProps) {
       </div>
 
       <Space direction="vertical" size="middle">
-        <Profile name={gProfileName || "-"} id={gProfile || ""} />
+        <AdsProfileBar
+          name={gProfileName || "-"}
+          id={gProfile || ""}
+          editProfileHandler={() => setIsDrawerActive(true)}
+        />
         <AdsDataTable data={filteredCampaigns} />
       </Space>
     </>
@@ -101,21 +120,4 @@ export default function SocialReports(pageProps) {
 
 export async function getServerSideProps(ctx) {
   return { props: {} };
-}
-
-function Profile(data) {
-  const idStyle = {
-    fontSize: "1.5rem",
-  };
-  const nameStyle = {
-    fontSize: "1.5rem",
-    fontWeight: "500",
-  };
-  return (
-    <div>
-      <span style={nameStyle}>{data.name}: </span>
-      <span style={idStyle}>{googleProfileFormatter(data.id)}</span>
-      <Button type="text" icon={<TbPencil size={24} color={"#7287A5"} />} shape="square" />
-    </div>
-  );
 }
