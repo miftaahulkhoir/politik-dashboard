@@ -78,6 +78,7 @@ export default function SurveyDataTable({
       selector: (row) => {
         const isAdmin = occupationLevel === 1;
         const canDownload = row?.total_respondent > 0 && isAdmin;
+        const canSee = row?.total_respondent > 0;
         return (
           <div className="d-flex gap-2">
             <Tooltip title="Unduh excel">
@@ -94,7 +95,8 @@ export default function SurveyDataTable({
             <Tooltip title="Lihat responden">
               <Button
                 type="text"
-                icon={<TbEye size={20} color="#016CEE" />}
+                disabled={!canSee}
+                icon={<TbEye size={20} color={canDownload ? "#016CEE" : "#cccccc"} />}
                 shape="circle"
                 onClick={() => {
                   setIsResponseDrawerOpen(true);
