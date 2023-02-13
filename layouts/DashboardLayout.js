@@ -9,6 +9,7 @@ import {
   TbLayoutDashboard,
   TbListCheck,
   TbMessageReport,
+  TbBrandTwitter,
   TbUser,
 } from "react-icons/tb";
 
@@ -99,6 +100,17 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 <a>
                   <TbDeviceAnalytics size={24} />
                   <span>Analisis Survei</span>
+                </a>
+              </li>
+            )}
+            {profile?.occupation?.level < 3 && (
+              <li
+                className={asPath === "/social-media-analysis" ? "meu-item active" : "menu-item"}
+                onClick={() => router.push("/social-media-analysis")}
+              >
+                <a>
+                  <TbBrandTwitter size={24} />
+                  <span>Analisis Sosial Media</span>
                 </a>
               </li>
             )}
