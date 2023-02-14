@@ -8,11 +8,11 @@ import UserFormDrawer from "../components/pagecomponents/users/UserFormDrawer";
 import UserRoleSelect from "../components/pagecomponents/users/UserRoleSelect";
 import UserSearchBar from "../components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "../utils/services/profiles";
-import { useFindAllUsers } from "../utils/services/users";
+import { useFindAllSubordinateUsers } from "../utils/services/users";
 
 export default function Users() {
   const [users, setUsers] = useState([]);
-  const { users: fetchUsers } = useFindAllUsers();
+  const { users: fetchUsers } = useFindAllSubordinateUsers();
   useEffect(() => {
     if (!fetchUsers?.length) return;
     setUsers(fetchUsers);

@@ -10,6 +10,13 @@ export const useFindAllUsers = () => {
   return { users, error, isLoading };
 };
 
+export const useFindAllSubordinateUsers = () => {
+  const { data, error, isLoading } = useSWR("/api/users/user-recruited", fetcher);
+  const users = data?.data || [];
+
+  return { users, error, isLoading };
+};
+
 export const useFindOneUser = (id) => {
   const { data, error, isLoading } = useSWR(`/api/users/${id}`, fetcher);
   const user = data?.data || {};
