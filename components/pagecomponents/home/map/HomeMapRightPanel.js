@@ -1,8 +1,7 @@
-import clsx from "clsx";
+import { Button } from "antd";
 import React, { useState } from "react";
 
-import HomeMapFilterLocation from "./HomeMapFilterLocation";
-import HomeMapFilterThematic from "./HomeMapFilterThematic";
+import HomeMapFIlterThematic2 from "./HomeMapFIlterThematic2";
 import styles from "./homeMapRightPanel.module.css";
 
 function HomeMapRightPanel({
@@ -29,7 +28,7 @@ function HomeMapRightPanel({
 
   return (
     <div className={styles.container}>
-      <HomeMapFilterLocation
+      {/* <HomeMapFilterLocation
         className={clsx(locationActive ? "" : styles.card_inactive)}
         regencies={regencies}
         districts={districts}
@@ -40,9 +39,9 @@ function HomeMapRightPanel({
         setRegency={setRegency}
         setDistrict={setDistrict}
         setVillage={setVillage}
-      />
+      /> */}
 
-      <HomeMapFilterThematic
+      {/* <HomeMapFilterThematic
         className={clsx(thematicActive ? "" : styles.card_inactive)}
         thematicType={thematicType}
         setThematicType={setThematicType}
@@ -52,7 +51,11 @@ function HomeMapRightPanel({
         questions={questions}
         questionID={questionID}
         setQuestionID={setQuestionID}
-      />
+      /> */}
+
+      <HomeMapFIlterThematic2 />
+
+      <Button type="primary">Petakan</Button>
     </div>
   );
 }
