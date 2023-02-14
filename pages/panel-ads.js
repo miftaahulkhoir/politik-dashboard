@@ -10,8 +10,9 @@ import AdsBarChart from "../components/pagecomponents/panelAds/AdsBarChart";
 import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
 import AdsDataTable from "../components/pagecomponents/panelAds/AdsDataTable";
 import AdsFormDrawer from "../components/pagecomponents/panelAds/AdsFormDrawer";
+import AdsDropdownSelector from "../components/pagecomponents/panelAds/AdsDropdownSelector";
 import AdsProfileBar from "../components/pagecomponents/panelAds/AdsProfileBar";
-import AdsTimeChart from "../components/pagecomponents/panelAds/AdsTimeChart";
+import AdsSummary from "../components/pagecomponents/panelAds/AdsSummary";
 import { useGetCampaignsById, useGetGoogleCustomerName } from "../utils/services/panelAds";
 const { RangePicker } = DatePicker;
 
@@ -67,6 +68,8 @@ export default function SocialReports(pageProps) {
   const [gProfile, setGProfile] = useState("");
   const [gProfileName, setGProfileName] = useState("");
   const { gProfileName: fetchGProfileName } = useGetGoogleCustomerName(pageProps.profile.google_ads_id);
+  const [selectedAdsID, setSelectedAdsID] = useState();
+  const [selectedCampaign, setSelectedCampaign] = useState();
 
   useEffect(() => {
     if (!fetchCampaigns?.length) return;
@@ -81,6 +84,21 @@ export default function SocialReports(pageProps) {
     setGProfile(pageProps.profile.google_ads_id);
     setGProfileName(fetchGProfileName);
   }, [fetchGProfileName]);
+
+  useEffect(() => {
+    for (let i = 0; i < filteredCampaigns.length; i++) {
+      console.log(filteredCampaigns[i]);
+      if (filteredCampaigns[i].campaign.id == selectedAdsID) {
+        setSelectedCampaign(filteredCampaigns[i]);
+        break;
+      }
+    }
+  }, [selectedAdsID]);
+
+  useEffect(() => {
+    setSelectedAdsID();
+    setSelectedCampaign();
+  }, [campaigns]);
 
   const filteredCampaigns = useMemo(() => {
     if (campaigns == null) {
@@ -116,7 +134,21 @@ export default function SocialReports(pageProps) {
           id={gProfile || ""}
           editProfileHandler={() => setIsDrawerActive(true)}
         />
-        <AdsDataTable data={filteredCampaigns} />
+        <AdsDropdownSelector
+          datas={filteredCampaigns}
+          setSelectedAdsID={setSelectedAdsID}
+          gProfile={gProfile}
+        />
+        {/* <AdsDataTable
+          data={selectedCampaign}
+        /> */}
+        {selectedCampaign ?
+          <AdsSummary
+            data={selectedCampaign}
+          /> : 
+            <div/>
+        }
+        
       </Space>
     </>
   );

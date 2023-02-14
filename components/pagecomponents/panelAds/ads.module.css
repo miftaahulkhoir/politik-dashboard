@@ -1,5 +1,4 @@
 .ads_summary_card {
-  padding: 16px 20px;
   border-radius: 12px;
   background: white;
   color: black;
@@ -25,8 +24,8 @@
 .ads_summary_card .value {
   /* padding-left: 10px; */
   text-align: center;
-  font-size: 40px;
-  font-weight: 600;
+  font-size: 30px;
+  font-weight: 500;
   padding: 25px 0 35px 0;
 }
 
