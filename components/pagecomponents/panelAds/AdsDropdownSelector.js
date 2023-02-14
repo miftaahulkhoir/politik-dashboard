@@ -8,7 +8,7 @@ import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
 function getLabel(ads) {
   const name = ads.campaign.name;
-  return `${name}`
+  return `${name}`;
 }
 
 export default function UserDataTable({
@@ -25,7 +25,7 @@ export default function UserDataTable({
 }) {
   const options = useMemo(() => datas.map((data) => ({ value: data.campaign.id, label: getLabel(data) })), [datas]);
 
-  let value = useMemo(() => null, [datas]);
+  const value = useMemo(() => null, [datas]);
 
   return (
     <Select

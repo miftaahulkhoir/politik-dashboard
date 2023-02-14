@@ -9,8 +9,8 @@ import Card from "../components/elements/card/Card";
 import AdsBarChart from "../components/pagecomponents/panelAds/AdsBarChart";
 import AdsCard from "../components/pagecomponents/panelAds/AdsCard";
 import AdsDataTable from "../components/pagecomponents/panelAds/AdsDataTable";
-import AdsFormDrawer from "../components/pagecomponents/panelAds/AdsFormDrawer";
 import AdsDropdownSelector from "../components/pagecomponents/panelAds/AdsDropdownSelector";
+import AdsFormDrawer from "../components/pagecomponents/panelAds/AdsFormDrawer";
 import AdsProfileBar from "../components/pagecomponents/panelAds/AdsProfileBar";
 import AdsSummary from "../components/pagecomponents/panelAds/AdsSummary";
 import { useGetCampaignsById, useGetGoogleCustomerName } from "../utils/services/panelAds";
@@ -134,21 +134,11 @@ export default function SocialReports(pageProps) {
           id={gProfile || ""}
           editProfileHandler={() => setIsDrawerActive(true)}
         />
-        <AdsDropdownSelector
-          datas={filteredCampaigns}
-          setSelectedAdsID={setSelectedAdsID}
-          gProfile={gProfile}
-        />
+        <AdsDropdownSelector datas={filteredCampaigns} setSelectedAdsID={setSelectedAdsID} gProfile={gProfile} />
         {/* <AdsDataTable
           data={selectedCampaign}
         /> */}
-        {selectedCampaign ?
-          <AdsSummary
-            data={selectedCampaign}
-          /> : 
-            <div/>
-        }
-        
+        {selectedCampaign ? <AdsSummary data={selectedCampaign} /> : <div />}
       </Space>
     </>
   );
