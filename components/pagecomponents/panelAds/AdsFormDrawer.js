@@ -75,7 +75,17 @@ export default function AdsFormDrawer({
         onClose();
       })
       .catch((err) => {
-        console.log(err);
+        if (err.code == "ERR_BAD_REQUEST") {
+          apiNotification.error({
+            message: "Gagal",
+            description: "Google Ads ID tidak valid",
+          });
+        } else {
+          apiNotification.error({
+            message: "Gagal",
+            description: "Internal server error",
+          });
+        }
       });
   };
 
@@ -99,7 +109,7 @@ export default function AdsFormDrawer({
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
           <Typography.Title level={5}>Google Ads ID</Typography.Title>
-          <Input value={googleId} onChange={(e) => setGoogleId(e.target.value)} />
+          <Input value={googleId} placeholder={"ex: 1234567890"} onChange={(e) => setGoogleId(e.target.value)} />
         </Col>
 
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
