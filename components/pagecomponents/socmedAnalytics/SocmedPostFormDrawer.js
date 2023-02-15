@@ -101,11 +101,7 @@ export default function SocmedPostFormDrawer({ open, setOpen, selectedUser, apiN
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
           <Typography.Title level={5}>Caption</Typography.Title>
-          <Input
-            value={caption}
-            placeholder={"Tulis disini"}
-            onChange={(e) => setCaption(e.target.value)}
-          />
+          <Input value={caption} placeholder={"Tulis disini"} onChange={(e) => setCaption(e.target.value)} />
         </Col>
         <Col span={24} style={{ marginBottom: "24px" }}>
           <Typography.Title level={5}>Media URL</Typography.Title>
@@ -116,7 +112,7 @@ export default function SocmedPostFormDrawer({ open, setOpen, selectedUser, apiN
           />
         </Col>
         <Typography.Title level={5}>Platform Media Sosial</Typography.Title>
-        <Checkbox.Group style={{ width: '100%' }} onChange={setPlatforms}>
+        <Checkbox.Group style={{ width: "100%" }} onChange={setPlatforms}>
           <Row>
             <Col span={16}>
               <Checkbox value="facebook">Facebook</Checkbox>
@@ -125,19 +121,29 @@ export default function SocmedPostFormDrawer({ open, setOpen, selectedUser, apiN
               <Checkbox value="twitter">Twitter</Checkbox>
             </Col>
             <Col span={16}>
-              <Checkbox value="instagram" defaultChecked={false} disabled>Instagram</Checkbox>
+              <Checkbox value="instagram" defaultChecked={false} disabled>
+                Instagram
+              </Checkbox>
             </Col>
             <Col span={16}>
-              <Checkbox value="tiktok" defaultChecked={false} disabled>TikTok</Checkbox>
+              <Checkbox value="tiktok" defaultChecked={false} disabled>
+                TikTok
+              </Checkbox>
             </Col>
             <Col span={16}>
-              <Checkbox value="linkedin" defaultChecked={false} disabled>LinkedIn</Checkbox>
+              <Checkbox value="linkedin" defaultChecked={false} disabled>
+                LinkedIn
+              </Checkbox>
             </Col>
             <Col span={16}>
-              <Checkbox value="pinterest" defaultChecked={false} disabled>Pinterest</Checkbox>
+              <Checkbox value="pinterest" defaultChecked={false} disabled>
+                Pinterest
+              </Checkbox>
             </Col>
             <Col span={16}>
-              <Checkbox value="telegram" defaultChecked={false} disabled>Telegram</Checkbox>
+              <Checkbox value="telegram" defaultChecked={false} disabled>
+                Telegram
+              </Checkbox>
             </Col>
           </Row>
         </Checkbox.Group>
