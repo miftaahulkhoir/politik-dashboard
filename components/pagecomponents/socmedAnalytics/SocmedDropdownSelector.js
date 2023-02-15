@@ -15,7 +15,7 @@ function getLabel(socmed) {
 }
 
 export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, addSocialmediaHandler }) {
-  const options = useMemo(() => socmeds.map((socmed) => ({ value: socmed.id, label: getLabel(socmed) })), [socmeds]);
+  const options = useMemo(() => socmeds.map((socmed) => ({ value: socmed.platform, label: getLabel(socmed) })), [socmeds]);
   const screen = Grid.useBreakpoint();
 
   const isSM = useMemo(() => {
@@ -29,7 +29,7 @@ export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, a
       placeholder="Pilih akun sosial media"
       optionFilterProp="children"
       onChange={(value, option) => {
-        console.log(value);
+        console.log("drpdown", value);
         setSelectedSocmedID(value);
       }}
       filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}

@@ -7,7 +7,8 @@ import SocmedDropdownSelector from "../components/pagecomponents/socmedAnalytics
 import SocmedFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedFormDrawer";
 import SocmedProfileBar from "../components/pagecomponents/socmedAnalytics/SocmedProfileBar";
 import SocmedResultHeader from "../components/pagecomponents/socmedAnalytics/SocmedResultHeader";
-import { useFindAllSocmeds, useFindOneSocmedResult } from "../utils/services/socmedAnalysis";
+import SocmedSummary from "../components/pagecomponents/socmedAnalytics/SocmedSummary";
+import { useFindAllSocmeds, useGetUserAnalytics, useFindOneSocmedResult } from "../utils/services/socmedAnalysis";
 
 const SurveyCharts = dynamic(() => import("../components/pagecomponents/surveyAnalitics/charts/SurveyCharts"));
 
@@ -17,10 +18,29 @@ export default function SocialMediaAnalysis() {
 
   const [socmedsList, setSocmedsList] = useState([]);
   const [ayrshareName, setAyrshareName] = useState("");
-  const [selectedSurveyID, setSelectedSurveyID] = useState();
+  const [selectedSocmedID, setSelectedSocmedID] = useState("");
+  const [selectedSocmedValue, setSelectedSocmedValue] = useState({});
+  const [showResult, setShowResult] = useState(false);
   // const { socmed } = useFindOneSocmedResult(selectedSurveyID);
   const { socmedsList: fetchSocmeds, ayrshareName: fetchAyrshareName } = useFindAllSocmeds();
+  const { userAnalytics } = useGetUserAnalytics();
   const { socmed } = useState();
+
+  useEffect(() => {
+    console.log("selected:", selectedSocmedID);
+    if (selectedSocmedID == "twitter") {
+      console.log("tw", userAnalytics.twitter);
+      setShowResult(true);
+      setSelectedSocmedValue(userAnalytics.twitter);
+    } else if (selectedSocmedID == "facebook") {
+      console.log("fb", userAnalytics.facebook);
+      setShowResult(true);
+      setSelectedSocmedValue(userAnalytics.facebook);
+    } else {
+      setShowResult(false);
+      console.log("error, selected", selectedSocmedID);
+    }
+  }, [selectedSocmedID]);
 
   useEffect(() => {
     setSocmedsList(fetchSocmeds);
@@ -63,16 +83,15 @@ export default function SocialMediaAnalysis() {
 
         <SocmedDropdownSelector
           socmeds={socmedsList}
-          setSelectedSurveyID={setSelectedSurveyID}
+          setSelectedSocmedID={setSelectedSocmedID}
           addSocialmediaHandler={redirect}
         />
 
-        {socmed?.id ? (
+        {showResult ? (
           <>
-            <SocmedResultHeader socmed={socmed} />
+            <SocmedResultHeader data={selectedSocmedValue} socmedType={selectedSocmedID} />
 
-            {/* <Tabs defaultActiveKey="1" items={tabItems} centered /> */}
-            <SurveyCharts socmed={socmed} />
+            <SocmedSummary data={selectedSocmedValue} socmedType={selectedSocmedID} />
           </>
         ) : (
           <div

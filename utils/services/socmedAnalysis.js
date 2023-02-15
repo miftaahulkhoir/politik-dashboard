@@ -3,14 +3,20 @@ import useSWR from "swr";
 
 import fetcher from "./fetcher";
 
-import removeNullUndefinedField from "../helpers/date/removeNullUndefinedField";
-
 export const useFindAllSocmeds = () => {
   const { data, error, isLoading } = useSWR("/api/profile/social-media", fetcher);
+  const activeSocialAccounts = data?.data.activeSocialAccounts || [];
   const socmedsList = data?.data.displayNames || [];
   const ayrshareName = data?.data.email || "-";
 
-  return { socmedsList, ayrshareName, error, isLoading };
+  return { activeSocialAccounts, socmedsList, ayrshareName, error, isLoading };
+};
+
+export const useGetUserAnalytics = () => {
+  const { data, error, isLoading } = useSWR("/api/profile/social-media/analytics", fetcher);
+  const userAnalytics = data?.data || {};
+
+  return { userAnalytics, error, isLoading };
 };
 
 export const updateAyrshareAccount = async (data) => {
