@@ -111,7 +111,7 @@ export default function SocmedSummary({
             </Card>
           </Col>
         </Row>
-        {/* <Row gutter={18}>
+        <Row gutter={18}>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
               <SocmedCard title={"Reaksi: Anger"} data={data?.analytics.reactions.anger || "0"} />
@@ -147,7 +147,7 @@ export default function SocmedSummary({
               <SocmedCard title={"Reaksi: Total"} data={data?.analytics.reactions.total || "0"} />
             </Card>
           </Col>
-        </Row> */}
+        </Row>
       </>
     );
   }

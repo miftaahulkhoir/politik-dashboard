@@ -5,6 +5,7 @@ import { useMemo, useState, useEffect } from "react";
 
 import SocmedDropdownSelector from "../components/pagecomponents/socmedAnalytics/SocmedDropdownSelector";
 import SocmedFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedFormDrawer";
+import SocmedPostFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedPostFormDrawer";
 import SocmedProfileBar from "../components/pagecomponents/socmedAnalytics/SocmedProfileBar";
 import SocmedResultHeader from "../components/pagecomponents/socmedAnalytics/SocmedResultHeader";
 import SocmedSummary from "../components/pagecomponents/socmedAnalytics/SocmedSummary";
@@ -15,6 +16,7 @@ const SurveyCharts = dynamic(() => import("../components/pagecomponents/surveyAn
 export default function SocialMediaAnalysis() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [isDrawerActive, setIsDrawerActive] = useState(false);
+  const [isPostDrawerActive, setIsPostDrawerActive] = useState(false);
 
   const [socmedsList, setSocmedsList] = useState([]);
   const [ayrshareName, setAyrshareName] = useState("");
@@ -66,6 +68,12 @@ export default function SocialMediaAnalysis() {
         setEmail={setAyrshareName}
         setDropdown={setSocmedsList}
       />
+      <SocmedPostFormDrawer
+        open={isPostDrawerActive}
+        setOpen={setIsPostDrawerActive}
+        apiNotification={apiNotification}
+      />
+
       <Head>
         <title>Analisis Sosial Media · Patrons</title>
       </Head>
@@ -78,6 +86,7 @@ export default function SocialMediaAnalysis() {
         <SocmedProfileBar
           email={ayrshareName || "-"}
           editProfileHandler={() => setIsDrawerActive(true)}
+          postSocialMediaHandler={() => setIsPostDrawerActive(true)}
           addSocialmediaHandler={redirect}
         />
 

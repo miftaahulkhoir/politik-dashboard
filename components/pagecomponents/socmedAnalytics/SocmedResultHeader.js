@@ -46,8 +46,9 @@ export default function SocmedResultHeader({ data, socmedType }) {
         </Col>
         <Col span={15}>
           <Space direction="vertical" size="0px">
+            <Typography.Title level={5}>{data?.analytics.link}</Typography.Title>
             <Typography.Title level={5}>
-              Followers: {data?.analytics.followersCount} | Following: {data?.analytics.fanCount}
+              Followers: {data?.analytics.followersCount} | Fans: {data?.analytics.fanCount}
             </Typography.Title>
           </Space>
         </Col>

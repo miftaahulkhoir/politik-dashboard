@@ -22,3 +22,7 @@ export const useGetUserAnalytics = () => {
 export const updateAyrshareAccount = async (data) => {
   return await axios.put(`/api/profile/update/ayrshare-token`, data);
 };
+
+export const postToSocialMedia = async (data) => {
+  return await axios.post(`/api/profile/social-media/post`, data);
+};
