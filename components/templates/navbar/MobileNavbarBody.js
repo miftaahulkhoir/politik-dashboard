@@ -14,6 +14,7 @@ export default function MobileNavbarBody({ active, setActive, xs }) {
     { name: "Dashboard", path: "/" },
     { name: "Manajemen Survei", path: "/surveys" },
     { name: "Analisis Survei", path: "/survey-analysis" },
+    { name: "Analisis Sosial Media", path: "/social-media-analysis" },
     { name: "Analisis Sentimen", path: "/sentiment-analysis" },
     { name: "Panel Ads", path: "/panel-ads" },
     { name: "WhatsApp Blast", path: "/whatsapp-blast" },
