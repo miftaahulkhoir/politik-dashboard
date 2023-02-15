@@ -31,12 +31,7 @@ export default function SocmedSummary({
           </Col>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
-              <SocmedCard
-                title={"Teman"}
-                data={
-                  data?.analytics.friendsCount || 0
-                }
-              />
+              <SocmedCard title={"Teman"} data={data?.analytics.friendsCount || 0} />
             </Card>
           </Col>
           <Col span={6}>
@@ -46,12 +41,7 @@ export default function SocmedSummary({
           </Col>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
-              <SocmedCard
-                title={"Listed"}
-                data={
-                  data?.analytics.listedCount || "0"
-                }
-              />
+              <SocmedCard title={"Listed"} data={data?.analytics.listedCount || "0"} />
             </Card>
           </Col>
         </Row>
@@ -70,12 +60,7 @@ export default function SocmedSummary({
         <Row gutter={18}>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
-              <SocmedCard
-                title={"Consumption"}
-                data={
-                  data?.analytics.pageConsumptions || 0
-                }
-              />
+              <SocmedCard title={"Consumption"} data={data?.analytics.pageConsumptions || 0} />
             </Card>
           </Col>
           <Col span={6}>
@@ -85,12 +70,7 @@ export default function SocmedSummary({
           </Col>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
-              <SocmedCard
-                title={"Impresions"}
-                data={
-                  data?.analytics.pageImpressions || "0"
-                }
-              />
+              <SocmedCard title={"Impresions"} data={data?.analytics.pageImpressions || "0"} />
             </Card>
           </Col>
           <Col span={6}>
@@ -131,7 +111,6 @@ export default function SocmedSummary({
             </Card>
           </Col>
         </Row>
-        
         {/* <Row gutter={18}>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>

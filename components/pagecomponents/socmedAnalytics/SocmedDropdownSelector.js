@@ -15,7 +15,10 @@ function getLabel(socmed) {
 }
 
 export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, addSocialmediaHandler }) {
-  const options = useMemo(() => socmeds.map((socmed) => ({ value: socmed.platform, label: getLabel(socmed) })), [socmeds]);
+  const options = useMemo(
+    () => socmeds.map((socmed) => ({ value: socmed.platform, label: getLabel(socmed) })),
+    [socmeds],
+  );
   const screen = Grid.useBreakpoint();
 
   const isSM = useMemo(() => {

@@ -28,7 +28,9 @@ export default function SocmedResultHeader({ data, socmedType }) {
         <Col span={15}>
           <Space direction="vertical" size="0px">
             <Typography.Title level={5}>@{data?.analytics.username}</Typography.Title>
-            <Typography.Title level={5}>Followers: {data?.analytics.followersCount} | Following: {data?.analytics.favoritesCount}</Typography.Title>
+            <Typography.Title level={5}>
+              Followers: {data?.analytics.followersCount} | Following: {data?.analytics.favoritesCount}
+            </Typography.Title>
             <Typography.Text style={{ color: "#7287A5" }}>Bergabung: {date}</Typography.Text>
           </Space>
         </Col>
@@ -44,7 +46,9 @@ export default function SocmedResultHeader({ data, socmedType }) {
         </Col>
         <Col span={15}>
           <Space direction="vertical" size="0px">
-            <Typography.Title level={5}>Followers: {data?.analytics.followersCount} | Following: {data?.analytics.fanCount}</Typography.Title>
+            <Typography.Title level={5}>
+              Followers: {data?.analytics.followersCount} | Following: {data?.analytics.fanCount}
+            </Typography.Title>
           </Space>
         </Col>
       </Row>
