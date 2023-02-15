@@ -1,7 +1,7 @@
 import { Space, notification } from "antd";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 
 import SocmedDropdownSelector from "../components/pagecomponents/socmedAnalytics/SocmedDropdownSelector";
 import SocmedFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedFormDrawer";
@@ -14,11 +14,21 @@ const SurveyCharts = dynamic(() => import("../components/pagecomponents/surveyAn
 export default function SocialMediaAnalysis() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [isDrawerActive, setIsDrawerActive] = useState(false);
-  const [ayrshareProfile, setAyrshareProfile] = useState("");
 
+  const [socmedsList, setSocmedsList] = useState([]);
+  const [ayrshareName, setAyrshareName] = useState("");
   const [selectedSurveyID, setSelectedSurveyID] = useState();
-  const { socmeds, ayrshareName } = useFindAllSocmeds();
-  const { socmed } = useFindOneSocmedResult(selectedSurveyID);
+  // const { socmed } = useFindOneSocmedResult(selectedSurveyID);
+  const { socmedsList: fetchSocmeds, ayrshareName: fetchAyrshareName } = useFindAllSocmeds();
+  const { socmed } = useState();
+
+  useEffect(() => {
+    setSocmedsList(fetchSocmeds);
+  }, [fetchSocmeds]);
+
+  useEffect(() => {
+    setAyrshareName(fetchAyrshareName);
+  }, [fetchAyrshareName]);
 
   const redirect = () => {
     window.open("https://app.ayrshare.com/social-accounts", "_blank");
@@ -33,7 +43,8 @@ export default function SocialMediaAnalysis() {
         open={isDrawerActive}
         setOpen={setIsDrawerActive}
         apiNotification={apiNotification}
-        setUserName={setAyrshareProfile}
+        setEmail={setAyrshareName}
+        setDropdown={setSocmedsList}
       />
       <Head>
         <title>Analisis Sosial Media · Patrons</title>
@@ -44,10 +55,14 @@ export default function SocialMediaAnalysis() {
       </div>
 
       <Space direction="vertical" style={{ width: "100%" }} size="large">
-        <SocmedProfileBar email={ayrshareName || "-"} editProfileHandler={() => setIsDrawerActive(true)} />
+        <SocmedProfileBar
+          email={ayrshareName || "-"}
+          editProfileHandler={() => setIsDrawerActive(true)}
+          addSocialmediaHandler={redirect}
+        />
 
         <SocmedDropdownSelector
-          socmeds={socmeds}
+          socmeds={socmedsList}
           setSelectedSurveyID={setSelectedSurveyID}
           addSocialmediaHandler={redirect}
         />
