@@ -1,37 +1,7 @@
-import { Card, Collapse, Space } from "antd";
+import { Card } from "antd";
 import DataTable from "react-data-table-component";
 
-function SpreadData() {
-  const data1 = [
-    {
-      name: "Total koordinator",
-      total: 999999,
-    },
-    {
-      name: "Total relawan",
-      total: 123,
-    },
-    {
-      name: "Total kecamatan",
-      total: 123,
-    },
-  ];
-
-  const data2 = [
-    {
-      name: "Total pemilih",
-      total: 123,
-    },
-    {
-      name: "Total terjangkau",
-      total: 123,
-    },
-    {
-      name: "Daftar hitam",
-      total: 123,
-    },
-  ];
-
+function SpreadData({ data }) {
   const columns = [
     {
       name: "Nama",
@@ -53,10 +23,10 @@ function SpreadData() {
         title="Data Persebaran"
         size="small"
       >
-        <Space direction="vertical" size={12}>
+        <Table columns={columns} data={data}></Table>
+        {/* <Space direction="vertical" size={12}>
           <Collapse defaultActiveKey={[1]}>
             <Collapse.Panel header="Data koordinator" key={1}>
-              <Table columns={columns} data={data1}></Table>
             </Collapse.Panel>
           </Collapse>
           <Collapse defaultActiveKey={[1]}>
@@ -64,7 +34,7 @@ function SpreadData() {
               <Table columns={columns} data={data2}></Table>
             </Collapse.Panel>
           </Collapse>
-        </Space>
+        </Space> */}
       </Card>
     </div>
   );

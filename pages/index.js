@@ -13,7 +13,7 @@ import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
-import HomeMapRightPanel from "../components/pagecomponents/home/map/HomeMapRightPanel";
+import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
 import capitalizeWords from "../utils/helpers/capitalizeWords";
@@ -282,11 +282,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                   )}
                   {userLogCordinate === false && (
                     <>
-                      <li className={position === "data" ? "nav-item actives" : "nav-item"}>
-                        <a className="nav-link" onClick={() => setPosition("data")}>
-                          <i className="fa fa-list"></i>
-                        </a>
-                      </li>
                       <li
                         className={position === "persebaran" ? "nav-item actives" : "nav-item"}
                         onClick={() => setPosition("persebaran")}
@@ -305,48 +300,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               </div>
               {/* CARD BODY */}
               <div className="col-12 search-list">
-                {/* TAB TABLE OVERVIEW */}
-                {position === "data" && userLogCordinate === false && (
-                  <>
-                    <h4>Data Koordinator</h4>
-                    <hr />
-                    <table className="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Total Koordinator</th>
-                          <th>Total Relawan</th>
-                          <th>Total Kecamatan</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{koordinator.length} Koordinator</td>
-                          <td>{relawan.length} Relawan</td>
-                          <td>{kecamatan.length} Kecamatan</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                    <br />
-                    <h4>Data Relawan</h4>
-                    <hr />
-                    <table className="table table-striped">
-                      <thead>
-                        <tr>
-                          <th>Total Pemilih</th>
-                          <th>Pemilih Terjangkau</th>
-                          <th>Daftar Hitam</th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr>
-                          <td>{pemilih.length}</td>
-                          <td>{pemilih.length}</td>
-                          <td>{daftarhitam.length}</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </>
-                )}
                 {/* TAB SELECT ROLE */}
                 {position === "persebaran" && userLogCordinate === false && (
                   <>
@@ -486,29 +439,30 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             </div>
           )}
 
-          <HomeMapRightPanel
-            regencies={regencies}
-            regency={regency}
-            setRegency={setRegency}
-            districts={districts}
-            district={district}
-            setDistrict={setDistrict}
-            villages={villages}
-            village={village}
-            setVillage={setVillage}
-            thematicType={thematicType}
-            setThematicType={setThematicType}
-            surveys={surveys}
-            surveyID={surveyID}
-            setSurveyID={setSurveyID}
-            questions={questions}
-            questionID={questionID}
-            setQuestionID={setQuestionID}
-            selectedQuestions={selectedQuestions}
-            setSelectedQuestions={setSelectedQuestions}
+          <PanelContainer
+            spreadData={[
+              {
+                name: "Total koordinator",
+                total: koordinator.length,
+              },
+              {
+                name: "Total relawan",
+                total: relawan.length,
+              },
+              {
+                name: "Total kecamatan",
+                total: kecamatan.length,
+              },
+              {
+                name: "Total pemilih",
+                total: pemilih.length,
+              },
+              {
+                name: "Total daftar hitam",
+                total: daftarhitam.length,
+              },
+            ]}
           />
-
-          {/* <PanelContainer /> */}
         </>
       ) : (
         <>

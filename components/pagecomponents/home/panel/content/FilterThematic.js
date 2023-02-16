@@ -1,7 +1,13 @@
 import { Button, Card, Checkbox, Collapse, Space } from "antd";
-import React, { useMemo } from "react";
+import React, { useMemo, useState } from "react";
 
-function FilterThematic({ surveys, selectedQuestions, setSelectedQuestions }) {
+import { useFindAllSurveys } from "../../../../../utils/services/surveys";
+
+function FilterThematic() {
+  // survey
+  const { surveys } = useFindAllSurveys();
+  const [questions, setQuestions] = useState();
+
   const filteredSurveys = useMemo(() => {
     return surveys
       ?.filter((survey) => {
@@ -12,20 +18,15 @@ function FilterThematic({ surveys, selectedQuestions, setSelectedQuestions }) {
       .sort((a, b) => new Date(b?.created_at)?.getTime() - new Date(a?.created_at)?.getTime());
   }, [surveys]);
 
-  const changeHandler = (checkedValues) => {
-    console.log("checked", checkedValues);
-    setSelectedQuestions([...checkedValues]);
-  };
-
   return (
-    <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", minWidth: "320px" }}>
+    <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", width: "350px" }}>
       <Card
         style={{ background: "white" }}
         bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)" }}
         title="Tematik"
         size="small"
       >
-        <Checkbox.Group style={{ width: "100%" }} onChange={changeHandler} value={selectedQuestions}>
+        <Checkbox.Group style={{ width: "100%" }} onChange={(value) => setQuestions(value)} value={questions}>
           <Space direction="vertical" size={12}>
             {filteredSurveys?.map((survey, index) => (
               <Collapse key={index}>
