@@ -70,16 +70,21 @@ export default function SocmedSummary({
           </Col>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
-              <SocmedCard title={"Impresions"} data={data?.analytics.pageImpressions || "0"} />
+              <SocmedCard title={"Engagement"} data={data?.analytics.fanCount || "0"} />
             </Card>
           </Col>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
-              <SocmedCard title={"Impresions Berbayar"} data={data?.analytics.pageImpressionsPaid || "0"} />
+              <SocmedCard title={"Impressions"} data={data?.analytics.pageImpressions || "0"} />
             </Card>
           </Col>
         </Row>
         <Row gutter={18}>
+          <Col span={6}>
+            <Card noPadding style={{ margin: "10px 0px" }}>
+              <SocmedCard title={"Impressions Berbayar"} data={data?.analytics.pageImpressionsPaid || "0"} />
+            </Card>
+          </Col>
           <Col span={6}>
             <Card noPadding style={{ margin: "10px 0px" }}>
               <SocmedCard title={"Post Engagement"} data={data?.analytics.pagePostEngagements || "0"} />
