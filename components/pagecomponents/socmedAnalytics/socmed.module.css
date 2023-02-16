@@ -1,0 +1,35 @@
+.socmed_summary_card {
+  border-radius: 12px;
+  background: white;
+  color: black;
+}
+
+.socmed_summary_card .title_top_left {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.socmed_summary_card .subtitle_top_left {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.socmed_summary_card .label {
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #636363;
+}
+
+.socmed_summary_card .value {
+  /* padding-left: 10px; */
+  text-align: center;
+  font-size: 30px;
+  font-weight: 500;
+  padding: 25px 0 35px 0;
+}
+
+.socmed_chart {
+  height: 410px;
+}
+

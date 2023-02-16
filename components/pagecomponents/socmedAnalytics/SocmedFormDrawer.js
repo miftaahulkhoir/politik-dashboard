@@ -2,19 +2,11 @@ import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { updateGoogleCustomer } from "../../../utils/services/panelAds";
+import { updateAyrshareAccount } from "../../../utils/services/socmedAnalysis";
 
-export default function AdsFormDrawer({
-  open,
-  setOpen,
-  selectedUser,
-  apiNotification,
-  setUserName,
-  setUserId,
-  setTable,
-}) {
+export default function SocmedFormDrawer({ open, setOpen, selectedUser, apiNotification, setEmail, setDropdown }) {
   // input form states
-  const [googleId, setGoogleId] = useState("");
+  const [ayrshareToken, setGoogleId] = useState("");
 
   // useEffect(() => {
   //   (async function () {
@@ -60,12 +52,12 @@ export default function AdsFormDrawer({
 
   // handler
   const updateAdsHandler = (data) => {
-    updateGoogleCustomer(data)
+    updateAyrshareAccount(data)
       .then((res) => {
         // console.log("update:", res.data.data.google_ads_id, res.data.data.google_ads_name, res.data.data.results);
-        setUserId(res.data.data.google_ads_id);
-        setUserName(res.data.data.google_ads_name);
-        setTable(res.data.data.results);
+        console.log("brcomplete", res);
+        setEmail(res.data.data.email);
+        setDropdown(res.data.data.displayNames);
 
         apiNotification.success({
           message: "Berhasil",
@@ -75,30 +67,24 @@ export default function AdsFormDrawer({
         onClose();
       })
       .catch((err) => {
-        if (err.code == "ERR_BAD_REQUEST") {
-          apiNotification.error({
-            message: "Gagal",
-            description: "Google Ads ID tidak valid",
-          });
-        } else {
-          apiNotification.error({
-            message: "Gagal",
-            description: "Internal server error",
-          });
-        }
+        console.log("error:", err);
+        apiNotification.error({
+          message: "Gagal",
+          description: "Ayrshare API Token tidak valid",
+        });
       });
   };
 
   const submitHandler = () => {
     const data = {
-      google_ads_id: googleId,
+      ayrshare_token: ayrshareToken,
     };
     updateAdsHandler(data);
   };
 
   return (
     <Drawer
-      title={"Edit Akun Google Ads"}
+      title={"Ubah Akun Ayrshare"}
       placement="right"
       onClose={onClose}
       open={open}
@@ -108,8 +94,12 @@ export default function AdsFormDrawer({
     >
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Google Ads ID</Typography.Title>
-          <Input value={googleId} placeholder={"ex: 1234567890"} onChange={(e) => setGoogleId(e.target.value)} />
+          <Typography.Title level={5}>Ayrshare API Key</Typography.Title>
+          <Input
+            value={ayrshareToken}
+            placeholder={"ex: ABCDEFG-HIJIKLM-NOPQRST"}
+            onChange={(e) => setGoogleId(e.target.value)}
+          />
         </Col>
 
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
