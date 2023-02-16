@@ -134,7 +134,12 @@ export default function SocialReports(pageProps) {
           id={gProfile || ""}
           editProfileHandler={() => setIsDrawerActive(true)}
         />
-        <AdsDropdownSelector datas={filteredCampaigns} setSelectedAdsID={setSelectedAdsID} gProfile={gProfile} />
+        <AdsDropdownSelector
+          datas={filteredCampaigns}
+          setSelectedAdsID={setSelectedAdsID}
+          gProfile={gProfile}
+          value={selectedAdsID}
+        />
         {/* <AdsDataTable
           data={selectedCampaign}
         /> */}

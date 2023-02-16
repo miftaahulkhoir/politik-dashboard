@@ -14,7 +14,7 @@ function getLabel(socmed) {
   }
 }
 
-export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, addSocialmediaHandler }) {
+export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, value, addSocialmediaHandler }) {
   const options = useMemo(
     () => socmeds.map((socmed) => ({ value: socmed.platform, label: getLabel(socmed) })),
     [socmeds],
@@ -31,6 +31,7 @@ export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, a
       showSearch
       placeholder="Pilih akun sosial media"
       optionFilterProp="children"
+      value={value}
       onChange={(value, option) => {
         console.log("drpdown", value);
         setSelectedSocmedID(value);

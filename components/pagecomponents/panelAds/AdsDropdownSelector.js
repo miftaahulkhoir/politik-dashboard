@@ -14,6 +14,7 @@ function getLabel(ads) {
 export default function UserDataTable({
   datas,
   setSelectedAdsID,
+  value,
   gProfile,
   currentUser,
   setSelectedUser,
@@ -24,8 +25,6 @@ export default function UserDataTable({
   setUsers,
 }) {
   const options = useMemo(() => datas.map((data) => ({ value: data.campaign.id, label: getLabel(data) })), [datas]);
-
-  const value = useMemo(() => null, [datas]);
 
   return (
     <Select

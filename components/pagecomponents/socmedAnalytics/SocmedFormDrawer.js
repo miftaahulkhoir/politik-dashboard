@@ -2,9 +2,19 @@ import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { updateAyrshareAccount } from "../../../utils/services/socmedAnalysis";
+import { updateAyrshareAccount, useGetUserAnalytics } from "../../../utils/services/socmedAnalysis";
 
-export default function SocmedFormDrawer({ open, setOpen, selectedUser, apiNotification, setEmail, setDropdown }) {
+export default function SocmedFormDrawer({
+  open,
+  setOpen,
+  selectedUser,
+  apiNotification,
+  setEmail,
+  setDropdown,
+  setUserAnalytics,
+  setShowResult,
+  setSelectedSocmedID,
+}) {
   // input form states
   const [ayrshareToken, setGoogleId] = useState("");
 
@@ -56,8 +66,11 @@ export default function SocmedFormDrawer({ open, setOpen, selectedUser, apiNotif
       .then((res) => {
         // console.log("update:", res.data.data.google_ads_id, res.data.data.google_ads_name, res.data.data.results);
         console.log("brcomplete", res);
+        setShowResult(false);
+        setSelectedSocmedID("");
         setEmail(res.data.data.email);
         setDropdown(res.data.data.displayNames);
+        // setUserAnalytics(useGetUserAnalytics().userAnalytics);
 
         apiNotification.success({
           message: "Berhasil",

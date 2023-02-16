@@ -18,14 +18,16 @@ export default function SocialMediaAnalysis() {
   const [isDrawerActive, setIsDrawerActive] = useState(false);
   const [isPostDrawerActive, setIsPostDrawerActive] = useState(false);
 
+  const [dropdownValue, setDropdownValue] = useState(null);
   const [socmedsList, setSocmedsList] = useState([]);
+  const [userAnalytics, setUserAnalytics] = useState({});
   const [ayrshareName, setAyrshareName] = useState("");
   const [selectedSocmedID, setSelectedSocmedID] = useState("");
   const [selectedSocmedValue, setSelectedSocmedValue] = useState({});
   const [showResult, setShowResult] = useState(false);
   // const { socmed } = useFindOneSocmedResult(selectedSurveyID);
   const { socmedsList: fetchSocmeds, ayrshareName: fetchAyrshareName } = useFindAllSocmeds();
-  const { userAnalytics } = useGetUserAnalytics();
+  const { userAnalytics: fetchUserAnalytics } = useGetUserAnalytics();
   const { socmed } = useState();
 
   useEffect(() => {
@@ -40,6 +42,7 @@ export default function SocialMediaAnalysis() {
       setSelectedSocmedValue(userAnalytics.facebook);
     } else {
       setShowResult(false);
+      setSelectedSocmedValue({});
       console.log("error, selected", selectedSocmedID);
     }
   }, [selectedSocmedID]);
@@ -51,6 +54,10 @@ export default function SocialMediaAnalysis() {
   useEffect(() => {
     setAyrshareName(fetchAyrshareName);
   }, [fetchAyrshareName]);
+
+  useEffect(() => {
+    setUserAnalytics(fetchUserAnalytics);
+  }, [fetchUserAnalytics]);
 
   const redirect = () => {
     window.open("https://app.ayrshare.com/social-accounts", "_blank");
@@ -67,6 +74,9 @@ export default function SocialMediaAnalysis() {
         apiNotification={apiNotification}
         setEmail={setAyrshareName}
         setDropdown={setSocmedsList}
+        setUserAnalytics={setUserAnalytics}
+        setShowResult={setShowResult}
+        setSelectedSocmedID={setSelectedSocmedID}
       />
       <SocmedPostFormDrawer
         open={isPostDrawerActive}
@@ -94,6 +104,7 @@ export default function SocialMediaAnalysis() {
           socmeds={socmedsList}
           setSelectedSocmedID={setSelectedSocmedID}
           addSocialmediaHandler={redirect}
+          value={selectedSocmedID}
         />
 
         {showResult ? (
