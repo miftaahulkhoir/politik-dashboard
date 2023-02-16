@@ -1,8 +1,8 @@
-import { Button } from "antd";
 import React, { useState } from "react";
 
-import HomeMapFIlterThematic2 from "./HomeMapFIlterThematic2";
 import styles from "./homeMapRightPanel.module.css";
+
+import HomeMapFIlterThematic2 from "../panel/content/FilterThematic";
 
 function HomeMapRightPanel({
   regencies,
@@ -22,9 +22,24 @@ function HomeMapRightPanel({
   questions,
   questionID,
   setQuestionID,
+  selectedQuestions,
+  setSelectedQuestions,
 }) {
   const [locationActive, setLocationActive] = useState(true);
   const [thematicActive, setThematicActive] = useState(true);
+
+  // const submitHandler = () => {
+  //   console.log("questions", selectedQuestions);
+  //   const questions = selectedQuestions.map((q) => {
+  //     const arr = q.split(",");
+  //     return {
+  //       surveyID: arr[0],
+  //       questionID: arr[1],
+  //     };
+  //   });
+  //   findSurveyResultsThematic(questions);
+  //   // console.table(questions);
+  // };
 
   return (
     <div className={styles.container}>
@@ -53,9 +68,11 @@ function HomeMapRightPanel({
         setQuestionID={setQuestionID}
       /> */}
 
-      <HomeMapFIlterThematic2 />
-
-      <Button type="primary">Petakan</Button>
+      <HomeMapFIlterThematic2
+        surveys={surveys}
+        selectedQuestions={selectedQuestions}
+        setSelectedQuestions={setSelectedQuestions}
+      />
     </div>
   );
 }

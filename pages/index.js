@@ -162,15 +162,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     return data;
   }, [survey, village]);
 
-  // main thematic data =====
-  const [dataThematics, setDataThematics] = useState([]);
-  useEffect(() => {
-    // survey
-    if (thematicType === 0) {
-      // console.log()
-    }
-    setDataThematics([]);
-  }, [thematicType, survey]);
+  // multi survey
+  const [selectedQuestions, setSelectedQuestions] = useState([]); // Array<{question_id: string}>
+  const [thematicSurveyResults, setThematicSurveyResults] = useState([]); // Array<{survey(per-question)}>
 
   // END TEMATIK ===================================
 
@@ -461,6 +455,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
           </div>
 
           {isMounted && (
+            // {/* {false && ( */}
             <div className="map">
               <HomeMap
                 showKoordinator={showKoordinator}
@@ -509,7 +504,11 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             questions={questions}
             questionID={questionID}
             setQuestionID={setQuestionID}
+            selectedQuestions={selectedQuestions}
+            setSelectedQuestions={setSelectedQuestions}
           />
+
+          {/* <PanelContainer /> */}
         </>
       ) : (
         <>
