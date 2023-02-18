@@ -2,9 +2,11 @@ import axios from "axios";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GeoJSON } from "react-leaflet";
 
-import getRandomColor from "../../../../utils/helpers/getRandomColor";
+import indexMaxOfNumbers from "../../../../utils/helpers/array/indexMaxOfNumbers";
+import sumNumbers from "../../../../utils/helpers/array/sumNumbers";
+import { getRandomColorByKey } from "../../../../utils/helpers/getRandomColor";
 
-export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse }) {
+export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, thematicSurveyResponse }) {
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
 
@@ -93,8 +95,8 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse }) {
 
   const onEachFeature = useCallback((feature, layer) => {
     if (feature?.properties?.selected) {
-      layer.options.fillColor = getRandomColor();
-      layer.options.fillOpacity = 0.7;
+      layer.options.fillColor = feature?.properties?.fillColor;
+      layer.options.fillOpacity = feature?.properties?.fillOpacity;
     } else {
       layer.options.fillColor = "#016CEE";
       layer.options.fillOpacity = 0.2;
@@ -116,16 +118,31 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse }) {
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!thematicQuestionSurveyResponse?.id) return;
+    if (!thematicSurveyResponse?.question_id) return;
+
+    const responses = thematicSurveyResponse?.responses ?? [];
+    console.log(responses);
 
     setData((prevData) => {
       const newFeatures = prevData?.features?.map((feature) => {
-        feature.properties.selected = thematicQuestionSurveyResponse.village_id == feature?.properties.village_id;
+        // console.log(feature);
+        const index = responses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
+        if (index === -1) return feature;
+
+        const count = responses[index].count;
+        const total = sumNumbers(count);
+        console.log("count", feature?.properties?.village_id, count);
+        const indexMaxCount = indexMaxOfNumbers(count);
+        const maxCount = count[indexMaxCount];
+
+        feature.properties.selected = true;
+        feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
+        feature.properties.fillOpacity = maxCount / total;
         return feature;
       });
       return { ...prevData, features: newFeatures };
     });
-  }, [thematicQuestionSurveyResponse]);
+  }, [thematicSurveyResponse]);
 
   useEffect(() => {
     if (!ref.current) return;
