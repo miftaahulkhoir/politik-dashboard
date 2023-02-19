@@ -1,12 +1,14 @@
-import { Button, Card, Checkbox, Collapse, Space } from "antd";
-import { useState } from "react";
+import { Card, Checkbox, Collapse, Space } from "antd";
 
 import capitalizeWords from "../../../../../utils/helpers/capitalizeWords";
 import { useFindAllReportCategories } from "../../../../../utils/services/reports";
 
-function FilterPopup() {
+function FilterPopup({ setIndexShownReportCategories }) {
   const { categories: reportCategories } = useFindAllReportCategories();
-  const [reports, setReports] = useState([]);
+
+  const categoryChangeHandler = (value) => {
+    setIndexShownReportCategories(value);
+  };
 
   return (
     <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", minWidth: "320px" }}>
@@ -19,7 +21,7 @@ function FilterPopup() {
         <Space direction="vertical" size={12}>
           <Collapse defaultActiveKey={[1]}>
             <Collapse.Panel header="Pengaduan" key={1}>
-              <Checkbox.Group style={{ width: "100%" }} value={reports} onChange={(value) => setReports(value)}>
+              <Checkbox.Group style={{ width: "100%" }} onChange={categoryChangeHandler}>
                 <Space direction="vertical" size="small">
                   {reportCategories?.map((category) => (
                     <Checkbox value={category?.id} key={category?.id}>
@@ -32,9 +34,9 @@ function FilterPopup() {
           </Collapse>
         </Space>
       </Card>
-      <Button type="primary" block>
+      {/* <Button type="primary" block>
         Petakan
-      </Button>
+      </Button> */}
     </div>
   );
 }

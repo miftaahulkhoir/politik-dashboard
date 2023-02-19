@@ -16,7 +16,6 @@ import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
-import capitalizeWords from "../utils/helpers/capitalizeWords";
 import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
@@ -102,6 +101,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [reports, setReports] = useState([]);
   useEffect(() => {
     if (!fetchReports?.length) return;
+    console.log(fetchReports);
     setReports(fetchReports);
   }, [fetchReports]);
 
@@ -249,12 +249,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                       >
                         <a className="nav-link">Persebaran</a>
                       </li>
-                      <li
-                        className={position === "pengaduan" ? "nav-item actives" : "nav-item"}
-                        onClick={() => setPosition("pengaduan")}
-                      >
-                        <a className="nav-link">Pengaduan</a>
-                      </li>
                     </>
                   )}
                 </ul>
@@ -308,40 +302,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                       <div className="circle-hitam"></div>
                       <label>Daftar Hitam</label>
                     </div>
-                  </>
-                )}
-
-                {/* TAB PENGADUAN */}
-                {position === "pengaduan" && userLogCordinate === false && (
-                  <>
-                    {reportCategories.map((category) => {
-                      const shown = indexShownReportCategories.includes(category.id);
-                      return (
-                        <div key={category.id} className="form-group d-flex justify-content-left">
-                          <input
-                            type="checkbox"
-                            defaultChecked={shown}
-                            onClick={() => {
-                              shown
-                                ? setIndexShownReportCategories((prev) => [
-                                    ...prev.filter((index) => index !== category.id),
-                                  ])
-                                : setIndexShownReportCategories((prev) => [...prev, category.id]);
-                            }}
-                          ></input>
-                          <div
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              borderRadius: "30px",
-                              margin: "0px 10px",
-                              background: getReportColorByID(category.id),
-                            }}
-                          ></div>
-                          <label>{capitalizeWords(category?.category_name)}</label>
-                        </div>
-                      );
-                    })}
                   </>
                 )}
 
@@ -425,6 +385,14 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             ]}
             thematicSurveyResponses={thematicSurveyResponses}
             setThematicSurveyResponses={setThematicSurveyResponses}
+            indexShownReportCategories={indexShownReportCategories}
+            setIndexShownReportCategories={setIndexShownReportCategories}
+            showUsers={{
+              showKoordinator: showKoordinator,
+              showRelawan: showRelawan,
+              showPemilih: showPemilih,
+              showBlackList: showBlackList,
+            }}
           />
         </>
       ) : (
