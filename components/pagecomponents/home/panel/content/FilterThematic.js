@@ -4,7 +4,7 @@ import React, { useMemo, useState } from "react";
 
 import { useFindAllSurveys } from "../../../../../utils/services/surveys";
 
-function FilterThematic({ thematicSurveyResponse, setThematicSurveyResponse }) {
+function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses }) {
   // survey
   const { surveys } = useFindAllSurveys();
   const [questions, setQuestions] = useState([]); // string -> surveyid,questionid
@@ -22,19 +22,30 @@ function FilterThematic({ thematicSurveyResponse, setThematicSurveyResponse }) {
   // responses
 
   const clickHandler = () => {
-    console.log(questions[0]);
-    const questionID = questions[0]?.split(",")[1];
-    const regencies = [3204, 3217]; // bandung dan bandung barat
+    questions.forEach((question) => {
+      console.log("questions", question);
+    });
+
     axios
-      .all(regencies.map((regency) => axios.get(`/api/response/summary/${questionID}?regencyid=${regency}`)))
+      .all(
+        questions.map(async (question) => {
+          const questionID = question?.split(",")[1];
+          const regencies = [3204, 3217]; // bandung dan bandung barat
+          const res = await axios
+            .all(regencies.map((regency) => axios.get(`/api/response/summary/${questionID}?regencyid=${regency}`)))
+            .catch((err) => console.error(err));
+          const dataArr = res?.map((r) => r?.data?.data);
+          const data = dataArr[0];
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          data.responses = [].concat(...dataArr?.map((d) => d?.responses));
+          // setThematicSurveyResponse(data);
+          return data;
+        }),
+      )
       .then((res) => {
-        const dataArr = res?.map((r) => r?.data?.data);
-        const data = dataArr[0];
-        // eslint-disable-next-line no-unsafe-optional-chaining
-        data.responses = [].concat(...dataArr?.map((d) => d?.responses));
-        setThematicSurveyResponse(data);
-      })
-      .catch((err) => console.error(err));
+        console.log("res all", res);
+        setThematicSurveyResponses(res);
+      });
   };
 
   return (

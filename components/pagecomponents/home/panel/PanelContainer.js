@@ -7,7 +7,7 @@ import SpreadData from "./content/SpreadData";
 import styles from "./panel.module.css";
 import PanelMenu from "./PanelMenu";
 
-function PanelContainer({ spreadData, thematicSurveyResponse, setThematicSurveyResponse }) {
+function PanelContainer({ spreadData, thematicSurveyResponses, setThematicSurveyResponses }) {
   const [activeMenus, setActiveMenus] = useState([]);
   return (
     <div className={styles.container}>
@@ -17,8 +17,8 @@ function PanelContainer({ spreadData, thematicSurveyResponse, setThematicSurveyR
         {activeMenus?.includes(2) ? <FilterPopup /> : null}
         {activeMenus?.includes(3) ? (
           <FilterThematic
-            thematicSurveyResponse={thematicSurveyResponse}
-            setThematicSurveyResponse={setThematicSurveyResponse}
+            thematicSurveyResponses={thematicSurveyResponses}
+            setThematicSurveyResponses={setThematicSurveyResponses}
           />
         ) : null}
       </Space>

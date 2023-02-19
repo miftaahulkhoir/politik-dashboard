@@ -37,7 +37,7 @@ export default function HomeMap({
   indexShownReportCategories,
   baseURL,
   thematicQuestionSurveyResponse,
-  thematicSurveyResponse,
+  thematicSurveyResponses,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -265,7 +265,7 @@ export default function HomeMap({
       <HomeGeoJSON
         zoom={zoom}
         // thematicQuestionSurveyResponse={thematicQuestionSurveyResponse}
-        thematicSurveyResponse={thematicSurveyResponse}
+        thematicSurveyResponses={thematicSurveyResponses}
       />
     </MapContainer>
   );

@@ -6,7 +6,8 @@ import indexMaxOfNumbers from "../../../../utils/helpers/array/indexMaxOfNumbers
 import sumNumbers from "../../../../utils/helpers/array/sumNumbers";
 import { getRandomColorByKey } from "../../../../utils/helpers/getRandomColor";
 
-export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, thematicSurveyResponse }) {
+export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, thematicSurveyResponses }) {
+  const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
 
@@ -90,7 +91,10 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, them
 
   useEffect(() => {
     // loadAndSaveGeoJSON();
-    axios.get("/geojson/bandung_bandungbarat_v4.json").then((res) => setData(res.data));
+    axios.get("/geojson/bandung_bandungbarat_v4.json").then((res) => {
+      setOriginalData(res.data);
+      setData(res.data);
+    });
   }, []);
 
   const onEachFeature = useCallback((feature, layer) => {
@@ -118,15 +122,19 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, them
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!thematicSurveyResponse?.question_id) return;
+    if (thematicSurveyResponses?.length == 0) return;
 
-    const responses = thematicSurveyResponse?.responses ?? [];
-    // console.log(responses);
-
-    setData((prevData) => {
-      const newFeatures = prevData?.features?.map((feature) => {
-        // console.log(feature);
+    // const responses = thematicSurveyResponses[0]?.responses ?? [];
+    // thematicSurveyResponses.reverse();
+    thematicSurveyResponses.forEach((response) => {
+      const responses = response?.responses ?? [];
+      const newFeatures = originalData?.features?.map((feature) => {
         const index = responses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
+        // if (feature?.properties?.selected) {
+        //   feature.properties.selected = false;
+        //   return feature;
+        // }
+
         if (index === -1) {
           feature.properties.selected = false;
           return feature;
@@ -134,7 +142,6 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, them
 
         const count = responses[index].count;
         const total = sumNumbers(count);
-        // console.log("count", feature?.properties?.village_id, count);
         const indexMaxCount = indexMaxOfNumbers(count);
         const maxCount = count[indexMaxCount];
 
@@ -143,9 +150,10 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, them
         feature.properties.fillOpacity = maxCount / total;
         return feature;
       });
-      return { ...prevData, features: newFeatures };
+
+      setData({ ...originalData, features: newFeatures });
     });
-  }, [thematicSurveyResponse]);
+  }, [originalData, thematicSurveyResponses]);
 
   useEffect(() => {
     if (!ref.current) return;

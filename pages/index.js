@@ -163,7 +163,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   }, [survey, village]);
 
   // multi survey
-  const [thematicSurveyResponse, setThematicSurveyResponse] = useState({});
+  const [thematicSurveyResponses, setThematicSurveyResponses] = useState([]);
 
   // END TEMATIK ===================================
 
@@ -434,7 +434,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 setSelectedReport={setSelectedReport}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
                 thematicQuestionSurveyResponse={thematicQuestionSurveyResponse}
-                thematicSurveyResponse={thematicSurveyResponse}
+                thematicSurveyResponses={thematicSurveyResponses}
               />
             </div>
           )}
@@ -462,8 +462,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 total: daftarhitam.length,
               },
             ]}
-            thematicSurveyResponse={thematicSurveyResponse}
-            setThematicSurveyResponse={setThematicSurveyResponse}
+            thematicSurveyResponses={thematicSurveyResponses}
+            setThematicSurveyResponses={setThematicSurveyResponses}
           />
         </>
       ) : (
