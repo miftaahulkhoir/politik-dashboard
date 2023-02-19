@@ -17,13 +17,7 @@ import PanelContainer from "../components/pagecomponents/home/panel/PanelContain
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
 import capitalizeWords from "../utils/helpers/capitalizeWords";
-import {
-  useFindAllDistrictsByRegencyID,
-  useFindAllRegencies,
-  useFindAllVillagesByDistrictID,
-} from "../utils/services/locations";
 import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
-import { useFindAllQuestionsBySurvey, useFindAllSurveys, useFindOneSurveyResult } from "../utils/services/surveys";
 
 const Centrifuge = require("centrifuge");
 
@@ -129,38 +123,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   // END PENGADUAN
 
   // TEMATIK ===================================
-  // filter lokasi =====
-  const [regency, setRegency] = useState(null);
-  const [district, setDistrict] = useState(null);
-  const [village, setVillage] = useState(null);
-
-  const { regencies } = useFindAllRegencies();
-  const { districts } = useFindAllDistrictsByRegencyID(regency);
-  const { villages } = useFindAllVillagesByDistrictID(district);
-
-  // filter tipe tematik =====
-  const [thematicType, setThematicType] = useState(null);
-  const [surveyID, setSurveyID] = useState(null);
-  const [questionID, setQuestionID] = useState(null);
-
-  // data survey
-  const { surveys } = useFindAllSurveys();
-  const { survey } = useFindOneSurveyResult(surveyID, {
-    villageID: village,
-    districtID: district,
-    regencyID: regency,
-    questionID: questionID,
-  });
-  const { questions } = useFindAllQuestionsBySurvey(surveyID);
-
-  console.log("survey", survey);
-  const thematicQuestionSurveyResponse = useMemo(() => {
-    if (!survey?.id) return {};
-    const data = survey?.questions[0];
-    data.village_id = village;
-    console.log("data response", data);
-    return data;
-  }, [survey, village]);
 
   // multi survey
   const [thematicSurveyResponses, setThematicSurveyResponses] = useState([]);
@@ -433,7 +395,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 indexShownReportCategories={indexShownReportCategories}
                 setSelectedReport={setSelectedReport}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
-                thematicQuestionSurveyResponse={thematicQuestionSurveyResponse}
                 thematicSurveyResponses={thematicSurveyResponses}
               />
             </div>

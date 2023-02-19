@@ -6,7 +6,7 @@ import indexMaxOfNumbers from "../../../../utils/helpers/array/indexMaxOfNumbers
 import sumNumbers from "../../../../utils/helpers/array/sumNumbers";
 import { getRandomColorByKey } from "../../../../utils/helpers/getRandomColor";
 
-export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, thematicSurveyResponses }) {
+export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
   const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
