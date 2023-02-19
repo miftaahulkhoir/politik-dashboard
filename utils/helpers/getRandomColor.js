@@ -120,7 +120,5 @@ export function getRandomColorByKey(key) {
     "#FAD7A0",
   ];
 
-  console.log("color", colors[key], key);
-
   return colors[key];
 }

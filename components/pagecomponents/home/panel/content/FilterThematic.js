@@ -20,16 +20,19 @@ function FilterThematic({ thematicSurveyResponse, setThematicSurveyResponse }) {
   }, [surveys]);
 
   // responses
-  const [response, setResponse] = useState({});
 
   const clickHandler = () => {
     console.log(questions[0]);
     const questionID = questions[0]?.split(",")[1];
+    const regencies = [3204, 3217]; // bandung dan bandung barat
     axios
-      .get(`/api/response/summary/${questionID}?regencyid=3204`)
+      .all(regencies.map((regency) => axios.get(`/api/response/summary/${questionID}?regencyid=${regency}`)))
       .then((res) => {
-        console.log("res", res?.data?.data);
-        setThematicSurveyResponse(res?.data?.data);
+        const dataArr = res?.map((r) => r?.data?.data);
+        const data = dataArr[0];
+        // eslint-disable-next-line no-unsafe-optional-chaining
+        data.responses = [].concat(...dataArr?.map((d) => d?.responses));
+        setThematicSurveyResponse(data);
       })
       .catch((err) => console.error(err));
   };

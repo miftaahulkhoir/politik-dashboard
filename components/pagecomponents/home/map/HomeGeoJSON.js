@@ -121,17 +121,20 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse, them
     if (!thematicSurveyResponse?.question_id) return;
 
     const responses = thematicSurveyResponse?.responses ?? [];
-    console.log(responses);
+    // console.log(responses);
 
     setData((prevData) => {
       const newFeatures = prevData?.features?.map((feature) => {
         // console.log(feature);
         const index = responses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
-        if (index === -1) return feature;
+        if (index === -1) {
+          feature.properties.selected = false;
+          return feature;
+        }
 
         const count = responses[index].count;
         const total = sumNumbers(count);
-        console.log("count", feature?.properties?.village_id, count);
+        // console.log("count", feature?.properties?.village_id, count);
         const indexMaxCount = indexMaxOfNumbers(count);
         const maxCount = count[indexMaxCount];
 
