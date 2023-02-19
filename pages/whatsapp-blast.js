@@ -1,8 +1,9 @@
-import { notification } from "antd";
+import { Button, Upload, message, notification } from "antd";
 import axios from "axios";
 import Head from "next/head";
 import { parseCookies } from "nookies";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { TbFileUpload } from "react-icons/tb";
 
 export default function Blast(pageProps) {
   const { koordinator, relawan, pemilih, profile } = pageProps;
@@ -10,11 +11,17 @@ export default function Blast(pageProps) {
   const [kirimRelawan, setKirimRelawan] = useState(false);
   const [kirimPemilih, setKirimPemilih] = useState(false);
   const [customNumber, setCustomNumber] = useState(false);
+  const [bulkCSV, setBulkCSV] = useState(false);
   const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [newNumber, setNewNumber] = useState("");
+  const [files, setFiles] = useState([]);
   const [pesan, setPesan] = useState("");
 
-  const handleBlastPesan = () => {
+  useEffect(() => {
+    console.log("files", files);
+  }, [files]);
+
+  const handleBlastPesan = async () => {
     // let phone =
     //   '087720505350, 082298778245, 081413016714, 082227711152, 085260402035, 081398577794';
 
@@ -34,24 +41,46 @@ export default function Blast(pageProps) {
         noPhone += `${element.phone},`;
       });
     }
-    axios
-      .post(`${pageProps.baseURL}api/wa/send`, {
-        secretkey: "KyaRxzcVpqwe",
-        phone: customNumber === true ? newNumber : noPhone,
-        message: pesan,
-      })
-      .then((res) => {
-        apiNotification.success({
-          message: "Berhasil",
-          description: "Pesan Terkirim",
+
+    console.log(newNumber, noPhone);
+
+    try {
+      if (newNumber || noPhone) {
+        await axios.post(`${pageProps.baseURL}api/wa/send`, {
+          secretkey: "KyaRxzcVpqwe",
+          phone: customNumber === true ? newNumber : noPhone,
+          message: pesan,
         });
-      })
-      .catch((err) => {
-        apiNotification.error({
-          message: "Gagal",
-          description: "Tidak dapat mengirim pesan",
-        });
+      }
+
+      // masih error, ngga tau kenapa
+      if (bulkCSV) {
+        const res = await axios.all(
+          files.map((file) => {
+            const formData = new FormData();
+            formData.append("file", file);
+            formData.append("secretKey", "KyaRxzcVpqwe");
+            formData.append("message", message);
+
+            return axios.post("/send-bulk", formData);
+            // console.log(res);
+          }),
+        );
+
+        console.log("res bulk csv", res);
+      }
+
+      apiNotification.success({
+        message: "Berhasil",
+        description: "Pesan Terkirim",
       });
+    } catch (err) {
+      console.error(err);
+      apiNotification.error({
+        message: "Gagal",
+        description: "Tidak dapat mengirim pesan",
+      });
+    }
   };
 
   return (
@@ -96,6 +125,10 @@ export default function Blast(pageProps) {
                 <input type="checkbox" defaultChecked={customNumber} onClick={() => setCustomNumber(!customNumber)} />{" "}
                 Custom Number
               </li>
+
+              <li>
+                <input type="checkbox" defaultChecked={bulkCSV} onClick={() => setBulkCSV(!bulkCSV)} /> Bulk CSV
+              </li>
             </ul>
             <div className="form-group">
               <label>
@@ -106,6 +139,23 @@ export default function Blast(pageProps) {
                 onChange={(e) => setNewNumber(e.target.value)}
                 disabled={customNumber === false}
               ></input>
+            </div>
+            <div className="form-group">
+              <h5>Bulk CSV</h5>
+              <Upload
+                accept=".csv"
+                onChange={(info) => {
+                  if (info.file.status === "done") {
+                    setFiles((prev) => [...prev, info.file.originFileObj]);
+                  }
+                }}
+                onRemove={(file) => {
+                  setFiles((prev) => prev.filter((p) => p.uid != file.originFileObj.uid));
+                }}
+                multiple
+              >
+                <Button icon={<TbFileUpload size={16} />}>Upload file CSV</Button>
+              </Upload>
             </div>
             <div className="form-group">
               <label>
@@ -119,7 +169,8 @@ export default function Blast(pageProps) {
                   kirimKoordinator === false &&
                   kirimRelawan === false &&
                   kirimPemilih === false &&
-                  customNumber === false
+                  customNumber === false &&
+                  bulkCSV === false
                 }
               ></textarea>
             </div>

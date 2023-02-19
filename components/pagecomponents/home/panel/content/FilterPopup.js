@@ -6,7 +6,6 @@ import { useFindAllReportCategories } from "../../../../../utils/services/report
 import { useFindAllOccupations } from "../../../../../utils/services/users";
 
 function FilterPopup({ setIndexShownReportCategories, showUsers }) {
-  console.log(showUsers);
   // reports
   const { categories: reportCategories } = useFindAllReportCategories();
 
