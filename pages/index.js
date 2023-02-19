@@ -16,7 +16,7 @@ import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
-import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
+import { useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
 
@@ -101,24 +101,17 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [reports, setReports] = useState([]);
   useEffect(() => {
     if (!fetchReports?.length) return;
-    console.log(fetchReports);
     setReports(fetchReports);
   }, [fetchReports]);
 
   const [selectedReport, setSelectedReport] = useState({});
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
 
-  const { categories: reportCategories } = useFindAllReportCategories();
   const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
 
   const filteredReports = useMemo(() => {
     return reports?.filter((report) => indexShownReportCategories.includes(report?.category?.id)) || [];
   }, [reports, indexShownReportCategories]);
-
-  const getReportColorByID = (id) => {
-    if (id == 1) return "#e74c3c";
-    return "#3498db";
-  };
 
   // END PENGADUAN
 
@@ -241,70 +234,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                       </a>
                     </li>
                   )}
-                  {userLogCordinate === false && (
-                    <>
-                      <li
-                        className={position === "persebaran" ? "nav-item actives" : "nav-item"}
-                        onClick={() => setPosition("persebaran")}
-                      >
-                        <a className="nav-link">Persebaran</a>
-                      </li>
-                    </>
-                  )}
                 </ul>
               </div>
               {/* CARD BODY */}
               <div className="col-12 search-list">
-                {/* TAB SELECT ROLE */}
-                {position === "persebaran" && userLogCordinate === false && (
-                  <>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showKoordinator}
-                        onClick={() => {
-                          setShowKoordinator(!showKoordinator);
-                        }}
-                      ></input>
-                      <div className="circle-cordinator"></div>
-                      <label>Koordinator</label>
-                    </div>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showRelawan}
-                        onClick={() => {
-                          setShowRelawan(!showRelawan);
-                        }}
-                      ></input>
-                      <div className="circle-relawan"></div>
-                      <label>Relawan</label>
-                    </div>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showPemilih}
-                        onClick={() => {
-                          setShowPemilih(!showPemilih);
-                        }}
-                      ></input>
-                      <div className="circle-pemilih"></div>
-                      <label>Pemilih</label>
-                    </div>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showBlackList}
-                        onClick={() => {
-                          setShowBlackList(!showBlackList);
-                        }}
-                      ></input>
-                      <div className="circle-hitam"></div>
-                      <label>Daftar Hitam</label>
-                    </div>
-                  </>
-                )}
-
                 {/* TAB USER COORDINATE */}
                 {userLogCordinate === true && (
                   <table className="table table-bordered my-2">
@@ -388,10 +321,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             indexShownReportCategories={indexShownReportCategories}
             setIndexShownReportCategories={setIndexShownReportCategories}
             showUsers={{
-              showKoordinator: showKoordinator,
-              showRelawan: showRelawan,
-              showPemilih: showPemilih,
-              showBlackList: showBlackList,
+              setShowKoordinator: setShowKoordinator,
+              setShowRelawan: setShowRelawan,
+              setShowPemilih: setShowPemilih,
+              setShowBlackList: setShowBlackList,
             }}
           />
         </>

@@ -1,13 +1,51 @@
 import { Card, Checkbox, Collapse, Space } from "antd";
+import { useEffect, useState } from "react";
 
 import capitalizeWords from "../../../../../utils/helpers/capitalizeWords";
 import { useFindAllReportCategories } from "../../../../../utils/services/reports";
+import { useFindAllOccupations } from "../../../../../utils/services/users";
 
-function FilterPopup({ setIndexShownReportCategories }) {
+function FilterPopup({ setIndexShownReportCategories, showUsers }) {
+  console.log(showUsers);
+  // reports
   const { categories: reportCategories } = useFindAllReportCategories();
 
   const categoryChangeHandler = (value) => {
     setIndexShownReportCategories(value);
+  };
+
+  // users
+  const { occupations: fetchOccupations } = useFindAllOccupations();
+  const [occupations, setOccupations] = useState([]);
+  useEffect(() => {
+    if (!fetchOccupations?.length) return;
+    setOccupations(fetchOccupations.filter((o) => o.level != 1));
+  }, [fetchOccupations]);
+
+  const userChangeHandler = (value) => {
+    if (value.includes(2)) {
+      showUsers.setShowKoordinator(true);
+    } else {
+      showUsers.setShowKoordinator(false);
+    }
+
+    if (value.includes(3)) {
+      showUsers.setShowRelawan(true);
+    } else {
+      showUsers.setShowRelawan(false);
+    }
+
+    if (value.includes(4)) {
+      showUsers.setShowPemilih(true);
+    } else {
+      showUsers.setShowPemilih(false);
+    }
+
+    if (value.includes(5)) {
+      showUsers.setShowBlackList(true);
+    } else {
+      showUsers.setShowBlackList(false);
+    }
   };
 
   return (
@@ -19,6 +57,20 @@ function FilterPopup({ setIndexShownReportCategories }) {
         size="small"
       >
         <Space direction="vertical" size={12}>
+          <Collapse defaultActiveKey={[1]}>
+            <Collapse.Panel header="Persebaran" key={1}>
+              <Checkbox.Group style={{ width: "100%" }} onChange={userChangeHandler}>
+                <Space direction="vertical" size="small">
+                  {occupations?.map((occupation) => (
+                    <Checkbox value={occupation?.level} key={occupation?.level}>
+                      {capitalizeWords(occupation?.name ?? "")}
+                    </Checkbox>
+                  ))}
+                </Space>
+              </Checkbox.Group>
+            </Collapse.Panel>
+          </Collapse>
+
           <Collapse defaultActiveKey={[1]}>
             <Collapse.Panel header="Pengaduan" key={1}>
               <Checkbox.Group style={{ width: "100%" }} onChange={categoryChangeHandler}>
