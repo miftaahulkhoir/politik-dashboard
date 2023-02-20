@@ -1,6 +1,5 @@
 import { Grid, notification } from "antd";
 import axios from "axios";
-import moment from "moment/moment";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { parseCookies } from "nookies";
@@ -20,11 +19,13 @@ import { useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
 
+const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
 const HomeMap = dynamic(() => import("../components/pagecomponents/home/map/HomeMap"), {
   ssr: false,
 });
-
-const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
+const LogCoordinateDrawer = dynamic(() => import("../components/pagecomponents/home/drawer/LogCoordinateDrawer"), {
+  ssr: false,
+});
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -38,7 +39,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
   const [showBlackList, setShowBlackList] = useState(false);
-  const [userLogCordinate, setUserLogCordinate] = useState(false);
+  // const [userLogCordinate, setUserLogCordinate] = useState(false);
   const [recenter, setRecenter] = useState(false);
   const [logCordinate, setLogCordinate] = useState([]);
   const [center, setCenter] = useState({ lat: -7.0335559, lng: 107.6589375 });
@@ -95,6 +96,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
       });
     }
   }, [showRelawan]);
+
+  // LOG LOKASI RELAWAN DRAWER
+  const [isLogCoordinateDrawerOpen, setIsLogCoordinateDrawerOpen] = useState(true);
+  // END LOG LOKASI RELAWAN DRAWER
 
   // PENGADUAN
   const { reports: fetchReports } = useFindAllReports();
@@ -186,7 +191,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   };
 
   const handleCenter = () => {
-    setUserLogCordinate(false);
+    // setUserLogCordinate(false);
+    setIsLogCoordinateDrawerOpen(false);
     setLogCordinate([]);
     setRecenter(true);
   };
@@ -217,49 +223,17 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         apiNotification={apiNotification}
       />
 
+      <LogCoordinateDrawer
+        open={isLogCoordinateDrawerOpen}
+        setOpen={setIsLogCoordinateDrawerOpen}
+        data={logCordinate}
+      />
+
       {profile?.occupation?.level === 1 ? (
         <>
           <MobileNavbarBody active={isNavbarActive} setActive={setIsNavbarActive} xs={screens.xs} />
 
           <HomeNavbar xs={screens.xs} smallDevice={smallDevice} setActive={setIsNavbarActive} />
-          <div className="left-content">
-            <div className="card">
-              {/* CARD HEADER */}
-              <div className="card-body p-0">
-                <ul className="nav">
-                  {userLogCordinate === true && (
-                    <li className={userLogCordinate === true ? "nav-item actives" : "nav-item"}>
-                      <a className="nav-link" onClick={() => handleCenter()}>
-                        <i className="fa fa-close"></i>
-                      </a>
-                    </li>
-                  )}
-                </ul>
-              </div>
-              {/* CARD BODY */}
-              <div className="col-12 search-list">
-                {/* TAB USER COORDINATE */}
-                {userLogCordinate === true && (
-                  <table className="table table-bordered my-2">
-                    <thead>
-                      <tr>
-                        <th>Lokasi</th>
-                        <th>Tanggal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {logCordinate.map((cordinate, index) => (
-                        <tr key={index}>
-                          <td>{cordinate.locationName}</td>
-                          <td>{moment.utc(cordinate.timestamp).local().format("H:mm D/M/Y")}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </div>
-            </div>
-          </div>
 
           {isMounted && (
             // {/* {false && ( */}
@@ -277,8 +251,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 setTempCenter={setTempCenter}
                 center={center}
                 setCenter={setCenter}
-                userLogCordinate={userLogCordinate}
-                setUserLogCordinate={setUserLogCordinate}
+                userLogCordinate={isLogCoordinateDrawerOpen}
+                setUserLogCordinate={setIsLogCoordinateDrawerOpen}
                 recenter={recenter}
                 setRecenter={setRecenter}
                 logCordinate={logCordinate}
