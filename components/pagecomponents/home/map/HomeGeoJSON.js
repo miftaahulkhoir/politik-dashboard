@@ -124,35 +124,34 @@ export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
   useEffect(() => {
     if (thematicSurveyResponses?.length == 0) return;
 
-    // const responses = thematicSurveyResponses[0]?.responses ?? [];
-    // thematicSurveyResponses.reverse();
-    thematicSurveyResponses.forEach((response) => {
-      const responses = response?.responses ?? [];
-      const newFeatures = originalData?.features?.map((feature) => {
-        const index = responses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
-        // if (feature?.properties?.selected) {
-        //   feature.properties.selected = false;
-        //   return feature;
-        // }
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
+    const mergedResponses = Object.values(
+      mappedResponses.reduce((acc, curr) => {
+        acc[curr?.village_id] = curr;
+        return acc;
+      }, {}),
+    );
 
-        if (index === -1) {
-          feature.properties.selected = false;
-          return feature;
-        }
-
-        const count = responses[index].count;
-        const total = sumNumbers(count);
-        const indexMaxCount = indexMaxOfNumbers(count);
-        const maxCount = count[indexMaxCount];
-
-        feature.properties.selected = true;
-        feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
-        feature.properties.fillOpacity = maxCount / total;
+    const newFeatures = originalData?.features?.map((feature) => {
+      const index = mergedResponses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
+      if (index === -1) {
+        feature.properties.selected = false;
         return feature;
-      });
+      }
 
-      setData({ ...originalData, features: newFeatures });
+      const count = mergedResponses[index].count;
+      const total = sumNumbers(count);
+      const indexMaxCount = indexMaxOfNumbers(count);
+      const maxCount = count[indexMaxCount];
+
+      feature.properties.selected = true;
+      feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
+      feature.properties.fillOpacity = maxCount / total;
+      return feature;
     });
+
+    setData({ ...originalData, features: newFeatures });
   }, [originalData, thematicSurveyResponses]);
 
   useEffect(() => {

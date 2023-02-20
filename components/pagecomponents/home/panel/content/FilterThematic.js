@@ -22,10 +22,6 @@ function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses })
   // responses
 
   const clickHandler = () => {
-    questions.forEach((question) => {
-      console.log("questions", question);
-    });
-
     axios
       .all(
         questions.map(async (question) => {
@@ -38,12 +34,10 @@ function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses })
           const data = dataArr[0];
           // eslint-disable-next-line no-unsafe-optional-chaining
           data.responses = [].concat(...dataArr?.map((d) => d?.responses));
-          // setThematicSurveyResponse(data);
           return data;
         }),
       )
       .then((res) => {
-        console.log("res all", res);
         setThematicSurveyResponses(res);
       });
   };
