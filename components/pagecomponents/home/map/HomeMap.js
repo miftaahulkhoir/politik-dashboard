@@ -125,7 +125,7 @@ export default function HomeMap({
               }
               position={[m?.latitude, m?.longitude]}
             >
-              <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+              <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
                 {trimString(m?.name, 30)}
               </Tooltip>
             </Marker>
@@ -153,7 +153,7 @@ export default function HomeMap({
                   }
                   position={[m?.latitude, m?.longitude]}
                 >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
                     {trimString(m?.name, 30)}
                   </Tooltip>
                 </Marker>
@@ -175,7 +175,7 @@ export default function HomeMap({
                   }
                   position={[m?.latitude, m?.longitude]}
                 >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
                     {trimString(m?.name, 30)}
                   </Tooltip>
                 </Marker>
@@ -197,7 +197,7 @@ export default function HomeMap({
                   }
                   position={[m?.latitude, m?.longitude]}
                 >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
                     {trimString(m?.name, 30)}
                   </Tooltip>
                 </Marker>
@@ -217,7 +217,7 @@ export default function HomeMap({
                 }
                 position={[m?.latitude, m?.longitude]}
               >
-                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
                   {trimString(m?.name, 30)}
                 </Tooltip>
               </Marker>
@@ -252,7 +252,7 @@ export default function HomeMap({
                     },
                   }}
                 >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
                     {trimString(capitalizeWords(report?.title), 30)}
                   </Tooltip>
                 </Marker>
@@ -275,8 +275,11 @@ function HomeMapComponent({ setZoom, recenter, tempCenter, setRecenter, setCente
     zoomend: () => {
       const zoom = mapEvents.getZoom();
       setZoom(zoom);
-      // setCenter(mapEvents.getCenter());
-      setIconSize(40 * scaleZoom(zoom) + 1);
+      if (zoom >= 18) {
+        setIconSize(20);
+      } else {
+        setIconSize(30 * scaleZoom(zoom) + 1);
+      }
     },
     // dragend: () => {
     //   setCenter(mapEvents.getCenter());
