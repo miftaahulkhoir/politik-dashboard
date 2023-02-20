@@ -105,7 +105,6 @@ export default function HomeMap({
       {/* MARKERS */}
       <div>
         {showKoordinator === true &&
-          userLogCordinate === false &&
           dataKoordinator.map((m, index) => (
             <Marker
               key={index}
@@ -131,7 +130,6 @@ export default function HomeMap({
             </Marker>
           ))}
         {showRelawan === true &&
-          userLogCordinate === false &&
           dataRelawan.map(
             (m, index) =>
               m.longitude !== "" && (
@@ -160,7 +158,6 @@ export default function HomeMap({
               ),
           )}
         {showPemilih === true &&
-          userLogCordinate === false &&
           dataPemilih.map(
             (m, index) =>
               m.longitude !== "" && (
@@ -182,7 +179,6 @@ export default function HomeMap({
               ),
           )}
         {showBlackList === true &&
-          userLogCordinate === false &&
           dataBlackList.map(
             (m, index) =>
               m.longitude !== "" && (
@@ -230,34 +226,33 @@ export default function HomeMap({
         )}
 
         {/* REPORTS */}
-        {userLogCordinate === false &&
-          reports.map(
-            (report, index) =>
-              report?.latitude &&
-              report?.longitude && (
-                <Marker
-                  key={index}
-                  icon={
-                    new L.Icon({
-                      iconUrl: getReportIconURLByID(report.category.id),
-                      iconSize: [iconSize, iconSize],
-                      iconAnchor: [iconSize / 2, iconSize / 2],
-                    })
-                  }
-                  position={[report?.latitude, report?.longitude]}
-                  eventHandlers={{
-                    click: (e) => {
-                      setSelectedReport(report);
-                      setIsReportDetailDrawerOpen(true);
-                    },
-                  }}
-                >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
-                    {trimString(capitalizeWords(report?.title), 30)}
-                  </Tooltip>
-                </Marker>
-              ),
-          )}
+        {reports.map(
+          (report, index) =>
+            report?.latitude &&
+            report?.longitude && (
+              <Marker
+                key={index}
+                icon={
+                  new L.Icon({
+                    iconUrl: getReportIconURLByID(report.category.id),
+                    iconSize: [iconSize, iconSize],
+                    iconAnchor: [iconSize / 2, iconSize / 2],
+                  })
+                }
+                position={[report?.latitude, report?.longitude]}
+                eventHandlers={{
+                  click: (e) => {
+                    setSelectedReport(report);
+                    setIsReportDetailDrawerOpen(true);
+                  },
+                }}
+              >
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                  {trimString(capitalizeWords(report?.title), 30)}
+                </Tooltip>
+              </Marker>
+            ),
+        )}
       </div>
 
       {/* GEOJSON */}
