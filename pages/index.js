@@ -39,7 +39,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
   const [showBlackList, setShowBlackList] = useState(false);
-  // const [userLogCordinate, setUserLogCordinate] = useState(false);
   const [recenter, setRecenter] = useState(false);
   const [logCordinate, setLogCordinate] = useState([]);
   const [center, setCenter] = useState({ lat: -7.0335559, lng: 107.6589375 });
@@ -98,7 +97,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   }, [showRelawan]);
 
   // LOG LOKASI RELAWAN DRAWER
-  const [isLogCoordinateDrawerOpen, setIsLogCoordinateDrawerOpen] = useState(true);
+  const [isLogCoordinateDrawerOpen, setIsLogCoordinateDrawerOpen] = useState(false);
   // END LOG LOKASI RELAWAN DRAWER
 
   // PENGADUAN
@@ -117,6 +116,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const filteredReports = useMemo(() => {
     return reports?.filter((report) => indexShownReportCategories.includes(report?.category?.id)) || [];
   }, [reports, indexShownReportCategories]);
+
+  // -- user occupations
+  const [selectedOccupations, setSelectedOccupations] = useState([]);
 
   // END PENGADUAN
 
@@ -292,13 +294,17 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             ]}
             thematicSurveyResponses={thematicSurveyResponses}
             setThematicSurveyResponses={setThematicSurveyResponses}
-            indexShownReportCategories={indexShownReportCategories}
-            setIndexShownReportCategories={setIndexShownReportCategories}
             showUsers={{
               setShowKoordinator: setShowKoordinator,
               setShowRelawan: setShowRelawan,
               setShowPemilih: setShowPemilih,
               setShowBlackList: setShowBlackList,
+            }}
+            stateSelected={{
+              selectedReportCategories: indexShownReportCategories,
+              setSelectedReportCategories: setIndexShownReportCategories,
+              selectedOccupations: selectedOccupations,
+              setSelectedOccupations: setSelectedOccupations,
             }}
           />
         </>

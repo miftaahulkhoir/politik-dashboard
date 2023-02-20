@@ -5,12 +5,11 @@ import capitalizeWords from "../../../../../utils/helpers/capitalizeWords";
 import { useFindAllReportCategories } from "../../../../../utils/services/reports";
 import { useFindAllOccupations } from "../../../../../utils/services/users";
 
-function FilterPopup({ setIndexShownReportCategories, showUsers }) {
+function FilterPopup({ showUsers, stateSelected }) {
   // reports
   const { categories: reportCategories } = useFindAllReportCategories();
-
   const categoryChangeHandler = (value) => {
-    setIndexShownReportCategories(value);
+    stateSelected.setSelectedReportCategories(value);
   };
 
   // users
@@ -22,6 +21,7 @@ function FilterPopup({ setIndexShownReportCategories, showUsers }) {
   }, [fetchOccupations]);
 
   const userChangeHandler = (value) => {
+    stateSelected.setSelectedOccupations(value);
     if (value.includes(2)) {
       showUsers.setShowKoordinator(true);
     } else {
@@ -58,7 +58,11 @@ function FilterPopup({ setIndexShownReportCategories, showUsers }) {
         <Space direction="vertical" size={12}>
           <Collapse defaultActiveKey={[1]}>
             <Collapse.Panel header="Persebaran" key={1}>
-              <Checkbox.Group style={{ width: "100%" }} onChange={userChangeHandler}>
+              <Checkbox.Group
+                style={{ width: "100%" }}
+                onChange={userChangeHandler}
+                value={stateSelected.selectedOccupations}
+              >
                 <Space direction="vertical" size="small">
                   {occupations?.map((occupation) => (
                     <Checkbox value={occupation?.level} key={occupation?.level}>
@@ -72,7 +76,11 @@ function FilterPopup({ setIndexShownReportCategories, showUsers }) {
 
           <Collapse defaultActiveKey={[1]}>
             <Collapse.Panel header="Pengaduan" key={1}>
-              <Checkbox.Group style={{ width: "100%" }} onChange={categoryChangeHandler}>
+              <Checkbox.Group
+                style={{ width: "100%" }}
+                onChange={categoryChangeHandler}
+                value={stateSelected?.selectedReportCategories}
+              >
                 <Space direction="vertical" size="small">
                   {reportCategories?.map((category) => (
                     <Checkbox value={category?.id} key={category?.id}>
