@@ -91,7 +91,7 @@ export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
 
   useEffect(() => {
     // loadAndSaveGeoJSON();
-    axios.get("/geojson/bandung_bandungbarat_v4.json").then((res) => {
+    axios.get("/geojson/kotabandung_kotacimahi_bandung_bandungbarat_v6.json").then((res) => {
       setOriginalData(res.data);
       setData(res.data);
     });

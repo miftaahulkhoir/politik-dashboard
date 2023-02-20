@@ -26,7 +26,7 @@ function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses })
       .all(
         questions.map(async (question) => {
           const questionID = question?.split(",")[1];
-          const regencies = [3204, 3217]; // bandung dan bandung barat
+          const regencies = [3204, 3217, 3277, 3273]; // bandung, bandung barat, kota bandung, kota cimahi
           const res = await axios
             .all(regencies.map((regency) => axios.get(`/api/response/summary/${questionID}?regencyid=${regency}`)))
             .catch((err) => console.error(err));
