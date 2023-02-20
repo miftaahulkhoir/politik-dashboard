@@ -1,10 +1,10 @@
-import { Button, Col, Drawer, Input, Row, Space, Switch, Typography } from "antd";
-import axios from "axios";
-import { useEffect, useState } from "react";
+import { Button, Col, Drawer, Grid, Input, Row, Space, Switch, Tooltip, Typography } from "antd";
+import { useCallback, useEffect, useMemo, useState } from "react";
 
 import SurveyFormCard from "./SurveyFormCard";
 
 import defaultSurveyQuestion from "../../../utils/constants/defaultSurveyQuestion";
+import { createSurvey, updateSurvey, useFindOneSurvey } from "../../../utils/services/surveys";
 
 export default function SurveyFormDrawer({
   open,
@@ -12,25 +12,44 @@ export default function SurveyFormDrawer({
   isEdit,
   setIsEdit,
   selectedSurveyId,
+  setSelectedSurveyId,
   apiNotification,
-  setSurveysList,
+  setSurveys,
 }) {
+  const screen = Grid.useBreakpoint();
+
+  const isSM = useMemo(() => {
+    return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
+  }, [screen]);
+
   const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
   const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);
 
+  // empty checking
+  const hasEmpty = useMemo(() => {
+    const titleEmpty = title === "";
+    const questionEmpty = questions?.some((question) => {
+      if (question.question_name === "") return true;
+      if (question?.options) {
+        return question.options.some((option) => option.option_name === "");
+      }
+      return false;
+    });
+
+    return titleEmpty || questionEmpty;
+  }, [title, questions]);
+
+  // end empty checking
+
+  const { survey } = useFindOneSurvey(selectedSurveyId);
   useEffect(() => {
     if (!isEdit) return;
-    (async function () {
-      try {
-        const res = await axios.get(`/api/survey/${selectedSurveyId}`);
-        const data = res?.data?.data;
-        setTitle(data?.survey_name);
-        setIsActive(data?.status ? 1 : 0);
-        setQuestions(data?.questions);
-      } catch (error) {}
-    })();
-  }, [isEdit, selectedSurveyId]);
+    if (!survey) return;
+    setTitle(survey?.survey_name);
+    setIsActive(survey?.status ? 1 : 0);
+    setQuestions(survey?.questions);
+  }, [isEdit, survey]);
 
   const clearForm = () => {
     setTitle("");
@@ -43,13 +62,14 @@ export default function SurveyFormDrawer({
   };
 
   const onClose = () => {
+    setSelectedSurveyId(null);
     setOpen(false);
     setIsEdit(false);
     clearForm();
   };
 
-  const getFormattedSurvey = () => {
-    const newQuestions = questions.map((question, i) => {
+  const getFormattedSurvey = useCallback(() => {
+    const newQuestions = questions?.map((question, i) => {
       const newQuestion = question;
       newQuestion.question_number = i + 1;
       newQuestion.section = "section1";
@@ -69,15 +89,15 @@ export default function SurveyFormDrawer({
     };
 
     return survey;
-  };
+  }, [isActive, questions, title]);
 
   const submitHandler = async () => {
     try {
       const survey = getFormattedSurvey();
       if (isEdit) {
-        await updateSurvey(survey);
+        await updateSurveyHandler(survey);
       } else {
-        await createSurvey(survey);
+        await createSurveyHandler(survey);
       }
 
       onClose();
@@ -86,15 +106,12 @@ export default function SurveyFormDrawer({
     }
   };
 
-  const createSurvey = async (survey) => {
+  const createSurveyHandler = async (survey) => {
     try {
-      const res = await axios.post("/api/survey", survey);
+      const res = await createSurvey(survey);
       const newSurvey = res.data.data;
 
-      setSurveysList((prevSurveys) => {
-        newSurvey.no = prevSurveys.length + 1;
-        return [...prevSurveys, newSurvey];
-      });
+      setSurveys((prevSurveys) => [...prevSurveys, newSurvey]);
 
       apiNotification.success({
         message: "Berhasil",
@@ -109,12 +126,12 @@ export default function SurveyFormDrawer({
     }
   };
 
-  const updateSurvey = async (survey) => {
+  const updateSurveyHandler = async (survey) => {
     try {
-      const res = await axios.put(`/api/survey/${selectedSurveyId}`, survey);
+      const res = await updateSurvey(selectedSurveyId, survey);
       const newSurvey = res.data.data;
 
-      // TODO: update the state
+      setSurveys((prevSurveys) => prevSurveys.map((survey) => (survey?.id === newSurvey?.id ? newSurvey : survey)));
 
       apiNotification.success({
         message: "Berhasil",
@@ -135,18 +152,20 @@ export default function SurveyFormDrawer({
       placement="right"
       onClose={onClose}
       open={open}
-      closable={false}
-      width="60%"
+      closable={true}
+      width={isSM ? "100%" : "750px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
       bodyStyle={{ background: "#EEEEEE", padding: "0px", overflowX: "hidden" }}
       stye
     >
-      <Row gutter={32} style={{ padding: "24px", background: "white" }}>
-        <Col span={16}>
+      <Row
+        style={{ padding: "24px", background: "white", flexDirection: isSM ? "column-reverse" : "row", gap: "16px" }}
+      >
+        <Col span={isSM ? 24 : 16}>
           <Typography.Title level={5}>Judul Survei</Typography.Title>
           <Input.TextArea rows={2} value={title} onChange={(e) => setTitle(e.target.value)} />
         </Col>
-        <Col span={8}>
+        <Col span={isSM ? 24 : 8}>
           <Typography.Title level={5}>Status</Typography.Title>
           <Space>
             <Typography.Text>Tidak Aktif</Typography.Text>
@@ -155,14 +174,24 @@ export default function SurveyFormDrawer({
           </Space>
         </Col>
       </Row>
-      {questions.map((question, index) => (
-        <SurveyFormCard key={index} index={index} questions={questions} setQuestions={setQuestions} />
+      {questions?.map((question, index) => (
+        <SurveyFormCard key={index} index={index} questions={questions} setQuestions={setQuestions} isSM={isSM} />
       ))}
       <Row justify="space-between" style={{ margin: "24px" }}>
         <Button onClick={addQuestionHandler}>Tambah Pertanyaan</Button>
-        <Button type="primary" onClick={submitHandler} style={{ fontWeight: 600, letterSpacing: "0.8px" }}>
-          SIMPAN
-        </Button>
+        <Tooltip
+          placement="topRight"
+          title={hasEmpty ? "Judul serta semua pertanyaan dan opsi jawaban tidak boleh kosong!" : ""}
+        >
+          <Button
+            type="primary"
+            onClick={submitHandler}
+            style={{ fontWeight: 600, letterSpacing: "0.8px" }}
+            disabled={hasEmpty}
+          >
+            SIMPAN
+          </Button>
+        </Tooltip>
       </Row>
     </Drawer>
   );

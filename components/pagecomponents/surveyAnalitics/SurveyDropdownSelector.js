@@ -15,7 +15,7 @@ function getLabel(survey) {
 }
 
 export default function SurveyDropdownSelector({ surveys, setSelectedSurveyID }) {
-  const options = useMemo(() => surveys.map((survey) => ({ value: survey.id, label: getLabel(survey) }), [surveys]));
+  const options = useMemo(() => surveys.map((survey) => ({ value: survey.id, label: getLabel(survey) })), [surveys]);
 
   return (
     <Select
@@ -26,7 +26,6 @@ export default function SurveyDropdownSelector({ surveys, setSelectedSurveyID })
       onChange={(value, option) => {
         setSelectedSurveyID(value);
       }}
-      // onSearch={onSearch}
       filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
       options={options}
     />

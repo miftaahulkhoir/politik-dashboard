@@ -1,4 +1,4 @@
-import reportStatus from "./reportStatus";
+import reportStatuses from "../../../utils/constants/reportStatuses";
 
 export default function ReportStatusPill({ id }) {
   return (
@@ -8,11 +8,11 @@ export default function ReportStatusPill({ id }) {
         borderRadius: "6px",
         display: "inline-block",
         fontWeight: 600,
-        background: reportStatus[id]?.bgColor,
-        color: reportStatus[id]?.textColor,
+        background: reportStatuses[id]?.bgColor,
+        color: reportStatuses[id]?.textColor,
       }}
     >
-      {reportStatus[id]?.name}
+      {reportStatuses[id]?.name}
     </div>
   );
 }

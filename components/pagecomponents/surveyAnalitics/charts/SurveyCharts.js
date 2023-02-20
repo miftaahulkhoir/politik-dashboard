@@ -1,31 +1,22 @@
-import axios from "axios";
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import SurveyLineChart from "./SurveyLineChart";
 import SurveyPieChart from "./SurveyPieChart";
 import SurveyTableChart from "./SurveyTableChart";
 import SurveyTextChart from "./SurveyTextChart";
 
+import { useFindOneSurveyResultDateCount } from "../../../../utils/services/surveys";
 import styles from "../surveyResults.module.css";
 
 export default function SurveyCharts({ survey }) {
-  // respondent count time series
-  const dates = useMemo(() => daysBehind(), []);
-  const [counts, setCounts] = useState([]);
-  useEffect(() => {
-    if (!survey.id) return;
-    axios
-      .get(`/api/survey-result/date-count/${survey.id}`)
-      .then((res) => setCounts(res.data.data))
-      .catch((err) => {});
-  }, [survey]);
+  const { counts } = useFindOneSurveyResultDateCount(survey.id);
 
   const dateCounts = useMemo(() => {
     const dates = daysBehind(7);
     if (!counts) return dates;
 
     const dateCounts = dates.map((date) => {
-      const count = counts.find(
+      const count = counts?.find(
         (count) => new Date(count.date).toLocaleDateString() === date.date.toLocaleDateString(),
       );
       date.count = count?.count || 0;
@@ -49,7 +40,7 @@ export default function SurveyCharts({ survey }) {
       return data ? data : [];
     };
 
-    const elements = questions.map((q) => {
+    const elements = questions?.map((q) => {
       if (["text", "long_text"].includes(q.input_type)) {
         return <SurveyTextChart key={q.id} title={q.question_name} data={q.answer_text} />;
       }

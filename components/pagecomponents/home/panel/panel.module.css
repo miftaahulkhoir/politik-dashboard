@@ -1,0 +1,14 @@
+.container {
+  position: absolute;
+  top: 92px;
+  left: 16px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: start;
+  z-index: 9999;
+  gap: 8px;
+}
+
+.menu_container {
+  flex-direction: column;
+}

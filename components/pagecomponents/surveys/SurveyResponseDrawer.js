@@ -1,12 +1,18 @@
-import { Collapse, Drawer, Space } from "antd";
+import { Collapse, Drawer, Grid, Space } from "antd";
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import DataTable from "react-data-table-component";
 
 import styles from "./surveyResponse.module.css";
 import SurveyResponseDrawer2 from "./SurveyResponseDrawer2";
 
 export default function SurveyResponseDrawer({ open, setOpen, selectedSurvey }) {
+  const screen = Grid.useBreakpoint();
+
+  const isSM = useMemo(() => {
+    return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
+  }, [screen]);
+
   const [responsesByRecruiters, setResponsesByRecruiters] = useState([]);
   const [selectedResponse, setSelectedResponse] = useState({});
 
@@ -38,7 +44,6 @@ export default function SurveyResponseDrawer({ open, setOpen, selectedSurvey }) 
   ];
 
   const onRowClicked = (row, e) => {
-    console.log("selected response", row);
     setSelectedResponse(row);
     setIsDrawer2Open(true);
   };
@@ -47,12 +52,17 @@ export default function SurveyResponseDrawer({ open, setOpen, selectedSurvey }) 
     <Drawer
       title={selectedSurvey?.survey_name}
       placement="right"
-      closable={false}
-      width="50%"
+      closable={true}
+      width={isSM ? "100%" : "600px"}
       open={open}
       onClose={() => setOpen(false)}
     >
-      <SurveyResponseDrawer2 open={isDrawer2Open} setOpen={setIsDrawer2Open} selectedResponse={selectedResponse} />
+      <SurveyResponseDrawer2
+        open={isDrawer2Open}
+        setOpen={setIsDrawer2Open}
+        selectedResponse={selectedResponse}
+        isSM={isSM}
+      />
 
       <Space direction="vertical" style={{ width: "100%" }}>
         {responsesByRecruiters.map((rbr) => (
@@ -100,11 +110,19 @@ function groupResponsesByRecruiters(arr) {
   });
 
   const result = Object.values(groupedArr).map((resp) => {
+    resp.sort((a, b) => {
+      return new Date(a?.created_at) - new Date(b?.created_at);
+    });
+
     return {
       recruiter_id: resp[0].recruiter_id,
       recruiter: resp[0].recruiter,
       responses: resp,
     };
+  });
+
+  result.sort((a, b) => {
+    return b?.responses?.length - a?.responses?.length;
   });
 
   return result;

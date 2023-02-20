@@ -1,8 +1,9 @@
-import { Button, Card, Col, Modal, Row } from "antd";
-import axios from "axios";
+import { Button, Card, Col, Modal, Row, Tooltip } from "antd";
 import { useCallback, useMemo } from "react";
-import { TbPencil, TbTrashX } from "react-icons/tb";
+import { TbPencil, TbTrashX, TbUserOff } from "react-icons/tb";
 
+import formateDateTime from "../../../utils/helpers/formatDateTime";
+import { deleteUser, updateUserOccupation, useFindAllOccupations } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
 export default function UserDataTable({
@@ -12,27 +13,32 @@ export default function UserDataTable({
   setIsFormEdit,
   setIsDrawerActive,
   apiNotification,
-  usersList,
-  setUsersList,
+  users,
+  setUsers,
 }) {
+  const { occupations } = useFindAllOccupations();
+  const blacklistOccupation = useMemo(() => {
+    if (occupations?.length === 0) return "";
+    return occupations[occupations.length - 1];
+  }, [occupations]);
+
   const deleteUserHandler = useCallback(
     (row) => {
       Modal.confirm({
         title: "Peringatan",
-        content: `Apakah kamu yakin ingin menghapus ${row.name}`,
+        content: `Apakah kamu yakin ingin menghapus ${row.name}?`,
         okText: "Ya",
         okType: "danger",
         cancelText: "Tidak",
         onOk: function () {
-          axios
-            .delete(`/api/users/${row?.id}`)
+          deleteUser(row?.id)
             .then(() => {
-              const newUsers = usersList.filter((s) => s.id !== row?.id);
-              setUsersList([...newUsers]);
+              const newUsers = users.filter((s) => s.id !== row?.id);
+              setUsers([...newUsers]);
 
               apiNotification.success({
                 message: "Sukses",
-                description: `User ${row?.name} berhasil dihapus`,
+                description: `Pengguna ${row?.name} berhasil dihapus`,
               });
             })
             .catch((err) => {
@@ -45,7 +51,46 @@ export default function UserDataTable({
         },
       });
     },
-    [apiNotification, setUsersList, usersList],
+    [apiNotification, setUsers, users],
+  );
+
+  const blacklistUserHandler = useCallback(
+    async (row) => {
+      Modal.confirm({
+        title: "Peringatan",
+        content: `Apakah kamu yakin ingin menambahkan ${row.name} ke daftar hitam?`,
+        okText: "Ya",
+        okType: "danger",
+        cancelText: "Tidak",
+        onOk: function () {
+          updateUserOccupation(row?.id, blacklistOccupation?.id)
+            .then(() => {
+              // const newUsers = users.filter((s) => s.id !== row?.id);
+              setUsers((prevUsers) => {
+                const newUsers = prevUsers.map((user) => {
+                  if (user?.id === row?.id) {
+                    user.occupation = { ...blacklistOccupation };
+                  }
+                  return user;
+                });
+                return [...newUsers];
+              });
+              apiNotification.success({
+                message: "Sukses",
+                description: `Pengguna ${row?.name} berhasil dimasukkan ke daftar hitam`,
+              });
+            })
+            .catch((err) => {
+              apiNotification.error({
+                message: "Gagal",
+                description: "Terjadi kesalahan",
+              });
+              console.error(err);
+            });
+        },
+      });
+    },
+    [apiNotification, setUsers, blacklistOccupation],
   );
 
   const updateUserHandler = useCallback(
@@ -69,10 +114,30 @@ export default function UserDataTable({
       {
         name: "NIK",
         selector: (row) => row?.nik || "-",
+        width: "180px",
+        sortable: true,
       },
       {
         name: "Nama",
         selector: (row) => row?.name,
+        maxWidth: "600px",
+        grow: 1000,
+        sortable: true,
+      },
+      {
+        name: "Tanggal",
+        selector: (row) =>
+          formateDateTime(row?.created_at, {
+            day: "numeric",
+            month: "short",
+            year: "numeric",
+          }),
+        sortable: true,
+        sortFunction: (a, b) => {
+          return new Date(a?.created_at).getTime() - new Date(b?.created_at).getTime();
+        },
+        width: "130px",
+        center: true,
       },
       {
         name: "Jenis Kelamin",
@@ -83,35 +148,58 @@ export default function UserDataTable({
       {
         name: "Email",
         selector: (row) => row?.email || "-",
+        minWidth: "250px",
+        maxWidth: "400px",
+        sortable: true,
+      },
+      {
+        name: "",
+        compact: true,
+        minWidth: "0px",
+        grow: 1,
       },
       {
         name: "Aksi",
         selector: (row) => {
           const canModify = currentUser?.occupation?.level + 1 === row?.occupation?.level;
+          const canBlacklist = canModify && row?.occupation?.level !== 5;
           return (
             <div className="d-flex gap-2">
-              <Button
-                type="text"
-                disabled={!canModify}
-                icon={<TbPencil size={20} color={canModify ? "#7287A5" : "#cccccc"} />}
-                shape="circle"
-                onClick={() => updateUserHandler(row)}
-              ></Button>
-              <Button
-                type="text"
-                disabled={!canModify}
-                icon={<TbTrashX size={20} color={canModify ? "#B12E2E" : "#cccccc"} />}
-                shape="circle"
-                onClick={() => deleteUserHandler(row)}
-              ></Button>
+              <Tooltip title="Edit pengguna">
+                <Button
+                  type="text"
+                  disabled={!canModify}
+                  icon={<TbPencil size={20} color={canModify ? "#7287A5" : "#cccccc"} />}
+                  shape="circle"
+                  onClick={() => updateUserHandler(row)}
+                ></Button>
+              </Tooltip>
+              <Tooltip title="Masukkan ke daftar hitam">
+                <Button
+                  type="text"
+                  disabled={!canBlacklist}
+                  icon={<TbUserOff size={20} color={canBlacklist ? "#111111" : "#cccccc"} />}
+                  shape="circle"
+                  onClick={() => blacklistUserHandler(row)}
+                ></Button>
+              </Tooltip>
+              <Tooltip title="Hapus pengguna">
+                <Button
+                  type="text"
+                  disabled={!canModify}
+                  icon={<TbTrashX size={20} color={canModify ? "#B12E2E" : "#cccccc"} />}
+                  shape="circle"
+                  onClick={() => deleteUserHandler(row)}
+                ></Button>
+              </Tooltip>
             </div>
           );
         },
-        width: "130px",
+        width: "150px",
         center: true,
       },
     ];
-  }, [currentUser?.occupation?.level, deleteUserHandler, updateUserHandler]);
+  }, [blacklistUserHandler, currentUser?.occupation?.level, deleteUserHandler, updateUserHandler]);
 
   return (
     <Row justify="end">

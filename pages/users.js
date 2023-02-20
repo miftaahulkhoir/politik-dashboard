@@ -1,63 +1,55 @@
 import { Space, notification } from "antd";
-import axios from "axios";
 import debounce from "lodash.debounce";
 import Head from "next/head";
-import { parseCookies } from "nookies";
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import UserDataTable from "../components/pagecomponents/users/UserDataTable";
 import UserFormDrawer from "../components/pagecomponents/users/UserFormDrawer";
 import UserRoleSelect from "../components/pagecomponents/users/UserRoleSelect";
 import UserSearchBar from "../components/pagecomponents/users/UserSearchBar";
+import { useFindProfile } from "../utils/services/profiles";
+import { useFindAllSubordinateUsers } from "../utils/services/users";
 
-export default function Users(pageProps) {
-  const [usersList, setUsersList] = useState([]);
+export default function Users() {
+  const [users, setUsers] = useState([]);
+  const { users: fetchUsers } = useFindAllSubordinateUsers();
+  useEffect(() => {
+    if (!fetchUsers?.length) return;
+    setUsers(fetchUsers);
+  }, [fetchUsers]);
 
   const [isDrawerActive, setIsDrawerActive] = useState(false);
   const [isFormEdit, setIsFormEdit] = useState(false);
   const [selectedUser, setSelectedUser] = useState({});
 
-  const [currentUser, setCurrentUser] = useState({});
+  const { profile: currentUser } = useFindProfile();
   const [activeRoleLevel, setActiveRoleLevel] = useState(1);
 
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
-  useEffect(() => {
-    const users = [];
-    pageProps.users.forEach((element, index) => {
-      users.push({ no: index + 1, ...element });
-    });
-    console.log(users);
-    setUsersList([...users]);
-  }, []);
-
-  useEffect(() => {
-    axios
-      .get(`${pageProps.baseURL}api/profile`)
-      .then((res) => {
-        setCurrentUser(res.data.data);
-      })
-      .catch((err) => {});
-  }, []);
-
   // filters
   const [filterSearch, setFilterSearch] = useState("");
   const [filterDate, setFilterDate] = useState("");
+  const [filterGender, setFilterGender] = useState("");
 
   const filteredUsers = useMemo(() => {
     const filteredSearch =
       filterSearch === ""
-        ? usersList
-        : usersList.filter((user) => {
-            return user.name.toLowerCase().includes(filterSearch.toLowerCase());
+        ? users
+        : users.filter((user) => {
+            return (
+              user?.name?.toLowerCase().includes(filterSearch.toLowerCase()) ||
+              user?.nik?.toLowerCase().includes(filterSearch.toLowerCase()) ||
+              user?.email?.toLowerCase().includes(filterSearch.toLowerCase())
+            );
           });
 
     const dateInput = new Date(filterDate);
     const filteredDate =
       filterDate === ""
         ? filteredSearch
-        : filteredSearch.filter((survey) => {
-            const date = new Date(survey.created_at);
+        : filteredSearch.filter((user) => {
+            const date = new Date(user.created_at);
 
             return (
               date.getFullYear() === dateInput.getFullYear() &&
@@ -66,20 +58,24 @@ export default function Users(pageProps) {
             );
           });
 
-    return filteredDate;
-  }, [usersList, filterSearch, filterDate]);
+    const filteredGender =
+      filterGender === "" ? filteredDate : filteredDate.filter((user) => user?.gender === filterGender);
 
-  const filterSearchHandler = useCallback(
-    debounce((e) => setFilterSearch(e.target.value), 300),
-    [],
-  );
+    const formattedUsers = filteredGender.map((user, index) => {
+      user.no = index + 1;
+      return user;
+    });
 
-  const filterDateHandler = useCallback(
-    debounce((_, valueString) => {
-      setFilterDate(valueString);
-    }, 300),
-    [],
-  );
+    return formattedUsers;
+  }, [users, filterSearch, filterDate, filterGender]);
+
+  const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
+
+  const filterDateHandler = debounce((_, valueString) => {
+    setFilterDate(valueString);
+  }, 300);
+
+  const filterGenderHandler = debounce((value) => setFilterGender(value), 300);
 
   const filteredRoleUsers = useMemo(() => {
     return filteredUsers
@@ -98,7 +94,7 @@ export default function Users(pageProps) {
         isEdit={isFormEdit}
         setIsEdit={setIsFormEdit}
         selectedUser={selectedUser}
-        setUsersList={setUsersList}
+        setUsers={setUsers}
         currentUser={currentUser}
       />
 
@@ -116,6 +112,7 @@ export default function Users(pageProps) {
         <UserSearchBar
           filterSearchHandler={filterSearchHandler}
           filterDateHandler={filterDateHandler}
+          filterGenderHandler={filterGenderHandler}
           addUserHandler={() => setIsDrawerActive(true)}
         />
 
@@ -126,8 +123,8 @@ export default function Users(pageProps) {
           setIsFormEdit={setIsFormEdit}
           setIsDrawerActive={setIsDrawerActive}
           apiNotification={apiNotification}
-          usersList={usersList}
-          setUsersList={setUsersList}
+          users={users}
+          setUsers={setUsers}
         />
       </Space>
     </>
@@ -135,27 +132,5 @@ export default function Users(pageProps) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { token } = parseCookies(ctx);
-  const { req } = ctx;
-  let baseURL = "";
-  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
-    baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
-    baseURL = process.env.APP_BASEURL_PATRON;
-  } else {
-    baseURL = process.env.APP_BASEURL_LOCAL;
-  }
-
-  let users = [];
-  await axios
-    .get(`${baseURL}api/users`, {
-      withCredentials: true,
-      headers: { Cookie: `token=${token}` },
-    })
-    .then((res) => {
-      users = res.data.data;
-    })
-    .catch((err) => {});
-
-  return { props: { users } };
+  return { props: {} };
 }

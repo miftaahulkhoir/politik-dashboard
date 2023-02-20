@@ -55,6 +55,13 @@ const defaultSurveyQuestion = {
       },
     ],
   },
+  location: {
+    input_type: "location",
+    question_name: "",
+    question_subject: "",
+    section: "",
+    options: null,
+  },
 };
 
 Object.freeze(defaultSurveyQuestion);

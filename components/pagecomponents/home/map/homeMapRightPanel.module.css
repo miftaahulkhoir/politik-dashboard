@@ -1,0 +1,13 @@
+.container {
+  position: absolute;
+  top: 100px;
+  right: 30px;
+  width: 350px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.card_inactive {
+  right: calc(-100% - 30px);
+}

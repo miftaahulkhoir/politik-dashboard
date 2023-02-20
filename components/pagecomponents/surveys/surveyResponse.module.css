@@ -3,6 +3,11 @@
   background: #eeeeee;
   border-radius: 8px;
   margin-top: 4px;
+  word-break: break-word;
+}
+
+.ans_title {
+  word-break: break-word;
 }
 
 .custom_ant .ant-collapse-content-box {

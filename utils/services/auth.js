@@ -2,18 +2,13 @@ import axios from "axios";
 import Router from "next/router";
 import { destroyCookie } from "nookies";
 
-export const loginUser = async (username, password) => {
-  try {
-    const res = await axios.post(`/login`, {
-      username: username,
-      password: password,
-    });
-    if (res.data.status === true) {
-      return true;
-    }
-  } catch (error) {
-    return false;
-  }
+export const loginUser = async (email, password, remember) => {
+  const res = await axios.post(`/api/login`, {
+    email: email,
+    password: password,
+  });
+  console.clear();
+  return res;
 };
 
 export const redirectUser = (ctx, location) => {
@@ -37,4 +32,5 @@ export const logoutUser = async () => {
   } catch (error) {
     console.error(error);
   }
+  console.clear();
 };

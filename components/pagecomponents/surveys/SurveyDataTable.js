@@ -1,20 +1,21 @@
 import { Button, Card, Modal, Switch, Tooltip } from "antd";
-import axios from "axios";
 import { TbDownload, TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import downloadFileFromURL from "../../../utils/services/downloadFileFromURL";
+import { deleteSurvey, updateSurveyStatus } from "../../../utils/services/surveys";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
 export default function SurveyDataTable({
   filteredSurveys,
-  surveysList,
-  setSurveysList,
+  surveys,
+  setSurveys,
   apiNotification,
   setSelectedSurvey,
   setIsResponseDrawerOpen,
   setIsFormEdit,
   setIsFormOpen,
   setSelectedSurveyId,
+  occupationLevel,
 }) {
   const columns = [
     {
@@ -28,7 +29,8 @@ export default function SurveyDataTable({
       name: "Judul Survei",
       selector: (row) => row.survey_name,
       sortable: true,
-      grow: 2.5,
+      grow: 1000,
+      maxWidth: "600px",
     },
     {
       name: "Tanggal",
@@ -41,7 +43,6 @@ export default function SurveyDataTable({
           month: "short",
           day: "numeric",
           hour: "2-digit",
-          hour12: false,
           minute: "2-digit",
         }).format(date);
         return text;
@@ -62,104 +63,120 @@ export default function SurveyDataTable({
       width: "100px",
       center: true,
       sortable: true,
+      sortFunction: (a, b) => Number(a?.status) - Number(b?.status),
+    },
+    {
+      name: "",
+      compact: true,
+      minWidth: "0px",
+      grow: 1,
     },
     {
       name: "Aksi",
       width: "200px",
       center: true,
-      selector: (row) => (
-        <div className="d-flex gap-2">
-          <Tooltip title="Unduh excel">
-            <Button
-              type="text"
-              icon={<TbDownload size={20} color="#29a229" />}
-              shape="circle"
-              onClick={() => {
-                downloadFileFromURL(`/api/exports/${row.id}`);
-              }}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Lihat responden">
-            <Button
-              type="text"
-              icon={<TbEye size={20} color="#016CEE" />}
-              shape="circle"
-              onClick={() => {
-                setIsResponseDrawerOpen(true);
-                setSelectedSurvey(row);
-              }}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Ubah survei">
-            <Button
-              type="text"
-              icon={<TbPencil size={20} color="#7287A5" />}
-              shape="circle"
-              onClick={() => {
-                if (row?.total_respondent > 0) {
-                  apiNotification.error({
-                    message: "Gagal",
-                    description: "Tidak bisa mengubah survei karena telah memiliki responden",
-                  });
-                  return;
-                }
-                setIsFormEdit(true);
-                setSelectedSurveyId(row.id);
-                setIsFormOpen(true);
-              }}
-            ></Button>
-          </Tooltip>
-          <Tooltip title="Hapus survei">
-            <Button
-              type="text"
-              icon={<TbTrashX size={20} color="#B12E2E" />}
-              shape="circle"
-              onClick={async () => {
-                try {
+      selector: (row) => {
+        const isAdmin = occupationLevel === 1;
+        const canDownload = row?.total_respondent > 0 && isAdmin;
+        const canSee = row?.total_respondent > 0;
+        return (
+          <div className="d-flex gap-2">
+            <Tooltip title="Unduh excel">
+              <Button
+                type="text"
+                disabled={!canDownload}
+                icon={<TbDownload size={20} color={canDownload ? "#29a229" : "#cccccc"} />}
+                shape="circle"
+                onClick={() => {
+                  downloadFileFromURL(`/api/exports/${row.id}`);
+                }}
+              ></Button>
+            </Tooltip>
+            <Tooltip title="Lihat responden">
+              <Button
+                type="text"
+                disabled={!canSee}
+                icon={<TbEye size={20} color={canDownload ? "#016CEE" : "#cccccc"} />}
+                shape="circle"
+                onClick={() => {
+                  setIsResponseDrawerOpen(true);
+                  setSelectedSurvey(row);
+                }}
+              ></Button>
+            </Tooltip>
+            <Tooltip title="Ubah survei">
+              <Button
+                type="text"
+                disabled={!isAdmin}
+                icon={<TbPencil size={20} color={isAdmin ? "#7287A5" : "#cccccc"} />}
+                shape="circle"
+                onClick={() => {
                   if (row?.total_respondent > 0) {
                     apiNotification.error({
                       message: "Gagal",
-                      description: "Tidak bisa menghapus survei karena telah memiliki responden",
+                      description: "Tidak bisa mengubah survei karena telah memiliki responden",
                     });
                     return;
                   }
-
-                  Modal.confirm({
-                    title: "Peringatan",
-                    content: `Apakah kamu yakin ingin menghapus ${row.survey_name}`,
-                    okText: "Ya",
-                    okType: "danger",
-                    cancelText: "Tidak",
-                    onOk: async function () {
-                      const res = await axios.delete(`/api/survey/${row?.id}`);
-                      if (!res?.data?.status) throw new Error("unknown error");
-
-                      const newSurveys = surveysList.filter((s) => s.id !== row.id);
-                      setSurveysList([...newSurveys]);
-
-                      apiNotification.success({
-                        message: "Berhasil",
-                        description: `Survei ${row?.survey_name} berhasil dihapus`,
+                  setIsFormEdit(true);
+                  setSelectedSurveyId(row.id);
+                  setIsFormOpen(true);
+                }}
+              ></Button>
+            </Tooltip>
+            <Tooltip title="Hapus survei">
+              <Button
+                type="text"
+                disabled={!isAdmin}
+                icon={<TbTrashX size={20} color={isAdmin ? "#B12E2E" : "#cccccc"} />}
+                shape="circle"
+                onClick={async () => {
+                  try {
+                    if (row?.total_respondent > 0) {
+                      apiNotification.error({
+                        message: "Gagal",
+                        description: "Tidak bisa menghapus survei karena telah memiliki responden",
                       });
-                    },
-                  });
-                } catch (error) {
-                  apiNotification.error({
-                    message: "Gagal",
-                    description: "Terjadi kesalahan",
-                  });
-                }
-              }}
-            ></Button>
-          </Tooltip>
-        </div>
-      ),
+                      return;
+                    }
+
+                    Modal.confirm({
+                      title: "Peringatan",
+                      content: `Apakah kamu yakin ingin menghapus ${row.survey_name}`,
+                      okText: "Ya",
+                      okType: "danger",
+                      cancelText: "Tidak",
+                      onOk: async function () {
+                        const res = await deleteSurvey(row?.id);
+                        if (!res?.data?.status) throw new Error("unknown error");
+
+                        const newSurveys = surveys.filter((s) => s.id !== row.id);
+                        setSurveys([...newSurveys]);
+
+                        apiNotification.success({
+                          message: "Berhasil",
+                          description: `Survei ${row?.survey_name} berhasil dihapus`,
+                        });
+                      },
+                    });
+                  } catch (error) {
+                    apiNotification.error({
+                      message: "Gagal",
+                      description: "Terjadi kesalahan",
+                    });
+                  }
+                }}
+              ></Button>
+            </Tooltip>
+          </div>
+        );
+      },
     },
   ];
 
-  const changeStatusHandler = async (id, pageProps) => {
+  const changeStatusHandler = async (id) => {
     try {
-      const res = await axios.put(`${pageProps.baseURL}api/survey/update-status/${id}`);
+      const res = await updateSurveyStatus(id);
       if (!res?.data?.status) throw new Error("unknown error");
     } catch (error) {
       console.error(error);

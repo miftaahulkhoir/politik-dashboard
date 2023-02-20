@@ -1,13 +1,12 @@
 import { Input } from "antd";
-import axios from "axios";
 import Head from "next/head";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { useState } from "react";
+import { useState } from "react";
 
-import { logoutUser } from "../utils/auth";
+import { loginUser, logoutUser } from "../utils/services/auth";
 
-export default function Login(pageProps) {
+export default function Login() {
   const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -16,11 +15,7 @@ export default function Login(pageProps) {
 
   const handleLogin = (event) => {
     event.preventDefault();
-    axios
-      .post(`${pageProps.baseURL}api/login`, {
-        email: email,
-        password: password,
-      })
+    loginUser(email, password)
       .then(async (res) => {
         if (res?.data?.data?.occupation_level > 2) {
           await logoutUser();
@@ -31,6 +26,7 @@ export default function Login(pageProps) {
         }
       })
       .catch((err) => {
+        console.error(err);
         setErrorMsg("Cek kembali email dan password Anda");
         setShowErrorMsg(true);
       });
@@ -46,8 +42,8 @@ export default function Login(pageProps) {
           <div className="auth-header">
             <div className="codex-brand">
               <a>
-                <img style={{ width: "60px" }} src={`${pageProps.baseURL}images/logo/icon-logo.png`} alt="" />
-                <img className="img-fluid light-logo" src={`${pageProps.baseURL}images/logo/logo.png`} alt="" />
+                <img style={{ width: "60px" }} src="/images/logo/icon-logo.png" alt="" />
+                <img className="img-fluid light-logo" src="/images/logo/logo.png" alt="" />
               </a>
             </div>
           </div>
@@ -76,7 +72,7 @@ export default function Login(pageProps) {
             <div className="form-group mb-0">
               <div className="auth-remember">
                 <div className="form-check custom-chek">
-                  <input className="form-check-input" id="agree" type="checkbox" value="" required="" />
+                  <input className="form-check-input" id="agree" type="checkbox" />
                   <label className="form-check-label" htmlFor="agree">
                     Ingat saya
                   </label>

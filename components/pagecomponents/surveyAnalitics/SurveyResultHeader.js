@@ -3,16 +3,20 @@ import { useMemo } from "react";
 
 export default function SurveyResultHeader({ survey }) {
   const date = useMemo(() => {
-    const createdAt = new Date(survey.created_at);
-    const formatted = new Intl.DateTimeFormat("id-ID", {
-      day: "numeric",
-      month: "long",
-      year: "numeric",
-      hour: "numeric",
-      minute: "numeric",
-    }).format(createdAt);
+    try {
+      const createdAt = new Date(survey.created_at);
+      const formatted = new Intl.DateTimeFormat("id-ID", {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+        hour: "numeric",
+        minute: "numeric",
+      }).format(createdAt);
 
-    return formatted;
+      return formatted;
+    } catch (error) {
+      return "";
+    }
   }, [survey]);
 
   return (

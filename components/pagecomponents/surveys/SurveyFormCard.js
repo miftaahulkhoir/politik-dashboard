@@ -6,14 +6,14 @@ import DropdownInputEditable from "../../elements/input/DropdownInputEditable";
 import MultiRadioEditable from "../../elements/input/MultiRadioEditable";
 import YesNoQuestion from "../../elements/input/YesNoQuestion";
 
-export default function SurveyFormCard({ index, questions, setQuestions }) {
+export default function SurveyFormCard({ index, questions, setQuestions, isSM }) {
   const type = useMemo(() => {
     return questions[index].input_type;
-  }, [questions]);
+  }, [index, questions]);
 
   const labels = useMemo(() => {
     return questions[index]?.options?.map((option) => option.option_name);
-  }, [questions]);
+  }, [index, questions]);
 
   const setLabels = useCallback(
     (values) => {
@@ -23,7 +23,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
       }));
       setQuestions([...newQuestions]);
     },
-    [questions],
+    [index, questions, setQuestions],
   );
 
   const formElement = useMemo(() => {
@@ -32,12 +32,13 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
     if (type === "dropdown") return <DropdownInputEditable labels={labels} setLabels={setLabels} />;
     if (type === "radio_button") return <MultiRadioEditable labels={labels} setLabels={setLabels} />;
     if (type === "yes_no_question") return <YesNoQuestion labels={labels} setLabels={setLabels} />;
+    if (type === "location") return <Input value="Kabupaten/Kota, Kecamatan, Desa/Kelurahan" disabled />;
   }, [type, labels, setLabels]);
 
   return (
     <Card style={{ margin: "24px" }}>
-      <Row gutter={32}>
-        <Col span={16}>
+      <Row style={{ gap: "16px", flexDirection: isSM ? "column-reverse" : "row" }}>
+        <Col span={isSM ? 24 : 16}>
           <Typography.Title level={5}>Pertanyaan</Typography.Title>
           <Input.TextArea
             rows={2}
@@ -49,7 +50,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
             }}
           />
         </Col>
-        <Col span={8}>
+        <Col span={isSM ? 24 : 8}>
           <Typography.Title level={5}>Jenis Jawaban</Typography.Title>
           <Select
             defaultValue="text"
@@ -75,6 +76,10 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
                 value: "yes_no_question",
                 label: "Ya dan Tidak",
               },
+              {
+                value: "location",
+                label: "Lokasi",
+              },
             ]}
             value={type}
             onChange={(value) => {
@@ -88,7 +93,7 @@ export default function SurveyFormCard({ index, questions, setQuestions }) {
       </Row>
       <Divider />
       <Row gutter={32}>
-        <Col span={16}>{formElement}</Col>
+        <Col span={isSM ? 24 : 16}>{formElement}</Col>
       </Row>
     </Card>
   );

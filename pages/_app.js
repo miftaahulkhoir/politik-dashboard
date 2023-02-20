@@ -13,7 +13,7 @@ import "../public/css/vendor/simplebar.css";
 import "../public/css/vendor/themify-icons.css";
 import "../styles/ant-override.css";
 import "../styles/globals.css";
-import { redirectUser } from "../utils/auth";
+import { redirectUser } from "../utils/services/auth";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -39,21 +39,21 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
   const { token } = parseCookies(ctx);
   const { req } = ctx;
   let baseURL = "";
-  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
+  if (`https://${req?.headers?.host}/` === process.env.APP_BASEURL_DEFAULT) {
     baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
+  } else if (`https://${req?.headers?.host}/` === process.env.APP_BASEURL_PATRON) {
     baseURL = process.env.APP_BASEURL_PATRON;
   } else {
     baseURL = process.env.APP_BASEURL_LOCAL;
   }
 
   pageProps.baseURL = baseURL;
-  console.log(baseURL);
 
   const protectedRoutes =
     ctx.pathname === "/" ||
     ctx.pathname === "/surveys" ||
     ctx.pathname === "/survey-analysis" ||
+    ctx.pathname === "/social-media-analysis" ||
     ctx.pathname === "/sentiment-analysis" ||
     ctx.pathname === "/panel-ads" ||
     ctx.pathname === "/whatsapp-blast" ||

@@ -1,17 +1,22 @@
 import { Space, notification } from "antd";
-import axios from "axios";
 import debounce from "lodash.debounce";
 import Head from "next/head";
-import { parseCookies } from "nookies";
 import { useEffect, useMemo, useState } from "react";
 
 import SurveyDataTable from "../components/pagecomponents/surveys/SurveyDataTable";
 import SurveyFormDrawer from "../components/pagecomponents/surveys/SurveyFormDrawer";
 import SurveyResponseDrawer from "../components/pagecomponents/surveys/SurveyResponseDrawer";
 import SurveySearchBar from "../components/pagecomponents/surveys/SurveySearchBar";
+import { useFindAllSurveys } from "../utils/services/surveys";
 
-export default function Surveys(pageProps) {
-  const [surveysList, setSurveysList] = useState([]);
+export default function Surveys({ profile }) {
+  const { surveys: fetchSurveys } = useFindAllSurveys();
+  const [surveys, setSurveys] = useState([]);
+  useEffect(() => {
+    if (!fetchSurveys?.length) return;
+    setSurveys(fetchSurveys);
+  }, [fetchSurveys]);
+
   const [filterSearch, setFilterSearch] = useState("");
   const [filterActive, setFilterActive] = useState(-1);
   const [filterDate, setFilterDate] = useState("");
@@ -25,20 +30,11 @@ export default function Surveys(pageProps) {
 
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
-  useEffect(() => {
-    if (!pageProps?.surveys) return;
-    const surveys = [];
-    pageProps.surveys.forEach((element, index) => {
-      surveys.push({ no: index + 1, ...element });
-    });
-    setSurveysList([...surveys]);
-  }, [pageProps]);
-
   const filteredSurveys = useMemo(() => {
     const filteredSearch =
       filterSearch === ""
-        ? surveysList
-        : surveysList.filter((survey) => {
+        ? surveys
+        : surveys.filter((survey) => {
             return survey.survey_name.toLowerCase().includes(filterSearch.toLowerCase());
           });
 
@@ -59,8 +55,13 @@ export default function Surveys(pageProps) {
             );
           });
 
-    return filteredDate;
-  }, [surveysList, filterSearch, filterActive, filterDate]);
+    const formatted = filteredDate.map((survey, index) => {
+      survey.no = index + 1;
+      return survey;
+    });
+
+    return formatted;
+  }, [surveys, filterSearch, filterActive, filterDate]);
 
   const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
 
@@ -88,7 +89,8 @@ export default function Surveys(pageProps) {
         isEdit={isFormEdit}
         setIsEdit={setIsFormEdit}
         selectedSurveyId={selectedSurveyId}
-        setSurveysList={setSurveysList}
+        setSelectedSurveyId={setSelectedSurveyId}
+        setSurveys={setSurveys}
         apiNotification={apiNotification}
       />
 
@@ -103,22 +105,21 @@ export default function Surveys(pageProps) {
           filterSearchHandler={filterSearchHandler}
           filterActiveHandler={filterActiveHandler}
           filterDateHandler={filterDateHandler}
+          occupationLevel={profile?.occupation?.level}
           addSurveyHandler={() => setIsFormOpen(true)}
         />
 
-        {/* <Card bodyStyle={{ padding: "0px" }} style={{ overflow: "hidden" }}>
-          <CustomDataTable columns={columns} data={filteredSurveys} style={{ width: "100%" }} />
-        </Card> */}
         <SurveyDataTable
           filteredSurveys={filteredSurveys}
-          surveysList={surveysList}
-          setSurveysList={setSurveysList}
+          surveys={surveys}
+          setSurveys={setSurveys}
           apiNotification={apiNotification}
           setSelectedSurvey={setSelectedSurvey}
           setIsResponseDrawerOpen={setIsResponseDrawerOpen}
           setIsFormEdit={setIsFormEdit}
           setIsFormOpen={setIsFormOpen}
           setSelectedSurveyId={setSelectedSurveyId}
+          occupationLevel={profile?.occupation?.level}
         />
       </Space>
     </>
@@ -126,26 +127,5 @@ export default function Surveys(pageProps) {
 }
 
 export async function getServerSideProps(ctx) {
-  const { token } = parseCookies(ctx);
-  const { req } = ctx;
-  let baseURL = "";
-  if (`https://${req.headers.host}/` === process.env.APP_BASEURL_DEFAULT) {
-    baseURL = process.env.APP_BASEURL_DEFAULT;
-  } else if (`https://${req.headers.host}/` === process.env.APP_BASEURL_PATRON) {
-    baseURL = process.env.APP_BASEURL_PATRON;
-  } else {
-    baseURL = process.env.APP_BASEURL_LOCAL;
-  }
-
-  let surveys = [];
-  await axios
-    .get(`${baseURL}api/survey`, {
-      withCredentials: true,
-      headers: { Cookie: `token=${token}` },
-    })
-    .then((res) => {
-      surveys = res.data.data || [];
-    })
-    .catch((err) => {});
-  return { props: { surveys } };
+  return { props: {} };
 }

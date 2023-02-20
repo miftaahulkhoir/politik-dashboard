@@ -1,11 +1,26 @@
-import { Button, Col, Drawer, Modal, Row, Space } from "antd";
-import { useMemo } from "react";
-import { TbCalendar } from "react-icons/tb";
+import { Button, Col, Drawer, Grid, Modal, Row, Space } from "antd";
+import { useCallback, useEffect, useMemo, useState } from "react";
+import { TbCalendar, TbMapPin, TbUser } from "react-icons/tb";
 
 import ReportChangeStatusModal from "./ReportChangeStatusModal";
 import ReportStatusPill from "./ReportStatusPill";
 
-export default function ReportDetailDrawer({ open = true, setOpen, selectedReport, setReports, apiNotification }) {
+import { reverseGeocoding } from "../../../utils/services/locations";
+
+export default function ReportDetailDrawer({
+  open = true,
+  setOpen,
+  selectedReport,
+  setReports,
+  apiNotification,
+  statuses,
+}) {
+  const screen = Grid.useBreakpoint();
+
+  const isSM = useMemo(() => {
+    return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
+  }, [screen]);
+
   const onClose = () => {
     setOpen(false);
   };
@@ -22,26 +37,35 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
     return formatted;
   }, [selectedReport?.created_at]);
 
-  const onChangeStatusClick = (report) => {
-    const modal = Modal.confirm();
-    modal.update({
-      icon: null,
-      footer: null,
-      maskClosable: true,
-      width: "500px",
-      bodyStyle: {
-        width: "100%",
-      },
-      content: (
-        <ReportChangeStatusModal
-          selectedReport={report}
-          onClose={() => modal.destroy()}
-          setReports={setReports}
-          apiNotification={apiNotification}
-        />
-      ),
-    });
-  };
+  const onChangeStatusClick = useCallback(
+    (report) => {
+      const modal = Modal.confirm();
+      modal.update({
+        icon: null,
+        footer: null,
+        maskClosable: true,
+        width: "500px",
+        bodyStyle: {
+          width: "100%",
+        },
+        content: (
+          <ReportChangeStatusModal
+            selectedReport={report}
+            onClose={() => modal.destroy()}
+            setReports={setReports}
+            apiNotification={apiNotification}
+            statuses={statuses}
+          />
+        ),
+      });
+    },
+    [apiNotification, statuses, setReports],
+  );
+
+  const [location, setLocation] = useState("");
+  useEffect(() => {
+    reverseGeocoding(selectedReport?.latitude, selectedReport?.longitude).then((res) => setLocation(res));
+  }, [selectedReport]);
 
   return (
     <Drawer
@@ -49,19 +73,29 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
       placement="right"
       onClose={onClose}
       open={open}
-      closable={false}
-      width="500px"
+      closable={true}
+      width={isSM ? "100%" : "500px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
       <Space direction="vertical" size="large">
         <Section title="Status:" horizontal>
-          <Space direction="vertical" size={4}>
+          <Space direction="vertical" size={8}>
             <ReportStatusPill id={selectedReport?.complaint_status?.id || "0"} />
-            {selectedReport?.complaint_status?.id != 2 && (
-              <Button type="link" style={{ margin: 0, padding: 0 }} onClick={() => onChangeStatusClick(selectedReport)}>
-                Ubah status
-              </Button>
-            )}
+            {selectedReport?.complaint_status_desc ? (
+              <div
+                style={{
+                  padding: "4px 12px",
+                  borderRadius: "6px",
+                  border: "1px solid #eeeeee",
+                  flex: 1,
+                }}
+              >
+                {selectedReport?.complaint_status_desc}
+              </div>
+            ) : null}
+            <Button type="link" style={{ margin: 0, padding: 0 }} onClick={() => onChangeStatusClick(selectedReport)}>
+              {selectedReport?.complaint_status?.id == 2 ? "Ubah catatan" : "Ubah status"}
+            </Button>
           </Space>
         </Section>
 
@@ -72,14 +106,22 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
 
         <Section title="Detail pengaduan">
           <Space direction="vertical" style={{ width: "100%", color: "#7287A5" }} size={12}>
-            <img src={selectedReport?.link_image} alt="gambar pengaduan" style={{ width: "100%" }} />
-            {/* <Row gutter={8} align="middle">
+            {selectedReport?.link_image && (
+              <img src={selectedReport?.link_image} alt="Foto tidak tersedia" style={{ width: "100%" }} />
+            )}
+            <Row wrap={false} gutter={8} align="middle">
+              <Col>
+                <TbUser size={24} />
+              </Col>
+              <Col flex={1}>{selectedReport?.sender_name}</Col>
+            </Row>
+            <Row wrap={false} gutter={8} align="middle">
               <Col>
                 <TbMapPin size={24} />
               </Col>
-              <Col flex={1}>{selectedReport?.address || "Tidak mengirimkan lokasi"}</Col>
-            </Row> */}
-            <Row gutter={8} align="middle">
+              <Col flex={1}>{location}</Col>
+            </Row>
+            <Row wrap={false} gutter={8} align="middle">
               <Col>
                 <TbCalendar size={24} />
               </Col>
