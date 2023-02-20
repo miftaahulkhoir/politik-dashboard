@@ -59,10 +59,10 @@ export default function Blast(pageProps) {
           files.map((file) => {
             const formData = new FormData();
             formData.append("file", file);
-            formData.append("secretKey", "KyaRxzcVpqwe");
+            formData.append("secretkey", "KyaRxzcVpqwe");
             formData.append("message", message);
 
-            return axios.post("/send-bulk", formData);
+            return axios.post("/api/wa/send-bulk", formData).then((res) => res?.data);
             // console.log(res);
           }),
         );
