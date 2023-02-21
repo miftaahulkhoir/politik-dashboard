@@ -96,6 +96,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     }
   }, [showRelawan]);
 
+  const [selectedUser, setSelectedUser] = useState({});
+
   // LOG LOKASI RELAWAN DRAWER
   const [isLogCoordinateDrawerOpen, setIsLogCoordinateDrawerOpen] = useState(false);
   // END LOG LOKASI RELAWAN DRAWER
@@ -231,6 +233,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         open={isLogCoordinateDrawerOpen}
         setOpen={setIsLogCoordinateDrawerOpen}
         data={logCordinate}
+        selectedUser={selectedUser}
       />
 
       {profile?.occupation?.level === 1 ? (
@@ -265,6 +268,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 reports={filteredReports}
                 indexShownReportCategories={indexShownReportCategories}
                 setSelectedReport={setSelectedReport}
+                setSelectedUser={setSelectedUser}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
                 thematicSurveyResponses={thematicSurveyResponses}
               />

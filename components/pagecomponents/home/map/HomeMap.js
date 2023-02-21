@@ -33,6 +33,7 @@ export default function HomeMap({
   handleColor,
   reports,
   setSelectedReport,
+  setSelectedUser,
   setIsReportDetailDrawerOpen,
   indexShownReportCategories,
   baseURL,
@@ -137,9 +138,11 @@ export default function HomeMap({
                   key={index}
                   eventHandlers={{
                     click: (e) => {
-                      handleDetailCordinate(m.id, m.name, "relawan"),
-                        setTempCenter([m.latitude, m.longitude]),
-                        setUserLogCordinate(true);
+                      console.log(m);
+                      setSelectedUser(m);
+                      handleDetailCordinate(m.id, m.name, "relawan");
+                      setTempCenter([m.latitude, m.longitude]);
+                      setUserLogCordinate(true);
                     },
                   }}
                   icon={
