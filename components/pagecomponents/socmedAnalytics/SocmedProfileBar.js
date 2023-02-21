@@ -15,27 +15,37 @@ export default function SocmedProfileBar({ email, editProfileHandler, postSocial
     //   <Button type="text" icon={<TbPencil size={24} color={"#7287A5"} />} shape="square" />
     // </div>
     <Row justify="space-between">
-      <Col span={14}>
+      <Col span={16}>
         <Row gutter={8}>
           <Col>
             <span style={idStyle}>{email}</span>
           </Col>
         </Row>
       </Col>
-      <Col span={2}>
-        <Button icon={<TbPencil />} type="primary" onClick={postSocialMediaHandler}>
-          Posting ke Sosial Media
-        </Button>
-      </Col>
-      <Col span={2}>
-        <Button icon={<TbPencil />} type="primary" onClick={editProfileHandler}>
-          Ubah Akun Ayrshare
-        </Button>
-      </Col>
-      <Col span={2}>
-        <Button icon={<TbPlus />} type="primary" onClick={addSocialmediaHandler}>
-          Tambah Akun
-        </Button>
+      <Col>
+        <Row gutter={12} justify={"space-between"}>
+          <Col>
+            <Row gutter={8} justify={"center"}>
+              <Button icon={<TbPencil />} type="primary" onClick={postSocialMediaHandler}>
+                Post
+              </Button>
+            </Row>
+          </Col>
+          <Col>
+            <Row gutter={8} justify={"space-between"}>
+              <Button icon={<TbPencil />} type="primary" onClick={editProfileHandler}>
+                Ubah Akun Ayrshare
+              </Button>
+            </Row>
+          </Col>
+          <Col>
+            <Row gutter={8} justify={"center"}>
+              <Button icon={<TbPlus />} type="primary" onClick={addSocialmediaHandler}>
+                Tambah Akun
+              </Button>
+            </Row>
+          </Col>
+        </Row>
       </Col>
     </Row>
   );
