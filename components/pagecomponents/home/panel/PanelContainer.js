@@ -1,5 +1,6 @@
-import { Space } from "antd";
-import React, { useState } from "react";
+import { Grid, Space } from "antd";
+import clsx from "clsx";
+import React, { useMemo, useState } from "react";
 
 import FilterPopup from "./content/FilterPopup";
 import FilterThematic from "./content/FilterThematic";
@@ -9,9 +10,16 @@ import PanelMenu from "./PanelMenu";
 
 function PanelContainer({ spreadData, thematicSurveyResponses, setThematicSurveyResponses, showUsers, stateSelected }) {
   const [activeMenus, setActiveMenus] = useState([]);
+
+  const screen = Grid.useBreakpoint();
+
+  const isMD = useMemo(() => {
+    return !screen.lg && !screen.xl && !screen.xxl;
+  }, [screen]);
+
   return (
-    <div className={styles.container}>
-      <PanelMenu activeMenus={activeMenus} setActiveMenus={setActiveMenus} />
+    <div className={clsx(styles.container, isMD ? styles.container_small : "")}>
+      <PanelMenu activeMenus={activeMenus} setActiveMenus={setActiveMenus} isMD={isMD} />
       <Space style={{ alignItems: "flex-start", padding: "0" }}>
         {activeMenus?.includes(1) ? <SpreadData data={spreadData} /> : null}
         {activeMenus?.includes(2) ? <FilterPopup showUsers={showUsers} stateSelected={stateSelected} /> : null}

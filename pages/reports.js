@@ -101,7 +101,6 @@ export default function Reports() {
         selectedReport={selectedReport}
         setReports={setReports}
         apiNotification={apiNotification}
-        statuses={statuses}
       />
 
       <Space direction="vertical" size="middle">

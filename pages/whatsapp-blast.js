@@ -1,8 +1,8 @@
-import { Button, Upload, message, notification } from "antd";
+import { Button, Upload, notification } from "antd";
 import axios from "axios";
 import Head from "next/head";
 import { parseCookies } from "nookies";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { TbFileUpload } from "react-icons/tb";
 
 export default function Blast(pageProps) {
@@ -16,10 +16,6 @@ export default function Blast(pageProps) {
   const [newNumber, setNewNumber] = useState("");
   const [files, setFiles] = useState([]);
   const [pesan, setPesan] = useState("");
-
-  useEffect(() => {
-    console.log("files", files);
-  }, [files]);
 
   const handleBlastPesan = async () => {
     // let phone =
@@ -42,8 +38,6 @@ export default function Blast(pageProps) {
       });
     }
 
-    console.log(newNumber, noPhone);
-
     try {
       if (newNumber || noPhone) {
         await axios.post(`${pageProps.baseURL}api/wa/send`, {
@@ -60,7 +54,7 @@ export default function Blast(pageProps) {
             const formData = new FormData();
             formData.append("file", file);
             formData.append("secretkey", "KyaRxzcVpqwe");
-            formData.append("message", message);
+            formData.append("message", pesan);
 
             return axios.post("/api/wa/send-bulk", formData).then((res) => res?.data);
             // console.log(res);

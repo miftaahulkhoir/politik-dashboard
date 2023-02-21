@@ -6,17 +6,18 @@ function SpreadData({ data }) {
     {
       name: "Nama",
       selector: (row) => row.name,
-      width: "160px",
+      width: "130px",
     },
     {
       name: "Total",
       selector: (row) => row.total,
       right: true,
+      width: "70px",
     },
   ];
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", minWidth: "320px" }}>
+    <div style={{ display: "flex", flexDirection: "column", rowGap: "8px" }}>
       <Card
         style={{ background: "white" }}
         bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)" }}
@@ -24,17 +25,6 @@ function SpreadData({ data }) {
         size="small"
       >
         <Table columns={columns} data={data}></Table>
-        {/* <Space direction="vertical" size={12}>
-          <Collapse defaultActiveKey={[1]}>
-            <Collapse.Panel header="Data koordinator" key={1}>
-            </Collapse.Panel>
-          </Collapse>
-          <Collapse defaultActiveKey={[1]}>
-            <Collapse.Panel header="Data relawan" key={1}>
-              <Table columns={columns} data={data2}></Table>
-            </Collapse.Panel>
-          </Collapse>
-        </Space> */}
       </Card>
     </div>
   );
@@ -49,15 +39,18 @@ function Table({ columns, data }) {
       noTableHead
       dense
       striped
-      // highlightOnHover
-      // pointerOnHover
       columns={columns}
       data={data}
       customStyles={{
         rows: {
           style: {
-            padding: "0px 0",
+            padding: "0",
             fontSize: "14px",
+          },
+        },
+        cells: {
+          style: {
+            padding: "4px",
           },
         },
       }}
