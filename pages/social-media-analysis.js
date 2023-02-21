@@ -32,6 +32,7 @@ export default function SocialMediaAnalysis() {
 
   useEffect(() => {
     console.log("selected:", selectedSocmedID);
+    console.log("fetch", fetchUserAnalytics);
     if (selectedSocmedID == "twitter") {
       console.log("tw", userAnalytics.twitter);
       setShowResult(true);

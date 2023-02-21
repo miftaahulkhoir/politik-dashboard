@@ -70,7 +70,6 @@ export default function SocmedFormDrawer({
         setSelectedSocmedID("");
         setEmail(res.data.data.email);
         setDropdown(res.data.data.displayNames);
-        // setUserAnalytics(useGetUserAnalytics().userAnalytics);
 
         apiNotification.success({
           message: "Berhasil",
