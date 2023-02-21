@@ -111,9 +111,10 @@ export default function HomeMap({
               key={index}
               eventHandlers={{
                 click: (e) => {
-                  handleDetailCordinate(m.id, m.name, "koordinator"),
-                    setTempCenter([m.latitude, m.longitude]),
-                    setUserLogCordinate(true);
+                  setSelectedUser(m);
+                  handleDetailCordinate(m.id, m.name, "koordinator");
+                  setTempCenter([m.latitude, m.longitude]);
+                  setUserLogCordinate(true);
                 },
               }}
               icon={
@@ -126,7 +127,7 @@ export default function HomeMap({
               position={[m?.latitude, m?.longitude]}
             >
               <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
-                {trimString(m?.name, 30)}
+                {trimString(m?.name, 30) || "-"}
               </Tooltip>
             </Marker>
           ))}
@@ -155,7 +156,7 @@ export default function HomeMap({
                   position={[m?.latitude, m?.longitude]}
                 >
                   <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
-                    {trimString(m?.name, 30)}
+                    {trimString(m?.name, 30) || "-"}
                   </Tooltip>
                 </Marker>
               ),
@@ -176,7 +177,7 @@ export default function HomeMap({
                   position={[m?.latitude, m?.longitude]}
                 >
                   <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
-                    {trimString(m?.name, 30)}
+                    {trimString(m?.name, 30) || "-"}
                   </Tooltip>
                 </Marker>
               ),
@@ -197,7 +198,7 @@ export default function HomeMap({
                   position={[m?.latitude, m?.longitude]}
                 >
                   <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
-                    {trimString(m?.name, 30)}
+                    {trimString(m?.name, 30) || "-"}
                   </Tooltip>
                 </Marker>
               ),
@@ -217,7 +218,7 @@ export default function HomeMap({
                 position={[m?.latitude, m?.longitude]}
               >
                 <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
-                  {trimString(m?.name, 30)}
+                  {trimString(m?.name, 30) || "-"}
                 </Tooltip>
               </Marker>
             ))}
