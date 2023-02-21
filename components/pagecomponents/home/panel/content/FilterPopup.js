@@ -48,7 +48,7 @@ function FilterPopup({ showUsers, stateSelected }) {
   };
 
   return (
-    <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", minWidth: "320px" }}>
+    <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", width: "200px" }}>
       <Card
         style={{ background: "white" }}
         bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)" }}
