@@ -6,16 +6,11 @@ import ReportChangeStatusModal from "./ReportChangeStatusModal";
 import ReportStatusPill from "./ReportStatusPill";
 
 import { reverseGeocoding } from "../../../utils/services/locations";
+import { useFindAllReportStatuses } from "../../../utils/services/reports";
 
-export default function ReportDetailDrawer({
-  open = true,
-  setOpen,
-  selectedReport,
-  setReports,
-  apiNotification,
-  statuses,
-}) {
+export default function ReportDetailDrawer({ open = true, setOpen, selectedReport, setReports, apiNotification }) {
   const screen = Grid.useBreakpoint();
+  const { statuses } = useFindAllReportStatuses();
 
   const isSM = useMemo(() => {
     return !screen.md && !screen.lg && !screen.xl && !screen.xxl;

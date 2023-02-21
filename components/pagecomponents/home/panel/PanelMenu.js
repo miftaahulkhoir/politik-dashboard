@@ -4,12 +4,10 @@ import React from "react";
 import styles from "./panel.module.css";
 import PANEL_MENUS from "./PANEL_MENUS";
 
-function PanelMenu({ activeMenus = [], setActiveMenus }) {
+function PanelMenu({ activeMenus = [], setActiveMenus, isMD }) {
   return (
     <div className={styles.menu_container}>
       <Space direction="vertical">
-        {/* <Button icon={<TbMapPin size={18} />} type="primary" onClick={() => setActiveMenu(1)} />
-        <Button icon={<TbBlur size={18} />} type="primary" onClick={() => setActiveMenu(2)} /> */}
         {PANEL_MENUS.map((menu) => {
           const active = activeMenus?.includes(menu?.id);
           return (
@@ -19,8 +17,15 @@ function PanelMenu({ activeMenus = [], setActiveMenus }) {
                 type={active ? "primary" : "default"}
                 onClick={() =>
                   setActiveMenus((prevMenus) => {
-                    if (!active) return [...prevMenus, menu.id];
+                    if (!active) {
+                      if (isMD && prevMenus.length > 0) {
+                        return [menu.id];
+                      }
+                      return [...prevMenus, menu.id];
+                    }
+
                     const newMenus = prevMenus.filter((m) => m != menu.id);
+
                     return [...newMenus];
                   })
                 }

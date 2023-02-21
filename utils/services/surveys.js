@@ -71,13 +71,13 @@ export const useFindOneSurveyResultDateCount = (id) => {
 
 // khusus untuk pemetaan tematik
 export const findSurveyResultsThematic = async (questions) => {
-  const regencies = [3204, 3217]; // bandung dan bandung barat
+  const regencies = [3204, 3217, 3277, 3273]; // bandung, bandung barat, kota bandung, kota cimahi
+
   try {
     const villagesRes = await axios.all(regencies.map((r) => axios.get(`/api/village?regencyid=${r}`)));
 
     const villages2D = villagesRes.map((r) => r?.data?.data);
     const villages = [].concat(...villages2D);
-    console.table(villages);
 
     const newQuestions = [];
 
@@ -87,8 +87,6 @@ export const findSurveyResultsThematic = async (questions) => {
         newQuestions.push(question);
       });
     });
-
-    console.table("new questions", newQuestions);
 
     const res = await axios.all(
       newQuestions.map((question) =>

@@ -1,6 +1,5 @@
 import { Grid, notification } from "antd";
 import axios from "axios";
-import moment from "moment/moment";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { parseCookies } from "nookies";
@@ -16,22 +15,17 @@ import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
-import capitalizeWords from "../utils/helpers/capitalizeWords";
-import {
-  useFindAllDistrictsByRegencyID,
-  useFindAllRegencies,
-  useFindAllVillagesByDistrictID,
-} from "../utils/services/locations";
-import { useFindAllReportCategories, useFindAllReports } from "../utils/services/reports";
-import { useFindAllQuestionsBySurvey, useFindAllSurveys, useFindOneSurveyResult } from "../utils/services/surveys";
+import { useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
 
+const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
 const HomeMap = dynamic(() => import("../components/pagecomponents/home/map/HomeMap"), {
   ssr: false,
 });
-
-const CustomDataTable = dynamic(() => import("../components/elements/customDataTable/CustomDataTable"), { ssr: false });
+const LogCoordinateDrawer = dynamic(() => import("../components/pagecomponents/home/drawer/LogCoordinateDrawer"), {
+  ssr: false,
+});
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -45,7 +39,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [showRelawan, setShowRelawan] = useState(false);
   const [showPemilih, setShowPemilih] = useState(false);
   const [showBlackList, setShowBlackList] = useState(false);
-  const [userLogCordinate, setUserLogCordinate] = useState(false);
   const [recenter, setRecenter] = useState(false);
   const [logCordinate, setLogCordinate] = useState([]);
   const [center, setCenter] = useState({ lat: -7.0335559, lng: 107.6589375 });
@@ -103,6 +96,12 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     }
   }, [showRelawan]);
 
+  const [selectedUser, setSelectedUser] = useState({});
+
+  // LOG LOKASI RELAWAN DRAWER
+  const [isLogCoordinateDrawerOpen, setIsLogCoordinateDrawerOpen] = useState(false);
+  // END LOG LOKASI RELAWAN DRAWER
+
   // PENGADUAN
   const { reports: fetchReports } = useFindAllReports();
   const [reports, setReports] = useState([]);
@@ -114,57 +113,23 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [selectedReport, setSelectedReport] = useState({});
   const [isReportDetailDrawerOpen, setIsReportDetailDrawerOpen] = useState(false);
 
-  const { categories: reportCategories } = useFindAllReportCategories();
   const [indexShownReportCategories, setIndexShownReportCategories] = useState([]); // Array<string> (the id)
 
   const filteredReports = useMemo(() => {
     return reports?.filter((report) => indexShownReportCategories.includes(report?.category?.id)) || [];
   }, [reports, indexShownReportCategories]);
 
-  const getReportColorByID = (id) => {
-    if (id == 1) return "#e74c3c";
-    return "#3498db";
-  };
+  // -- user occupations
+  const [selectedOccupations, setSelectedOccupations] = useState([]);
 
   // END PENGADUAN
 
   // TEMATIK ===================================
-  // filter lokasi =====
-  const [regency, setRegency] = useState(null);
-  const [district, setDistrict] = useState(null);
-  const [village, setVillage] = useState(null);
-
-  const { regencies } = useFindAllRegencies();
-  const { districts } = useFindAllDistrictsByRegencyID(regency);
-  const { villages } = useFindAllVillagesByDistrictID(district);
-
-  // filter tipe tematik =====
-  const [thematicType, setThematicType] = useState(null);
-  const [surveyID, setSurveyID] = useState(null);
-  const [questionID, setQuestionID] = useState(null);
-
-  // data survey
-  const { surveys } = useFindAllSurveys();
-  const { survey } = useFindOneSurveyResult(surveyID, {
-    villageID: village,
-    districtID: district,
-    regencyID: regency,
-    questionID: questionID,
-  });
-  const { questions } = useFindAllQuestionsBySurvey(surveyID);
-
-  console.log("survey", survey);
-  const thematicQuestionSurveyResponse = useMemo(() => {
-    if (!survey?.id) return {};
-    const data = survey?.questions[0];
-    data.village_id = village;
-    console.log("data response", data);
-    return data;
-  }, [survey, village]);
+  // survey
+  const [selectedQuestions, setSelectedQuestions] = useState([]); // string -> surveyid,questionid
 
   // multi survey
-  const [selectedQuestions, setSelectedQuestions] = useState([]); // Array<{question_id: string}>
-  const [thematicSurveyResults, setThematicSurveyResults] = useState([]); // Array<{survey(per-question)}>
+  const [thematicSurveyResponses, setThematicSurveyResponses] = useState([]);
 
   // END TEMATIK ===================================
 
@@ -232,7 +197,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   };
 
   const handleCenter = () => {
-    setUserLogCordinate(false);
+    // setUserLogCordinate(false);
+    setIsLogCoordinateDrawerOpen(false);
     setLogCordinate([]);
     setRecenter(true);
   };
@@ -263,149 +229,18 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         apiNotification={apiNotification}
       />
 
+      <LogCoordinateDrawer
+        open={isLogCoordinateDrawerOpen}
+        setOpen={setIsLogCoordinateDrawerOpen}
+        data={logCordinate}
+        selectedUser={selectedUser}
+      />
+
       {profile?.occupation?.level === 1 ? (
         <>
           <MobileNavbarBody active={isNavbarActive} setActive={setIsNavbarActive} xs={screens.xs} />
 
           <HomeNavbar xs={screens.xs} smallDevice={smallDevice} setActive={setIsNavbarActive} />
-          <div className="left-content">
-            <div className="card">
-              {/* CARD HEADER */}
-              <div className="card-body p-0">
-                <ul className="nav">
-                  {userLogCordinate === true && (
-                    <li className={userLogCordinate === true ? "nav-item actives" : "nav-item"}>
-                      <a className="nav-link" onClick={() => handleCenter()}>
-                        <i className="fa fa-close"></i>
-                      </a>
-                    </li>
-                  )}
-                  {userLogCordinate === false && (
-                    <>
-                      <li
-                        className={position === "persebaran" ? "nav-item actives" : "nav-item"}
-                        onClick={() => setPosition("persebaran")}
-                      >
-                        <a className="nav-link">Persebaran</a>
-                      </li>
-                      <li
-                        className={position === "pengaduan" ? "nav-item actives" : "nav-item"}
-                        onClick={() => setPosition("pengaduan")}
-                      >
-                        <a className="nav-link">Pengaduan</a>
-                      </li>
-                    </>
-                  )}
-                </ul>
-              </div>
-              {/* CARD BODY */}
-              <div className="col-12 search-list">
-                {/* TAB SELECT ROLE */}
-                {position === "persebaran" && userLogCordinate === false && (
-                  <>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showKoordinator}
-                        onClick={() => {
-                          setShowKoordinator(!showKoordinator);
-                        }}
-                      ></input>
-                      <div className="circle-cordinator"></div>
-                      <label>Koordinator</label>
-                    </div>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showRelawan}
-                        onClick={() => {
-                          setShowRelawan(!showRelawan);
-                        }}
-                      ></input>
-                      <div className="circle-relawan"></div>
-                      <label>Relawan</label>
-                    </div>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showPemilih}
-                        onClick={() => {
-                          setShowPemilih(!showPemilih);
-                        }}
-                      ></input>
-                      <div className="circle-pemilih"></div>
-                      <label>Pemilih</label>
-                    </div>
-                    <div className="form-group d-flex justify-content-left">
-                      <input
-                        type="checkbox"
-                        defaultChecked={showBlackList}
-                        onClick={() => {
-                          setShowBlackList(!showBlackList);
-                        }}
-                      ></input>
-                      <div className="circle-hitam"></div>
-                      <label>Daftar Hitam</label>
-                    </div>
-                  </>
-                )}
-
-                {/* TAB PENGADUAN */}
-                {position === "pengaduan" && userLogCordinate === false && (
-                  <>
-                    {reportCategories.map((category) => {
-                      const shown = indexShownReportCategories.includes(category.id);
-                      return (
-                        <div key={category.id} className="form-group d-flex justify-content-left">
-                          <input
-                            type="checkbox"
-                            defaultChecked={shown}
-                            onClick={() => {
-                              shown
-                                ? setIndexShownReportCategories((prev) => [
-                                    ...prev.filter((index) => index !== category.id),
-                                  ])
-                                : setIndexShownReportCategories((prev) => [...prev, category.id]);
-                            }}
-                          ></input>
-                          <div
-                            style={{
-                              width: "20px",
-                              height: "20px",
-                              borderRadius: "30px",
-                              margin: "0px 10px",
-                              background: getReportColorByID(category.id),
-                            }}
-                          ></div>
-                          <label>{capitalizeWords(category?.category_name)}</label>
-                        </div>
-                      );
-                    })}
-                  </>
-                )}
-
-                {/* TAB USER COORDINATE */}
-                {userLogCordinate === true && (
-                  <table className="table table-bordered my-2">
-                    <thead>
-                      <tr>
-                        <th>Lokasi</th>
-                        <th>Tanggal</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {logCordinate.map((cordinate, index) => (
-                        <tr key={index}>
-                          <td>{cordinate.locationName}</td>
-                          <td>{moment.utc(cordinate.timestamp).local().format("H:mm D/M/Y")}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                )}
-              </div>
-            </div>
-          </div>
 
           {isMounted && (
             // {/* {false && ( */}
@@ -423,8 +258,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 setTempCenter={setTempCenter}
                 center={center}
                 setCenter={setCenter}
-                userLogCordinate={userLogCordinate}
-                setUserLogCordinate={setUserLogCordinate}
+                userLogCordinate={isLogCoordinateDrawerOpen}
+                setUserLogCordinate={setIsLogCoordinateDrawerOpen}
                 recenter={recenter}
                 setRecenter={setRecenter}
                 logCordinate={logCordinate}
@@ -433,8 +268,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 reports={filteredReports}
                 indexShownReportCategories={indexShownReportCategories}
                 setSelectedReport={setSelectedReport}
+                setSelectedUser={setSelectedUser}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
-                thematicQuestionSurveyResponse={thematicQuestionSurveyResponse}
+                thematicSurveyResponses={thematicSurveyResponses}
               />
             </div>
           )}
@@ -462,6 +298,24 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 total: daftarhitam.length,
               },
             ]}
+            thematicSurveyResponses={thematicSurveyResponses}
+            setThematicSurveyResponses={setThematicSurveyResponses}
+            showUsers={{
+              setShowKoordinator: setShowKoordinator,
+              setShowRelawan: setShowRelawan,
+              setShowPemilih: setShowPemilih,
+              setShowBlackList: setShowBlackList,
+            }}
+            stateSelected={{
+              selectedReportCategories: indexShownReportCategories,
+              setSelectedReportCategories: setIndexShownReportCategories,
+              selectedOccupations: selectedOccupations,
+              setSelectedOccupations: setSelectedOccupations,
+            }}
+            surveyState={{
+              selectedQuestions: selectedQuestions,
+              setSelectedQuestions: setSelectedQuestions,
+            }}
           />
         </>
       ) : (

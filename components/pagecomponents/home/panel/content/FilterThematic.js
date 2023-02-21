@@ -1,12 +1,12 @@
 import { Button, Card, Checkbox, Collapse, Space } from "antd";
-import React, { useMemo, useState } from "react";
+import axios from "axios";
+import React, { useMemo } from "react";
 
 import { useFindAllSurveys } from "../../../../../utils/services/surveys";
 
-function FilterThematic() {
+function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses, surveyState }) {
   // survey
   const { surveys } = useFindAllSurveys();
-  const [questions, setQuestions] = useState();
 
   const filteredSurveys = useMemo(() => {
     return surveys
@@ -18,6 +18,29 @@ function FilterThematic() {
       .sort((a, b) => new Date(b?.created_at)?.getTime() - new Date(a?.created_at)?.getTime());
   }, [surveys]);
 
+  // responses
+
+  const clickHandler = () => {
+    axios
+      .all(
+        surveyState?.selectedQuestions?.map(async (question) => {
+          const questionID = question?.split(",")[1];
+          const regencies = [3204, 3217, 3277, 3273]; // bandung, bandung barat, kota bandung, kota cimahi
+          const res = await axios
+            .all(regencies.map((regency) => axios.get(`/api/response/summary/${questionID}?regencyid=${regency}`)))
+            .catch((err) => console.error(err));
+          const dataArr = res?.map((r) => r?.data?.data);
+          const data = dataArr[0];
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          data.responses = [].concat(...dataArr?.map((d) => d?.responses));
+          return data;
+        }),
+      )
+      .then((res) => {
+        setThematicSurveyResponses(res);
+      });
+  };
+
   return (
     <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", width: "350px" }}>
       <Card
@@ -26,7 +49,11 @@ function FilterThematic() {
         title="Tematik"
         size="small"
       >
-        <Checkbox.Group style={{ width: "100%" }} onChange={(value) => setQuestions(value)} value={questions}>
+        <Checkbox.Group
+          style={{ width: "100%" }}
+          onChange={(value) => surveyState?.setSelectedQuestions(value)}
+          value={surveyState?.selectedQuestions}
+        >
           <Space direction="vertical" size={12}>
             {filteredSurveys?.map((survey, index) => (
               <Collapse key={index}>
@@ -51,7 +78,7 @@ function FilterThematic() {
           </Space>
         </Checkbox.Group>
       </Card>
-      <Button type="primary" block>
+      <Button type="primary" block disabled={!surveyState?.selectedQuestions?.length} onClick={clickHandler}>
         Petakan
       </Button>
     </div>

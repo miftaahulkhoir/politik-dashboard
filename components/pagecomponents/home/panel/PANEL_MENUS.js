@@ -8,7 +8,7 @@ const PANEL_MENUS = [
   },
   {
     id: 2,
-    name: "Perserbaran",
+    name: "Persebaran",
     icon: <TbMapPin size={18} />,
   },
   {

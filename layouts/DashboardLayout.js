@@ -4,12 +4,13 @@ import { useMemo, useState } from "react";
 import {
   TbAd2,
   TbBrandGoogleAnalytics,
+  TbBrandTwitter,
   TbBrandWhatsapp,
+  TbCalendarEvent,
   TbDeviceAnalytics,
   TbLayoutDashboard,
   TbListCheck,
   TbMessageReport,
-  TbBrandTwitter,
   TbUser,
 } from "react-icons/tb";
 
@@ -167,6 +168,18 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 </a>
               </li>
             )} */}
+
+            {profile?.occupation?.level < 3 && (
+              <li
+                className={asPath === "/events" ? "meu-item active" : "menu-item"}
+                onClick={() => router.push("/events")}
+              >
+                <a>
+                  <TbCalendarEvent size={24} />
+                  <span>Manajemen Kegiatan</span>
+                </a>
+              </li>
+            )}
             <li
               className={asPath === "/reports" ? "meu-item active" : "menu-item"}
               onClick={() => router.push("/reports")}

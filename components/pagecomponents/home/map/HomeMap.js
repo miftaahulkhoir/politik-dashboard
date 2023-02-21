@@ -33,10 +33,11 @@ export default function HomeMap({
   handleColor,
   reports,
   setSelectedReport,
+  setSelectedUser,
   setIsReportDetailDrawerOpen,
   indexShownReportCategories,
   baseURL,
-  thematicQuestionSurveyResponse,
+  thematicSurveyResponses,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -105,15 +106,15 @@ export default function HomeMap({
       {/* MARKERS */}
       <div>
         {showKoordinator === true &&
-          userLogCordinate === false &&
           dataKoordinator.map((m, index) => (
             <Marker
               key={index}
               eventHandlers={{
                 click: (e) => {
-                  handleDetailCordinate(m.id, m.name, "koordinator"),
-                    setTempCenter([m.latitude, m.longitude]),
-                    setUserLogCordinate(true);
+                  setSelectedUser(m);
+                  handleDetailCordinate(m.id, m.name, "koordinator");
+                  setTempCenter([m.latitude, m.longitude]);
+                  setUserLogCordinate(true);
                 },
               }}
               icon={
@@ -125,13 +126,12 @@ export default function HomeMap({
               }
               position={[m?.latitude, m?.longitude]}
             >
-              <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                {trimString(m?.name, 30)}
+              <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                {trimString(m?.name, 30) || "-"}
               </Tooltip>
             </Marker>
           ))}
         {showRelawan === true &&
-          userLogCordinate === false &&
           dataRelawan.map(
             (m, index) =>
               m.longitude !== "" && (
@@ -139,9 +139,11 @@ export default function HomeMap({
                   key={index}
                   eventHandlers={{
                     click: (e) => {
-                      handleDetailCordinate(m.id, m.name, "relawan"),
-                        setTempCenter([m.latitude, m.longitude]),
-                        setUserLogCordinate(true);
+                      console.log(m);
+                      setSelectedUser(m);
+                      handleDetailCordinate(m.id, m.name, "relawan");
+                      setTempCenter([m.latitude, m.longitude]);
+                      setUserLogCordinate(true);
                     },
                   }}
                   icon={
@@ -153,14 +155,13 @@ export default function HomeMap({
                   }
                   position={[m?.latitude, m?.longitude]}
                 >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                    {trimString(m?.name, 30)}
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                    {trimString(m?.name, 30) || "-"}
                   </Tooltip>
                 </Marker>
               ),
           )}
         {showPemilih === true &&
-          userLogCordinate === false &&
           dataPemilih.map(
             (m, index) =>
               m.longitude !== "" && (
@@ -175,14 +176,13 @@ export default function HomeMap({
                   }
                   position={[m?.latitude, m?.longitude]}
                 >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                    {trimString(m?.name, 30)}
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                    {trimString(m?.name, 30) || "-"}
                   </Tooltip>
                 </Marker>
               ),
           )}
         {showBlackList === true &&
-          userLogCordinate === false &&
           dataBlackList.map(
             (m, index) =>
               m.longitude !== "" && (
@@ -197,8 +197,8 @@ export default function HomeMap({
                   }
                   position={[m?.latitude, m?.longitude]}
                 >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                    {trimString(m?.name, 30)}
+                  <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                    {trimString(m?.name, 30) || "-"}
                   </Tooltip>
                 </Marker>
               ),
@@ -217,8 +217,8 @@ export default function HomeMap({
                 }
                 position={[m?.latitude, m?.longitude]}
               >
-                <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                  {trimString(m?.name, 30)}
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                  {trimString(m?.name, 30) || "-"}
                 </Tooltip>
               </Marker>
             ))}
@@ -230,38 +230,37 @@ export default function HomeMap({
         )}
 
         {/* REPORTS */}
-        {userLogCordinate === false &&
-          reports.map(
-            (report, index) =>
-              report?.latitude &&
-              report?.longitude && (
-                <Marker
-                  key={index}
-                  icon={
-                    new L.Icon({
-                      iconUrl: getReportIconURLByID(report.category.id),
-                      iconSize: [iconSize, iconSize],
-                      iconAnchor: [iconSize / 2, iconSize / 2],
-                    })
-                  }
-                  position={[report?.latitude, report?.longitude]}
-                  eventHandlers={{
-                    click: (e) => {
-                      setSelectedReport(report);
-                      setIsReportDetailDrawerOpen(true);
-                    },
-                  }}
-                >
-                  <Tooltip direction="top" offset={[0, -10]} opacity={1} permanent>
-                    {trimString(capitalizeWords(report?.title), 30)}
-                  </Tooltip>
-                </Marker>
-              ),
-          )}
+        {reports.map(
+          (report, index) =>
+            report?.latitude &&
+            report?.longitude && (
+              <Marker
+                key={index}
+                icon={
+                  new L.Icon({
+                    iconUrl: getReportIconURLByID(report.category.id),
+                    iconSize: [iconSize, iconSize],
+                    iconAnchor: [iconSize / 2, iconSize / 2],
+                  })
+                }
+                position={[report?.latitude, report?.longitude]}
+                eventHandlers={{
+                  click: (e) => {
+                    setSelectedReport(report);
+                    setIsReportDetailDrawerOpen(true);
+                  },
+                }}
+              >
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                  {trimString(capitalizeWords(report?.title), 30)}
+                </Tooltip>
+              </Marker>
+            ),
+        )}
       </div>
 
       {/* GEOJSON */}
-      <HomeGeoJSON zoom={zoom} thematicQuestionSurveyResponse={thematicQuestionSurveyResponse} />
+      <HomeGeoJSON zoom={zoom} thematicSurveyResponses={thematicSurveyResponses} />
     </MapContainer>
   );
 }
@@ -275,8 +274,11 @@ function HomeMapComponent({ setZoom, recenter, tempCenter, setRecenter, setCente
     zoomend: () => {
       const zoom = mapEvents.getZoom();
       setZoom(zoom);
-      // setCenter(mapEvents.getCenter());
-      setIconSize(40 * scaleZoom(zoom) + 1);
+      if (zoom >= 18) {
+        setIconSize(20);
+      } else {
+        setIconSize(30 * scaleZoom(zoom) + 1);
+      }
     },
     // dragend: () => {
     //   setCenter(mapEvents.getCenter());

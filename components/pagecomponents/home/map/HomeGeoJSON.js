@@ -2,9 +2,12 @@ import axios from "axios";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GeoJSON } from "react-leaflet";
 
-import getRandomColor from "../../../../utils/helpers/getRandomColor";
+import indexMaxOfNumbers from "../../../../utils/helpers/array/indexMaxOfNumbers";
+import sumNumbers from "../../../../utils/helpers/array/sumNumbers";
+import { getRandomColorByKey } from "../../../../utils/helpers/getRandomColor";
 
-export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse }) {
+export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
+  const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
 
@@ -88,13 +91,16 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse }) {
 
   useEffect(() => {
     // loadAndSaveGeoJSON();
-    axios.get("/geojson/bandung_bandungbarat_v4.json").then((res) => setData(res.data));
+    axios.get("/geojson/kotabandung_kotacimahi_bandung_bandungbarat_v6.json").then((res) => {
+      setOriginalData(res.data);
+      setData(res.data);
+    });
   }, []);
 
   const onEachFeature = useCallback((feature, layer) => {
     if (feature?.properties?.selected) {
-      layer.options.fillColor = getRandomColor();
-      layer.options.fillOpacity = 0.7;
+      layer.options.fillColor = feature?.properties?.fillColor;
+      layer.options.fillOpacity = feature?.properties?.fillOpacity;
     } else {
       layer.options.fillColor = "#016CEE";
       layer.options.fillOpacity = 0.2;
@@ -116,16 +122,37 @@ export default function HomeGeoJSON({ zoom, thematicQuestionSurveyResponse }) {
   const ref = useRef(null);
 
   useEffect(() => {
-    if (!thematicQuestionSurveyResponse?.id) return;
+    if (thematicSurveyResponses?.length == 0) return;
 
-    setData((prevData) => {
-      const newFeatures = prevData?.features?.map((feature) => {
-        feature.properties.selected = thematicQuestionSurveyResponse.village_id == feature?.properties.village_id;
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
+    const mergedResponses = Object.values(
+      mappedResponses.reduce((acc, curr) => {
+        acc[curr?.village_id] = curr;
+        return acc;
+      }, {}),
+    );
+
+    const newFeatures = originalData?.features?.map((feature) => {
+      const index = mergedResponses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
+      if (index === -1) {
+        feature.properties.selected = false;
         return feature;
-      });
-      return { ...prevData, features: newFeatures };
+      }
+
+      const count = mergedResponses[index].count;
+      const total = sumNumbers(count);
+      const indexMaxCount = indexMaxOfNumbers(count);
+      const maxCount = count[indexMaxCount];
+
+      feature.properties.selected = true;
+      feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
+      feature.properties.fillOpacity = maxCount / total;
+      return feature;
     });
-  }, [thematicQuestionSurveyResponse]);
+
+    setData({ ...originalData, features: newFeatures });
+  }, [originalData, thematicSurveyResponses]);
 
   useEffect(() => {
     if (!ref.current) return;
