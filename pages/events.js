@@ -3,6 +3,7 @@ import debounce from "lodash.debounce";
 import Head from "next/head";
 import React, { useMemo, useState } from "react";
 
+import EventAddForm from "../components/pagecomponents/events/EventAddForm";
 import EventDataTable from "../components/pagecomponents/events/EventDataTable";
 import EventSearchBar from "../components/pagecomponents/events/EventSearchBar";
 import { useFindAllEvents } from "../utils/services/events";
@@ -11,6 +12,9 @@ export default function Events() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
   const { events } = useFindAllEvents();
+
+  // drawers
+  const [isAddFormDrawerOpen, setIsFormDrawerOpen] = useState(false);
 
   // filters
   const [filterSearch, setFilterSearch] = useState("");
@@ -63,8 +67,14 @@ export default function Events() {
         <h1>Manajemen Kegiatan</h1>
       </div>
 
+      <EventAddForm open={isAddFormDrawerOpen} setOpen={setIsFormDrawerOpen} />
+
       <Space direction="vertical">
-        <EventSearchBar filterSearchHandler={filterSearchHandler} filterDateHandler={filterDateHandler} />
+        <EventSearchBar
+          filterSearchHandler={filterSearchHandler}
+          filterDateHandler={filterDateHandler}
+          addEventHandler={() => setIsFormDrawerOpen(true)}
+        />
 
         <EventDataTable data={filteredEvents} apiNotification={apiNotification} />
       </Space>
