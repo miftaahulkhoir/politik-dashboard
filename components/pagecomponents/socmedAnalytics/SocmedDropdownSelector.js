@@ -1,6 +1,8 @@
-import { Button, Grid, Row, Col, Select } from "antd";
+import { Button, DatePicker, Grid, Row, Col, Select } from "antd";
 import { useMemo } from "react";
 import { TbPlus, TbSearch } from "react-icons/tb";
+
+const { RangePicker } = DatePicker;
 
 function getLabel(socmed) {
   const name = socmed.displayName;
@@ -14,7 +16,7 @@ function getLabel(socmed) {
   }
 }
 
-export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, value, addSocialmediaHandler }) {
+export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, selectDateHandler, value }) {
   const options = useMemo(
     () => socmeds.map((socmed) => ({ value: socmed.platform, label: getLabel(socmed) })),
     [socmeds],
@@ -26,18 +28,33 @@ export default function SocmedDropdownSelector({ socmeds, setSelectedSocmedID, v
   }, [screen]);
 
   return (
-    <Select
-      style={{ width: "100%" }}
-      showSearch
-      placeholder="Pilih akun sosial media"
-      optionFilterProp="children"
-      value={value}
-      onChange={(value, option) => {
-        console.log("drpdown", value);
-        setSelectedSocmedID(value);
-      }}
-      filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
-      options={options}
-    />
+    <Row justify="space-between">
+      <Col span={24}>
+        <Row gutter={18}>
+          <Col span={16}>
+            <Select
+              style={{ width: "100%" }}
+              showSearch
+              placeholder="Pilih akun sosial media"
+              optionFilterProp="children"
+              value={value}
+              onChange={(value, option) => {
+                console.log("drpdown", value);
+                setSelectedSocmedID(value);
+              }}
+              filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+              options={options}
+            />
+          </Col>
+          <Col span={8}>
+            <RangePicker
+              style={{ width: "100%" }}
+              placeholder={["Tanggal Awal", "Tanggal Akhir"]}
+              onChange={selectDateHandler}
+            />
+          </Col>
+        </Row>
+      </Col>
+    </Row>
   );
 }

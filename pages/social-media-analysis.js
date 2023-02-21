@@ -1,10 +1,13 @@
 import { Space, notification } from "antd";
+import axios from "axios";
+import debounce from "lodash.debounce";
 import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useMemo, useState, useEffect } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 
 import SocmedDropdownSelector from "../components/pagecomponents/socmedAnalytics/SocmedDropdownSelector";
 import SocmedFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedFormDrawer";
+import SocmedHistorical from "../components/pagecomponents/socmedAnalytics/SocmedHistorical";
 import SocmedPostFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedPostFormDrawer";
 import SocmedProfileBar from "../components/pagecomponents/socmedAnalytics/SocmedProfileBar";
 import SocmedResultHeader from "../components/pagecomponents/socmedAnalytics/SocmedResultHeader";
@@ -13,10 +16,16 @@ import { useFindAllSocmeds, useGetUserAnalytics, useFindOneSocmedResult } from "
 
 const SurveyCharts = dynamic(() => import("../components/pagecomponents/surveyAnalitics/charts/SurveyCharts"));
 
-export default function SocialMediaAnalysis() {
+export default function SocialMediaAnalysis(pageProps) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [isDrawerActive, setIsDrawerActive] = useState(false);
   const [isPostDrawerActive, setIsPostDrawerActive] = useState(false);
+
+  const [isProfileAssigned, setIsProfileAssigned] = useState(false);
+  const [isDateAssigned, setIsDateAssigned] = useState(false);
+  const [filterDate, setFilterDate] = useState([]);
+
+  const [historical, setHistorical] = useState([]);
 
   const [dropdownValue, setDropdownValue] = useState(null);
   const [socmedsList, setSocmedsList] = useState([]);
@@ -31,22 +40,25 @@ export default function SocialMediaAnalysis() {
   const { socmed } = useState();
 
   useEffect(() => {
-    console.log("selected:", selectedSocmedID);
-    console.log("fetch", fetchUserAnalytics);
-    if (selectedSocmedID == "twitter") {
-      console.log("tw", userAnalytics.twitter);
-      setShowResult(true);
-      setSelectedSocmedValue(userAnalytics.twitter);
-    } else if (selectedSocmedID == "facebook") {
-      console.log("fb", userAnalytics.facebook);
-      setShowResult(true);
-      setSelectedSocmedValue(userAnalytics.facebook);
-    } else {
-      setShowResult(false);
-      setSelectedSocmedValue({});
-      console.log("error, selected", selectedSocmedID);
+    if (selectedSocmedID != "" && isDateAssigned) {
+      fetchHistoricalData();
+      console.log("selected:", selectedSocmedID);
+      console.log("fetch", fetchUserAnalytics);
+      if (selectedSocmedID == "twitter") {
+        console.log("tw", userAnalytics.twitter);
+        setShowResult(true);
+        setSelectedSocmedValue(userAnalytics.twitter);
+      } else if (selectedSocmedID == "facebook") {
+        console.log("fb", userAnalytics.facebook);
+        setShowResult(true);
+        setSelectedSocmedValue(userAnalytics.facebook);
+      } else {
+        setShowResult(false);
+        setSelectedSocmedValue({});
+        console.log("error, selected", selectedSocmedID);
+      }
     }
-  }, [selectedSocmedID]);
+  }, [selectedSocmedID, filterDate]);
 
   useEffect(() => {
     setSocmedsList(fetchSocmeds);
@@ -60,9 +72,45 @@ export default function SocialMediaAnalysis() {
     setUserAnalytics(fetchUserAnalytics);
   }, [fetchUserAnalytics]);
 
+  const selectDateHandler = useCallback(
+    debounce((_, valueString) => {
+      const res = [];
+      valueString.forEach((value, index) => {
+        res[index] = value;
+      });
+      setFilterDate(res);
+      setIsDateAssigned(true);
+    }, 300),
+  );
+
   const redirect = () => {
     window.open("https://app.ayrshare.com/social-accounts", "_blank");
     return null;
+  };
+
+  const fetchHistoricalData = async () => {
+    try {
+      const request = {
+        platfrom: selectedSocmedID,
+        from: filterDate[0],
+        until: filterDate[1],
+      };
+      // console.log("date", request);
+      await axios
+        .get(
+          `${pageProps.baseURL}api/profile/social-media/analytics/historical?platform=${request.platfrom}&from=${request.from}&until=${request.until}`,
+        )
+        .then((res) => {
+          console.log("socmed results:", res.data.data);
+          setHistorical(res.data.data);
+        });
+    } catch (error) {
+      // console.error(error);
+      apiNotification.error({
+        message: "Gagal",
+        description: "Terjadi kesalahan dalam pengambilan data reports",
+      });
+    }
   };
 
   return (
@@ -105,6 +153,7 @@ export default function SocialMediaAnalysis() {
           socmeds={socmedsList}
           setSelectedSocmedID={setSelectedSocmedID}
           addSocialmediaHandler={redirect}
+          selectDateHandler={selectDateHandler}
           value={selectedSocmedID}
         />
 
@@ -112,7 +161,8 @@ export default function SocialMediaAnalysis() {
           <>
             <SocmedResultHeader data={selectedSocmedValue} socmedType={selectedSocmedID} />
 
-            <SocmedSummary data={selectedSocmedValue} socmedType={selectedSocmedID} />
+            <SocmedHistorical data={historical} socmedType={selectedSocmedID} />
+            {/* <SocmedSummary data={selectedSocmedValue} socmedType={selectedSocmedID} /> */}
           </>
         ) : (
           <div
