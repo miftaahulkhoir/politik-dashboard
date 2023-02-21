@@ -8,7 +8,14 @@ import SpreadData from "./content/SpreadData";
 import styles from "./panel.module.css";
 import PanelMenu from "./PanelMenu";
 
-function PanelContainer({ spreadData, thematicSurveyResponses, setThematicSurveyResponses, showUsers, stateSelected }) {
+function PanelContainer({
+  spreadData,
+  thematicSurveyResponses,
+  setThematicSurveyResponses,
+  showUsers,
+  stateSelected,
+  surveyState,
+}) {
   const [activeMenus, setActiveMenus] = useState([]);
 
   const screen = Grid.useBreakpoint();
@@ -25,6 +32,7 @@ function PanelContainer({ spreadData, thematicSurveyResponses, setThematicSurvey
         {activeMenus?.includes(2) ? <FilterPopup showUsers={showUsers} stateSelected={stateSelected} /> : null}
         {activeMenus?.includes(3) ? (
           <FilterThematic
+            surveyState={surveyState}
             thematicSurveyResponses={thematicSurveyResponses}
             setThematicSurveyResponses={setThematicSurveyResponses}
           />

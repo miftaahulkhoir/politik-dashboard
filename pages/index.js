@@ -123,6 +123,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   // END PENGADUAN
 
   // TEMATIK ===================================
+  // survey
+  const [selectedQuestions, setSelectedQuestions] = useState([]); // string -> surveyid,questionid
 
   // multi survey
   const [thematicSurveyResponses, setThematicSurveyResponses] = useState([]);
@@ -305,6 +307,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               setSelectedReportCategories: setIndexShownReportCategories,
               selectedOccupations: selectedOccupations,
               setSelectedOccupations: setSelectedOccupations,
+            }}
+            surveyState={{
+              selectedQuestions: selectedQuestions,
+              setSelectedQuestions: setSelectedQuestions,
             }}
           />
         </>

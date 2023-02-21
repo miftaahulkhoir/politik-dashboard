@@ -1,13 +1,12 @@
 import { Button, Card, Checkbox, Collapse, Space } from "antd";
 import axios from "axios";
-import React, { useMemo, useState } from "react";
+import React, { useMemo } from "react";
 
 import { useFindAllSurveys } from "../../../../../utils/services/surveys";
 
-function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses }) {
+function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses, surveyState }) {
   // survey
   const { surveys } = useFindAllSurveys();
-  const [questions, setQuestions] = useState([]); // string -> surveyid,questionid
 
   const filteredSurveys = useMemo(() => {
     return surveys
@@ -24,7 +23,7 @@ function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses })
   const clickHandler = () => {
     axios
       .all(
-        questions.map(async (question) => {
+        surveyState?.selectedQuestions?.map(async (question) => {
           const questionID = question?.split(",")[1];
           const regencies = [3204, 3217, 3277, 3273]; // bandung, bandung barat, kota bandung, kota cimahi
           const res = await axios
@@ -50,7 +49,11 @@ function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses })
         title="Tematik"
         size="small"
       >
-        <Checkbox.Group style={{ width: "100%" }} onChange={(value) => setQuestions(value)} value={questions}>
+        <Checkbox.Group
+          style={{ width: "100%" }}
+          onChange={(value) => surveyState?.setSelectedQuestions(value)}
+          value={surveyState?.selectedQuestions}
+        >
           <Space direction="vertical" size={12}>
             {filteredSurveys?.map((survey, index) => (
               <Collapse key={index}>
@@ -75,7 +78,7 @@ function FilterThematic({ thematicSurveyResponses, setThematicSurveyResponses })
           </Space>
         </Checkbox.Group>
       </Card>
-      <Button type="primary" block disabled={!questions?.length} onClick={clickHandler}>
+      <Button type="primary" block disabled={!surveyState?.selectedQuestions?.length} onClick={clickHandler}>
         Petakan
       </Button>
     </div>
