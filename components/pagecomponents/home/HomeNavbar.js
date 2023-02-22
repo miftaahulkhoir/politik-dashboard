@@ -3,10 +3,10 @@ import { useRouter } from "next/router";
 
 import HomeMoreMenuDropdown from "./HomeMoreMenuDropdown";
 import styles from "./homeNavbar.module.css";
+import HomeSocmedMenuDropdown from "./HomSocmedMenuDropdown";
 
 import MobileNavbarToggler from "../../templates/navbar/MobileNavbarToggler";
 import ProfileDropdown from "../dashboardLayout/ProfileDropdown";
-import HomeSocmedMenuDropdown from "./HomSocmedMenuDropdown";
 
 export default function HomeNavbar({ smallDevice, setActive }) {
   const router = useRouter();
@@ -32,9 +32,7 @@ export default function HomeNavbar({ smallDevice, setActive }) {
             <MobileNavbarToggler setActive={setActive} />
           ) : (
             <>
-              <div className={styles.links_container}>
-                {links.map((link, i) => displayMenu(link, i))}
-              </div>
+              <div className={styles.links_container}> {links.map((link, i) => displayMenu(link, i, router))} </div>
               <HomeMoreMenuDropdown />
               <ProfileDropdown />
             </>
@@ -45,14 +43,14 @@ export default function HomeNavbar({ smallDevice, setActive }) {
   );
 }
 
-function displayMenu(link, i) {
+function displayMenu(link, i, router) {
   if (link.name === "social-media") {
-    return (<HomeSocmedMenuDropdown />)
+    return <HomeSocmedMenuDropdown />;
   } else {
     return (
       <Button type="text" key={i} onClick={() => router.push(link.path)}>
         {link.name}
       </Button>
-    )
+    );
   }
 }
