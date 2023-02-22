@@ -103,3 +103,7 @@ export default function Logistics() {
     </>
   );
 }
+
+export async function getServerSideProps(ctx) {
+  return { props: {} };
+}

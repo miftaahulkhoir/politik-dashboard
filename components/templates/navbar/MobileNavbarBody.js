@@ -18,6 +18,7 @@ export default function MobileNavbarBody({ active, setActive, xs }) {
     { name: "Analisis Sentimen", path: "/sentiment-analysis" },
     { name: "Panel Ads", path: "/panel-ads" },
     { name: "WhatsApp Blast", path: "/whatsapp-blast" },
+    { name: "Logistik", path: "/logistics" },
     { name: "Manajemen Kegiatan", path: "/events" },
     { name: "Pengaduan", path: "/reports" },
     { name: "Manajemen Pengguna", path: "/users" },
