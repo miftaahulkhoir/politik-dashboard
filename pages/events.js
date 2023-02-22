@@ -5,6 +5,7 @@ import React, { useMemo, useState } from "react";
 
 import EventAddFormDrawer from "../components/pagecomponents/events/EventAddFormDrawer";
 import EventDataTable from "../components/pagecomponents/events/EventDataTable";
+import EventDetailDrawer from "../components/pagecomponents/events/EventDetailDrawer";
 import EventSearchBar from "../components/pagecomponents/events/EventSearchBar";
 import { useFindAllEvents } from "../utils/services/events";
 
@@ -16,6 +17,7 @@ export default function Events() {
 
   // drawers
   const [isAddFormDrawerOpen, setIsFormDrawerOpen] = useState(false);
+  const [isEventDetailDrawerOpen, setIsEventDetailDrawerOpen] = useState(false);
 
   // filters
   const [filterSearch, setFilterSearch] = useState("");
@@ -70,6 +72,13 @@ export default function Events() {
 
       <EventAddFormDrawer open={isAddFormDrawerOpen} setOpen={setIsFormDrawerOpen} apiNotification={apiNotification} />
 
+      <EventDetailDrawer
+        open={isEventDetailDrawerOpen}
+        setOpen={setIsEventDetailDrawerOpen}
+        apiNotification={apiNotification}
+        selectedEvent={selectedEvent}
+      />
+
       <Space direction="vertical">
         <EventSearchBar
           filterSearchHandler={filterSearchHandler}
@@ -77,7 +86,12 @@ export default function Events() {
           addEventHandler={() => setIsFormDrawerOpen(true)}
         />
 
-        <EventDataTable data={filteredEvents} apiNotification={apiNotification} setSelectedEvent={setSelectedEvent} />
+        <EventDataTable
+          data={filteredEvents}
+          apiNotification={apiNotification}
+          setSelectedEvent={setSelectedEvent}
+          setDetailDrawerOpen={setIsEventDetailDrawerOpen}
+        />
       </Space>
     </>
   );

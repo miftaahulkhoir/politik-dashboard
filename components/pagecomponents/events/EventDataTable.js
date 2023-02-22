@@ -5,7 +5,7 @@ import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 import formateDateTime from "../../../utils/helpers/formatDateTime";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
-export default function EventDataTable({ data, apiNotification }) {
+export default function EventDataTable({ data, apiNotification, setSelectedEvent, setDetailDrawerOpen }) {
   const columns = useMemo(() => {
     return [
       {
@@ -33,9 +33,9 @@ export default function EventDataTable({ data, apiNotification }) {
         name: "Link",
         selector: (row) =>
           (
-            <Button type="link" style={{ padding: "0" }}>
+            <a href={row?.link} target="_blank" rel="noreferrer">
               {row?.link}
-            </Button>
+            </a>
           ) || "-",
         width: "300px",
         sortable: true,
@@ -84,7 +84,15 @@ export default function EventDataTable({ data, apiNotification }) {
           return (
             <div className="d-flex gap-2">
               <Tooltip title="Lihat kegiatan">
-                <Button type="text" icon={<TbEye size={20} color="#016CEE" />} shape="circle" />
+                <Button
+                  type="text"
+                  icon={<TbEye size={20} color="#016CEE" />}
+                  shape="circle"
+                  onClick={() => {
+                    setSelectedEvent(row);
+                    setDetailDrawerOpen(true);
+                  }}
+                />
               </Tooltip>
               <Tooltip title="Edit kegiatan">
                 <Button type="text" icon={<TbPencil size={20} color="#7287A5" />} shape="circle" />
