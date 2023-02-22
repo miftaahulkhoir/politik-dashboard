@@ -15,8 +15,6 @@ export default function HomeNavbar({ smallDevice, setActive }) {
     { name: "Manajemen Survei", path: "/surveys" },
     { name: "Analisis Survei", path: "/survey-analysis" },
     { name: "social-media" },
-    { name: "Analisis Sentimen", path: "/sentiment-analysis" },
-    { name: "Panel Ads", path: "/panel-ads" },
     { name: "WhatsApp Blast", path: "/whatsapp-blast" },
   ];
 
