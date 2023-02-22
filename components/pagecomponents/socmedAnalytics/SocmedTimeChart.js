@@ -20,7 +20,7 @@ export default function SocmedHistorical({ data, socmedType, title, color }) {
     });
     series = [
       {
-        name: "Impressions",
+        name: title,
         type: "line",
         smooth: true,
         showSymbol: false,
