@@ -6,6 +6,7 @@ import styles from "./homeNavbar.module.css";
 
 import MobileNavbarToggler from "../../templates/navbar/MobileNavbarToggler";
 import ProfileDropdown from "../dashboardLayout/ProfileDropdown";
+import HomeSocmedMenuDropdown from "./HomSocmedMenuDropdown";
 
 export default function HomeNavbar({ smallDevice, setActive }) {
   const router = useRouter();
@@ -13,7 +14,7 @@ export default function HomeNavbar({ smallDevice, setActive }) {
   const links = [
     { name: "Manajemen Survei", path: "/surveys" },
     { name: "Analisis Survei", path: "/survey-analysis" },
-    { name: "Analisis Sosial Media", path: "/social-media-analysis" },
+    { name: "social-media" },
     { name: "Analisis Sentimen", path: "/sentiment-analysis" },
     { name: "Panel Ads", path: "/panel-ads" },
     { name: "WhatsApp Blast", path: "/whatsapp-blast" },
@@ -32,14 +33,7 @@ export default function HomeNavbar({ smallDevice, setActive }) {
           ) : (
             <>
               <div className={styles.links_container}>
-                {links.map((link, i) => (
-                  // <div role="button" key={i} onClick={() => router.push(link.path)}>
-                  //   {link.name}
-                  // </div>
-                  <Button type="text" key={i} onClick={() => router.push(link.path)}>
-                    {link.name}
-                  </Button>
-                ))}
+                {links.map((link, i) => displayMenu(link, i))}
               </div>
               <HomeMoreMenuDropdown />
               <ProfileDropdown />
@@ -49,4 +43,16 @@ export default function HomeNavbar({ smallDevice, setActive }) {
       </nav>
     </header>
   );
+}
+
+function displayMenu(link, i) {
+  if (link.name === "social-media") {
+    return (<HomeSocmedMenuDropdown />)
+  } else {
+    return (
+      <Button type="text" key={i} onClick={() => router.push(link.path)}>
+        {link.name}
+      </Button>
+    )
+  }
 }
