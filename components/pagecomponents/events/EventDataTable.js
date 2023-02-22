@@ -1,6 +1,6 @@
 import { Button, Card, Col, Row, Tooltip } from "antd";
 import { useMemo } from "react";
-import { TbPencil } from "react-icons/tb";
+import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import formateDateTime from "../../../utils/helpers/formatDateTime";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
@@ -18,42 +18,59 @@ export default function EventDataTable({ data, apiNotification }) {
       {
         name: "Judul",
         selector: (row) => row?.event_name || "-",
-        width: "180px",
+        minWidth: "200px",
+        maxWidth: "300px",
         sortable: true,
+        grow: 1000,
       },
       {
-        name: "Deskripsi",
-        selector: (row) => row?.description || "-",
-        width: "180px",
-        sortable: true,
-      },
-      {
-        name: "Kategori",
-        selector: (row) => row?.category || "-",
-        width: "180px",
+        name: "Narahubung",
+        selector: (row) => row?.contact_person || "-",
+        width: "200px",
         sortable: true,
       },
       {
         name: "Link",
-        selector: (row) => row?.link || "belum ada field di api-nya",
-        maxWidth: "600px",
-        grow: 1000,
+        selector: (row) =>
+          (
+            <Button type="link" style={{ padding: "0" }}>
+              {row?.link}
+            </Button>
+          ) || "-",
+        width: "300px",
         sortable: true,
       },
       {
-        name: "Jadwal Rilis",
+        name: "Tanggal Mulai",
         selector: (row) =>
-          formateDateTime(row?.created_at, {
-            day: "numeric",
-            month: "short",
+          formateDateTime(row?.date_start, {
             year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
           }),
         sortable: true,
         sortFunction: (a, b) => {
-          return new Date(a?.created_at).getTime() - new Date(b?.created_at).getTime();
+          return new Date(a?.date_start).getTime() - new Date(b?.date_start).getTime();
         },
-        width: "130px",
-        center: true,
+        width: "160px",
+      },
+      {
+        name: "Tanggal Selesai",
+        selector: (row) =>
+          formateDateTime(row?.date_end, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        sortable: true,
+        sortFunction: (a, b) => {
+          return new Date(a?.date_end).getTime() - new Date(b?.date_end).getTime();
+        },
+        width: "160px",
       },
       {
         name: "",
@@ -66,8 +83,14 @@ export default function EventDataTable({ data, apiNotification }) {
         selector: (row) => {
           return (
             <div className="d-flex gap-2">
-              <Tooltip title="Edit pengguna">
-                <Button type="text" icon={<TbPencil size={20} color="#7287A5" />} shape="circle"></Button>
+              <Tooltip title="Lihat kegiatan">
+                <Button type="text" icon={<TbEye size={20} color="#016CEE" />} shape="circle" />
+              </Tooltip>
+              <Tooltip title="Edit kegiatan">
+                <Button type="text" icon={<TbPencil size={20} color="#7287A5" />} shape="circle" />
+              </Tooltip>
+              <Tooltip title="Hapus kegiatan">
+                <Button type="text" icon={<TbTrashX size={20} color="#B12E2E" />} shape="circle" />
               </Tooltip>
             </div>
           );
