@@ -3,10 +3,13 @@ import { useRouter } from "next/router";
 import { useMemo, useState } from "react";
 import {
   TbAd2,
+  TbAddressBook,
   TbBrandGoogleAnalytics,
   TbBrandTwitter,
   TbBrandWhatsapp,
   TbCalendarEvent,
+  TbChevronDown,
+  TbChevronUp,
   TbDeviceAnalytics,
   TbLayoutDashboard,
   TbListCheck,
@@ -23,6 +26,7 @@ export default function DashboardLayout({ profile, baseURL, children }) {
   const { asPath } = router;
 
   const [isNavbarActive, setIsNavbarActive] = useState(false);
+  const [socmedMenu, setSocmedMenu] = useState(asPath === "/social-media-analysis" || asPath === "/sentiment-analysis" || asPath === "/panel-ads");
 
   const screens = Grid.useBreakpoint();
 
@@ -106,16 +110,65 @@ export default function DashboardLayout({ profile, baseURL, children }) {
             )}
             {profile?.occupation?.level < 3 && (
               <li
-                className={asPath === "/social-media-analysis" ? "meu-item active" : "menu-item"}
-                onClick={() => router.push("/social-media-analysis")}
+                className={"menu-item"}
+                onClick={() => setSocmedMenu(!socmedMenu)}
               >
                 <a>
-                  <TbBrandTwitter size={24} />
-                  <span>Analisis Sosial Media</span>
+                  <TbAddressBook size={24} />
+                  <span>Sosial Media</span>
+                  <div style={{"marginLeft": "auto"}}>
+                    {socmedMenu ? <TbChevronUp size={20} /> : <TbChevronDown size={20} />}
+                  </div>
                 </a>
               </li>
             )}
             {profile?.occupation?.level < 3 && (
+              <li style={socmedMenu ? {"display": "block"} : {"display": "none"}}>
+                <a
+                  className={asPath === "/social-media-analysis" ? "menu-item active" : "menu-item"}
+                  style={{textDecoration: "none", color: "inherit"}}
+                  onClick={() => router.push("/social-media-analysis")}
+                >
+                  <ul style={{"paddingLeft": "20px"}}>
+                    <li>
+                      <a style={{"padding": "0px"}}>
+                        <TbBrandTwitter size={24} />
+                        <span>Analisis Sosial Media</span>
+                      </a>
+                    </li>
+                  </ul>
+                </a>
+                <a
+                  className={asPath === "/sentiment-analysis" ? "menu-item active" : "menu-item"}
+                  style={{textDecoration: "none", color: "inherit"}}
+                  onClick={() => router.push("/sentiment-analysis")}
+                >
+                  <ul style={{"paddingLeft": "20px"}}>
+                    <li>
+                      <a style={{"padding": "0px"}}>
+                        <TbBrandGoogleAnalytics size={24} />
+                        <span>Analisis Sentimen</span>
+                      </a>
+                    </li>
+                  </ul>
+                </a>
+                <a
+                  className={asPath === "/panel-ads" ? "menu-item active" : "menu-item"}
+                  style={{textDecoration: "none", color: "inherit"}}
+                  onClick={() => router.push("/panel-ads")}
+                >
+                  <ul style={{"paddingLeft": "20px"}}>
+                    <li>
+                      <a style={{"padding": "0px"}}>
+                        <TbAd2 size={24} />
+                        <span>Panel Ads</span>
+                      </a>
+                    </li>
+                  </ul>
+                </a>
+              </li>
+            )}
+            {/* {profile?.occupation?.level < 3 && (
               <li
                 className={asPath === "/sentiment-analysis" ? "meu-item active" : "menu-item"}
                 onClick={() => router.push("/sentiment-analysis")}
@@ -136,7 +189,7 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                   <span>Panel Ads</span>
                 </a>
               </li>
-            )}
+            )} */}
             {profile?.occupation?.level < 3 && (
               <li
                 className={asPath === "/whatsapp-blast" ? "meu-item active" : "menu-item"}
