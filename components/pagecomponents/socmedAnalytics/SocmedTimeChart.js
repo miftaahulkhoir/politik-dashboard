@@ -7,7 +7,7 @@ import Card from "../../elements/card/Card";
 
 const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
-export default function SocmedHistorical({ data, socmedType, title, color }) {
+export default function SocmedHistorical({ data, socmedType, title, color, chartType }) {
   const timestamp = [];
   let series = [];
   const dataRaw = [];
@@ -21,7 +21,7 @@ export default function SocmedHistorical({ data, socmedType, title, color }) {
     series = [
       {
         name: title,
-        type: "line",
+        type: chartType,
         smooth: true,
         showSymbol: false,
         color: color,

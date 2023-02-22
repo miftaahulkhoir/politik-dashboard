@@ -161,7 +161,7 @@ export default function SocialMediaAnalysis(pageProps) {
           <>
             <SocmedResultHeader data={selectedSocmedValue} socmedType={selectedSocmedID} />
 
-            <SocmedHistorical data={historical} socmedType={selectedSocmedID} />
+            <SocmedHistorical data={historical} socmedType={selectedSocmedID} dataLength={historical.length} />
             {/* <SocmedSummary data={selectedSocmedValue} socmedType={selectedSocmedID} /> */}
           </>
         ) : (
