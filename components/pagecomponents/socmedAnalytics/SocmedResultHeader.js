@@ -29,7 +29,7 @@ export default function SocmedResultHeader({ data, socmedType }) {
           <Space direction="vertical" size="0px">
             <Typography.Title level={5}>@{data?.analytics.username}</Typography.Title>
             <Typography.Title level={5}>
-              Followers: {data?.analytics.followersCount} | Following: {data?.analytics.favoritesCount}
+              Followers: {data?.analytics.followersCount} | Following: {data?.analytics.friendsCount}
             </Typography.Title>
             <Typography.Text style={{ color: "#7287A5" }}>Bergabung: {date}</Typography.Text>
           </Space>
