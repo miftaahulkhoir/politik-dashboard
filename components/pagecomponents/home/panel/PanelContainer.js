@@ -13,7 +13,8 @@ function PanelContainer({
   thematicSurveyResponses,
   setThematicSurveyResponses,
   showUsers,
-  stateSelected,
+  occupationState,
+  reportState,
   surveyState,
 }) {
   const [activeMenus, setActiveMenus] = useState([]);
@@ -29,9 +30,10 @@ function PanelContainer({
       <PanelMenu activeMenus={activeMenus} setActiveMenus={setActiveMenus} isMD={isMD} />
       <Space style={{ alignItems: "flex-start", padding: "0" }}>
         {activeMenus?.includes(1) ? <SpreadData data={spreadData} /> : null}
-        {activeMenus?.includes(2) ? <FilterPopup showUsers={showUsers} stateSelected={stateSelected} /> : null}
+        {activeMenus?.includes(2) ? <FilterPopup showUsers={showUsers} occupationState={occupationState} /> : null}
         {activeMenus?.includes(3) ? (
           <FilterThematic
+            reportState={reportState}
             surveyState={surveyState}
             thematicSurveyResponses={thematicSurveyResponses}
             setThematicSurveyResponses={setThematicSurveyResponses}

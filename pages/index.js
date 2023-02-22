@@ -306,11 +306,13 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               setShowPemilih: setShowPemilih,
               setShowBlackList: setShowBlackList,
             }}
-            stateSelected={{
-              selectedReportCategories: indexShownReportCategories,
-              setSelectedReportCategories: setIndexShownReportCategories,
+            occupationState={{
               selectedOccupations: selectedOccupations,
               setSelectedOccupations: setSelectedOccupations,
+            }}
+            reportState={{
+              selectedReportCategories: indexShownReportCategories,
+              setSelectedReportCategories: setIndexShownReportCategories,
             }}
             surveyState={{
               selectedQuestions: selectedQuestions,

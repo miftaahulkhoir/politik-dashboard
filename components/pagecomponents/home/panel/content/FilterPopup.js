@@ -1,16 +1,16 @@
-import { Card, Checkbox, Collapse, Space } from "antd";
+import { Card, Checkbox, Space } from "antd";
 import { useEffect, useState } from "react";
 
 import capitalizeWords from "../../../../../utils/helpers/capitalizeWords";
-import { useFindAllReportCategories } from "../../../../../utils/services/reports";
 import { useFindAllOccupations } from "../../../../../utils/services/users";
 
-function FilterPopup({ showUsers, stateSelected }) {
-  // reports
-  const { categories: reportCategories } = useFindAllReportCategories();
-  const categoryChangeHandler = (value) => {
-    stateSelected.setSelectedReportCategories(value);
-  };
+function FilterPopup({ showUsers, occupationState }) {
+  const profileImages = [
+    "/images/map/markers/user-koordinator.svg",
+    "/images/map/markers/user-relawan.svg",
+    "/images/map/markers/user-pemilih.svg",
+    "/images/map/markers/user-blacklist.svg",
+  ];
 
   // users
   const { occupations: fetchOccupations } = useFindAllOccupations();
@@ -21,7 +21,7 @@ function FilterPopup({ showUsers, stateSelected }) {
   }, [fetchOccupations]);
 
   const userChangeHandler = (value) => {
-    stateSelected.setSelectedOccupations(value);
+    occupationState.setSelectedOccupations(value);
     if (value.includes(2)) {
       showUsers.setShowKoordinator(true);
     } else {
@@ -55,47 +55,23 @@ function FilterPopup({ showUsers, stateSelected }) {
         title="Persebaran"
         size="small"
       >
-        <Space direction="vertical" size={12}>
-          <Collapse defaultActiveKey={[1]}>
-            <Collapse.Panel header="Persebaran" key={1}>
-              <Checkbox.Group
-                style={{ width: "100%" }}
-                onChange={userChangeHandler}
-                value={stateSelected.selectedOccupations}
-              >
-                <Space direction="vertical" size="small">
-                  {occupations?.map((occupation) => (
-                    <Checkbox value={occupation?.level} key={occupation?.level}>
-                      {capitalizeWords(occupation?.name ?? "")}
-                    </Checkbox>
-                  ))}
+        <Checkbox.Group
+          style={{ width: "100%" }}
+          onChange={userChangeHandler}
+          value={occupationState.selectedOccupations}
+        >
+          <Space direction="vertical" size="small">
+            {occupations?.map((occupation, i) => (
+              <Checkbox value={occupation?.level} key={occupation?.level}>
+                <Space size={4}>
+                  <img src={profileImages[i]} alt="" style={{ width: "20px" }} />
+                  {capitalizeWords(occupation?.name ?? "")}
                 </Space>
-              </Checkbox.Group>
-            </Collapse.Panel>
-          </Collapse>
-
-          <Collapse defaultActiveKey={[1]}>
-            <Collapse.Panel header="Pengaduan" key={1}>
-              <Checkbox.Group
-                style={{ width: "100%" }}
-                onChange={categoryChangeHandler}
-                value={stateSelected?.selectedReportCategories}
-              >
-                <Space direction="vertical" size="small">
-                  {reportCategories?.map((category) => (
-                    <Checkbox value={category?.id} key={category?.id}>
-                      {capitalizeWords(category?.category_name ?? "")}
-                    </Checkbox>
-                  ))}
-                </Space>
-              </Checkbox.Group>
-            </Collapse.Panel>
-          </Collapse>
-        </Space>
+              </Checkbox>
+            ))}
+          </Space>
+        </Checkbox.Group>
       </Card>
-      {/* <Button type="primary" block>
-        Petakan
-      </Button> */}
     </div>
   );
 }
