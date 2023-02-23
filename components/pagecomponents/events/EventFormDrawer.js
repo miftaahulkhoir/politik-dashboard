@@ -1,11 +1,20 @@
 import { Button, Col, DatePicker, Drawer, Input, Row, Space, TimePicker, Typography, Upload } from "antd";
 import dayjs from "dayjs";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { TbPlus } from "react-icons/tb";
 
-import { createEvent } from "../../../utils/services/events";
+import { createEvent, updateEvent } from "../../../utils/services/events";
 
-export default function EventFormDrawer({ open, setOpen, isSM, apiNotification }) {
+export default function EventFormDrawer({
+  open,
+  setOpen,
+  isSM,
+  apiNotification,
+  isEdit = false,
+  setIsEdit,
+  selectedEvent,
+  setEvents,
+}) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
@@ -16,9 +25,28 @@ export default function EventFormDrawer({ open, setOpen, isSM, apiNotification }
   const [dateEnd, setDateEnd] = useState(dayjs());
   const [timeEnd, setTimeEnd] = useState(dayjs());
 
+  console.log("selected event", selectedEvent);
+
+  // fill form if edit
+  useEffect(() => {
+    if (!isEdit) return;
+    setTitle(selectedEvent?.event_name);
+    setImage(null);
+    setDescription(selectedEvent?.description);
+    setLink(selectedEvent?.link);
+    setContact(selectedEvent?.contact_person);
+    setDateStart(dayjs(selectedEvent?.date_start));
+    setDateEnd(dayjs(selectedEvent?.date_start));
+    setTimeStart(dayjs(selectedEvent?.date_end));
+    setTimeEnd(dayjs(selectedEvent?.date_end));
+  }, [isEdit, selectedEvent]);
+
   const onClose = () => {
     setOpen(false);
-    resetForm();
+    setTimeout(() => {
+      resetForm();
+      setIsEdit(false);
+    }, 200);
   };
 
   const resetForm = () => {
@@ -27,46 +55,78 @@ export default function EventFormDrawer({ open, setOpen, isSM, apiNotification }
     setDescription("");
     setLink("");
     setContact("");
-    setDateStart("");
-    setDateEnd("");
-    setTimeStart("");
-    setTimeEnd("");
+    setDateStart(dayjs());
+    setDateEnd(dayjs());
+    setTimeStart(dayjs());
+    setTimeEnd(dayjs());
+  };
+
+  const createEventHandler = async (formData) => {
+    try {
+      const res = await createEvent(formData);
+      const newEvent = res?.data?.data;
+      setEvents((prevEvents) => [newEvent, ...prevEvents]);
+
+      apiNotification.success({
+        message: "Berhasil",
+        description: `Kegiatan ${title} telah ditambahkan`,
+      });
+      onClose();
+    } catch (error) {
+      console.error(error);
+      apiNotification.error({
+        message: "Gagal",
+        description: "Terjadi kesalahan saat menambahkan kegiatan",
+      });
+    }
+  };
+
+  const editEventHandler = async (formData) => {
+    try {
+      const res = await updateEvent(formData);
+
+      console.log(res);
+
+      apiNotification.success({
+        message: "Berhasil",
+        description: `Perubahan kegiatan ${title} telah disimpan`,
+      });
+      onClose();
+    } catch (error) {
+      console.error(error);
+      apiNotification.error({
+        message: "Gagal",
+        description: "Terjadi kesalahan saat menyimpan perubahan kegiatan",
+      });
+    }
   };
 
   const submitHandler = async () => {
     const dateFormat = "YYYY-MM-DD";
     const timeFormat = "HH:mm:ss";
 
-    try {
-      const formData = new FormData();
-      formData.append("event_name", title);
-      formData.append("images", image);
-      formData.append("category", "kategori");
-      formData.append("description", description);
-      formData.append("link", link);
-      formData.append("date_start", `${dateStart.format(dateFormat)} ${timeStart.format(timeFormat)}`);
-      formData.append("date_end", `${dateEnd.format(dateFormat)} ${timeEnd.format(timeFormat)}`);
-      formData.append("contact_person", contact);
-      formData.append("location", "di sini");
-      formData.append("status", true);
+    const formData = new FormData();
+    formData.append("event_name", title);
+    formData.append("images", image);
+    formData.append("category", "kategori");
+    formData.append("description", description);
+    formData.append("link", link);
+    formData.append("date_start", `${dateStart.format(dateFormat)} ${timeStart.format(timeFormat)}`);
+    formData.append("date_end", `${dateEnd.format(dateFormat)} ${timeEnd.format(timeFormat)}`);
+    formData.append("contact_person", contact);
+    formData.append("location", "di sini");
+    formData.append("status", true);
 
-      await createEvent(formData);
-      apiNotification.success({
-        message: "Berhasil",
-        description: `Kegiatan ${title} telah ditambahkan`,
-      });
-    } catch (error) {
-      console.error(error);
-      apiNotification.error({
-        message: "Gagal",
-        description: "Terjadi kesalahan",
-      });
+    if (isEdit) {
+      await editEventHandler(formData);
+    } else {
+      await createEventHandler(formData);
     }
   };
 
   return (
     <Drawer
-      title={"Tambah Kegaitan"}
+      title={isEdit ? "Edit Kegiatan" : "Tambah Kegaitan"}
       placement="right"
       onClose={onClose}
       open={open}

@@ -21,7 +21,8 @@ export default function Events() {
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   // drawers
-  const [isAddFormDrawerOpen, setIsFormDrawerOpen] = useState(false);
+  const [isFormDrawerOpen, setIsFormDrawerOpen] = useState(false);
+  const [isFormDrawerEdit, setIsFormDrawerEdit] = useState(false);
   const [isEventDetailDrawerOpen, setIsEventDetailDrawerOpen] = useState(false);
 
   // filters
@@ -75,7 +76,15 @@ export default function Events() {
         <h1>Manajemen Kegiatan</h1>
       </div>
 
-      <EventFormDrawer open={isAddFormDrawerOpen} setOpen={setIsFormDrawerOpen} apiNotification={apiNotification} />
+      <EventFormDrawer
+        open={isFormDrawerOpen}
+        setOpen={setIsFormDrawerOpen}
+        apiNotification={apiNotification}
+        setEvents={setEvents}
+        selectedEvent={selectedEvent}
+        isEdit={isFormDrawerEdit}
+        setIsEdit={setIsFormDrawerEdit}
+      />
 
       <EventDetailDrawer
         open={isEventDetailDrawerOpen}
@@ -96,6 +105,8 @@ export default function Events() {
           apiNotification={apiNotification}
           setSelectedEvent={setSelectedEvent}
           setDetailDrawerOpen={setIsEventDetailDrawerOpen}
+          setIsFormDrawerOpen={setIsFormDrawerOpen}
+          setIsFormDrawerEdit={setIsFormDrawerEdit}
           events={events}
           setEvents={setEvents}
         />

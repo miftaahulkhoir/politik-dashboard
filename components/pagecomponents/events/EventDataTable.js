@@ -1,5 +1,5 @@
 import { Button, Card, Col, Modal, Row, Tooltip } from "antd";
-import { useMemo } from "react";
+import { useCallback, useMemo } from "react";
 import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import formateDateTime from "../../../utils/helpers/formatDateTime";
@@ -11,44 +11,59 @@ export default function EventDataTable({
   apiNotification,
   setSelectedEvent,
   setDetailDrawerOpen,
+  setIsFormDrawerOpen,
+  setIsFormDrawerEdit,
   events,
   setEvents,
 }) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const openDetailHandler = (row) => {
-    setSelectedEvent(row);
-    setDetailDrawerOpen(true);
-  };
+  const openDetailHandler = useCallback(
+    (row) => {
+      setSelectedEvent(row);
+      setDetailDrawerOpen(true);
+    },
+    [setSelectedEvent, setDetailDrawerOpen],
+  );
 
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const deleteHandler = (row) => {
-    Modal.confirm({
-      title: "Peringatan",
-      content: `Apakah kamu yakin ingin menghapus ${row.event_name}?`,
-      okText: "Ya",
-      okType: "danger",
-      cancelText: "Tidak",
-      onOk: function () {
-        deleteEvent(row?.id)
-          .then(() => {
-            const newEvents = events.filter((e) => e.id !== row?.id);
-            setEvents([...newEvents]);
+  const editDetailHandler = useCallback(
+    (row) => {
+      setSelectedEvent(row);
+      setIsFormDrawerOpen(true);
+      setIsFormDrawerEdit(true);
+    },
+    [setSelectedEvent, setIsFormDrawerOpen, setIsFormDrawerEdit],
+  );
 
-            apiNotification.success({
-              message: "Sukses",
-              description: `Kegiatan ${row?.name} berhasil dihapus`,
+  const deleteHandler = useCallback(
+    (row) => {
+      Modal.confirm({
+        title: "Peringatan",
+        content: `Apakah kamu yakin ingin menghapus ${row.event_name}?`,
+        okText: "Ya",
+        okType: "danger",
+        cancelText: "Tidak",
+        onOk: function () {
+          deleteEvent(row?.id)
+            .then(() => {
+              const newEvents = events.filter((e) => e.id !== row?.id);
+              setEvents([...newEvents]);
+
+              apiNotification.success({
+                message: "Sukses",
+                description: `Kegiatan ${row?.name} berhasil dihapus`,
+              });
+            })
+            .catch((err) => {
+              apiNotification.error({
+                message: "Gagal",
+                description: "Terjadi kesalahan",
+              });
+              console.error(err);
             });
-          })
-          .catch((err) => {
-            apiNotification.error({
-              message: "Gagal",
-              description: "Terjadi kesalahan",
-            });
-            console.error(err);
-          });
-      },
-    });
-  };
+        },
+      });
+    },
+    [apiNotification, events, setEvents],
+  );
 
   const columns = useMemo(() => {
     return [
@@ -136,7 +151,12 @@ export default function EventDataTable({
                 />
               </Tooltip>
               <Tooltip title="Edit kegiatan">
-                <Button type="text" icon={<TbPencil size={20} color="#7287A5" />} shape="circle" />
+                <Button
+                  type="text"
+                  icon={<TbPencil size={20} color="#7287A5" />}
+                  shape="circle"
+                  onClick={() => editDetailHandler(row)}
+                />
               </Tooltip>
               <Tooltip title="Hapus kegiatan">
                 <Button
@@ -153,7 +173,7 @@ export default function EventDataTable({
         center: true,
       },
     ];
-  }, [deleteHandler, openDetailHandler]);
+  }, [deleteHandler, editDetailHandler, openDetailHandler]);
 
   return (
     <Row justify="end">
