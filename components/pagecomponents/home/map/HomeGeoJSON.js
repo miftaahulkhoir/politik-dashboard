@@ -150,18 +150,13 @@ export default function HomeGeoJSON({
         if (responseSummary) {
           matchedResponses.push({
             question: surveyResponse?.question_name,
+            options: surveyResponse?.options,
             counts: responseSummary?.count,
             total_count: sumNumbers(responseSummary?.count),
           });
         }
-
-        // console.log("rr", responses);
       });
       feature.properties.question_responses = matchedResponses;
-
-      // feature.properties.questions = mappedResponses.filter(
-      //   (response) => response?.village_id == feature?.properties?.village_id,
-      // );
 
       const index = mergedResponses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
       if (index === -1) {

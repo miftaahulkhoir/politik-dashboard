@@ -41,8 +41,6 @@ export default function SurveyCharts({ survey }) {
     };
 
     const elements = questions?.map((q) => {
-      console.log("options", q.options, getPieData(q.options));
-
       if (["text", "long_text"].includes(q.input_type)) {
         return <SurveyTextChart key={q.id} title={q.question_name} data={q.answer_text} />;
       }
