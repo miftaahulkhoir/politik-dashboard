@@ -11,6 +11,7 @@ import NameAvatar from "../components/elements/nameAvatar/NameAvatar";
 import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
+import RegionQuestionDetailDrawer from "../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
@@ -127,6 +128,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   // TEMATIK ===================================
   // survey
   const [selectedQuestions, setSelectedQuestions] = useState([]); // string -> surveyid,questionid
+  const [isRegionQuestionDetailDrawerOpen, setIsRegionQuestionDetailDrawerOpen] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState(null);
 
   // multi survey
   const [thematicSurveyResponses, setThematicSurveyResponses] = useState([]);
@@ -236,6 +239,12 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         selectedUser={selectedUser}
       />
 
+      <RegionQuestionDetailDrawer
+        open={isRegionQuestionDetailDrawerOpen}
+        setOpen={setIsRegionQuestionDetailDrawerOpen}
+        selectedRegion={selectedRegion}
+      />
+
       {profile?.occupation?.level === 1 ? (
         <>
           <MobileNavbarBody active={isNavbarActive} setActive={setIsNavbarActive} xs={screens.xs} />
@@ -271,6 +280,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 setSelectedUser={setSelectedUser}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
                 thematicSurveyResponses={thematicSurveyResponses}
+                setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
+                setSelectedRegion={setSelectedRegion}
               />
             </div>
           )}

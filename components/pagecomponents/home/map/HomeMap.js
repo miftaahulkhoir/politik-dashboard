@@ -38,6 +38,8 @@ export default function HomeMap({
   indexShownReportCategories,
   baseURL,
   thematicSurveyResponses,
+  setIsRegionQuestionDetailDrawerOpen,
+  setSelectedRegion,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -260,7 +262,12 @@ export default function HomeMap({
       </div>
 
       {/* GEOJSON */}
-      <HomeGeoJSON zoom={zoom} thematicSurveyResponses={thematicSurveyResponses} />
+      <HomeGeoJSON
+        zoom={zoom}
+        thematicSurveyResponses={thematicSurveyResponses}
+        setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
+        setSelectedRegion={setSelectedRegion}
+      />
     </MapContainer>
   );
 }

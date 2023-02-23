@@ -6,7 +6,12 @@ import indexMaxOfNumbers from "../../../../utils/helpers/array/indexMaxOfNumbers
 import sumNumbers from "../../../../utils/helpers/array/sumNumbers";
 import { getRandomColorByKey } from "../../../../utils/helpers/getRandomColor";
 
-export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
+export default function HomeGeoJSON({
+  zoom,
+  thematicSurveyResponses,
+  setIsRegionQuestionDetailDrawerOpen,
+  setSelectedRegion,
+}) {
   const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
@@ -97,21 +102,23 @@ export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
     });
   }, []);
 
-  const onEachFeature = useCallback((feature, layer) => {
-    if (feature?.properties?.selected) {
-      layer.options.fillColor = feature?.properties?.fillColor;
-      layer.options.fillOpacity = feature?.properties?.fillOpacity;
-    } else {
-      layer.options.fillColor = "#016CEE";
-      layer.options.fillOpacity = 0.2;
-    }
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      if (feature?.properties?.selected) {
+        layer.options.fillColor = feature?.properties?.fillColor;
+        layer.options.fillOpacity = feature?.properties?.fillOpacity;
+      } else {
+        layer.options.fillColor = "#016CEE";
+        layer.options.fillOpacity = 0.2;
+      }
 
-    layer.on("click", (e) => {
-      // e.target.setStyle({
-      //   fillColor: "green",
-      // });
-    });
-  }, []);
+      layer.on("click", (e) => {
+        setIsRegionQuestionDetailDrawerOpen(true);
+        setSelectedRegion(feature.properties);
+      });
+    },
+    [setIsRegionQuestionDetailDrawerOpen, setSelectedRegion],
+  );
 
   const style = useMemo(() => {
     return {
@@ -134,6 +141,28 @@ export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
     );
 
     const newFeatures = originalData?.features?.map((feature) => {
+      const matchedResponses = [];
+      thematicSurveyResponses?.forEach((surveyResponse) => {
+        const responseSummary = surveyResponse?.responses?.find(
+          (r, questionIndex) => r?.village_id == feature?.properties?.village_id,
+        );
+
+        if (responseSummary) {
+          matchedResponses.push({
+            question: surveyResponse?.question_name,
+            counts: responseSummary?.count,
+            total_count: sumNumbers(responseSummary?.count),
+          });
+        }
+
+        // console.log("rr", responses);
+      });
+      feature.properties.question_responses = matchedResponses;
+
+      // feature.properties.questions = mappedResponses.filter(
+      //   (response) => response?.village_id == feature?.properties?.village_id,
+      // );
+
       const index = mergedResponses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
       if (index === -1) {
         feature.properties.selected = false;
