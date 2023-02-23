@@ -1,18 +1,23 @@
 import { Space, notification } from "antd";
 import debounce from "lodash.debounce";
 import Head from "next/head";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
-import EventAddFormDrawer from "../components/pagecomponents/events/EventAddFormDrawer";
 import EventDataTable from "../components/pagecomponents/events/EventDataTable";
 import EventDetailDrawer from "../components/pagecomponents/events/EventDetailDrawer";
+import EventFormDrawer from "../components/pagecomponents/events/EventFormDrawer";
 import EventSearchBar from "../components/pagecomponents/events/EventSearchBar";
 import { useFindAllEvents } from "../utils/services/events";
 
 export default function Events() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
-  const { events } = useFindAllEvents();
+  const { events: fetchEvents } = useFindAllEvents();
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    setEvents(fetchEvents);
+  }, [fetchEvents]);
+
   const [selectedEvent, setSelectedEvent] = useState(null);
 
   // drawers
@@ -70,7 +75,7 @@ export default function Events() {
         <h1>Manajemen Kegiatan</h1>
       </div>
 
-      <EventAddFormDrawer open={isAddFormDrawerOpen} setOpen={setIsFormDrawerOpen} apiNotification={apiNotification} />
+      <EventFormDrawer open={isAddFormDrawerOpen} setOpen={setIsFormDrawerOpen} apiNotification={apiNotification} />
 
       <EventDetailDrawer
         open={isEventDetailDrawerOpen}
@@ -91,6 +96,8 @@ export default function Events() {
           apiNotification={apiNotification}
           setSelectedEvent={setSelectedEvent}
           setDetailDrawerOpen={setIsEventDetailDrawerOpen}
+          events={events}
+          setEvents={setEvents}
         />
       </Space>
     </>

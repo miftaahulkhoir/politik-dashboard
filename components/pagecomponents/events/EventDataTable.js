@@ -1,11 +1,55 @@
-import { Button, Card, Col, Row, Tooltip } from "antd";
+import { Button, Card, Col, Modal, Row, Tooltip } from "antd";
 import { useMemo } from "react";
 import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import formateDateTime from "../../../utils/helpers/formatDateTime";
+import { deleteEvent } from "../../../utils/services/events";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 
-export default function EventDataTable({ data, apiNotification, setSelectedEvent, setDetailDrawerOpen }) {
+export default function EventDataTable({
+  data,
+  apiNotification,
+  setSelectedEvent,
+  setDetailDrawerOpen,
+  events,
+  setEvents,
+}) {
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const openDetailHandler = (row) => {
+    setSelectedEvent(row);
+    setDetailDrawerOpen(true);
+  };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const deleteHandler = (row) => {
+    Modal.confirm({
+      title: "Peringatan",
+      content: `Apakah kamu yakin ingin menghapus ${row.event_name}?`,
+      okText: "Ya",
+      okType: "danger",
+      cancelText: "Tidak",
+      onOk: function () {
+        deleteEvent(row?.id)
+          .then(() => {
+            const newEvents = events.filter((e) => e.id !== row?.id);
+            setEvents([...newEvents]);
+
+            apiNotification.success({
+              message: "Sukses",
+              description: `Kegiatan ${row?.name} berhasil dihapus`,
+            });
+          })
+          .catch((err) => {
+            apiNotification.error({
+              message: "Gagal",
+              description: "Terjadi kesalahan",
+            });
+            console.error(err);
+          });
+      },
+    });
+  };
+
   const columns = useMemo(() => {
     return [
       {
@@ -88,17 +132,19 @@ export default function EventDataTable({ data, apiNotification, setSelectedEvent
                   type="text"
                   icon={<TbEye size={20} color="#016CEE" />}
                   shape="circle"
-                  onClick={() => {
-                    setSelectedEvent(row);
-                    setDetailDrawerOpen(true);
-                  }}
+                  onClick={() => openDetailHandler(row)}
                 />
               </Tooltip>
               <Tooltip title="Edit kegiatan">
                 <Button type="text" icon={<TbPencil size={20} color="#7287A5" />} shape="circle" />
               </Tooltip>
               <Tooltip title="Hapus kegiatan">
-                <Button type="text" icon={<TbTrashX size={20} color="#B12E2E" />} shape="circle" />
+                <Button
+                  type="text"
+                  icon={<TbTrashX size={20} color="#B12E2E" />}
+                  shape="circle"
+                  onClick={() => deleteHandler(row)}
+                />
               </Tooltip>
             </div>
           );
@@ -107,7 +153,7 @@ export default function EventDataTable({ data, apiNotification, setSelectedEvent
         center: true,
       },
     ];
-  }, []);
+  }, [deleteHandler, openDetailHandler]);
 
   return (
     <Row justify="end">

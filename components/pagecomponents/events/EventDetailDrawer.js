@@ -50,7 +50,13 @@ export default function EventDetailDrawer({ open, setOpen, selectedEvent, setEve
       <Space direction="vertical" size="large">
         <Section title="Informasi kegiatan">
           <Space direction="vertical" size="middle">
-            <Image src={selectedEvent?.image_url} alt="foto kegiatan" style={{ borderRadius: "16px" }}></Image>
+            <Image
+              src={selectedEvent?.image_url}
+              alt="foto kegiatan"
+              style={{ borderRadius: "16px" }}
+              width="100%"
+              height="100%"
+            />
             <Space direction="vertical">
               <div style={{ fontSize: "14px", fontWeight: 600 }}>{selectedEvent?.event_name}</div>
               <div style={{ fontSize: "12px", color: "#7287A5" }}>{selectedEvent?.description}</div>

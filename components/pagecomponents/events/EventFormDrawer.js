@@ -5,7 +5,7 @@ import { TbPlus } from "react-icons/tb";
 
 import { createEvent } from "../../../utils/services/events";
 
-export default function EventAddFormDrawer({ open, setOpen, isSM, apiNotification }) {
+export default function EventFormDrawer({ open, setOpen, isSM, apiNotification }) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
   const [description, setDescription] = useState("");
