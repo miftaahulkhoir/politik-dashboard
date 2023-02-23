@@ -278,10 +278,18 @@ function SearchBar({
   if (selectedGroupData != "") {
     const temp = groupData.find((value) => value.id == selectedGroupData);
     temp.keywords.forEach((value, index) => {
-      topicList[index] = {
-        value: value.id,
-        label: value.name,
-      };
+      // remove if else, and use else when mediatoolkit account is activated
+      if (value.id === 6610527) {
+        topicList[index] = {
+          value: value.id,
+          label: "anies",
+        };
+      } else {
+        topicList[index] = {
+          value: value.id,
+          label: value.name,
+        };
+      }
     });
   }
 
