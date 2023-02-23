@@ -47,13 +47,13 @@ export default function LogisticDataTable({ data, setSelectedLogistic, setIsDeta
       maxWidth: "300px",
       sortable: true,
     },
-    {
-      name: "Lokasi",
-      selector: (row) => row?.location,
-      minWidth: "200px",
-      maxWidth: "300px",
-      sortable: true,
-    },
+    // {
+    //   name: "Lokasi",
+    //   selector: (row) => row?.location,
+    //   minWidth: "200px",
+    //   maxWidth: "300px",
+    //   sortable: true,
+    // },
     {
       name: "Terakhir Update",
       selector: (row) =>

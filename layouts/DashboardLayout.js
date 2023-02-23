@@ -231,7 +231,15 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 <span>Logistik</span>
               </a>
             </li>
-
+            <li
+              className={asPath === "/reports" ? "meu-item active" : "menu-item"}
+              onClick={() => router.push("/reports")}
+            >
+              <a>
+                <TbMessageReport size={24} />
+                <span>Pengaduan</span>
+              </a>
+            </li>
             {profile?.occupation?.level < 3 && (
               <li
                 className={asPath === "/events" ? "meu-item active" : "menu-item"}
@@ -243,15 +251,6 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 </a>
               </li>
             )}
-            <li
-              className={asPath === "/reports" ? "meu-item active" : "menu-item"}
-              onClick={() => router.push("/reports")}
-            >
-              <a>
-                <TbMessageReport size={24} />
-                <span>Pengaduan</span>
-              </a>
-            </li>
             {profile?.occupation?.level < 3 && (
               <li
                 className={asPath === "/users" ? "meu-item active" : "menu-item"}

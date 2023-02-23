@@ -29,17 +29,17 @@ export default function EventDataTable({ data, apiNotification, setSelectedEvent
         width: "200px",
         sortable: true,
       },
-      {
-        name: "Link",
-        selector: (row) =>
-          (
-            <a href={row?.link} target="_blank" rel="noreferrer">
-              {row?.link}
-            </a>
-          ) || "-",
-        width: "300px",
-        sortable: true,
-      },
+      // {
+      //   name: "Link",
+      //   selector: (row) =>
+      //     (
+      //       <a href={row?.link} target="_blank" rel="noreferrer">
+      //         {row?.link}
+      //       </a>
+      //     ) || "-",
+      //   width: "300px",
+      //   sortable: true,
+      // },
       {
         name: "Tanggal Mulai",
         selector: (row) =>

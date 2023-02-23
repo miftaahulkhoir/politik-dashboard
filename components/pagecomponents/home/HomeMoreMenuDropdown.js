@@ -12,16 +12,15 @@ export default function HomeMoreMenuDropdown() {
     },
     {
       key: "2",
-      label: "Manajemen Kegiatan",
-      icon: <TbCalendarEvent size={16} />,
-      onClick: () => Router.push("/events"),
-    },
-
-    {
-      key: "3",
       label: "Pengaduan",
       icon: <TbMessageReport size={16} />,
       onClick: () => Router.push("/reports"),
+    },
+    {
+      key: "3",
+      label: "Manajemen Kegiatan",
+      icon: <TbCalendarEvent size={16} />,
+      onClick: () => Router.push("/events"),
     },
     {
       key: "4",
