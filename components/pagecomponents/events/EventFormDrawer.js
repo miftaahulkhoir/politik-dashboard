@@ -81,11 +81,9 @@ export default function EventFormDrawer({
     }
   };
 
-  const editEventHandler = async (formData) => {
+  const editEventHandler = async (id, formData) => {
     try {
-      const res = await updateEvent(formData);
-
-      console.log(res);
+      await updateEvent(id, formData);
 
       apiNotification.success({
         message: "Berhasil",
@@ -107,7 +105,6 @@ export default function EventFormDrawer({
 
     const formData = new FormData();
     formData.append("event_name", title);
-    formData.append("images", image);
     formData.append("category", "kategori");
     formData.append("description", description);
     formData.append("link", link);
@@ -116,9 +113,13 @@ export default function EventFormDrawer({
     formData.append("contact_person", contact);
     formData.append("location", "di sini");
     formData.append("status", true);
+    if (image) {
+      formData.append("images", image);
+    }
 
     if (isEdit) {
-      await editEventHandler(formData);
+      console.log("form", formData);
+      await editEventHandler(selectedEvent.id, formData);
     } else {
       await createEventHandler(formData);
     }
