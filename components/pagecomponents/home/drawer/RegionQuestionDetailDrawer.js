@@ -33,7 +33,9 @@ export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegi
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
       <Space direction="vertical" size="small" key={selectedRegion?.village_id}>
-        {selectedRegion?.question_responses?.length == 0 ? <div>Tidak ada data yang tersedia di daerah ini</div> : null}
+        {selectedRegion?.question_responses?.length == 0 || !selectedRegion?.question_responses ? (
+          <div>Tidak ada data yang tersedia di daerah ini</div>
+        ) : null}
         {selectedRegion?.question_responses?.map((response) => {
           return (
             <SurveyPieChart

@@ -127,7 +127,12 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
   // TEMATIK ===================================
   // survey
-  const [selectedQuestions, setSelectedQuestions] = useState([]); // string -> surveyid,questionid
+  const [selectedQuestions, setSelectedQuestions] = useState([]); // Array<string> -> string: surveyid,questionid
+
+  // data kpu
+  const [selectedKPUYears, setSelectedKPUYears] = useState([]);
+
+  // on click
   const [isRegionQuestionDetailDrawerOpen, setIsRegionQuestionDetailDrawerOpen] = useState(false);
   const [selectedRegion, setSelectedRegion] = useState(null);
 
@@ -328,6 +333,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             surveyState={{
               selectedQuestions: selectedQuestions,
               setSelectedQuestions: setSelectedQuestions,
+            }}
+            kpuState={{
+              selectedKPUYears: selectedKPUYears,
+              setSelectedKPUYears: setSelectedKPUYears,
             }}
           />
         </>

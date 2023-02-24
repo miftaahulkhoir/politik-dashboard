@@ -6,7 +6,7 @@ import capitalizeWords from "../../../../../utils/helpers/capitalizeWords";
 import { useFindAllReportCategories } from "../../../../../utils/services/reports";
 import { useFindAllSurveys } from "../../../../../utils/services/surveys";
 
-function FilterThematic({ setThematicSurveyResponses, surveyState, reportState }) {
+function FilterThematic({ setThematicSurveyResponses, surveyState, reportState, kpuState }) {
   // report
   const reportImages = ["/images/map/markers/report-1.svg", "/images/map/markers/report-2.svg"];
 
@@ -28,8 +28,9 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, reportState }
       .sort((a, b) => new Date(b?.created_at)?.getTime() - new Date(a?.created_at)?.getTime());
   }, [surveys]);
 
-  const clickHandler = () => {
-    axios
+  const clickHandler = async () => {
+    const responses = [];
+    await axios
       .all(
         surveyState?.selectedQuestions?.map(async (question) => {
           const questionID = question?.split(",")[1];
@@ -45,8 +46,27 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, reportState }
         }),
       )
       .then((res) => {
-        setThematicSurveyResponses(res);
+        responses.push(...res);
       });
+
+    await axios
+      .all(
+        kpuState?.selectedKPUYears.map(async (year) => {
+          const regencies = [3204, 3217, 3277, 3273]; // bandung, bandung barat, kota bandung, kota cimahi
+          const res = await axios
+            .all(regencies.map((regency) => axios.get(`/api/data-kpu?regencyid=${regency}`)))
+            .catch((err) => console.error(err));
+          const dataArr = res?.map((r) => r?.data?.data);
+          const data = dataArr[0];
+          // eslint-disable-next-line no-unsafe-optional-chaining
+          data.responses = [].concat(...dataArr?.map((d) => d?.responses));
+          return data;
+        }),
+      )
+      .then((res) => {
+        responses.push(...res);
+      });
+    setThematicSurveyResponses(responses);
   };
 
   return (
@@ -111,9 +131,31 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, reportState }
               </Checkbox.Group>
             </Collapse.Panel>
           </Collapse>
+
+          <Collapse key="kpu">
+            <Collapse.Panel header="Data KPU">
+              <Checkbox.Group
+                style={{ width: "100%" }}
+                onChange={(value) => kpuState?.setSelectedKPUYears(value)}
+                value={kpuState?.selectedKPUYears}
+              >
+                <Space direction="vertical" size="small">
+                  {[2019].map((year) => {
+                    const value = year + "";
+                    return (
+                      <Checkbox key={value} value={value}>
+                        Tahun {year}
+                      </Checkbox>
+                    );
+                  })}
+                </Space>
+              </Checkbox.Group>
+            </Collapse.Panel>
+          </Collapse>
         </Space>
       </Card>
-      <Button type="primary" block disabled={!surveyState?.selectedQuestions?.length} onClick={clickHandler}>
+      {/* <Button type="primary" block disabled={!surveyState?.selectedQuestions?.length} onClick={clickHandler}> */}
+      <Button type="primary" block onClick={clickHandler}>
         Petakan
       </Button>
     </div>

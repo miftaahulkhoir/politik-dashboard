@@ -16,6 +16,7 @@ function PanelContainer({
   occupationState,
   reportState,
   surveyState,
+  kpuState,
 }) {
   const [activeMenus, setActiveMenus] = useState([]);
 
@@ -35,6 +36,7 @@ function PanelContainer({
           <FilterThematic
             reportState={reportState}
             surveyState={surveyState}
+            kpuState={kpuState}
             thematicSurveyResponses={thematicSurveyResponses}
             setThematicSurveyResponses={setThematicSurveyResponses}
           />

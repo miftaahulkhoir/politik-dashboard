@@ -129,7 +129,7 @@ export default function HomeGeoJSON({
   const ref = useRef(null);
 
   useEffect(() => {
-    if (thematicSurveyResponses?.length == 0) return;
+    if (!thematicSurveyResponses) return;
 
     // eslint-disable-next-line no-unsafe-optional-chaining
     const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
