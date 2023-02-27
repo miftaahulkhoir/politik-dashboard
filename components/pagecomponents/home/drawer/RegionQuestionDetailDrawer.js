@@ -3,7 +3,7 @@ import React, { useMemo } from "react";
 
 import SurveyPieChart from "../../surveyAnalitics/charts/SurveyPieChart";
 
-export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegion }) {
+export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegion, selectedRegionLevel }) {
   const screen = Grid.useBreakpoint();
 
   const isSM = useMemo(() => {
@@ -22,9 +22,24 @@ export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegi
     return result;
   };
 
+  const pieData = (response) => {
+    if (selectedRegionLevel == 2) {
+      return getPieData(response?.options, response?.district_counts);
+    }
+    return getPieData(response?.options, response?.counts);
+  };
+
+  const title = useMemo(() => {
+    const regionTitle = `${selectedRegion?.district}, ${selectedRegion?.regency}`;
+    if (selectedRegionLevel == 1) {
+      return `${selectedRegion?.village}, ${regionTitle}`;
+    }
+    return regionTitle;
+  }, [selectedRegion, selectedRegionLevel]);
+
   return (
     <Drawer
-      title={`${selectedRegion?.village}, ${selectedRegion?.district}, ${selectedRegion?.regency}`}
+      title={title}
       placement="right"
       onClose={onClose}
       open={open}
@@ -41,7 +56,7 @@ export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegi
             <SurveyPieChart
               key={response?.question + selectedRegion?.village_id}
               title={response?.question}
-              data={getPieData(response?.options, response?.counts)}
+              data={pieData(response)}
             />
           );
         })}

@@ -136,6 +136,8 @@ export default function HomeGeoJSON({
     if (!thematicSurveyResponses) return;
     if (!originalData) return;
 
+    console.log(thematicSurveyResponses);
+
     // eslint-disable-next-line no-unsafe-optional-chaining
     const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
     const mergedResponses = Object.values(
@@ -145,19 +147,45 @@ export default function HomeGeoJSON({
       }, {}),
     );
 
+    // reduced to district id
+    const mergedResponsesDistrict = mergedResponses.reduce((acc, curr) => {
+      if (!curr) return acc;
+      const districtId = curr?.village_id?.substr(0, 7);
+      const count = curr.count;
+      const matchingIndices = acc.reduce((matches, el, i) => {
+        if (el.district_id === districtId) {
+          matches.push(i);
+        }
+        return matches;
+      }, []);
+      if (matchingIndices.length > 0) {
+        matchingIndices.forEach((index) => {
+          acc[index].count = acc[index].count.map((val, i) => val + count[i]);
+        });
+      } else {
+        acc.push({ district_id: districtId, count: count });
+      }
+      return acc;
+    }, []);
+
     const newFeatures = originalData?.features?.map((feature) => {
       const matchedResponses = [];
       thematicSurveyResponses?.forEach((surveyResponse) => {
         const responseSummary = surveyResponse?.responses?.find(
-          (r, questionIndex) => r?.village_id == feature?.properties?.village_id,
+          (r) => r?.village_id == feature?.properties?.village_id,
         );
 
         if (responseSummary) {
+          const responseSummaryDistrict = mergedResponsesDistrict.find(
+            (response) => response?.district_id == feature?.properties?.district_id,
+          );
           matchedResponses.push({
             question: surveyResponse?.question_name,
             options: surveyResponse?.options,
             counts: responseSummary?.count,
             total_count: sumNumbers(responseSummary?.count),
+            district_counts: responseSummaryDistrict?.count,
+            total_district_counts: sumNumbers(responseSummaryDistrict?.count),
           });
         }
       });
@@ -177,8 +205,12 @@ export default function HomeGeoJSON({
       feature.properties.selected = true;
       feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
       feature.properties.fillOpacity = maxCount / total;
+
+      console.log("feature", feature);
       return feature;
     });
+
+    console.log("new features", newFeatures);
 
     setData({ ...originalData, features: newFeatures });
   }, [originalData, thematicSurveyResponses]);

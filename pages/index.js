@@ -160,6 +160,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
 
   // END TEMATIK ===================================
 
+  // PILIH LEVEL REGION ===================================
+  const [selectedRegionLevel, setSelectedRegionLevel] = useState(1);
+  // END PILIH LEVEL REGION ===================================
+
   const ranks = useMemo(() => {
     return users?.map((user, i) => {
       user.no = i + 1;
@@ -273,6 +277,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         open={isRegionQuestionDetailDrawerOpen}
         setOpen={setIsRegionQuestionDetailDrawerOpen}
         selectedRegion={selectedRegion}
+        selectedRegionLevel={selectedRegionLevel}
       />
 
       {profile?.occupation?.level === 1 ? (
@@ -369,6 +374,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             kpuState={{
               selectedKPUYears: selectedKPUYears,
               setSelectedKPUYears: setSelectedKPUYears,
+            }}
+            regionState={{
+              selectedRegionLevel: selectedRegionLevel,
+              setSelectedRegionLevel: setSelectedRegionLevel,
             }}
           />
         </>
