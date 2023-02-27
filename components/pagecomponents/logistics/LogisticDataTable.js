@@ -30,21 +30,21 @@ export default function LogisticDataTable({ data, setSelectedLogistic, setIsDeta
     {
       name: "ID Peralatan",
       selector: (row) => row?.id,
-      width: "140px",
+      width: "200px",
       sortable: true,
     },
     {
       name: "Kategori",
       selector: (row) => capitalizeWords(row?.category?.name),
       grow: 1000,
-      maxWidth: "140px",
+      maxWidth: "200px",
       sortable: true,
     },
     {
       name: "Nama",
       selector: (row) => capitalizeWords(row?.name),
-      minWidth: "200px",
-      maxWidth: "300px",
+      minWidth: "500px",
+      maxWidth: "700px",
       sortable: true,
     },
     // {
@@ -68,7 +68,7 @@ export default function LogisticDataTable({ data, setSelectedLogistic, setIsDeta
       sortFunction: (a, b) => {
         return new Date(a?.updated_at).getTime() - new Date(b?.updated_at).getTime();
       },
-      width: "160px",
+      width: "180px",
       center: true,
     },
     {

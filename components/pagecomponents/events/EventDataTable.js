@@ -77,15 +77,15 @@ export default function EventDataTable({
       {
         name: "Judul",
         selector: (row) => row?.event_name || "-",
-        minWidth: "200px",
-        maxWidth: "300px",
+        minWidth: "400px",
+        maxWidth: "500px",
         sortable: true,
         grow: 1000,
       },
       {
         name: "Narahubung",
         selector: (row) => row?.contact_person || "-",
-        width: "200px",
+        width: "350px",
         sortable: true,
       },
       // {
@@ -113,7 +113,7 @@ export default function EventDataTable({
         sortFunction: (a, b) => {
           return new Date(a?.date_start).getTime() - new Date(b?.date_start).getTime();
         },
-        width: "160px",
+        width: "180px",
       },
       {
         name: "Tanggal Selesai",
@@ -129,7 +129,7 @@ export default function EventDataTable({
         sortFunction: (a, b) => {
           return new Date(a?.date_end).getTime() - new Date(b?.date_end).getTime();
         },
-        width: "160px",
+        width: "180px",
       },
       {
         name: "",
