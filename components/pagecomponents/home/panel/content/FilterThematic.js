@@ -99,6 +99,23 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, reportState, 
             </Collapse.Panel>
           </Collapse>
 
+          <Collapse key="logistik">
+            <Collapse.Panel header="Logistik">
+              {/* <Checkbox.Group
+                style={{ width: "100%" }}
+                // onChange={reportCategoryChangeHandler}
+                // value={reportState?.selectedReportCategories}
+              > */}
+              <Space direction="vertical" size="small">
+                <Checkbox>Spanduk</Checkbox>
+                <Checkbox>Banner</Checkbox>
+                <Checkbox>Baliho</Checkbox>
+                <Checkbox>Nametag</Checkbox>
+              </Space>
+              {/* </Checkbox.Group> */}
+            </Collapse.Panel>
+          </Collapse>
+
           <Collapse key="survei">
             <Collapse.Panel header="Survei">
               <Checkbox.Group
