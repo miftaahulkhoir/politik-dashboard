@@ -14,8 +14,10 @@ import ChartCard from "../components/pagecomponents/home/ChartCard";
 import RegionQuestionDetailDrawer from "../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
+import LogisticDetailDrawer from "../components/pagecomponents/logistics/LogisticDetailDrawer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
+import { useFindAllLogistics } from "../utils/services/logistics";
 import { useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
@@ -119,6 +121,23 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const filteredReports = useMemo(() => {
     return reports?.filter((report) => indexShownReportCategories.includes(report?.category?.id)) || [];
   }, [reports, indexShownReportCategories]);
+
+  // LOGISTIK (seperti pengaduan)
+  const { logistics: fetchLogistics } = useFindAllLogistics();
+  const [logistics, setLogistics] = useState([]);
+  useEffect(() => {
+    if (!fetchLogistics?.length) return;
+    setLogistics(fetchLogistics);
+  }, [fetchLogistics]);
+
+  const [selectedLogistic, setSelectedLogistic] = useState({});
+  const [isLogisticDetailDrawerOpen, setIsLogisticDetailDrawerOpen] = useState(false);
+
+  const [indexShownLogisticCategories, setIndexShownLogisticCategories] = useState([]); // Array<string> (the id)
+
+  const filteredLogistics = useMemo(() => {
+    return logistics?.filter((logistic) => indexShownLogisticCategories.includes(logistic?.category?.id)) || [];
+  }, [logistics, indexShownLogisticCategories]);
 
   // -- user occupations
   const [selectedOccupations, setSelectedOccupations] = useState([]);
@@ -237,6 +256,12 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         apiNotification={apiNotification}
       />
 
+      <LogisticDetailDrawer
+        open={isLogisticDetailDrawerOpen}
+        setOpen={setIsLogisticDetailDrawerOpen}
+        selectedLogistic={selectedLogistic}
+      />
+
       <LogCoordinateDrawer
         open={isLogCoordinateDrawerOpen}
         setOpen={setIsLogCoordinateDrawerOpen}
@@ -282,6 +307,9 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 reports={filteredReports}
                 indexShownReportCategories={indexShownReportCategories}
                 setSelectedReport={setSelectedReport}
+                logistics={filteredLogistics}
+                setSelectedLogistic={setSelectedLogistic}
+                setIsLogisticDetailDrawerOpen={setIsLogisticDetailDrawerOpen}
                 setSelectedUser={setSelectedUser}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
                 thematicSurveyResponses={thematicSurveyResponses}
@@ -329,6 +357,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             reportState={{
               selectedReportCategories: indexShownReportCategories,
               setSelectedReportCategories: setIndexShownReportCategories,
+            }}
+            logisticState={{
+              selectedLogisticCategories: indexShownLogisticCategories,
+              setSelectedLogisticCategories: setIndexShownLogisticCategories,
             }}
             surveyState={{
               selectedQuestions: selectedQuestions,

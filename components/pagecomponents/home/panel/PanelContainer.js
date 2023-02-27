@@ -15,6 +15,7 @@ function PanelContainer({
   showUsers,
   occupationState,
   reportState,
+  logisticState,
   surveyState,
   kpuState,
 }) {
@@ -35,6 +36,7 @@ function PanelContainer({
         {activeMenus?.includes(3) ? (
           <FilterThematic
             reportState={reportState}
+            logisticState={logisticState}
             surveyState={surveyState}
             kpuState={kpuState}
             thematicSurveyResponses={thematicSurveyResponses}
