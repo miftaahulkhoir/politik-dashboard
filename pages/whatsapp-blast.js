@@ -1,9 +1,11 @@
-import { Button, Upload, notification } from "antd";
+import { Button, Space, Tooltip, Upload, notification } from "antd";
 import axios from "axios";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import { useState } from "react";
-import { TbFileUpload } from "react-icons/tb";
+import { TbDownload, TbFileUpload } from "react-icons/tb";
+
+import downloadFileFromURL from "../utils/services/downloadFileFromURL";
 
 export default function Blast(pageProps) {
   const { koordinator, relawan, pemilih, profile } = pageProps;
@@ -135,7 +137,20 @@ export default function Blast(pageProps) {
               ></input>
             </div>
             <div className="form-group">
-              <h5>Bulk CSV</h5>
+              <Space style={{ alignItems: "start" }}>
+                <h5>Bulk CSV</h5>
+                <Tooltip title="Unduh template">
+                  <Button
+                    type="text"
+                    icon={<TbDownload size={12} color="#29a229" />}
+                    shape="circle"
+                    size="small"
+                    onClick={() => {
+                      downloadFileFromURL(process.env.NEXT_PUBLIC_WA_BLAST_EXAMPLE_FILE);
+                    }}
+                  ></Button>
+                </Tooltip>
+              </Space>
               <Upload
                 accept=".csv"
                 onChange={(info) => {
