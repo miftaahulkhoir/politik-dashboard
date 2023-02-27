@@ -16,6 +16,10 @@ export default function HomeGeoJSON({
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
 
+  useEffect(() => {
+    console.log("data geojson", data);
+  }, [data]);
+
   function loadAndSaveGeoJSON() {
     const dbName = "geojson";
 
@@ -130,6 +134,7 @@ export default function HomeGeoJSON({
 
   useEffect(() => {
     if (!thematicSurveyResponses) return;
+    if (!originalData) return;
 
     // eslint-disable-next-line no-unsafe-optional-chaining
     const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
