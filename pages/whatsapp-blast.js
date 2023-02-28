@@ -153,6 +153,16 @@ export default function Blast(pageProps) {
               </Space>
               <Upload
                 accept=".csv"
+                beforeUpload={(file) => {
+                  const isCSV = file.type === "text/csv";
+                  if (!isCSV) {
+                    apiNotification.error({
+                      message: "Gagal mengupload file",
+                      description: "File harus berformat .csv",
+                    });
+                  }
+                  return isCSV || Upload.LIST_IGNORE;
+                }}
                 onChange={(info) => {
                   if (info.file.status === "done") {
                     setFiles((prev) => [...prev, info.file.originFileObj]);
