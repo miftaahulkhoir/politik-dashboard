@@ -1,7 +1,7 @@
 import { Drawer, Grid, Space } from "antd";
 import React, { useMemo } from "react";
 
-import SurveyPieChart from "../../surveyAnalitics/charts/SurveyPieChart";
+import SurveyHorizontalBarChart from "../../surveyAnalitics/charts/SurveyHorizontalBarChart";
 
 export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegion, selectedRegionLevel }) {
   const screen = Grid.useBreakpoint();
@@ -44,7 +44,7 @@ export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegi
       onClose={onClose}
       open={open}
       closable={true}
-      width={isSM ? "100%" : "500px"}
+      width={isSM ? "100%" : "600px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
       <Space direction="vertical" size="small" key={selectedRegion?.village_id}>
@@ -53,10 +53,17 @@ export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegi
         ) : null}
         {selectedRegion?.question_responses?.map((response) => {
           return (
-            <SurveyPieChart
+            // <SurveyPieChart
+            //   key={response?.question + selectedRegion?.village_id}
+            //   title={response?.question}
+            //   data={pieData(response)}
+            // />
+            <SurveyHorizontalBarChart
               key={response?.question + selectedRegion?.village_id}
               title={response?.question}
-              data={pieData(response)}
+              dataX={pieData(response).map((d) => d.value)}
+              dataY={pieData(response).map((d) => d.name)}
+              fitTitleHeight
             />
           );
         })}
