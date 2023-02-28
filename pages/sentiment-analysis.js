@@ -9,14 +9,10 @@ import Card from "../components/elements/card/Card";
 import SocialPieChart from "../components/pagecomponents/sentimentAnalytics/SocialPieChart";
 import SocialSummaryCard from "../components/pagecomponents/sentimentAnalytics/SocialSummaryCard";
 import SocialTimeChart from "../components/pagecomponents/sentimentAnalytics/SocialTimeChart";
+import SocialWordCloud from "../components/pagecomponents/sentimentAnalytics/SocialWordCloud";
 const { RangePicker } = DatePicker;
 
-const { TextArea } = Input;
-const { Text, Title } = Typography;
-
 export default function SocialReports(pageProps) {
-  const [summaryImpressions, setSummaryImpressions] = useState(null);
-  const [summaryEngagements, setSummaryEngagements] = useState(null);
   const [summaryEngagementRate, setSummaryEngagementRate] = useState(null);
   const [summaryPostLinkClicks, setSummaryPostLinkClicks] = useState(null);
 
@@ -30,10 +26,8 @@ export default function SocialReports(pageProps) {
   const [sentiment, setSentiment] = useState([]);
   const [mentionBySource, setMentionBySource] = useState([]);
   const [sentimentOverTime, setSentimentOverTime] = useState([]);
+  const [wordcloud, setWordcloud] = useState([]);
 
-  const [engagementData, setEngagementData] = useState([]);
-  const [engagementRateData, setEngagementRateData] = useState([]);
-  const [videoViewsData, setVideoViewsData] = useState([]);
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
   const [mtkUrl, setMtkUrl] = useState("");
@@ -43,13 +37,9 @@ export default function SocialReports(pageProps) {
   const [isGroupAssigned, setIsGroupAssigned] = useState(false);
   const [isTopicAssigned, setIsTopicAssigned] = useState(false);
   const [isDateAssigned, setIsDateAssigned] = useState(false);
-  const [isDataFetched, setIsDataFetched] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isFormEdit, setIsFormEdit] = useState(false);
-  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
 
-  const [filterSearch, setFilterSearch] = useState("");
   const [groupData, setGroupData] = useState([]);
   const [selectedGroupData, setSelectedGroup] = useState("");
   const [selectedTopicData, setSelectedTopic] = useState("");
@@ -109,7 +99,7 @@ export default function SocialReports(pageProps) {
         from_time: filterDate[0].toString(),
         to_time: filterDate[1].toString(),
       };
-      await axios.post(`${pageProps.baseURL}api/sentiment/${mtkOrgId}/reports`, request).then((res) => {
+      await axios.post(`${pageProps.baseURL}api/sentiment/reports`, request).then((res) => {
         setMentionData(res.data.data.mentions_over_time.data.entries);
         setMentionSum(res.data.data.sum_of_mentions.data.total_value);
         setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
@@ -117,6 +107,7 @@ export default function SocialReports(pageProps) {
         setSentiment(res.data.data.effective_sentiment.data.entries);
         setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);
         setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
+        setWordcloud(res.data.data.wordcloud);
         setShowCharts(true);
         setIsLoading(false);
         if (!res?.data?.status) throw new Error("unknown error");
@@ -196,6 +187,11 @@ export default function SocialReports(pageProps) {
                 </Card>
               </Col>
             </Row>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialWordCloud title={"Word Cloud"} data={wordcloud} chartType={"detail"} />
+              </Card>
+            </div>
           </>
         ) : (
           <div
@@ -241,14 +237,14 @@ export async function getServerSideProps(ctx) {
 
   // get groups
   await axios
-    .get(`${baseURL}api/sentiment/157456`, {
+    .get(`${baseURL}api/sentiment`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
       reports = res.data.data;
       mediatoolkit = {
-        orgid: `157456`,
+        orgid: reports.organization,
       };
     })
     .catch((err) => {

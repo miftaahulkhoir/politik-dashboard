@@ -1,17 +1,19 @@
-import { Button, DatePicker, Grid, Row, Col, Select } from "antd";
 import dynamic from "next/dynamic";
-
-import styles from "./socmed.module.css";
-
-import Card from "../../elements/card/Card";
 
 const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
-export default function SocmedHistorical({ data, socmedType, title, color, chartType }) {
+export default function SocmedHistorical({ data, title, color, chartType }) {
   const timestamp = [];
   let series = [];
   const dataRaw = [];
   const legends = [];
+  let boundaryGap;
+
+  if (chartType === "bar") {
+    boundaryGap = true;
+  } else {
+    boundaryGap = false;
+  }
 
   if (data.length > 0) {
     data.forEach((value, index) => {
@@ -106,7 +108,7 @@ export default function SocmedHistorical({ data, socmedType, title, color, chart
     xAxis: [
       {
         type: "category",
-        boundaryGap: false,
+        boundaryGap: boundaryGap,
         // data: ['Jan', 'Feb', 'Mar', 'Apr'],
         data: timestamp,
       },
