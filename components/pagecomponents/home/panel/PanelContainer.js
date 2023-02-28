@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 
 import FilterPopup from "./content/FilterPopup";
 import FilterThematic from "./content/FilterThematic";
+import SelectRegionLevel from "./content/SelectRegionLevel";
 import SpreadData from "./content/SpreadData";
 import styles from "./panel.module.css";
 import PanelMenu from "./PanelMenu";
@@ -15,8 +16,10 @@ function PanelContainer({
   showUsers,
   occupationState,
   reportState,
+  logisticState,
   surveyState,
   kpuState,
+  regionState,
 }) {
   const [activeMenus, setActiveMenus] = useState([]);
 
@@ -35,12 +38,14 @@ function PanelContainer({
         {activeMenus?.includes(3) ? (
           <FilterThematic
             reportState={reportState}
+            logisticState={logisticState}
             surveyState={surveyState}
             kpuState={kpuState}
             thematicSurveyResponses={thematicSurveyResponses}
             setThematicSurveyResponses={setThematicSurveyResponses}
           />
         ) : null}
+        {activeMenus?.includes(4) ? <SelectRegionLevel regionState={regionState} /> : null}
       </Space>
     </div>
   );

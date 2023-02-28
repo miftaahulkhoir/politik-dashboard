@@ -189,10 +189,12 @@ export default function UserFormDrawer({
           <Typography.Title level={5}>Email</Typography.Title>
           <Input value={email} disabled={isEdit} onChange={(e) => setEmail(e.target.value)} />
         </Col>
-        <Col span={24} style={{ marginBottom: "24px" }}>
-          <Typography.Title level={5}>Password</Typography.Title>
-          <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
-        </Col>
+        {!isEdit ? (
+          <Col span={24} style={{ marginBottom: "24px" }}>
+            <Typography.Title level={5}>Password</Typography.Title>
+            <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
+          </Col>
+        ) : null}
         <Col span={24} style={{ marginBottom: "24px" }}>
           <Typography.Title level={5}>Jabatan</Typography.Title>
           <Select

@@ -33,6 +33,9 @@ export default function HomeMap({
   handleColor,
   reports,
   setSelectedReport,
+  logistics,
+  setSelectedLogistic,
+  setIsLogisticDetailDrawerOpen,
   setSelectedUser,
   setIsReportDetailDrawerOpen,
   indexShownReportCategories,
@@ -89,6 +92,13 @@ export default function HomeMap({
     return "/images/map/markers/report-2.svg";
   };
 
+  const getIconURLByID = (id) => {
+    if (id > 0 && id <= 10) {
+      return `/images/map/markers/icon-${id}.svg`;
+    }
+    return "/images/map/markers/icon-1.svg";
+  };
+
   return (
     <MapContainer center={center} zoom={zoom} zoomControl={false} ref={setMap} className={styles.homeMap}>
       <HomeMapComponent
@@ -141,7 +151,6 @@ export default function HomeMap({
                   key={index}
                   eventHandlers={{
                     click: (e) => {
-                      console.log(m);
                       setSelectedUser(m);
                       handleDetailCordinate(m.id, m.name, "relawan");
                       setTempCenter([m.latitude, m.longitude]);
@@ -255,6 +264,35 @@ export default function HomeMap({
               >
                 <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
                   {trimString(capitalizeWords(report?.title), 30)}
+                </Tooltip>
+              </Marker>
+            ),
+        )}
+
+        {/* Logistic */}
+        {logistics.map(
+          (logistic, index) =>
+            logistic?.latitude &&
+            logistic?.longitude && (
+              <Marker
+                key={index}
+                icon={
+                  new L.Icon({
+                    iconUrl: getIconURLByID(index + 1),
+                    iconSize: [iconSize, iconSize],
+                    iconAnchor: [iconSize / 2, iconSize / 2],
+                  })
+                }
+                position={[logistic?.latitude, logistic?.longitude]}
+                eventHandlers={{
+                  click: (e) => {
+                    setSelectedLogistic(logistic);
+                    setIsLogisticDetailDrawerOpen(true);
+                  },
+                }}
+              >
+                <Tooltip direction="top" offset={[0, -10]} opacity={1} sticky>
+                  {trimString(capitalizeWords(logistic?.name), 30)}
                 </Tooltip>
               </Marker>
             ),

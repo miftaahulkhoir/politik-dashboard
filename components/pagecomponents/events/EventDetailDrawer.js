@@ -39,7 +39,7 @@ export default function EventDetailDrawer({ open, setOpen, selectedEvent, setEve
 
   return (
     <Drawer
-      title="Detail Pengaduan"
+      title="Detail Kegiatan"
       placement="right"
       onClose={onClose}
       open={open}
@@ -62,6 +62,7 @@ export default function EventDetailDrawer({ open, setOpen, selectedEvent, setEve
               <div style={{ fontSize: "12px", color: "#7287A5" }}>{selectedEvent?.description}</div>
             </Space>
             <Section title="Narahubung">{selectedEvent?.contact_person}</Section>
+            <Section title="Lokasi">{selectedEvent?.location ?? "-"}</Section>
             <Section title="Periode kegiatan">
               <Space>
                 <div>

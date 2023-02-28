@@ -3,16 +3,23 @@ import axios from "axios";
 import React, { useMemo } from "react";
 
 import capitalizeWords from "../../../../../utils/helpers/capitalizeWords";
+import { useFindAllLogisticCategories } from "../../../../../utils/services/logistics";
 import { useFindAllReportCategories } from "../../../../../utils/services/reports";
 import { useFindAllSurveys } from "../../../../../utils/services/surveys";
 
-function FilterThematic({ setThematicSurveyResponses, surveyState, reportState, kpuState }) {
+function FilterThematic({ setThematicSurveyResponses, surveyState, logisticState, reportState, kpuState }) {
   // report
   const reportImages = ["/images/map/markers/report-1.svg", "/images/map/markers/report-2.svg"];
 
   const { categories: reportCategories } = useFindAllReportCategories();
   const reportCategoryChangeHandler = (value) => {
     reportState.setSelectedReportCategories(value);
+  };
+
+  // logistics
+  const { categories: logisticCategories } = useFindAllLogisticCategories();
+  const logisticCategoryChangeHandler = (value) => {
+    logisticState.setSelectedLogisticCategories(value);
   };
 
   // survey
@@ -101,18 +108,19 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, reportState, 
 
           <Collapse key="logistik">
             <Collapse.Panel header="Logistik">
-              {/* <Checkbox.Group
+              <Checkbox.Group
                 style={{ width: "100%" }}
-                // onChange={reportCategoryChangeHandler}
-                // value={reportState?.selectedReportCategories}
-              > */}
-              <Space direction="vertical" size="small">
-                <Checkbox>Spanduk</Checkbox>
-                <Checkbox>Banner</Checkbox>
-                <Checkbox>Baliho</Checkbox>
-                <Checkbox>Nametag</Checkbox>
-              </Space>
-              {/* </Checkbox.Group> */}
+                onChange={logisticCategoryChangeHandler}
+                value={logisticState?.selectedLogisticCategories}
+              >
+                <Space direction="vertical" size="small">
+                  {logisticCategories?.map((category, i) => (
+                    <Checkbox value={category?.id} key={category?.id}>
+                      <Space size={4}>{capitalizeWords(category?.name ?? "")}</Space>
+                    </Checkbox>
+                  ))}
+                </Space>
+              </Checkbox.Group>
             </Collapse.Panel>
           </Collapse>
 

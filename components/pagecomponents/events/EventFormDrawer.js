@@ -25,8 +25,6 @@ export default function EventFormDrawer({
   const [dateEnd, setDateEnd] = useState(dayjs());
   const [timeEnd, setTimeEnd] = useState(dayjs());
 
-  console.log("selected event", selectedEvent);
-
   // fill form if edit
   useEffect(() => {
     if (!isEdit) return;
@@ -118,7 +116,6 @@ export default function EventFormDrawer({
     }
 
     if (isEdit) {
-      console.log("form", formData);
       await editEventHandler(selectedEvent.id, formData);
     } else {
       await createEventHandler(formData);
