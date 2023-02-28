@@ -12,6 +12,13 @@ export default function SocmedHistorical({ data, socmedType, title, color, chart
   let series = [];
   const dataRaw = [];
   const legends = [];
+  let boundaryGap;
+
+  if (chartType === "bar") {
+    boundaryGap = true;
+  } else {
+    boundaryGap = false;
+  }
 
   if (data.length > 0) {
     data.forEach((value, index) => {
@@ -106,7 +113,7 @@ export default function SocmedHistorical({ data, socmedType, title, color, chart
     xAxis: [
       {
         type: "category",
-        boundaryGap: false,
+        boundaryGap: boundaryGap,
         // data: ['Jan', 'Feb', 'Mar', 'Apr'],
         data: timestamp,
       },
