@@ -5,7 +5,7 @@ export default function SelectRegionLevel({ regionState }) {
     <Card
       style={{ background: "white" }}
       bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)" }}
-      title="Persebaran"
+      title="Level Daerah"
       size="small"
     >
       <Radio.Group
