@@ -151,7 +151,6 @@ export default function HomeMap({
                   key={index}
                   eventHandlers={{
                     click: (e) => {
-                      console.log(m);
                       setSelectedUser(m);
                       handleDetailCordinate(m.id, m.name, "relawan");
                       setTempCenter([m.latitude, m.longitude]);

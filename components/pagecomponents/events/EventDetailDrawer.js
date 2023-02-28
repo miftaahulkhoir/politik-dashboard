@@ -37,8 +37,6 @@ export default function EventDetailDrawer({ open, setOpen, selectedEvent, setEve
     }
   };
 
-  console.log(selectedEvent);
-
   return (
     <Drawer
       title="Detail Kegiatan"

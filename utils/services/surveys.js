@@ -98,7 +98,7 @@ export const findSurveyResultsThematic = async (questions) => {
 
     const data = res.map((r) => r?.data?.data);
 
-    console.log("data", data);
+    return data;
   } catch (error) {
     return [];
   }

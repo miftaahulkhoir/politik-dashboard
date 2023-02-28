@@ -16,9 +16,7 @@ export default function HomeGeoJSON({
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
 
-  useEffect(() => {
-    console.log("data geojson", data);
-  }, [data]);
+  useEffect(() => {}, [data]);
 
   function loadAndSaveGeoJSON() {
     const dbName = "geojson";
@@ -136,8 +134,6 @@ export default function HomeGeoJSON({
     if (!thematicSurveyResponses) return;
     if (!originalData) return;
 
-    console.log(thematicSurveyResponses);
-
     // eslint-disable-next-line no-unsafe-optional-chaining
     const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
     const mergedResponses = Object.values(
@@ -206,11 +202,8 @@ export default function HomeGeoJSON({
       feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
       feature.properties.fillOpacity = maxCount / total;
 
-      console.log("feature", feature);
       return feature;
     });
-
-    console.log("new features", newFeatures);
 
     setData({ ...originalData, features: newFeatures });
   }, [originalData, thematicSurveyResponses]);

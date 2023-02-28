@@ -1,7 +1,6 @@
 import { Card, Radio, Space } from "antd";
 
 export default function SelectRegionLevel({ regionState }) {
-  // console.log("value", regionState?.selectRegionLevel);
   return (
     <Card
       style={{ background: "white" }}

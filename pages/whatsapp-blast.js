@@ -59,11 +59,8 @@ export default function Blast(pageProps) {
             formData.append("message", pesan);
 
             return axios.post("/api/wa/send-bulk", formData).then((res) => res?.data);
-            // console.log(res);
           }),
         );
-
-        console.log("res bulk csv", res);
       }
 
       apiNotification.success({
