@@ -1,12 +1,9 @@
-import { Button, DatePicker, Grid, Row, Col, Select } from "antd";
-import dynamic from "next/dynamic";
+import { Row, Col } from "antd";
 
 import styles from "./socmed.module.css";
 import SocmedTimeChart from "./SocmedTimeChart";
 
 import Card from "../../elements/card/Card";
-
-const ReactEcharts = dynamic(() => import("echarts-for-react"), { ssr: false });
 
 export default function SocmedHistorical({ data, socmedType, dataLength }) {
   const colors = ["#08c4b2", "#6f5ed3", "#ce3665", "#ffcd1c", "#3896e3"];

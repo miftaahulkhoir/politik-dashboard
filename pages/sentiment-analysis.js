@@ -12,12 +12,7 @@ import SocialTimeChart from "../components/pagecomponents/sentimentAnalytics/Soc
 import SocialWordCloud from "../components/pagecomponents/sentimentAnalytics/SocialWordCloud";
 const { RangePicker } = DatePicker;
 
-const { TextArea } = Input;
-const { Text, Title } = Typography;
-
 export default function SocialReports(pageProps) {
-  const [summaryImpressions, setSummaryImpressions] = useState(null);
-  const [summaryEngagements, setSummaryEngagements] = useState(null);
   const [summaryEngagementRate, setSummaryEngagementRate] = useState(null);
   const [summaryPostLinkClicks, setSummaryPostLinkClicks] = useState(null);
 
@@ -33,9 +28,6 @@ export default function SocialReports(pageProps) {
   const [sentimentOverTime, setSentimentOverTime] = useState([]);
   const [wordcloud, setWordcloud] = useState([]);
 
-  const [engagementData, setEngagementData] = useState([]);
-  const [engagementRateData, setEngagementRateData] = useState([]);
-  const [videoViewsData, setVideoViewsData] = useState([]);
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
   const [mtkUrl, setMtkUrl] = useState("");
@@ -45,13 +37,9 @@ export default function SocialReports(pageProps) {
   const [isGroupAssigned, setIsGroupAssigned] = useState(false);
   const [isTopicAssigned, setIsTopicAssigned] = useState(false);
   const [isDateAssigned, setIsDateAssigned] = useState(false);
-  const [isDataFetched, setIsDataFetched] = useState(false);
 
   const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isFormEdit, setIsFormEdit] = useState(false);
-  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
 
-  const [filterSearch, setFilterSearch] = useState("");
   const [groupData, setGroupData] = useState([]);
   const [selectedGroupData, setSelectedGroup] = useState("");
   const [selectedTopicData, setSelectedTopic] = useState("");

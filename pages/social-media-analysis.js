@@ -1,9 +1,8 @@
 import { Space, notification } from "antd";
 import axios from "axios";
 import debounce from "lodash.debounce";
-import dynamic from "next/dynamic";
 import Head from "next/head";
-import { useCallback, useMemo, useState, useEffect } from "react";
+import { useCallback, useState, useEffect } from "react";
 
 import SocmedDropdownSelector from "../components/pagecomponents/socmedAnalytics/SocmedDropdownSelector";
 import SocmedFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedFormDrawer";
@@ -11,23 +10,18 @@ import SocmedHistorical from "../components/pagecomponents/socmedAnalytics/Socme
 import SocmedPostFormDrawer from "../components/pagecomponents/socmedAnalytics/SocmedPostFormDrawer";
 import SocmedProfileBar from "../components/pagecomponents/socmedAnalytics/SocmedProfileBar";
 import SocmedResultHeader from "../components/pagecomponents/socmedAnalytics/SocmedResultHeader";
-import SocmedSummary from "../components/pagecomponents/socmedAnalytics/SocmedSummary";
-import { useFindAllSocmeds, useGetUserAnalytics, useFindOneSocmedResult } from "../utils/services/socmedAnalysis";
-
-const SurveyCharts = dynamic(() => import("../components/pagecomponents/surveyAnalitics/charts/SurveyCharts"));
+import { useFindAllSocmeds, useGetUserAnalytics } from "../utils/services/socmedAnalysis";
 
 export default function SocialMediaAnalysis(pageProps) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [isDrawerActive, setIsDrawerActive] = useState(false);
   const [isPostDrawerActive, setIsPostDrawerActive] = useState(false);
 
-  const [isProfileAssigned, setIsProfileAssigned] = useState(false);
   const [isDateAssigned, setIsDateAssigned] = useState(false);
   const [filterDate, setFilterDate] = useState([]);
 
   const [historical, setHistorical] = useState([]);
 
-  const [dropdownValue, setDropdownValue] = useState(null);
   const [socmedsList, setSocmedsList] = useState([]);
   const [userAnalytics, setUserAnalytics] = useState({});
   const [ayrshareName, setAyrshareName] = useState("");
@@ -37,7 +31,6 @@ export default function SocialMediaAnalysis(pageProps) {
   // const { socmed } = useFindOneSocmedResult(selectedSurveyID);
   const { socmedsList: fetchSocmeds, ayrshareName: fetchAyrshareName } = useFindAllSocmeds();
   const { userAnalytics: fetchUserAnalytics } = useGetUserAnalytics();
-  const { socmed } = useState();
 
   useEffect(() => {
     if (selectedSocmedID != "" && isDateAssigned) {
@@ -101,7 +94,7 @@ export default function SocialMediaAnalysis(pageProps) {
           `${pageProps.baseURL}api/profile/social-media/analytics/historical?platform=${request.platfrom}&from=${request.from}&until=${request.until}`,
         )
         .then((res) => {
-          console.log("socmed results:", res.data.data);
+          // console.log("socmed results:", res.data.data);
           setHistorical(res.data.data);
         });
     } catch (error) {
