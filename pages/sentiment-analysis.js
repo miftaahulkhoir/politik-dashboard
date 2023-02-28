@@ -9,6 +9,7 @@ import Card from "../components/elements/card/Card";
 import SocialPieChart from "../components/pagecomponents/sentimentAnalytics/SocialPieChart";
 import SocialSummaryCard from "../components/pagecomponents/sentimentAnalytics/SocialSummaryCard";
 import SocialTimeChart from "../components/pagecomponents/sentimentAnalytics/SocialTimeChart";
+import SocialWordCloud from "../components/pagecomponents/sentimentAnalytics/SocialWordCloud";
 const { RangePicker } = DatePicker;
 
 const { TextArea } = Input;
@@ -30,6 +31,7 @@ export default function SocialReports(pageProps) {
   const [sentiment, setSentiment] = useState([]);
   const [mentionBySource, setMentionBySource] = useState([]);
   const [sentimentOverTime, setSentimentOverTime] = useState([]);
+  const [wordcloud, setWordcloud] = useState([]);
 
   const [engagementData, setEngagementData] = useState([]);
   const [engagementRateData, setEngagementRateData] = useState([]);
@@ -117,6 +119,7 @@ export default function SocialReports(pageProps) {
         setSentiment(res.data.data.effective_sentiment.data.entries);
         setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);
         setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
+        setWordcloud(res.data.data.wordcloud);
         setShowCharts(true);
         setIsLoading(false);
         if (!res?.data?.status) throw new Error("unknown error");
@@ -196,6 +199,11 @@ export default function SocialReports(pageProps) {
                 </Card>
               </Col>
             </Row>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialWordCloud title={"Word Cloud"} data={wordcloud} chartType={"detail"} />
+              </Card>
+            </div>
           </>
         ) : (
           <div
