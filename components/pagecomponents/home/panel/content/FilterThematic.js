@@ -93,7 +93,7 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, logisticState
     <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", width: "350px" }}>
       <Card
         style={{ background: "white" }}
-        bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)" }}
+        bodyStyle={{ overflowY: "scroll", maxHeight: "calc(100vh - 200px)" }}
         title="Tematik"
         size="small"
       >

@@ -11,8 +11,9 @@ import NameAvatar from "../components/elements/nameAvatar/NameAvatar";
 import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
-import RegionQuestionDetailDrawer from "../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+import RegionQuestionDetailDrawer from "../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer";
+import LegendContainer from "../components/pagecomponents/home/legend/LegendContainer";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import LogisticDetailDrawer from "../components/pagecomponents/logistics/LogisticDetailDrawer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
@@ -381,6 +382,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               setSelectedRegionLevel: setSelectedRegionLevel,
             }}
           />
+
+          <LegendContainer />
         </>
       ) : (
         <>
