@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import LegendItem from "./LegendItem";
 import styles from "./legend.module.css";
 
-export default function LegendContainer() {
+export default function LegendContainer({ data }) {
   const screen = Grid.useBreakpoint();
 
   const isMD = useMemo(() => {
@@ -18,36 +18,18 @@ export default function LegendContainer() {
         title="Legenda"
         style={{ width: "240px" }}
         headStyle={{ textAlign: "right" }}
-        bodyStyle={{ textAlign: "right", overflowY: "auto", maxHeight: "calc(100vh - 150px)" }}
+        bodyStyle={{
+          textAlign: "right",
+          overflowY: "auto",
+          maxHeight: "calc(100vh - 150px)",
+          display: data?.length ? "block" : "none",
+        }}
         className={styles.contents_container}
       >
         <Space direction="vertical">
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwwwwwwwwwwwwwgggg" />
-          <LegendItem color="blue" text="wwwwwwwwwwwwwwwwwwwwwwww wwggggwwwwwwwwwwwwwwwwßwwwwwwwwwwwwgggg" />
+          {data?.map((d, i) => (
+            <LegendItem key={d + i} color={d?.color} text={d?.text} />
+          ))}
         </Space>
       </Card>
     </div>
