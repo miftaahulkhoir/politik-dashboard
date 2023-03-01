@@ -43,6 +43,7 @@ export default function HomeMap({
   thematicSurveyResponses,
   setIsRegionQuestionDetailDrawerOpen,
   setSelectedRegion,
+  selectedRegionLevel,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -93,7 +94,8 @@ export default function HomeMap({
   };
 
   const getIconURLByID = (id) => {
-    if (id > 0 && id <= 10) {
+    const numID = Number(id) || 0;
+    if (numID > 0 && numID <= 10) {
       return `/images/map/markers/icon-${id}.svg`;
     }
     return "/images/map/markers/icon-1.svg";
@@ -278,7 +280,7 @@ export default function HomeMap({
                 key={index}
                 icon={
                   new L.Icon({
-                    iconUrl: getIconURLByID(index + 1),
+                    iconUrl: getIconURLByID(logistic.category.id),
                     iconSize: [iconSize, iconSize],
                     iconAnchor: [iconSize / 2, iconSize / 2],
                   })
@@ -305,6 +307,7 @@ export default function HomeMap({
         thematicSurveyResponses={thematicSurveyResponses}
         setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
         setSelectedRegion={setSelectedRegion}
+        selectedRegionLevel={selectedRegionLevel}
       />
     </MapContainer>
   );

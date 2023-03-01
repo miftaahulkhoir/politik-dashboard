@@ -11,6 +11,7 @@ export default function HomeGeoJSON({
   thematicSurveyResponses,
   setIsRegionQuestionDetailDrawerOpen,
   setSelectedRegion,
+  selectedRegionLevel,
 }) {
   const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
@@ -143,26 +144,7 @@ export default function HomeGeoJSON({
       }, {}),
     );
 
-    // reduced to district id
-    const mergedResponsesDistrict = mergedResponses.reduce((acc, curr) => {
-      if (!curr) return acc;
-      const districtId = curr?.village_id?.substr(0, 7);
-      const count = curr.count;
-      const matchingIndices = acc.reduce((matches, el, i) => {
-        if (el.district_id === districtId) {
-          matches.push(i);
-        }
-        return matches;
-      }, []);
-      if (matchingIndices.length > 0) {
-        matchingIndices.forEach((index) => {
-          acc[index].count = acc[index].count.map((val, i) => val + count[i]);
-        });
-      } else {
-        acc.push({ district_id: districtId, count: count });
-      }
-      return acc;
-    }, []);
+    // console.log("merged", mergedResponses);
 
     const newFeatures = originalData?.features?.map((feature) => {
       const matchedResponses = [];
@@ -171,17 +153,23 @@ export default function HomeGeoJSON({
           (r) => r?.village_id == feature?.properties?.village_id,
         );
 
+        // fill empty with random color
+        const newColors = surveyResponse?.color.map((color, i) => {
+          if (color == "") {
+            return getRandomColorByKey(i);
+          }
+          return color;
+        });
+
         if (responseSummary) {
-          const responseSummaryDistrict = mergedResponsesDistrict.find(
-            (response) => response?.district_id == feature?.properties?.district_id,
-          );
           matchedResponses.push({
             question: surveyResponse?.question_name,
             options: surveyResponse?.options,
             counts: responseSummary?.count,
             total_count: sumNumbers(responseSummary?.count),
-            district_counts: responseSummaryDistrict?.count,
-            total_district_counts: sumNumbers(responseSummaryDistrict?.count),
+            district_counts: responseSummary?.district_count,
+            total_district_counts: sumNumbers(responseSummary?.district_count),
+            colors: newColors,
           });
         }
       });
@@ -193,13 +181,26 @@ export default function HomeGeoJSON({
         return feature;
       }
 
-      const count = mergedResponses[index].count;
+      let count = mergedResponses[index].count;
+      if (selectedRegionLevel == 2) {
+        count = mergedResponses[index].district_count;
+      }
       const total = sumNumbers(count);
       const indexMaxCount = indexMaxOfNumbers(count);
       const maxCount = count[indexMaxCount];
 
+      // fill empty with random color
+      const newColors = matchedResponses?.at(-1)?.colors?.map((color, i) => {
+        if (color == "") {
+          return getRandomColorByKey(i);
+        }
+        return color;
+      });
+
+      const color = newColors[indexMaxCount];
+
       feature.properties.selected = true;
-      feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
+      feature.properties.fillColor = color;
       feature.properties.fillOpacity = maxCount / total;
 
       return feature;

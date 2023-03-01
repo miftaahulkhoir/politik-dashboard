@@ -8,6 +8,19 @@ import { useFindAllReportCategories } from "../../../../../utils/services/report
 import { useFindAllSurveys } from "../../../../../utils/services/surveys";
 
 function FilterThematic({ setThematicSurveyResponses, surveyState, logisticState, reportState, kpuState }) {
+  const icons = [
+    "/images/map/markers/icon-1.svg",
+    "/images/map/markers/icon-2.svg",
+    "/images/map/markers/icon-3.svg",
+    "/images/map/markers/icon-4.svg",
+    "/images/map/markers/icon-5.svg",
+    "/images/map/markers/icon-6.svg",
+    "/images/map/markers/icon-7.svg",
+    "/images/map/markers/icon-8.svg",
+    "/images/map/markers/icon-9.svg",
+    "/images/map/markers/icon-10.svg",
+  ];
+
   // report
   const reportImages = ["/images/map/markers/report-1.svg", "/images/map/markers/report-2.svg"];
 
@@ -80,7 +93,7 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, logisticState
     <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", width: "350px" }}>
       <Card
         style={{ background: "white" }}
-        bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)" }}
+        bodyStyle={{ overflowY: "scroll", maxHeight: "calc(100vh - 200px)" }}
         title="Tematik"
         size="small"
       >
@@ -116,7 +129,10 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, logisticState
                 <Space direction="vertical" size="small">
                   {logisticCategories?.map((category, i) => (
                     <Checkbox value={category?.id} key={category?.id}>
-                      <Space size={4}>{capitalizeWords(category?.name ?? "")}</Space>
+                      <Space size={4}>
+                        <img src={icons[i]} alt="" style={{ width: "20px" }} />
+                        {capitalizeWords(category?.name ?? "")}
+                      </Space>
                     </Checkbox>
                   ))}
                 </Space>

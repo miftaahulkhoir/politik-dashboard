@@ -1,10 +1,31 @@
 import * as echarts from "echarts";
 import { useEffect, useMemo, useRef } from "react";
 
+// eslint-disable-next-line import/order
 import SurveyChartCard from "./SurveyChartCard";
 
-export default function SurveyHorizontalBarChart({ title, dataX, dataY, fitTitleHeight = false }) {
+export default function SurveyHorizontalBarChart({ title, dataX, dataY, colors, fitTitleHeight = false }) {
   const chartRef = useRef(null);
+
+  const newDataX = useMemo(() => {
+    const data = dataX;
+    data.reverse();
+    colors.reverse();
+    return data.map((value, index) => {
+      return {
+        value: value,
+        itemStyle: {
+          color: colors[index],
+        },
+      };
+    });
+  }, [dataX, colors]);
+
+  const newDataY = useMemo(() => {
+    const data = dataY;
+    data.reverse();
+    return data;
+  }, [dataY]);
 
   useEffect(() => {
     if (!chartRef?.current) return;
@@ -19,25 +40,28 @@ export default function SurveyHorizontalBarChart({ title, dataX, dataY, fitTitle
     // Set chart options
     setTimeout(() => {
       chart.setOption({
+        grid: {
+          top: 20,
+          bottom: 20,
+          left: 120,
+          right: 20,
+        },
         tooltip: {
           trigger: "item",
-        },
-        legend: {
-          top: "bottom",
         },
         xAxis: {
           type: "value",
         },
         yAxis: {
           type: "category",
-          data: dataY,
+          data: newDataY,
         },
         series: [
           {
             name: title,
             type: "bar",
             // center: ["50%", "33%"],
-            data: dataX,
+            data: newDataX,
             emphasis: {
               itemStyle: {
                 shadowBlur: 10,
@@ -62,10 +86,10 @@ export default function SurveyHorizontalBarChart({ title, dataX, dataY, fitTitle
     return () => {
       chart.dispose();
     };
-  }, [dataX, dataY, title]);
+  }, [title, newDataX, newDataY]);
 
   const height = useMemo(() => {
-    const h = dataX?.length * 40 + 120;
+    const h = dataX?.length * 40 + 40;
     // if (h < 200) return "200px";
     return h;
   }, [dataX]);

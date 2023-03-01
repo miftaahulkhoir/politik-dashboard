@@ -11,12 +11,14 @@ import NameAvatar from "../components/elements/nameAvatar/NameAvatar";
 import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
-import RegionQuestionDetailDrawer from "../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+import RegionQuestionDetailDrawer from "../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer";
+import LegendContainer from "../components/pagecomponents/home/legend/LegendContainer";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import LogisticDetailDrawer from "../components/pagecomponents/logistics/LogisticDetailDrawer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
+import { getRandomColorByKey } from "../utils/helpers/getRandomColor";
 import { useFindAllLogistics } from "../utils/services/logistics";
 import { useFindAllReports } from "../utils/services/reports";
 
@@ -244,6 +246,15 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     return val;
   }, [screens]);
 
+  const legendData = useMemo(() => {
+    const lastQuestionResponse = thematicSurveyResponses?.at(-1);
+    const data = lastQuestionResponse?.options?.map((option, i) => ({
+      text: option,
+      color: lastQuestionResponse?.color[i] || getRandomColorByKey(i),
+    }));
+    return data;
+  }, [thematicSurveyResponses]);
+
   return (
     <>
       <Head>
@@ -320,6 +331,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 thematicSurveyResponses={thematicSurveyResponses}
                 setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
                 setSelectedRegion={setSelectedRegion}
+                selectedRegionLevel={selectedRegionLevel}
               />
             </div>
           )}
@@ -380,6 +392,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               setSelectedRegionLevel: setSelectedRegionLevel,
             }}
           />
+
+          <LegendContainer data={legendData} />
         </>
       ) : (
         <>

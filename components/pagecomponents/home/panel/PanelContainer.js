@@ -32,7 +32,7 @@ function PanelContainer({
   return (
     <div className={clsx(styles.container, isMD ? styles.container_small : "")}>
       <PanelMenu activeMenus={activeMenus} setActiveMenus={setActiveMenus} isMD={isMD} />
-      <Space style={{ alignItems: "flex-start", padding: "0" }}>
+      <Space className={styles.contents_container} style={{ alignItems: "flex-start", padding: "0" }}>
         {activeMenus?.includes(1) ? <SpreadData data={spreadData} /> : null}
         {activeMenus?.includes(2) ? <FilterPopup showUsers={showUsers} occupationState={occupationState} /> : null}
         {activeMenus?.includes(3) ? (

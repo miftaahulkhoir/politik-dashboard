@@ -7,7 +7,7 @@ import PANEL_MENUS from "./PANEL_MENUS";
 function PanelMenu({ activeMenus = [], setActiveMenus, isMD }) {
   return (
     <div className={styles.menu_container}>
-      <Space direction="vertical">
+      <Space direction="vertical" className={styles.contents_container}>
         {PANEL_MENUS.map((menu) => {
           const active = activeMenus?.includes(menu?.id);
           return (
