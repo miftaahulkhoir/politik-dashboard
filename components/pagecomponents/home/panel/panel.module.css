@@ -7,11 +7,16 @@
   justify-content: start;
   z-index: 99;
   gap: 8px;
+  pointer-events: none;
 }
 
 .container_small {
   transform-origin: top left;
   scale: 0.8;
+}
+
+.contents_container * {
+  pointer-events: all;
 }
 
 .menu_container {
