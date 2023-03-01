@@ -134,8 +134,6 @@ export default function HomeGeoJSON({
     if (!thematicSurveyResponses) return;
     if (!originalData) return;
 
-    console.log(thematicSurveyResponses);
-
     // eslint-disable-next-line no-unsafe-optional-chaining
     const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
     const mergedResponses = Object.values(
@@ -154,6 +152,14 @@ export default function HomeGeoJSON({
           (r) => r?.village_id == feature?.properties?.village_id,
         );
 
+        // fill empty with random color
+        const newColors = surveyResponse?.color.map((color, i) => {
+          if (color == "") {
+            return getRandomColorByKey(i);
+          }
+          return color;
+        });
+
         if (responseSummary) {
           matchedResponses.push({
             question: surveyResponse?.question_name,
@@ -162,7 +168,7 @@ export default function HomeGeoJSON({
             total_count: sumNumbers(responseSummary?.count),
             district_counts: responseSummary?.district_count,
             total_district_counts: sumNumbers(responseSummary?.district_count),
-            colors: surveyResponse?.color,
+            colors: newColors,
           });
         }
       });
@@ -179,9 +185,15 @@ export default function HomeGeoJSON({
       const indexMaxCount = indexMaxOfNumbers(count);
       const maxCount = count[indexMaxCount];
 
-      const color = matchedResponses?.at(-1)?.colors[indexMaxCount] || getRandomColorByKey(indexMaxCount);
-      console.log("matched", matchedResponses.at(-1));
-      console.log("color", color);
+      // fill empty with random color
+      const newColors = matchedResponses?.at(-1)?.colors?.map((color, i) => {
+        if (color == "") {
+          return getRandomColorByKey(i);
+        }
+        return color;
+      });
+
+      const color = newColors[indexMaxCount];
 
       feature.properties.selected = true;
       feature.properties.fillColor = color;

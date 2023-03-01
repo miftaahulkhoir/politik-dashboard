@@ -63,6 +63,7 @@ export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegi
               title={response?.question}
               dataX={pieData(response).map((d) => d.value)}
               dataY={pieData(response).map((d) => d.name)}
+              colors={response?.colors}
               fitTitleHeight
             />
           );
