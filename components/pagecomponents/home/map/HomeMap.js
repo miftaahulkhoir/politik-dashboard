@@ -43,6 +43,7 @@ export default function HomeMap({
   thematicSurveyResponses,
   setIsRegionQuestionDetailDrawerOpen,
   setSelectedRegion,
+  selectedRegionLevel,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -306,6 +307,7 @@ export default function HomeMap({
         thematicSurveyResponses={thematicSurveyResponses}
         setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
         setSelectedRegion={setSelectedRegion}
+        selectedRegionLevel={selectedRegionLevel}
       />
     </MapContainer>
   );

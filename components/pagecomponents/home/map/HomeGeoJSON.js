@@ -11,6 +11,7 @@ export default function HomeGeoJSON({
   thematicSurveyResponses,
   setIsRegionQuestionDetailDrawerOpen,
   setSelectedRegion,
+  selectedRegionLevel,
 }) {
   const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
@@ -180,7 +181,10 @@ export default function HomeGeoJSON({
         return feature;
       }
 
-      const count = mergedResponses[index].count;
+      let count = mergedResponses[index].count;
+      if (selectedRegionLevel == 2) {
+        count = mergedResponses[index].district_count;
+      }
       const total = sumNumbers(count);
       const indexMaxCount = indexMaxOfNumbers(count);
       const maxCount = count[indexMaxCount];

@@ -320,6 +320,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 thematicSurveyResponses={thematicSurveyResponses}
                 setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
                 setSelectedRegion={setSelectedRegion}
+                selectedRegionLevel={selectedRegionLevel}
               />
             </div>
           )}
