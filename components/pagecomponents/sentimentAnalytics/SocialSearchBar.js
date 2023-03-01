@@ -1,13 +1,17 @@
-import { Col, DatePicker, Row, Select } from "antd";
+import { Button, Col, DatePicker, Row, Select } from "antd";
+import { TbPencil } from "react-icons/tb";
+
 const { RangePicker } = DatePicker;
 
 export default function SearchBar({
   groupData,
+  selectedGroup,
   selectGroupHandler,
+  selectedTopic,
   selectTopicHandler,
   selectDateHandler,
   selectedGroupData,
-  addSurveyHandler,
+  editOrganizationHandler,
 }) {
   const groupList = [{}];
   console.log("group data", groupData);
@@ -17,9 +21,10 @@ export default function SearchBar({
       label: value.name,
     };
   });
+  groupList.push({ value: "change_org_id", label: "Buat group baru..." });
 
   const topicList = [{}];
-  if (selectedGroupData != "") {
+  if (selectedGroupData != null) {
     const temp = groupData.find((value) => value.id == selectedGroupData);
     temp.keywords.forEach((value, index) => {
       // remove if else, and use else when mediatoolkit account is activated
@@ -35,6 +40,7 @@ export default function SearchBar({
         };
       }
     });
+    topicList.push({ value: "change_topic_id", label: "Buat topik baru..." });
   }
 
   // console.log("yes", selectedGroup.keywords);
@@ -54,6 +60,7 @@ export default function SearchBar({
               style={{ width: "100%" }}
               onChange={selectGroupHandler}
               options={groupList}
+              value={selectedGroup}
             />
           </Col>
           <Col span={8}>
@@ -62,6 +69,7 @@ export default function SearchBar({
               style={{ width: "100%" }}
               onChange={selectTopicHandler}
               options={topicList}
+              value={selectedTopic}
             />
           </Col>
           <Col span={8}>
@@ -71,6 +79,13 @@ export default function SearchBar({
               onChange={selectDateHandler}
             />
           </Col>
+        </Row>
+      </Col>
+      <Col>
+        <Row gutter={8} justify={"center"}>
+          <Button icon={<TbPencil />} type="primary" onClick={editOrganizationHandler}>
+            Ubah Organisasi
+          </Button>
         </Row>
       </Col>
     </Row>

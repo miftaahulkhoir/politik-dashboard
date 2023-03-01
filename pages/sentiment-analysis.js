@@ -6,18 +6,26 @@ import { parseCookies } from "nookies";
 import { useCallback, useEffect, useState } from "react";
 
 import Card from "../components/elements/card/Card";
+import SocialGroupDrawer from "../components/pagecomponents/sentimentAnalytics/SocialGroupDrawer";
+import SocialOrganizationDrawer from "../components/pagecomponents/sentimentAnalytics/SocialOrganizationDrawer";
 import SocialPieChart from "../components/pagecomponents/sentimentAnalytics/SocialPieChart";
 import SocialSearchBar from "../components/pagecomponents/sentimentAnalytics/SocialSearchBar";
 import SocialSummaryCard from "../components/pagecomponents/sentimentAnalytics/SocialSummaryCard";
 import SocialTimeChart from "../components/pagecomponents/sentimentAnalytics/SocialTimeChart";
+import SocialTopicDrawer from "../components/pagecomponents/sentimentAnalytics/SocialTopicDrawer";
 import SocialWordCloud from "../components/pagecomponents/sentimentAnalytics/SocialWordCloud";
 
 export default function SocialReports(pageProps) {
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [summaryEngagementRate, setSummaryEngagementRate] = useState(null);
   const [summaryPostLinkClicks, setSummaryPostLinkClicks] = useState(null);
 
   const [showCharts, setShowCharts] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isGroupDrawerActive, setIsGroupDrawerActive] = useState(false);
+  const [isTopicDrawerActive, setIsTopicDrawerActive] = useState(false);
+  const [isOrganizationDrawerActive, setIsOrganizationDrawerActive] = useState(false);
 
   const [mentionData, setMentionData] = useState([]);
   const [mentionSum, setMentionSum] = useState(null);
@@ -28,8 +36,6 @@ export default function SocialReports(pageProps) {
   const [sentimentOverTime, setSentimentOverTime] = useState([]);
   const [wordcloud, setWordcloud] = useState([]);
 
-  const [apiNotification, contextHolderNotification] = notification.useNotification();
-
   const [mtkUrl, setMtkUrl] = useState("");
   const [mtkToken, setMtkToken] = useState("");
   const [mtkOrgId, setMtkOrgId] = useState("");
@@ -38,11 +44,9 @@ export default function SocialReports(pageProps) {
   const [isTopicAssigned, setIsTopicAssigned] = useState(false);
   const [isDateAssigned, setIsDateAssigned] = useState(false);
 
-  const [isFormOpen, setIsFormOpen] = useState(false);
-
   const [groupData, setGroupData] = useState([]);
-  const [selectedGroupData, setSelectedGroup] = useState("");
-  const [selectedTopicData, setSelectedTopic] = useState("");
+  const [selectedGroupData, setSelectedGroup] = useState(null);
+  const [selectedTopicData, setSelectedTopic] = useState(null);
   const [filterDate, setFilterDate] = useState([]);
 
   useEffect(() => {
@@ -63,15 +67,23 @@ export default function SocialReports(pageProps) {
 
   const selectGroupHandler = useCallback(
     debounce((value) => {
-      setSelectedGroup(Number(value));
-      setIsGroupAssigned(true);
+      if (value === "change_org_id") {
+        setIsGroupDrawerActive(true);
+      } else {
+        setSelectedGroup(Number(value));
+        setIsGroupAssigned(true);
+      }
     }, 300),
   );
 
   const selectTopicHandler = useCallback(
     debounce((value) => {
-      setSelectedTopic(Number(value));
-      setIsTopicAssigned(true);
+      if (value === "change_topic_id") {
+        setIsTopicDrawerActive(true);
+      } else {
+        setSelectedTopic(Number(value));
+        setIsTopicAssigned(true);
+      }
     }, 300),
   );
 
@@ -123,6 +135,39 @@ export default function SocialReports(pageProps) {
 
   return (
     <>
+      {contextHolderNotification}
+
+      <SocialGroupDrawer
+        open={isGroupDrawerActive}
+        setOpen={setIsGroupDrawerActive}
+        apiNotification={apiNotification}
+        // setEmail={setAyrshareName}
+        // setDropdown={setSocmedsList}
+        // setUserAnalytics={setUserAnalytics}
+        // setShowResult={setShowResult}
+        // setSelectedSocmedID={setSelectedSocmedID}
+      />
+      <SocialTopicDrawer
+        open={isTopicDrawerActive}
+        setOpen={setIsTopicDrawerActive}
+        apiNotification={apiNotification}
+        // setEmail={setAyrshareName}
+        // setDropdown={setSocmedsList}
+        // setUserAnalytics={setUserAnalytics}
+        // setShowResult={setShowResult}
+        // setSelectedSocmedID={setSelectedSocmedID}
+      />
+      <SocialOrganizationDrawer
+        open={isOrganizationDrawerActive}
+        setOpen={setIsOrganizationDrawerActive}
+        apiNotification={apiNotification}
+        // setEmail={setAyrshareName}
+        // setDropdown={setSocmedsList}
+        // setUserAnalytics={setUserAnalytics}
+        // setShowResult={setShowResult}
+        // setSelectedSocmedID={setSelectedSocmedID}
+      />
+
       <Head>
         <title>Analisis Sentimen · Patrons</title>
       </Head>
@@ -134,11 +179,13 @@ export default function SocialReports(pageProps) {
       <Space direction="vertical" size="middle">
         <SocialSearchBar
           groupData={groupData}
+          selectedGroup={selectedGroupData}
           selectGroupHandler={selectGroupHandler}
+          selectedTopic={selectedTopicData}
           selectTopicHandler={selectTopicHandler}
           selectDateHandler={selectDateHandler}
           selectedGroupData={selectedGroupData}
-          addSurveyHandler={() => setIsFormOpen(true)}
+          editOrganizationHandler={() => setIsOrganizationDrawerActive(true)}
         />
 
         {showCharts ? (
