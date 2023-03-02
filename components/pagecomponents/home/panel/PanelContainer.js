@@ -9,6 +9,7 @@ import SpreadData from "./content/SpreadData";
 import styles from "./panel.module.css";
 import PanelMenu from "./PanelMenu";
 
+const NO_ACTIVE_MENU_SHOWN = [];
 function PanelContainer({
   spreadData,
   thematicSurveyResponses,
@@ -21,13 +22,17 @@ function PanelContainer({
   kpuState,
   regionState,
 }) {
-  const [activeMenus, setActiveMenus] = useState([]);
+  const [activeMenus, setActiveMenus] = useState(NO_ACTIVE_MENU_SHOWN);
 
   const screen = Grid.useBreakpoint();
 
   const isMD = useMemo(() => {
     return !screen.lg && !screen.xl && !screen.xxl;
   }, [screen]);
+
+  const handleFilterThematicActionMap = () => {
+    setActiveMenus(NO_ACTIVE_MENU_SHOWN);
+  };
 
   return (
     <div className={clsx(styles.container, isMD ? styles.container_small : "")}>
@@ -43,6 +48,7 @@ function PanelContainer({
             kpuState={kpuState}
             thematicSurveyResponses={thematicSurveyResponses}
             setThematicSurveyResponses={setThematicSurveyResponses}
+            onClickActionMap={handleFilterThematicActionMap}
           />
         ) : null}
         {activeMenus?.includes(4) ? <SelectRegionLevel regionState={regionState} /> : null}

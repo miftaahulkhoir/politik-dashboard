@@ -7,7 +7,14 @@ import { useFindAllLogisticCategories } from "../../../../../utils/services/logi
 import { useFindAllReportCategories } from "../../../../../utils/services/reports";
 import { useFindAllSurveys } from "../../../../../utils/services/surveys";
 
-function FilterThematic({ setThematicSurveyResponses, surveyState, logisticState, reportState, kpuState }) {
+function FilterThematic({
+  setThematicSurveyResponses,
+  surveyState,
+  logisticState,
+  reportState,
+  kpuState,
+  onClickActionMap,
+}) {
   const icons = [
     "/images/map/markers/icon-1.svg",
     "/images/map/markers/icon-2.svg",
@@ -86,6 +93,7 @@ function FilterThematic({ setThematicSurveyResponses, surveyState, logisticState
       .then((res) => {
         responses.push(...res);
       });
+    onClickActionMap();
     setThematicSurveyResponses(responses);
   };
 
