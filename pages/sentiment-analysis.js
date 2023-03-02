@@ -141,6 +141,7 @@ export default function SocialReports(pageProps) {
         open={isGroupDrawerActive}
         setOpen={setIsGroupDrawerActive}
         apiNotification={apiNotification}
+        setGroupData={setGroupData}
         // setEmail={setAyrshareName}
         // setDropdown={setSocmedsList}
         // setUserAnalytics={setUserAnalytics}

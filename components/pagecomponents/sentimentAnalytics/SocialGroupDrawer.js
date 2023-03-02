@@ -1,14 +1,15 @@
-import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd";
+import { Button, Checkbox, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { updateAyrshareAccount, useGetUserAnalytics } from "../../../utils/services/socmedAnalysis";
+import { createGroup } from "../../../utils/services/sentimentAnalysis";
 
 export default function SocialGroupDrawer({
   open,
   setOpen,
   selectedUser,
   apiNotification,
+  setGroupData,
   setEmail,
   setDropdown,
   setUserAnalytics,
@@ -16,7 +17,8 @@ export default function SocialGroupDrawer({
   setSelectedSocmedID,
 }) {
   // input form states
-  const [ayrshareToken, setGoogleId] = useState("");
+  const [name, setName] = useState("");
+  const [publics, setPublics] = useState(false);
 
   // useEffect(() => {
   //   (async function () {
@@ -50,7 +52,7 @@ export default function SocialGroupDrawer({
   // fill form if edit
 
   const clearForm = () => {
-    setGoogleId("");
+    setName("");
   };
 
   const onClose = () => {
@@ -62,14 +64,15 @@ export default function SocialGroupDrawer({
 
   // handler
   const updateAdsHandler = (data) => {
-    updateAyrshareAccount(data)
+    createGroup(data)
       .then((res) => {
         // console.log("update:", res.data.data.google_ads_id, res.data.data.google_ads_name, res.data.data.results);
         console.log("brcomplete", res);
-        setShowResult(false);
-        setSelectedSocmedID("");
-        setEmail(res.data.data.email);
-        setDropdown(res.data.data.displayNames);
+        setGroupData(res.data.data.data.groups);
+        // setShowResult(false);
+        // setSelectedSocmedID("");
+        // setEmail(res.data.data.email);
+        // setDropdown(res.data.data.displayNames);
 
         apiNotification.success({
           message: "Berhasil",
@@ -82,15 +85,19 @@ export default function SocialGroupDrawer({
         console.log("error:", err);
         apiNotification.error({
           message: "Gagal",
-          description: "Ayrshare API Token tidak valid",
+          description: "Tidak dapat membuat group baru",
         });
       });
   };
 
   const submitHandler = () => {
     const data = {
-      ayrshare_token: ayrshareToken,
+      name: name,
+      public: false,
     };
+    if (publics === "public") {
+      data.public = true;
+    }
     updateAdsHandler(data);
   };
 
@@ -107,7 +114,16 @@ export default function SocialGroupDrawer({
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
           <Typography.Title level={5}>Nama group</Typography.Title>
-          <Input value={ayrshareToken} placeholder={"ex: Politik"} onChange={(e) => setGoogleId(e.target.value)} />
+          <Input value={name} placeholder={"ex: Politik"} onChange={(e) => setName(e.target.value)} />
+          <Checkbox.Group style={{ width: "100%", marginTop: "15px" }} onChange={setPublics}>
+            <Row>
+              <Col span={16}>
+                <Checkbox value="public" defaultChecked={false}>
+                  Publik
+                </Checkbox>
+              </Col>
+            </Row>
+          </Checkbox.Group>
         </Col>
 
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
