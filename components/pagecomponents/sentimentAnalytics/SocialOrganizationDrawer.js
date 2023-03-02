@@ -2,7 +2,7 @@ import { Button, Col, Drawer, Input, Radio, Row, Select, Typography } from "antd
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 
-import { updateAyrshareAccount, useGetUserAnalytics } from "../../../utils/services/socmedAnalysis";
+import { updateOrganization } from "../../../utils/services/sentimentAnalysis";
 
 export default function SocialOrganizationDrawer({
   open,
@@ -61,15 +61,15 @@ export default function SocialOrganizationDrawer({
   };
 
   // handler
-  const updateAdsHandler = (data) => {
-    updateAyrshareAccount(data)
+  const updateOrganizationHandler = (data) => {
+    updateOrganization(data)
       .then((res) => {
         // console.log("update:", res.data.data.google_ads_id, res.data.data.google_ads_name, res.data.data.results);
         console.log("brcomplete", res);
-        setShowResult(false);
-        setSelectedSocmedID("");
-        setEmail(res.data.data.email);
-        setDropdown(res.data.data.displayNames);
+        // setShowResult(false);
+        // setSelectedSocmedID("");
+        // setEmail(res.data.data.email);
+        // setDropdown(res.data.data.displayNames);
 
         apiNotification.success({
           message: "Berhasil",
@@ -82,16 +82,16 @@ export default function SocialOrganizationDrawer({
         console.log("error:", err);
         apiNotification.error({
           message: "Gagal",
-          description: "Ayrshare API Token tidak valid",
+          description: "Organization ID tidak valid",
         });
       });
   };
 
   const submitHandler = () => {
     const data = {
-      ayrshare_token: ayrshareToken,
+      determ_id: ayrshareToken,
     };
-    updateAdsHandler(data);
+    updateOrganizationHandler(data);
   };
 
   return (
@@ -107,7 +107,7 @@ export default function SocialOrganizationDrawer({
       <Row>
         <Col span={24} style={{ marginBottom: "24px" }}>
           <Typography.Title level={5}>ID organisasi</Typography.Title>
-          <Input value={ayrshareToken} placeholder={"ex: indonesia"} onChange={(e) => setGoogleId(e.target.value)} />
+          <Input value={ayrshareToken} placeholder={"ex: 157456"} onChange={(e) => setGoogleId(e.target.value)} />
         </Col>
 
         <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
