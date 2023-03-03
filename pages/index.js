@@ -160,6 +160,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   // multi survey
   const [thematicSurveyResponses, setThematicSurveyResponses] = useState([]);
 
+  const [selectedThematicFromLegend, setSelectedThematicFromLegend] = useState(null);
+
   // END TEMATIK ===================================
 
   // PILIH LEVEL REGION ===================================
@@ -332,6 +334,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
                 setSelectedRegion={setSelectedRegion}
                 selectedRegionLevel={selectedRegionLevel}
+                selectedThematicFromLegend={selectedThematicFromLegend}
               />
             </div>
           )}
@@ -393,7 +396,13 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             }}
           />
 
-          <LegendContainer data={legendData} />
+          <LegendContainer
+            data={legendData}
+            selectedItem={selectedThematicFromLegend}
+            selectedThematicFromLegend={selectedThematicFromLegend}
+            onClickItem={(itemIndex) => setSelectedThematicFromLegend(itemIndex)}
+            onClickResetSelectedItem={() => setSelectedThematicFromLegend(null)}
+          />
         </>
       ) : (
         <>

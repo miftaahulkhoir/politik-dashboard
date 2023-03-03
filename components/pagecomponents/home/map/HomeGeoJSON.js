@@ -12,6 +12,7 @@ export default function HomeGeoJSON({
   setIsRegionQuestionDetailDrawerOpen,
   setSelectedRegion,
   selectedRegionLevel,
+  selectedThematicFromLegend,
 }) {
   const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
@@ -199,7 +200,8 @@ export default function HomeGeoJSON({
 
       const color = newColors[indexMaxCount];
 
-      feature.properties.selected = true;
+      feature.properties.selected =
+        selectedThematicFromLegend !== null ? selectedThematicFromLegend === indexMaxCount : true;
       feature.properties.fillColor = color;
       feature.properties.fillOpacity = maxCount / total;
 
@@ -207,7 +209,7 @@ export default function HomeGeoJSON({
     });
 
     setData({ ...originalData, features: newFeatures });
-  }, [originalData, thematicSurveyResponses]);
+  }, [originalData, thematicSurveyResponses, selectedThematicFromLegend]);
 
   useEffect(() => {
     if (!ref.current) return;

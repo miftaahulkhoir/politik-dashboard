@@ -44,6 +44,7 @@ export default function HomeMap({
   setIsRegionQuestionDetailDrawerOpen,
   setSelectedRegion,
   selectedRegionLevel,
+  selectedThematicFromLegend,
 }) {
   const [zoom, setZoom] = useState(11);
   const [iconSize, setIconSize] = useState(30);
@@ -308,6 +309,7 @@ export default function HomeMap({
         setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
         setSelectedRegion={setSelectedRegion}
         selectedRegionLevel={selectedRegionLevel}
+        selectedThematicFromLegend={selectedThematicFromLegend}
       />
     </MapContainer>
   );
