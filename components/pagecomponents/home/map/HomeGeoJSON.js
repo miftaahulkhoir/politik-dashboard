@@ -125,9 +125,9 @@ export default function HomeGeoJSON({
 
   const style = useMemo(() => {
     return {
-      weight: zoom < 12 ? 0 : Math.pow(zoom, 1.2) * 0.1,
+      weight: 0,
     };
-  }, [zoom, resetSignal]);
+  }, []);
 
   const ref = useRef(null);
 
