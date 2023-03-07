@@ -47,12 +47,12 @@ export default function Events() {
       filterDate === ""
         ? filteredSearch
         : filteredSearch.filter((event) => {
-            const date = new Date(event.created_at);
+            const date = new Date(event.date_start);
 
             return (
               date.getFullYear() === dateInput.getFullYear() &&
               date.getMonth() === dateInput.getMonth() &&
-              date.getDate() === dateInput.getDate()
+              date.getUTCDate() === dateInput.getUTCDate()
             );
           });
 

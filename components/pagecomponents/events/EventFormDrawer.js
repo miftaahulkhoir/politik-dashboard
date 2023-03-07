@@ -1,9 +1,12 @@
 import { Button, Col, DatePicker, Drawer, Input, Row, Space, TimePicker, Typography, Upload } from "antd";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useEffect, useState } from "react";
 import { TbPlus } from "react-icons/tb";
 
 import { createEvent, updateEvent } from "../../../utils/services/events";
+
+dayjs.extend(utc);
 
 export default function EventFormDrawer({
   open,
@@ -33,10 +36,10 @@ export default function EventFormDrawer({
     setDescription(selectedEvent?.description);
     setLink(selectedEvent?.link);
     setContact(selectedEvent?.contact_person);
-    setDateStart(dayjs(selectedEvent?.date_start));
-    setDateEnd(dayjs(selectedEvent?.date_start));
-    setTimeStart(dayjs(selectedEvent?.date_end));
-    setTimeEnd(dayjs(selectedEvent?.date_end));
+    setDateStart(dayjs.utc(selectedEvent?.date_start));
+    setDateEnd(dayjs.utc(selectedEvent?.date_start));
+    setTimeStart(dayjs.utc(selectedEvent?.date_end));
+    setTimeEnd(dayjs.utc(selectedEvent?.date_end));
   }, [isEdit, selectedEvent]);
 
   const onClose = () => {
