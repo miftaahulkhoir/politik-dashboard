@@ -17,6 +17,7 @@ export default function EventFormDrawer({
   setIsEdit,
   selectedEvent,
   setEvents,
+  reloadEvents,
 }) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
@@ -66,7 +67,9 @@ export default function EventFormDrawer({
     try {
       const res = await createEvent(formData);
       const newEvent = res?.data?.data;
-      setEvents((prevEvents) => [newEvent, ...prevEvents]);
+      if (newEvent) {
+        setEvents((prevEvents) => [newEvent, ...prevEvents]);
+      }
 
       apiNotification.success({
         message: "Berhasil",
@@ -84,7 +87,11 @@ export default function EventFormDrawer({
 
   const editEventHandler = async (id, formData) => {
     try {
-      await updateEvent(id, formData);
+      const res = await updateEvent(id, formData);
+      const newEvent = res?.data?.data;
+      if (newEvent) {
+        setEvents((prevEvents) => [newEvent, ...prevEvents]);
+      }
 
       apiNotification.success({
         message: "Berhasil",
