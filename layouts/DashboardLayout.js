@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 import {
   TbAd2,
   TbAddressBook,
+  TbAlignLeft,
   TbBrandGoogleAnalytics,
   TbBrandTwitter,
   TbBrandWhatsapp,
@@ -28,7 +29,10 @@ export default function DashboardLayout({ profile, baseURL, children }) {
 
   const [isNavbarActive, setIsNavbarActive] = useState(false);
   const [socmedMenu, setSocmedMenu] = useState(
-    asPath === "/social-media-analysis" || asPath === "/sentiment-analysis" || asPath === "/panel-ads",
+    asPath === "/social-media-analysis" ||
+      asPath === "/sentiment" ||
+      asPath === "/sentiment-analysis" ||
+      asPath === "/panel-ads",
   );
 
   const screens = Grid.useBreakpoint();
@@ -134,6 +138,20 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                       <a style={{ padding: "0px" }}>
                         <TbBrandTwitter size={24} />
                         <span>Analisis Sosial Media</span>
+                      </a>
+                    </li>
+                  </ul>
+                </a>
+                <a
+                  className={asPath === "/sentiment" ? "menu-item active" : "menu-item"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                  onClick={() => router.push("/sentiment")}
+                >
+                  <ul style={{ paddingLeft: "20px" }}>
+                    <li>
+                      <a style={{ padding: "0px" }}>
+                        <TbAlignLeft size={24} />
+                        <span>Manajemen Sentimen</span>
                       </a>
                     </li>
                   </ul>

@@ -67,23 +67,15 @@ export default function SocialReports(pageProps) {
 
   const selectGroupHandler = useCallback(
     debounce((value) => {
-      if (value === "change_org_id") {
-        setIsGroupDrawerActive(true);
-      } else {
-        setSelectedGroup(Number(value));
-        setIsGroupAssigned(true);
-      }
+      setSelectedGroup(Number(value));
+      setIsGroupAssigned(true);
     }, 300),
   );
 
   const selectTopicHandler = useCallback(
     debounce((value) => {
-      if (value === "change_topic_id") {
-        setIsTopicDrawerActive(true);
-      } else {
-        setSelectedTopic(Number(value));
-        setIsTopicAssigned(true);
-      }
+      setSelectedTopic(Number(value));
+      setIsTopicAssigned(true);
     }, 300),
   );
 

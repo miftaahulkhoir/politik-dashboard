@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 
 import HomeMoreMenuDropdown from "./HomeMoreMenuDropdown";
 import styles from "./homeNavbar.module.css";
-import HomeSocmedMenuDropdown from "./HomSocmedMenuDropdown";
+import HomeSocmedMenuDropdown from "./HomeSocmedMenuDropdown";
 
 import MobileNavbarToggler from "../../templates/navbar/MobileNavbarToggler";
 import ProfileDropdown from "../dashboardLayout/ProfileDropdown";

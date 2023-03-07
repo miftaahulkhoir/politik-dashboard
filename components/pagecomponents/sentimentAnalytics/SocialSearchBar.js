@@ -11,7 +11,6 @@ export default function SearchBar({
   selectTopicHandler,
   selectDateHandler,
   selectedGroupData,
-  editOrganizationHandler,
 }) {
   const groupList = [{}];
   console.log("group data", groupData);
@@ -21,7 +20,6 @@ export default function SearchBar({
       label: value.name,
     };
   });
-  groupList.push({ value: "change_org_id", label: "Buat group baru..." });
 
   const topicList = [{}];
   if (selectedGroupData != null) {
@@ -40,7 +38,6 @@ export default function SearchBar({
         };
       }
     });
-    topicList.push({ value: "change_topic_id", label: "Buat topik baru..." });
   }
 
   // console.log("yes", selectedGroup.keywords);
@@ -79,13 +76,6 @@ export default function SearchBar({
               onChange={selectDateHandler}
             />
           </Col>
-        </Row>
-      </Col>
-      <Col>
-        <Row gutter={8} justify={"center"}>
-          <Button icon={<TbPencil />} type="primary" onClick={editOrganizationHandler}>
-            Ubah Organisasi
-          </Button>
         </Row>
       </Col>
     </Row>
