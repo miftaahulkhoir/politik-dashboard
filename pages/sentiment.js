@@ -4,7 +4,6 @@ import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 
 import SentimentDataTable from "../components/pagecomponents/sentiment/SentimentDataTable";
-import SurveyFormDrawer from "../components/pagecomponents/surveys/SurveyFormDrawer";
 import SurveyResponseDrawer from "../components/pagecomponents/surveys/SurveyResponseDrawer";
 import SentimentSearchBar from "../components/pagecomponents/sentiment/SentimentSearchBar";
 import SentimentGroupDrawer from "../components/pagecomponents/sentiment/SentimentGroupDrawer";

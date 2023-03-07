@@ -1,10 +1,13 @@
-import { Button, Col, Drawer, Grid, Input, Radio, Row, Select, Tooltip, Typography } from "antd";
+import { Button, Col, Divider, Drawer, Grid, Input, Radio, Row, Select, Tooltip, Typography } from "antd";
 import axios from "axios";
 import React, { useEffect, useMemo, useState } from "react";
 
 import SentimentFormCard from "./SentimentFormCard";
 
-import defaultSurveyQuestion from "../../../utils/constants/defaultSurveyQuestion";
+import defaultSentimentKeyword from "../../../utils/constants/defaultSentimentKeyword";
+import defaultCountries from "../../../utils/constants/countries";
+import defaultLanguages from "../../../utils/constants/languages";
+import sourceTypes from "../../../utils/constants/sentimentPlatforms";
 
 import { updateAyrshareAccount, useGetUserAnalytics } from "../../../utils/services/socmedAnalysis";
 
@@ -22,46 +25,73 @@ export default function SocialTopicDrawer({
   const screen = Grid.useBreakpoint();
 
   // input form states
-  const [ayrshareToken, setGoogleId] = useState("");
 
   const isSM = useMemo(() => {
     return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
   }, [screen]);
 
-  const [title, setTitle] = useState("");
   const [isActive, setIsActive] = useState(false);
-  const [questions, setQuestions] = useState([{ ...defaultSurveyQuestion.text }]);
+
+  // input topic form
+  const [topic, setTopic] = useState("");
+  const [languages, setLanguages] = useState([]);
+  const [locations, setLocations] = useState([]);
+  const [platforms, setPlatforms] = useState([]);
+  const [keywords, setKeywords] = useState([{ ...defaultSentimentKeyword }]);
 
   // empty checking
-  const hasEmpty = useMemo(() => {
-    const titleEmpty = title === "";
-    const questionEmpty = questions?.some((question) => {
-      if (question.question_name === "") return true;
-      if (question?.options) {
-        return question.options.some((option) => option.option_name === "");
-      }
+  const checkKeywordEmpty = (values) => {
+    let isNull = false;
+    if (values.length === 0) {
+      isNull = true;
+    } else {
+      values.forEach((value) => {
+        if (value.clause === null) {
+          isNull = true;
+        } else if (value.sub.phrase.text === "") {
+          isNull = true;
+        }
+      });
+    }
+    if (isNull === true) {
+      return true;
+    } else {
       return false;
-    });
+    }
+  };
 
-    return titleEmpty || questionEmpty;
-  }, [title, questions]);
+  const hasEmpty = useMemo(() => {
+    const topicEmpty = topic === "";
+    const languageEmpty = languages.length === 0;
+    const locationEmpty = locations.length === 0;
+    const platformEmpty = platforms.length === 0;
+    const keywordEmpty = checkKeywordEmpty(keywords);
+
+    console.log(keywords);
+
+    return topicEmpty || languageEmpty || platformEmpty || locationEmpty || keywordEmpty;
+    // return titleEmpty || questionEmpty;
+  }, [topic, languages, locations, platforms, keywords]);
+  // }, [title, keywords]);
 
   const clearForm = () => {
-    setTitle("");
-    setIsActive(false);
-    setQuestions([{ ...defaultSurveyQuestion.text }]);
+    setTopic("");
+    setLanguages([]);
+    setLocations([]);
+    setPlatforms([]);
+    const empty = { ...defaultSentimentKeyword };
+    empty.sub.phrase.text = null;
+    setKeywords([empty]);
   };
 
   const addQuestionHandler = () => {
-    setQuestions([...questions, { ...defaultSurveyQuestion.text }]);
+    setKeywords([...keywords, { ...defaultSentimentKeyword }]);
   };
 
-  // const onClose = () => {
-  //   setSelectedSurveyId(null);
-  //   setOpen(false);
-  //   setIsEdit(false);
-  //   clearForm();
-  // };
+  const onClose = () => {
+    setOpen(false);
+    clearForm();
+  };
 
   // handler
   const updateAdsHandler = (data) => {
@@ -79,7 +109,7 @@ export default function SocialTopicDrawer({
           description: "Perubahan user telah disimpan",
         });
 
-        // onClose();
+        onClose();
       })
       .catch((err) => {
         console.log("error:", err);
@@ -92,7 +122,7 @@ export default function SocialTopicDrawer({
 
   const submitHandler = () => {
     const data = {
-      ayrshare_token: ayrshareToken,
+      ayrshare_token: topic,
     };
     updateAdsHandler(data);
   };
@@ -101,7 +131,7 @@ export default function SocialTopicDrawer({
     <Drawer
       title={"Buat topik baru"}
       placement="right"
-      // onClose={onClose}
+      onClose={onClose}
       open={open}
       closable={true}
       width={isSM ? "100%" : "750px"}
@@ -112,99 +142,53 @@ export default function SocialTopicDrawer({
       <Row
         style={{ padding: "24px", background: "white", flexDirection: isSM ? "column-reverse" : "row", gap: "16px" }}
       >
-        <Col span={24} style={{ marginBottom: "24px" }}>
+        <Col span={24}>
           <Typography.Title level={5}>Nama topik</Typography.Title>
-          <Input value={ayrshareToken} placeholder={"ex: indonesia"} onChange={(e) => setGoogleId(e.target.value)} />
+          <Input value={topic} placeholder={"ex: indonesia"} onChange={(e) => setTopic(e.target.value)} />
         </Col>
-        <Col span={isSM ? 24 : 8}>
+        <Divider />
+        <Col span={24}>
           <Typography.Title level={5}>Bahasa</Typography.Title>
           <Select
-            defaultValue="text"
-            style={{ width: "160px" }}
-            options={[
-              {
-                value: "text",
-                label: "Isian Singkat",
-              },
-              {
-                value: "long_text",
-                label: "Paragraf",
-              },
-              {
-                value: "dropdown",
-                label: "Dropdown",
-              },
-              {
-                value: "radio_button",
-                label: "Pilihan Ganda",
-              },
-              {
-                value: "yes_no_question",
-                label: "Ya dan Tidak",
-              },
-              {
-                value: "location",
-                label: "Lokasi",
-              },
-            ]}
-            // value={type}
-            // onChange={(value) => {
-            //   const newQuestions = [...questions];
-            //   newQuestions[index].input_type = value;
-            //   newQuestions[index].options = defaultSurveyQuestion[value].options;
-            //   setQuestions([...newQuestions]);
-            // }}
+            mode={"multiple"}
+            placeholder="Masukkan bahasa"
+            style={{ width: "100%" }}
+            options={defaultLanguages}
+            value={languages}
+            onChange={(value) => setLanguages(value)}
           />
         </Col>
-        <Col span={isSM ? 24 : 8}>
+        <Col span={24}>
           <Typography.Title level={5}>Negara</Typography.Title>
           <Select
-            defaultValue="text"
-            style={{ width: "160px" }}
-            options={[
-              {
-                value: "text",
-                label: "Isian Singkat",
-              },
-              {
-                value: "long_text",
-                label: "Paragraf",
-              },
-              {
-                value: "dropdown",
-                label: "Dropdown",
-              },
-              {
-                value: "radio_button",
-                label: "Pilihan Ganda",
-              },
-              {
-                value: "yes_no_question",
-                label: "Ya dan Tidak",
-              },
-              {
-                value: "location",
-                label: "Lokasi",
-              },
-            ]}
-            // value={type}
-            // onChange={(value) => {
-            //   const newQuestions = [...questions];
-            //   newQuestions[index].input_type = value;
-            //   newQuestions[index].options = defaultSurveyQuestion[value].options;
-            //   setQuestions([...newQuestions]);
-            // }}
+            mode={"multiple"}
+            placeholder="Masukkan negara"
+            style={{ width: "100%" }}
+            options={defaultCountries}
+            value={locations}
+            onChange={(value) => setLocations(value)}
+          />
+        </Col>
+        <Col span={24}>
+          <Typography.Title level={5}>Platform</Typography.Title>
+          <Select
+            mode={"multiple"}
+            placeholder="Masukkan platform"
+            style={{ width: "100%" }}
+            options={sourceTypes}
+            value={platforms}
+            onChange={(value) => setPlatforms(value)}
           />
         </Col>
       </Row>
-      {questions?.map((question, index) => (
-        <SentimentFormCard key={index} index={index} questions={questions} setQuestions={setQuestions} isSM={isSM} />
+      {keywords?.map((question, index) => (
+        <SentimentFormCard key={index} index={index} keywords={keywords} setKeywords={setKeywords} isSM={isSM} />
       ))}
       <Row justify="space-between" style={{ margin: "24px" }}>
         <Button onClick={addQuestionHandler}>Tambah Pertanyaan</Button>
         <Tooltip
           placement="topRight"
-          title={hasEmpty ? "Judul serta semua pertanyaan dan opsi jawaban tidak boleh kosong!" : ""}
+          title={hasEmpty ? "Nama topik serta semua input dalam form tidak boleh kosong!" : ""}
         >
           <Button
             type="primary"
