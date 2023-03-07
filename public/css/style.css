@@ -9235,6 +9235,9 @@ th {
 .codex-menu li > a > svg {
   margin-inline-end: 10px;
 }
+.codex-menu li > span > svg {
+  margin-inline-end: 10px;
+}
 .codex-menu li > a > i {
   font-size: 18px;
 }

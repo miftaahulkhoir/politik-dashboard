@@ -135,10 +135,10 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 >
                   <ul style={{ paddingLeft: "20px" }}>
                     <li>
-                      <a style={{ padding: "0px" }}>
+                      <span style={{ padding: "0px" }}>
                         <TbBrandTwitter size={24} />
                         <span>Analisis Sosial Media</span>
-                      </a>
+                      </span>
                     </li>
                   </ul>
                 </a>
@@ -163,10 +163,10 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 >
                   <ul style={{ paddingLeft: "20px" }}>
                     <li>
-                      <a style={{ padding: "0px" }}>
+                      <span style={{ padding: "0px" }}>
                         <TbBrandGoogleAnalytics size={24} />
                         <span>Analisis Sentimen</span>
-                      </a>
+                      </span>
                     </li>
                   </ul>
                 </a>
@@ -177,10 +177,10 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 >
                   <ul style={{ paddingLeft: "20px" }}>
                     <li>
-                      <a style={{ padding: "0px" }}>
+                      <span style={{ padding: "0px" }}>
                         <TbAd2 size={24} />
                         <span>Panel Ads</span>
-                      </a>
+                      </span>
                     </li>
                   </ul>
                 </a>

@@ -37,7 +37,8 @@ export default function Events() {
             return (
               event?.event_name?.toLowerCase().includes(filterSearch.toLowerCase()) ||
               event?.category?.toLowerCase().includes(filterSearch.toLowerCase()) ||
-              event?.desctiption?.toLowerCase().includes(filterSearch.toLowerCase())
+              event?.desctiption?.toLowerCase().includes(filterSearch.toLowerCase()) ||
+              event?.contact_person?.toLowerCase().includes(filterSearch.toLowerCase())
             );
           });
 
