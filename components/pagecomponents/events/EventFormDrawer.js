@@ -1,9 +1,12 @@
 import { Button, Col, DatePicker, Drawer, Input, Row, Space, TimePicker, Typography, Upload } from "antd";
 import dayjs from "dayjs";
+import utc from "dayjs/plugin/utc";
 import { useEffect, useState } from "react";
 import { TbPlus } from "react-icons/tb";
 
 import { createEvent, updateEvent } from "../../../utils/services/events";
+
+dayjs.extend(utc);
 
 export default function EventFormDrawer({
   open,
@@ -14,6 +17,7 @@ export default function EventFormDrawer({
   setIsEdit,
   selectedEvent,
   setEvents,
+  reloadEvents,
 }) {
   const [title, setTitle] = useState("");
   const [image, setImage] = useState(null);
@@ -33,10 +37,10 @@ export default function EventFormDrawer({
     setDescription(selectedEvent?.description);
     setLink(selectedEvent?.link);
     setContact(selectedEvent?.contact_person);
-    setDateStart(dayjs(selectedEvent?.date_start));
-    setDateEnd(dayjs(selectedEvent?.date_start));
-    setTimeStart(dayjs(selectedEvent?.date_end));
-    setTimeEnd(dayjs(selectedEvent?.date_end));
+    setDateStart(dayjs.utc(selectedEvent?.date_start));
+    setDateEnd(dayjs.utc(selectedEvent?.date_start));
+    setTimeStart(dayjs.utc(selectedEvent?.date_end));
+    setTimeEnd(dayjs.utc(selectedEvent?.date_end));
   }, [isEdit, selectedEvent]);
 
   const onClose = () => {
@@ -63,7 +67,9 @@ export default function EventFormDrawer({
     try {
       const res = await createEvent(formData);
       const newEvent = res?.data?.data;
-      setEvents((prevEvents) => [newEvent, ...prevEvents]);
+      if (newEvent) {
+        setEvents((prevEvents) => [newEvent, ...prevEvents]);
+      }
 
       apiNotification.success({
         message: "Berhasil",
@@ -81,7 +87,11 @@ export default function EventFormDrawer({
 
   const editEventHandler = async (id, formData) => {
     try {
-      await updateEvent(id, formData);
+      const res = await updateEvent(id, formData);
+      const newEvent = res?.data?.data;
+      if (newEvent) {
+        setEvents((prevEvents) => [newEvent, ...prevEvents]);
+      }
 
       apiNotification.success({
         message: "Berhasil",

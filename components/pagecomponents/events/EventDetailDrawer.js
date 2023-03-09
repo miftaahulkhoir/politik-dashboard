@@ -17,6 +17,7 @@ export default function EventDetailDrawer({ open, setOpen, selectedEvent, setEve
   const formatTime = (date) => {
     try {
       return formateDateTime(date, {
+        timeZone: "UTC",
         hour: "2-digit",
         minute: "2-digit",
       });
@@ -28,6 +29,7 @@ export default function EventDetailDrawer({ open, setOpen, selectedEvent, setEve
   const formatDate = (date) => {
     try {
       return formateDateTime(date, {
+        timeZone: "UTC",
         year: "numeric",
         month: "short",
         day: "numeric",
