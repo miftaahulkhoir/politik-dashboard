@@ -161,7 +161,7 @@ export default function UserFormDrawer({
             <Typography.Title level={5}>Nama Lengkap</Typography.Title>
             <Form.Item
               name="name"
-              rules={[{ max: 2, message: "Name maksimal 50 karakter" }]}
+              rules={[{ max: 2, message: "Nama maksimal 50 karakter" }]}
               style={{ marginBottom: 0 }}
             >
               <Input value={name} onChange={(e) => setName(e.target.value)} />
