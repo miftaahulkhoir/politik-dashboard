@@ -86,9 +86,9 @@ export default function EventFormDrawer({
   const editEventHandler = async (id, formData, eventTitle) => {
     try {
       const res = await updateEvent(id, formData);
-      const newEvent = res?.data?.data;
-      if (newEvent) {
-        setEvents((prevEvents) => [newEvent, ...prevEvents]);
+      const changedEvent = res?.data?.data;
+      if (changedEvent) {
+        setEvents((prev) => prev.map((v) => (v.id === id ? changedEvent : v)));
       }
 
       apiNotification.success({
