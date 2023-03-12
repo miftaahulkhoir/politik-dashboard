@@ -104,7 +104,6 @@ export default function EventDataTable({
         name: "Tanggal Mulai",
         selector: (row) =>
           formateDateTime(row?.date_start, {
-            timeZone: "UTC",
             year: "numeric",
             month: "short",
             day: "numeric",
@@ -121,7 +120,6 @@ export default function EventDataTable({
         name: "Tanggal Selesai",
         selector: (row) =>
           formateDateTime(row?.date_end, {
-            timeZone: "UTC",
             year: "numeric",
             month: "short",
             day: "numeric",

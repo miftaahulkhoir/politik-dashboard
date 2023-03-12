@@ -8,6 +8,10 @@ import { createEvent, updateEvent } from "../../../utils/services/events";
 
 dayjs.extend(utc);
 
+function convertToUTC(dayjsDate, format) {
+  return dayjsDate.utc().format(format);
+}
+
 export default function EventFormDrawer({
   open,
   setOpen,
@@ -29,10 +33,10 @@ export default function EventFormDrawer({
         description: selectedEvent?.description,
         link: selectedEvent?.link,
         contact: selectedEvent?.contact_person,
-        dateStart: dayjs.utc(selectedEvent?.date_start),
-        dateEnd: dayjs.utc(selectedEvent?.date_end),
-        timeStart: dayjs.utc(selectedEvent?.date_start),
-        timeEnd: dayjs.utc(selectedEvent?.date_end),
+        dateStart: dayjs(selectedEvent?.date_start),
+        dateEnd: dayjs(selectedEvent?.date_end),
+        timeStart: dayjs(selectedEvent?.date_start),
+        timeEnd: dayjs(selectedEvent?.date_end),
       });
     } else {
       form.setFieldsValue({
@@ -115,8 +119,8 @@ export default function EventFormDrawer({
     formData.append("category", "kategori");
     formData.append("description", description);
     formData.append("link", link);
-    formData.append("date_start", `${dateStart.format(dateFormat)} ${timeStart.format(timeFormat)}`);
-    formData.append("date_end", `${dateEnd.format(dateFormat)} ${timeEnd.format(timeFormat)}`);
+    formData.append("date_start", `${convertToUTC(dateStart, dateFormat)} ${convertToUTC(timeStart, timeFormat)}`);
+    formData.append("date_end", `${convertToUTC(dateEnd, dateFormat)} ${convertToUTC(timeEnd, timeFormat)}`);
     formData.append("contact_person", contact);
     formData.append("location", "di sini");
     formData.append("status", true);
