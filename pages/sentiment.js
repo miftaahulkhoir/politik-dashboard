@@ -41,7 +41,7 @@ export default function Surveys({ profile }) {
       filterSearch === ""
         ? groups
         : groups.filter((group) => {
-            return group.survey_name.toLowerCase().includes(filterSearch.toLowerCase());
+            return group.name.toLowerCase().includes(filterSearch.toLowerCase());
           });
 
     const filteredActive =
