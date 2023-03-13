@@ -6,13 +6,13 @@ import { parseCookies } from "nookies";
 import { useCallback, useEffect, useState } from "react";
 
 import Card from "../components/elements/card/Card";
-import SocialGroupDrawer from "../components/pagecomponents/sentimentAnalytics/SocialGroupDrawer";
-import SocialOrganizationDrawer from "../components/pagecomponents/sentimentAnalytics/SocialOrganizationDrawer";
+import SentimentGroupDrawer from "../components/pagecomponents/sentiment/SentimentGroupDrawer";
+import SocialOrganizationDrawer from "../components/pagecomponents/sentiment/SentimentOrganizationDrawer";
 import SocialPieChart from "../components/pagecomponents/sentimentAnalytics/SocialPieChart";
 import SocialSearchBar from "../components/pagecomponents/sentimentAnalytics/SocialSearchBar";
 import SocialSummaryCard from "../components/pagecomponents/sentimentAnalytics/SocialSummaryCard";
 import SocialTimeChart from "../components/pagecomponents/sentimentAnalytics/SocialTimeChart";
-import SocialTopicDrawer from "../components/pagecomponents/sentimentAnalytics/SocialTopicDrawer";
+import SocialTopicDrawer from "../components/pagecomponents/sentiment/SentimentTopicDrawer";
 import SocialWordCloud from "../components/pagecomponents/sentimentAnalytics/SocialWordCloud";
 
 export default function SocialReports(pageProps) {
@@ -129,7 +129,7 @@ export default function SocialReports(pageProps) {
     <>
       {contextHolderNotification}
 
-      <SocialGroupDrawer
+      <SentimentGroupDrawer
         open={isGroupDrawerActive}
         setOpen={setIsGroupDrawerActive}
         apiNotification={apiNotification}

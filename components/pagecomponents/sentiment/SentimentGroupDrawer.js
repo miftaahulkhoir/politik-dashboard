@@ -4,7 +4,7 @@ import React, { useEffect, useState } from "react";
 
 import { createGroup } from "../../../utils/services/sentimentAnalysis";
 
-export default function SocialGroupDrawer({
+export default function SentimentGroupDrawer({
   open,
   setOpen,
   selectedUser,
