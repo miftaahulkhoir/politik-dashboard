@@ -18,7 +18,7 @@ export default function SentimentSearchBar({
 
   return (
     <Row justify="space-between" style={{ rowGap: "8px" }}>
-      <Col span={isSM ? 24 : 18}>
+      <Col span={isSM ? 24 : 16}>
         <Row gutter={16} style={{ rowGap: "8px" }}>
           <Col span={isSM ? 24 : 8}>
             <Input placeholder="Pencarian" prefix={<TbSearch />} onChange={filterSearchHandler} />
@@ -26,18 +26,20 @@ export default function SentimentSearchBar({
         </Row>
       </Col>
       {occupationLevel === 1 ? (
-        <Row gutter={16}>
-          <Col>
-            <Button icon={<TbPlus />} type="primary" onClick={addSurveyHandler}>
-              Tambah Group
-            </Button>
-          </Col>
-          <Col>
-            <Button icon={<TbPencil />} type="primary" onClick={editOrganizationHandler}>
-              Ubah Organisasi
-            </Button>
-          </Col>
-        </Row>
+        <Col>
+          <Row gutter={16}>
+            <Col>
+              <Button icon={<TbPlus />} type="primary" onClick={addSurveyHandler}>
+                Tambah Group
+              </Button>
+            </Col>
+            <Col>
+              <Button icon={<TbPencil />} type="primary" onClick={editOrganizationHandler}>
+                Ubah Organisasi
+              </Button>
+            </Col>
+          </Row>
+        </Col>
       ) : null}
     </Row>
   );
