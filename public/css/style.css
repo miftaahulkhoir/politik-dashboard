@@ -1,3 +1,4 @@
+/*** 00 RESETS ***/
 /*** 01 VARIABLES ***/
 /*** 02 TYPOGRAPHY ***/
 /*** 03 COMMON ***/
@@ -36,6 +37,13 @@
 /*** 36 DASHBOARD ***/
 /*** 37 ECOMMERCE DASHBOARD ***/
 /*** 38 RESPONSIVE ***/
+/*******************
+ 00 RESET START
+********************/
+body {
+  overflow-x: hidden;
+  width: 100%;
+}
 /*******************
  02 TYPOGRAPHY START
 ********************/

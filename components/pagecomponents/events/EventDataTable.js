@@ -5,6 +5,7 @@ import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 import formateDateTime from "../../../utils/helpers/formatDateTime";
 import { deleteEvent } from "../../../utils/services/events";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
+import LimitedText from "../../elements/typography/LimitedText";
 
 export default function EventDataTable({
   data,
@@ -76,7 +77,7 @@ export default function EventDataTable({
       },
       {
         name: "Judul",
-        selector: (row) => row?.event_name || "-",
+        selector: (row) => (row?.event_name ? <LimitedText text={row.event_name} /> : "-"),
         minWidth: "400px",
         maxWidth: "500px",
         sortable: true,
@@ -103,7 +104,6 @@ export default function EventDataTable({
         name: "Tanggal Mulai",
         selector: (row) =>
           formateDateTime(row?.date_start, {
-            timeZone: "UTC",
             year: "numeric",
             month: "short",
             day: "numeric",
@@ -120,7 +120,6 @@ export default function EventDataTable({
         name: "Tanggal Selesai",
         selector: (row) =>
           formateDateTime(row?.date_end, {
-            timeZone: "UTC",
             year: "numeric",
             month: "short",
             day: "numeric",

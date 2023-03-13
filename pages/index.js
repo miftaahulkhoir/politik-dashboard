@@ -1,5 +1,6 @@
 import { Grid, notification } from "antd";
 import axios from "axios";
+import clsx from "clsx";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { parseCookies } from "nookies";
@@ -12,7 +13,6 @@ import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
-import RegionQuestionDetailDrawer from "../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer";
 import LegendContainer from "../components/pagecomponents/home/legend/LegendContainer";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
 import LogisticDetailDrawer from "../components/pagecomponents/logistics/LogisticDetailDrawer";
@@ -31,6 +31,12 @@ const HomeMap = dynamic(() => import("../components/pagecomponents/home/map/Home
 const LogCoordinateDrawer = dynamic(() => import("../components/pagecomponents/home/drawer/LogCoordinateDrawer"), {
   ssr: false,
 });
+const RegionQuestionDetailDrawer = dynamic(
+  () => import("../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer"),
+  {
+    ssr: false,
+  },
+);
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -410,24 +416,64 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             <h1>Dashboard</h1>
           </div>
 
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Total relawan" number={425} stat={-0.051} />
           </div>
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Total pemilih" number={6875} stat={0.128} />
           </div>
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Total logistik" subtitle="satuan rupiah" number={192092251} stat={-0.121} />
           </div>
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Pemilih baru" subtitle="2 Des 2022" number={6875} stat={0.041} />
           </div>
-          <div className="col-6 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md,
+            })}
+          >
             <Card noPadding>
               <ChartCard dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]} dataY={[140, 232, 101, 264, 90, 340]} />
             </Card>
           </div>
-          <div className="col-6 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md,
+            })}
+          >
             <BlueCard />
           </div>
           <div className="col-12 mb-24">

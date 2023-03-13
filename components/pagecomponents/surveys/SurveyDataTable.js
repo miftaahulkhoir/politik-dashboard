@@ -1,9 +1,10 @@
-import { Button, Card, Modal, Switch, Tooltip } from "antd";
+import { Button, Card, Modal, Switch, Tooltip, Typography } from "antd";
 import { TbDownload, TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import downloadFileFromURL from "../../../utils/services/downloadFileFromURL";
 import { deleteSurvey, updateSurveyStatus } from "../../../utils/services/surveys";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
+import LimitedText from "../../elements/typography/LimitedText";
 
 export default function SurveyDataTable({
   filteredSurveys,
@@ -27,7 +28,7 @@ export default function SurveyDataTable({
     },
     {
       name: "Judul Survei",
-      selector: (row) => row.survey_name,
+      selector: (row) => (row?.survey_name ? <LimitedText text={row.survey_name} /> : "-"),
       sortable: true,
       grow: 1000,
       maxWidth: "600px",

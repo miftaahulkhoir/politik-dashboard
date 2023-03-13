@@ -7,6 +7,16 @@ import SurveyTextChart from "./SurveyTextChart";
 
 import { useFindOneSurveyResultDateCount } from "../../../../utils/services/surveys";
 import styles from "../surveyResults.module.css";
+import SurveyChartCard from "./SurveyChartCard";
+
+function locationToTableChartOptions(locations) {
+  return locations.map((v) => {
+    return {
+      option_name: v.regions.join(", "),
+      total_answer: v.number,
+    };
+  });
+}
 
 export default function SurveyCharts({ survey }) {
   const { counts } = useFindOneSurveyResultDateCount(survey.id);
@@ -45,7 +55,13 @@ export default function SurveyCharts({ survey }) {
         return <SurveyTextChart key={q.id} title={q.question_name} data={q.answer_text} />;
       }
 
-      if (q?.options?.length > 8 || q?.options?.some((option) => option.option_name.length > 30)) {
+      if (q?.input_type.includes("location") && q?.location?.length > 0) {
+        return (
+          <SurveyTableChart key={q.id} title={q.question_name} options={locationToTableChartOptions(q.location)} />
+        );
+      }
+
+      if (q?.options?.length > 8 || q?.options?.some((option) => option?.option_name?.length > 30)) {
         return <SurveyTableChart key={q.id} title={q.question_name} options={q.options} />;
       }
 

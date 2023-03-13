@@ -5,6 +5,7 @@ import { TbPencil, TbTrashX, TbUserOff } from "react-icons/tb";
 import formateDateTime from "../../../utils/helpers/formatDateTime";
 import { deleteUser, updateUserOccupation, useFindAllOccupations } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
+import LimitedText from "../../elements/typography/LimitedText";
 
 export default function UserDataTable({
   data,
@@ -119,7 +120,7 @@ export default function UserDataTable({
       },
       {
         name: "Nama",
-        selector: (row) => row?.name,
+        selector: (row) => (row?.name ? <LimitedText text={row.name} /> : "-"),
         maxWidth: "600px",
         grow: 1000,
         sortable: true,
