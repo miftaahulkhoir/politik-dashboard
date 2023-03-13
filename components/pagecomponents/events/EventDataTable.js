@@ -1,11 +1,71 @@
-import { Button, Card, Col, Row, Tooltip } from "antd";
-import { useMemo } from "react";
-import { TbPencil } from "react-icons/tb";
+import { Button, Card, Col, Modal, Row, Tooltip } from "antd";
+import { useCallback, useMemo } from "react";
+import { TbEye, TbPencil, TbTrashX } from "react-icons/tb";
 
 import formateDateTime from "../../../utils/helpers/formatDateTime";
+import { deleteEvent } from "../../../utils/services/events";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
+import LimitedText from "../../elements/typography/LimitedText";
 
-export default function EventDataTable({ data, apiNotification }) {
+export default function EventDataTable({
+  data,
+  apiNotification,
+  setSelectedEvent,
+  setDetailDrawerOpen,
+  setIsFormDrawerOpen,
+  setIsFormDrawerEdit,
+  events,
+  setEvents,
+}) {
+  const openDetailHandler = useCallback(
+    (row) => {
+      setSelectedEvent(row);
+      setDetailDrawerOpen(true);
+    },
+    [setSelectedEvent, setDetailDrawerOpen],
+  );
+
+  const editDetailHandler = useCallback(
+    (row) => {
+      setSelectedEvent(row);
+      setIsFormDrawerOpen(true);
+      setIsFormDrawerEdit(true);
+    },
+    [setSelectedEvent, setIsFormDrawerOpen, setIsFormDrawerEdit],
+  );
+
+  const deleteHandler = useCallback(
+    (row) => {
+      Modal.confirm({
+        title: "Peringatan",
+        content: `Apakah kamu yakin ingin menghapus ${row.event_name}?`,
+        okText: "Ya",
+        okType: "danger",
+        cancelText: "Tidak",
+        onOk: function () {
+          deleteEvent(row?.id)
+            .then(() => {
+              const newEvents = events.filter((e) => e.id !== row?.id);
+              setEvents([...newEvents]);
+
+              apiNotification.success({
+                message: "Sukses",
+                description: `Kegiatan ${row?.name} berhasil dihapus`,
+              });
+            })
+            .catch((err) => {
+              apiNotification.error({
+                message: "Gagal",
+                description: "Terjadi kesalahan",
+              });
+              console.error(err);
+            });
+        },
+      });
+    },
+    [apiNotification, events, setEvents],
+  );
+
   const columns = useMemo(() => {
     return [
       {
@@ -17,43 +77,60 @@ export default function EventDataTable({ data, apiNotification }) {
       },
       {
         name: "Judul",
-        selector: (row) => row?.event_name || "-",
-        width: "180px",
+        selector: (row) => (row?.event_name ? <LimitedText text={row.event_name} /> : "-"),
+        minWidth: "400px",
+        maxWidth: "500px",
         sortable: true,
-      },
-      {
-        name: "Deskripsi",
-        selector: (row) => row?.description || "-",
-        width: "180px",
-        sortable: true,
-      },
-      {
-        name: "Kategori",
-        selector: (row) => row?.category || "-",
-        width: "180px",
-        sortable: true,
-      },
-      {
-        name: "Link",
-        selector: (row) => row?.link || "belum ada field di api-nya",
-        maxWidth: "600px",
         grow: 1000,
-        sortable: true,
       },
       {
-        name: "Jadwal Rilis",
+        name: "Narahubung",
+        selector: (row) => row?.contact_person || "-",
+        width: "350px",
+        sortable: true,
+      },
+      // {
+      //   name: "Link",
+      //   selector: (row) =>
+      //     (
+      //       <a href={row?.link} target="_blank" rel="noreferrer">
+      //         {row?.link}
+      //       </a>
+      //     ) || "-",
+      //   width: "300px",
+      //   sortable: true,
+      // },
+      {
+        name: "Tanggal Mulai",
         selector: (row) =>
-          formateDateTime(row?.created_at, {
-            day: "numeric",
-            month: "short",
+          formateDateTime(row?.date_start, {
             year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
           }),
         sortable: true,
         sortFunction: (a, b) => {
-          return new Date(a?.created_at).getTime() - new Date(b?.created_at).getTime();
+          return new Date(a?.date_start).getTime() - new Date(b?.date_start).getTime();
         },
-        width: "130px",
-        center: true,
+        width: "180px",
+      },
+      {
+        name: "Tanggal Selesai",
+        selector: (row) =>
+          formateDateTime(row?.date_end, {
+            year: "numeric",
+            month: "short",
+            day: "numeric",
+            hour: "2-digit",
+            minute: "2-digit",
+          }),
+        sortable: true,
+        sortFunction: (a, b) => {
+          return new Date(a?.date_end).getTime() - new Date(b?.date_end).getTime();
+        },
+        width: "180px",
       },
       {
         name: "",
@@ -66,8 +143,29 @@ export default function EventDataTable({ data, apiNotification }) {
         selector: (row) => {
           return (
             <div className="d-flex gap-2">
-              <Tooltip title="Edit pengguna">
-                <Button type="text" icon={<TbPencil size={20} color="#7287A5" />} shape="circle"></Button>
+              <Tooltip title="Lihat kegiatan">
+                <Button
+                  type="text"
+                  icon={<TbEye size={20} color="#016CEE" />}
+                  shape="circle"
+                  onClick={() => openDetailHandler(row)}
+                />
+              </Tooltip>
+              <Tooltip title="Edit kegiatan">
+                <Button
+                  type="text"
+                  icon={<TbPencil size={20} color="#7287A5" />}
+                  shape="circle"
+                  onClick={() => editDetailHandler(row)}
+                />
+              </Tooltip>
+              <Tooltip title="Hapus kegiatan">
+                <Button
+                  type="text"
+                  icon={<TbTrashX size={20} color="#B12E2E" />}
+                  shape="circle"
+                  onClick={() => deleteHandler(row)}
+                />
               </Tooltip>
             </div>
           );
@@ -76,7 +174,7 @@ export default function EventDataTable({ data, apiNotification }) {
         center: true,
       },
     ];
-  }, []);
+  }, [deleteHandler, editDetailHandler, openDetailHandler]);
 
   return (
     <Row justify="end">

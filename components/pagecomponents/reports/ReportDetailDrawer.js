@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Grid, Modal, Row, Space } from "antd";
+import { Button, Col, Drawer, Grid, Image, Modal, Row, Space } from "antd";
 import { useCallback, useEffect, useMemo, useState } from "react";
 import { TbCalendar, TbMapPin, TbUser } from "react-icons/tb";
 
@@ -102,7 +102,7 @@ export default function ReportDetailDrawer({ open = true, setOpen, selectedRepor
         <Section title="Detail pengaduan">
           <Space direction="vertical" style={{ width: "100%", color: "#7287A5" }} size={12}>
             {selectedReport?.link_image && (
-              <img src={selectedReport?.link_image} alt="Foto tidak tersedia" style={{ width: "100%" }} />
+              <Image src={selectedReport?.link_image} alt="Foto tidak tersedia" style={{ width: "100%" }} />
             )}
             <Row wrap={false} gutter={8} align="middle">
               <Col>

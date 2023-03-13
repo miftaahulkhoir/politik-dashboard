@@ -59,7 +59,6 @@ export default function Reports() {
             );
           });
 
-    console.log(reports);
     const filteredStatus =
       filterStatus === ""
         ? filteredDate

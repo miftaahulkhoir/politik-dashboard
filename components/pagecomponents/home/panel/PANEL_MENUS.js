@@ -1,4 +1,4 @@
-import { TbBlur, TbList, TbMapPin } from "react-icons/tb";
+import { TbBlur, TbList, TbMapPin, TbResize } from "react-icons/tb";
 
 const PANEL_MENUS = [
   {
@@ -8,13 +8,18 @@ const PANEL_MENUS = [
   },
   {
     id: 2,
-    name: "Perserbaran",
+    name: "Persebaran",
     icon: <TbMapPin size={18} />,
   },
   {
     id: 3,
     name: "Tematik",
     icon: <TbBlur size={18} />,
+  },
+  {
+    id: 4,
+    name: "Level Daerah",
+    icon: <TbResize size={18} />,
   },
 ];
 

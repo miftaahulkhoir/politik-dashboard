@@ -1,9 +1,11 @@
-import { Button, Upload, notification } from "antd";
+import { Button, Space, Tooltip, Upload, notification } from "antd";
 import axios from "axios";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import { useState } from "react";
-import { TbFileUpload } from "react-icons/tb";
+import { TbDownload, TbFileUpload } from "react-icons/tb";
+
+import downloadFileFromURL from "../utils/services/downloadFileFromURL";
 
 export default function Blast(pageProps) {
   const { koordinator, relawan, pemilih, profile } = pageProps;
@@ -57,11 +59,8 @@ export default function Blast(pageProps) {
             formData.append("message", pesan);
 
             return axios.post("/api/wa/send-bulk", formData).then((res) => res?.data);
-            // console.log(res);
           }),
         );
-
-        console.log("res bulk csv", res);
       }
 
       apiNotification.success({
@@ -135,9 +134,32 @@ export default function Blast(pageProps) {
               ></input>
             </div>
             <div className="form-group">
-              <h5>Bulk CSV</h5>
+              <Space style={{ alignItems: "start" }}>
+                <h5>Bulk CSV</h5>
+                <Tooltip title="Unduh template">
+                  <Button
+                    type="text"
+                    icon={<TbDownload size={12} color="#29a229" />}
+                    shape="circle"
+                    size="small"
+                    onClick={() => {
+                      downloadFileFromURL(process.env.NEXT_PUBLIC_WA_BLAST_EXAMPLE_FILE);
+                    }}
+                  ></Button>
+                </Tooltip>
+              </Space>
               <Upload
                 accept=".csv"
+                beforeUpload={(file) => {
+                  const isCSV = file.type === "text/csv";
+                  if (!isCSV) {
+                    apiNotification.error({
+                      message: "Gagal mengupload file",
+                      description: "File harus berformat .csv",
+                    });
+                  }
+                  return isCSV || Upload.LIST_IGNORE;
+                }}
                 onChange={(info) => {
                   if (info.file.status === "done") {
                     setFiles((prev) => [...prev, info.file.originFileObj]);

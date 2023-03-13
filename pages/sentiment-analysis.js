@@ -1,4 +1,4 @@
-import { Col, DatePicker, Input, Row, Select, Space, Spin, Typography, notification } from "antd";
+import { Col, Row, Space, Spin, notification } from "antd";
 import axios from "axios";
 import debounce from "lodash.debounce";
 import Head from "next/head";
@@ -6,22 +6,26 @@ import { parseCookies } from "nookies";
 import { useCallback, useEffect, useState } from "react";
 
 import Card from "../components/elements/card/Card";
+import SentimentGroupDrawer from "../components/pagecomponents/sentiment/SentimentGroupDrawer";
+import SocialOrganizationDrawer from "../components/pagecomponents/sentiment/SentimentOrganizationDrawer";
 import SocialPieChart from "../components/pagecomponents/sentimentAnalytics/SocialPieChart";
+import SocialSearchBar from "../components/pagecomponents/sentimentAnalytics/SocialSearchBar";
 import SocialSummaryCard from "../components/pagecomponents/sentimentAnalytics/SocialSummaryCard";
 import SocialTimeChart from "../components/pagecomponents/sentimentAnalytics/SocialTimeChart";
-const { RangePicker } = DatePicker;
-
-const { TextArea } = Input;
-const { Text, Title } = Typography;
+import SocialTopicDrawer from "../components/pagecomponents/sentiment/SentimentTopicDrawer";
+import SocialWordCloud from "../components/pagecomponents/sentimentAnalytics/SocialWordCloud";
 
 export default function SocialReports(pageProps) {
-  const [summaryImpressions, setSummaryImpressions] = useState(null);
-  const [summaryEngagements, setSummaryEngagements] = useState(null);
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [summaryEngagementRate, setSummaryEngagementRate] = useState(null);
   const [summaryPostLinkClicks, setSummaryPostLinkClicks] = useState(null);
 
   const [showCharts, setShowCharts] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+
+  const [isGroupDrawerActive, setIsGroupDrawerActive] = useState(false);
+  const [isTopicDrawerActive, setIsTopicDrawerActive] = useState(false);
+  const [isOrganizationDrawerActive, setIsOrganizationDrawerActive] = useState(false);
 
   const [mentionData, setMentionData] = useState([]);
   const [mentionSum, setMentionSum] = useState(null);
@@ -30,11 +34,7 @@ export default function SocialReports(pageProps) {
   const [sentiment, setSentiment] = useState([]);
   const [mentionBySource, setMentionBySource] = useState([]);
   const [sentimentOverTime, setSentimentOverTime] = useState([]);
-
-  const [engagementData, setEngagementData] = useState([]);
-  const [engagementRateData, setEngagementRateData] = useState([]);
-  const [videoViewsData, setVideoViewsData] = useState([]);
-  const [apiNotification, contextHolderNotification] = notification.useNotification();
+  const [wordcloud, setWordcloud] = useState([]);
 
   const [mtkUrl, setMtkUrl] = useState("");
   const [mtkToken, setMtkToken] = useState("");
@@ -43,16 +43,10 @@ export default function SocialReports(pageProps) {
   const [isGroupAssigned, setIsGroupAssigned] = useState(false);
   const [isTopicAssigned, setIsTopicAssigned] = useState(false);
   const [isDateAssigned, setIsDateAssigned] = useState(false);
-  const [isDataFetched, setIsDataFetched] = useState(false);
 
-  const [isFormOpen, setIsFormOpen] = useState(false);
-  const [isFormEdit, setIsFormEdit] = useState(false);
-  const [selectedSurveyId, setSelectedSurveyId] = useState(null);
-
-  const [filterSearch, setFilterSearch] = useState("");
   const [groupData, setGroupData] = useState([]);
-  const [selectedGroupData, setSelectedGroup] = useState("");
-  const [selectedTopicData, setSelectedTopic] = useState("");
+  const [selectedGroupData, setSelectedGroup] = useState(null);
+  const [selectedTopicData, setSelectedTopic] = useState(null);
   const [filterDate, setFilterDate] = useState([]);
 
   useEffect(() => {
@@ -109,7 +103,7 @@ export default function SocialReports(pageProps) {
         from_time: filterDate[0].toString(),
         to_time: filterDate[1].toString(),
       };
-      await axios.post(`${pageProps.baseURL}api/sentiment/${mtkOrgId}/reports`, request).then((res) => {
+      await axios.post(`${pageProps.baseURL}api/sentiment/reports`, request).then((res) => {
         setMentionData(res.data.data.mentions_over_time.data.entries);
         setMentionSum(res.data.data.sum_of_mentions.data.total_value);
         setTotalImpression(res.data.data.sum_of_impressions.data.total_value);
@@ -117,6 +111,7 @@ export default function SocialReports(pageProps) {
         setSentiment(res.data.data.effective_sentiment.data.entries);
         setMentionBySource(res.data.data.mentions_over_time_by_source.data.entries);
         setSentimentOverTime(res.data.data.sentiment_over_time.data.entries);
+        setWordcloud(res.data.data.wordcloud);
         setShowCharts(true);
         setIsLoading(false);
         if (!res?.data?.status) throw new Error("unknown error");
@@ -132,6 +127,40 @@ export default function SocialReports(pageProps) {
 
   return (
     <>
+      {contextHolderNotification}
+
+      <SentimentGroupDrawer
+        open={isGroupDrawerActive}
+        setOpen={setIsGroupDrawerActive}
+        apiNotification={apiNotification}
+        setGroupData={setGroupData}
+        // setEmail={setAyrshareName}
+        // setDropdown={setSocmedsList}
+        // setUserAnalytics={setUserAnalytics}
+        // setShowResult={setShowResult}
+        // setSelectedSocmedID={setSelectedSocmedID}
+      />
+      <SocialTopicDrawer
+        open={isTopicDrawerActive}
+        setOpen={setIsTopicDrawerActive}
+        apiNotification={apiNotification}
+        // setEmail={setAyrshareName}
+        // setDropdown={setSocmedsList}
+        // setUserAnalytics={setUserAnalytics}
+        // setShowResult={setShowResult}
+        // setSelectedSocmedID={setSelectedSocmedID}
+      />
+      <SocialOrganizationDrawer
+        open={isOrganizationDrawerActive}
+        setOpen={setIsOrganizationDrawerActive}
+        apiNotification={apiNotification}
+        // setEmail={setAyrshareName}
+        // setDropdown={setSocmedsList}
+        // setUserAnalytics={setUserAnalytics}
+        // setShowResult={setShowResult}
+        // setSelectedSocmedID={setSelectedSocmedID}
+      />
+
       <Head>
         <title>Analisis Sentimen · Patrons</title>
       </Head>
@@ -141,13 +170,15 @@ export default function SocialReports(pageProps) {
       </div>
 
       <Space direction="vertical" size="middle">
-        <SearchBar
+        <SocialSearchBar
           groupData={groupData}
+          selectedGroup={selectedGroupData}
           selectGroupHandler={selectGroupHandler}
+          selectedTopic={selectedTopicData}
           selectTopicHandler={selectTopicHandler}
           selectDateHandler={selectDateHandler}
           selectedGroupData={selectedGroupData}
-          addSurveyHandler={() => setIsFormOpen(true)}
+          editOrganizationHandler={() => setIsOrganizationDrawerActive(true)}
         />
 
         {showCharts ? (
@@ -196,6 +227,11 @@ export default function SocialReports(pageProps) {
                 </Card>
               </Col>
             </Row>
+            <div className="col-12">
+              <Card noPadding>
+                <SocialWordCloud title={"Word Cloud"} data={wordcloud} chartType={"detail"} />
+              </Card>
+            </div>
           </>
         ) : (
           <div
@@ -241,86 +277,18 @@ export async function getServerSideProps(ctx) {
 
   // get groups
   await axios
-    .get(`${baseURL}api/sentiment/157456`, {
+    .get(`${baseURL}api/sentiment`, {
       withCredentials: true,
       headers: { Cookie: `token=${token}` },
     })
     .then((res) => {
       reports = res.data.data;
       mediatoolkit = {
-        orgid: `157456`,
+        orgid: reports.organization,
       };
     })
     .catch((err) => {
       console.log(err);
     });
   return { props: { reports, mediatoolkit } };
-}
-
-function SearchBar({
-  groupData,
-  selectGroupHandler,
-  selectTopicHandler,
-  selectDateHandler,
-  selectedGroupData,
-  addSurveyHandler,
-}) {
-  const groupList = [{}];
-  console.log("group data", groupData);
-  groupData.forEach((value, index) => {
-    groupList[index] = {
-      value: value.id,
-      label: value.name,
-    };
-  });
-
-  const topicList = [{}];
-  if (selectedGroupData != "") {
-    const temp = groupData.find((value) => value.id == selectedGroupData);
-    temp.keywords.forEach((value, index) => {
-      topicList[index] = {
-        value: value.id,
-        label: value.name,
-      };
-    });
-  }
-
-  // console.log("yes", selectedGroup.keywords);
-  // selectedGroup.keywords.forEach((value, index) => {
-  //   console.log(value.id, value.name);
-  //   topicList[index].value = value.id
-  //   topicList[index].label = value.name
-  // })
-
-  return (
-    <Row justify="space-between">
-      <Col span={18}>
-        <Row gutter={16}>
-          <Col span={8}>
-            <Select
-              placeholder={"Pilih Group..."}
-              style={{ width: "100%" }}
-              onChange={selectGroupHandler}
-              options={groupList}
-            />
-          </Col>
-          <Col span={8}>
-            <Select
-              placeholder={"Pilih Topik..."}
-              style={{ width: "100%" }}
-              onChange={selectTopicHandler}
-              options={topicList}
-            />
-          </Col>
-          <Col span={8}>
-            <RangePicker
-              style={{ width: "100%" }}
-              placeholder={["Tanggal Awal", "Tanggal Akhir"]}
-              onChange={selectDateHandler}
-            />
-          </Col>
-        </Row>
-      </Col>
-    </Row>
-  );
 }

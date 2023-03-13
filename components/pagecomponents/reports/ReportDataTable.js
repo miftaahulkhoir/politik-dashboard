@@ -7,6 +7,7 @@ import ReportStatusPill from "./ReportStatusPill";
 import capitalizeWords from "../../../utils/helpers/capitalizeWords";
 import formateDateTime from "../../../utils/helpers/formatDateTime";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
+import LimitedText from "../../elements/typography/LimitedText";
 
 export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOpen, apiNotification }) {
   const openDetailDrawerHandler = (row) => {
@@ -31,7 +32,7 @@ export default function ReportDataTable({ data, setSelectedReport, setIsDrawerOp
     },
     {
       name: "Judul",
-      selector: (row) => row?.title,
+      selector: (row) => (row?.title ? <LimitedText text={row.title} /> : "-"),
       grow: 1000,
       maxWidth: "600px",
       sortable: true,

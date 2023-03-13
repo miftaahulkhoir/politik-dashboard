@@ -5,9 +5,10 @@
   top: 0;
   left: 0;
   background: white;
-  z-index: 99999;
+  z-index: 9999;
   padding: 3rem 2rem;
   overflow: hidden;
+  overflow-y: auto;
   transition: all 200ms;
 }
 

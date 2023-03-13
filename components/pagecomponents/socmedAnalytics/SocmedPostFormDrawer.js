@@ -80,11 +80,20 @@ export default function SocmedPostFormDrawer({ open, setOpen, selectedUser, apiN
   };
 
   const submitHandler = () => {
-    const data = {
-      post: caption,
-      mediaUrls: [mediaUrl],
-      platforms: platforms,
-    };
+    let data;
+    if (mediaUrl != "") {
+      data = {
+        post: caption,
+        mediaUrls: [mediaUrl],
+        platforms: platforms,
+      };
+    } else {
+      data = {
+        post: caption,
+        platforms: platforms,
+      };
+    }
+    console.log("submit post", data);
     updateAdsHandler(data);
   };
 

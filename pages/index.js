@@ -1,5 +1,6 @@
 import { Grid, notification } from "antd";
 import axios from "axios";
+import clsx from "clsx";
 import dynamic from "next/dynamic";
 import Head from "next/head";
 import { parseCookies } from "nookies";
@@ -12,9 +13,13 @@ import SummaryCard from "../components/elements/summaryCard/SummaryCard";
 import BlueCard from "../components/pagecomponents/home/BlueCard";
 import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
+import LegendContainer from "../components/pagecomponents/home/legend/LegendContainer";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
+import LogisticDetailDrawer from "../components/pagecomponents/logistics/LogisticDetailDrawer";
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
+import { getRandomColorByKey } from "../utils/helpers/getRandomColor";
+import { useFindAllLogistics } from "../utils/services/logistics";
 import { useFindAllReports } from "../utils/services/reports";
 
 const Centrifuge = require("centrifuge");
@@ -26,6 +31,12 @@ const HomeMap = dynamic(() => import("../components/pagecomponents/home/map/Home
 const LogCoordinateDrawer = dynamic(() => import("../components/pagecomponents/home/drawer/LogCoordinateDrawer"), {
   ssr: false,
 });
+const RegionQuestionDetailDrawer = dynamic(
+  () => import("../components/pagecomponents/home/drawer/RegionQuestionDetailDrawer"),
+  {
+    ssr: false,
+  },
+);
 
 export default function Index({ profile, users, koordinator, relawan, pemilih, daftarhitam, kecamatan }) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -96,6 +107,8 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     }
   }, [showRelawan]);
 
+  const [selectedUser, setSelectedUser] = useState({});
+
   // LOG LOKASI RELAWAN DRAWER
   const [isLogCoordinateDrawerOpen, setIsLogCoordinateDrawerOpen] = useState(false);
   // END LOG LOKASI RELAWAN DRAWER
@@ -117,17 +130,49 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     return reports?.filter((report) => indexShownReportCategories.includes(report?.category?.id)) || [];
   }, [reports, indexShownReportCategories]);
 
+  // LOGISTIK (seperti pengaduan)
+  const { logistics: fetchLogistics } = useFindAllLogistics();
+  const [logistics, setLogistics] = useState([]);
+  useEffect(() => {
+    if (!fetchLogistics?.length) return;
+    setLogistics(fetchLogistics);
+  }, [fetchLogistics]);
+
+  const [selectedLogistic, setSelectedLogistic] = useState({});
+  const [isLogisticDetailDrawerOpen, setIsLogisticDetailDrawerOpen] = useState(false);
+
+  const [indexShownLogisticCategories, setIndexShownLogisticCategories] = useState([]); // Array<string> (the id)
+
+  const filteredLogistics = useMemo(() => {
+    return logistics?.filter((logistic) => indexShownLogisticCategories.includes(logistic?.category?.id)) || [];
+  }, [logistics, indexShownLogisticCategories]);
+
   // -- user occupations
   const [selectedOccupations, setSelectedOccupations] = useState([]);
 
   // END PENGADUAN
 
   // TEMATIK ===================================
+  // survey
+  const [selectedQuestions, setSelectedQuestions] = useState([]); // Array<string> -> string: surveyid,questionid
+
+  // data kpu
+  const [selectedKPUYears, setSelectedKPUYears] = useState([]);
+
+  // on click
+  const [isRegionQuestionDetailDrawerOpen, setIsRegionQuestionDetailDrawerOpen] = useState(false);
+  const [selectedRegion, setSelectedRegion] = useState(null);
 
   // multi survey
   const [thematicSurveyResponses, setThematicSurveyResponses] = useState([]);
 
+  const [selectedThematicFromLegend, setSelectedThematicFromLegend] = useState(null);
+
   // END TEMATIK ===================================
+
+  // PILIH LEVEL REGION ===================================
+  const [selectedRegionLevel, setSelectedRegionLevel] = useState(1);
+  // END PILIH LEVEL REGION ===================================
 
   const ranks = useMemo(() => {
     return users?.map((user, i) => {
@@ -209,6 +254,15 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     return val;
   }, [screens]);
 
+  const legendData = useMemo(() => {
+    const lastQuestionResponse = thematicSurveyResponses?.at(-1);
+    const data = lastQuestionResponse?.options?.map((option, i) => ({
+      text: option,
+      color: lastQuestionResponse?.color[i] || getRandomColorByKey(i),
+    }));
+    return data;
+  }, [thematicSurveyResponses]);
+
   return (
     <>
       <Head>
@@ -225,10 +279,24 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
         apiNotification={apiNotification}
       />
 
+      <LogisticDetailDrawer
+        open={isLogisticDetailDrawerOpen}
+        setOpen={setIsLogisticDetailDrawerOpen}
+        selectedLogistic={selectedLogistic}
+      />
+
       <LogCoordinateDrawer
         open={isLogCoordinateDrawerOpen}
         setOpen={setIsLogCoordinateDrawerOpen}
         data={logCordinate}
+        selectedUser={selectedUser}
+      />
+
+      <RegionQuestionDetailDrawer
+        open={isRegionQuestionDetailDrawerOpen}
+        setOpen={setIsRegionQuestionDetailDrawerOpen}
+        selectedRegion={selectedRegion}
+        selectedRegionLevel={selectedRegionLevel}
       />
 
       {profile?.occupation?.level === 1 ? (
@@ -263,8 +331,16 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
                 reports={filteredReports}
                 indexShownReportCategories={indexShownReportCategories}
                 setSelectedReport={setSelectedReport}
+                logistics={filteredLogistics}
+                setSelectedLogistic={setSelectedLogistic}
+                setIsLogisticDetailDrawerOpen={setIsLogisticDetailDrawerOpen}
+                setSelectedUser={setSelectedUser}
                 setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
                 thematicSurveyResponses={thematicSurveyResponses}
+                setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
+                setSelectedRegion={setSelectedRegion}
+                selectedRegionLevel={selectedRegionLevel}
+                selectedThematicFromLegend={selectedThematicFromLegend}
               />
             </div>
           )}
@@ -300,12 +376,38 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               setShowPemilih: setShowPemilih,
               setShowBlackList: setShowBlackList,
             }}
-            stateSelected={{
-              selectedReportCategories: indexShownReportCategories,
-              setSelectedReportCategories: setIndexShownReportCategories,
+            occupationState={{
               selectedOccupations: selectedOccupations,
               setSelectedOccupations: setSelectedOccupations,
             }}
+            reportState={{
+              selectedReportCategories: indexShownReportCategories,
+              setSelectedReportCategories: setIndexShownReportCategories,
+            }}
+            logisticState={{
+              selectedLogisticCategories: indexShownLogisticCategories,
+              setSelectedLogisticCategories: setIndexShownLogisticCategories,
+            }}
+            surveyState={{
+              selectedQuestions: selectedQuestions,
+              setSelectedQuestions: setSelectedQuestions,
+            }}
+            kpuState={{
+              selectedKPUYears: selectedKPUYears,
+              setSelectedKPUYears: setSelectedKPUYears,
+            }}
+            regionState={{
+              selectedRegionLevel: selectedRegionLevel,
+              setSelectedRegionLevel: setSelectedRegionLevel,
+            }}
+          />
+
+          <LegendContainer
+            data={legendData}
+            selectedItem={selectedThematicFromLegend}
+            selectedThematicFromLegend={selectedThematicFromLegend}
+            onClickItem={(itemIndex) => setSelectedThematicFromLegend(itemIndex)}
+            onClickResetSelectedItem={() => setSelectedThematicFromLegend(null)}
           />
         </>
       ) : (
@@ -314,24 +416,64 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             <h1>Dashboard</h1>
           </div>
 
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Total relawan" number={425} stat={-0.051} />
           </div>
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Total pemilih" number={6875} stat={0.128} />
           </div>
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Total logistik" subtitle="satuan rupiah" number={192092251} stat={-0.121} />
           </div>
-          <div className="col-3 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md && screens.lg === false,
+              "col-3": screens.lg,
+            })}
+          >
             <SummaryCard title="Pemilih baru" subtitle="2 Des 2022" number={6875} stat={0.041} />
           </div>
-          <div className="col-6 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md,
+            })}
+          >
             <Card noPadding>
               <ChartCard dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]} dataY={[140, 232, 101, 264, 90, 340]} />
             </Card>
           </div>
-          <div className="col-6 mb-24">
+          <div
+            className={clsx({
+              "mb-24": true,
+              "col-12": screens.xs,
+              "col-6": screens.md,
+            })}
+          >
             <BlueCard />
           </div>
           <div className="col-12 mb-24">

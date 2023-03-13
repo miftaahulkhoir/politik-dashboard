@@ -6,10 +6,19 @@ import indexMaxOfNumbers from "../../../../utils/helpers/array/indexMaxOfNumbers
 import sumNumbers from "../../../../utils/helpers/array/sumNumbers";
 import { getRandomColorByKey } from "../../../../utils/helpers/getRandomColor";
 
-export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
+export default function HomeGeoJSON({
+  zoom,
+  thematicSurveyResponses,
+  setIsRegionQuestionDetailDrawerOpen,
+  setSelectedRegion,
+  selectedRegionLevel,
+  selectedThematicFromLegend,
+}) {
   const [originalData, setOriginalData] = useState(null);
   const [data, setData] = useState(null);
   const [resetSignal, setResetSignal] = useState(false);
+
+  useEffect(() => {}, [data]);
 
   function loadAndSaveGeoJSON() {
     const dbName = "geojson";
@@ -97,32 +106,35 @@ export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
     });
   }, []);
 
-  const onEachFeature = useCallback((feature, layer) => {
-    if (feature?.properties?.selected) {
-      layer.options.fillColor = feature?.properties?.fillColor;
-      layer.options.fillOpacity = feature?.properties?.fillOpacity;
-    } else {
-      layer.options.fillColor = "#016CEE";
-      layer.options.fillOpacity = 0.2;
-    }
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      if (feature?.properties?.selected) {
+        layer.options.fillColor = feature?.properties?.fillColor;
+        layer.options.fillOpacity = feature?.properties?.fillOpacity;
+      } else {
+        layer.options.fillColor = "#016CEE";
+        layer.options.fillOpacity = 0.2;
+      }
 
-    layer.on("click", (e) => {
-      // e.target.setStyle({
-      //   fillColor: "green",
-      // });
-    });
-  }, []);
+      layer.on("click", (e) => {
+        setIsRegionQuestionDetailDrawerOpen(true);
+        setSelectedRegion(feature.properties);
+      });
+    },
+    [setIsRegionQuestionDetailDrawerOpen, setSelectedRegion],
+  );
 
   const style = useMemo(() => {
     return {
-      weight: zoom < 12 ? 0 : Math.pow(zoom, 1.2) * 0.1,
+      weight: 0,
     };
-  }, [zoom, resetSignal]);
+  }, []);
 
   const ref = useRef(null);
 
   useEffect(() => {
-    if (thematicSurveyResponses?.length == 0) return;
+    if (!thematicSurveyResponses) return;
+    if (!originalData) return;
 
     // eslint-disable-next-line no-unsafe-optional-chaining
     const mappedResponses = [].concat(...thematicSurveyResponses?.map((res) => res?.responses ?? []));
@@ -133,26 +145,71 @@ export default function HomeGeoJSON({ zoom, thematicSurveyResponses }) {
       }, {}),
     );
 
+    // console.log("merged", mergedResponses);
+
     const newFeatures = originalData?.features?.map((feature) => {
+      const matchedResponses = [];
+      thematicSurveyResponses?.forEach((surveyResponse) => {
+        const responseSummary = surveyResponse?.responses?.find(
+          (r) => r?.village_id == feature?.properties?.village_id,
+        );
+
+        // fill empty with random color
+        const newColors = surveyResponse?.color.map((color, i) => {
+          if (color == "") {
+            return getRandomColorByKey(i);
+          }
+          return color;
+        });
+
+        if (responseSummary) {
+          matchedResponses.push({
+            question: surveyResponse?.question_name,
+            options: surveyResponse?.options,
+            counts: responseSummary?.count,
+            total_count: sumNumbers(responseSummary?.count),
+            district_counts: responseSummary?.district_count,
+            total_district_counts: sumNumbers(responseSummary?.district_count),
+            colors: newColors,
+          });
+        }
+      });
+      feature.properties.question_responses = matchedResponses;
+
       const index = mergedResponses.findIndex((response) => response?.village_id == feature?.properties?.village_id);
       if (index === -1) {
         feature.properties.selected = false;
         return feature;
       }
 
-      const count = mergedResponses[index].count;
+      let count = mergedResponses[index].count;
+      if (selectedRegionLevel == 2) {
+        count = mergedResponses[index].district_count;
+      }
       const total = sumNumbers(count);
       const indexMaxCount = indexMaxOfNumbers(count);
       const maxCount = count[indexMaxCount];
 
-      feature.properties.selected = true;
-      feature.properties.fillColor = getRandomColorByKey(indexMaxCount);
+      // fill empty with random color
+      const newColors = matchedResponses?.at(-1)?.colors?.map((color, i) => {
+        if (color == "") {
+          return getRandomColorByKey(i);
+        }
+        return color;
+      });
+
+      const color = newColors[indexMaxCount];
+
+      feature.properties.selected =
+        selectedThematicFromLegend !== null ? selectedThematicFromLegend === indexMaxCount : true;
+      feature.properties.fillColor = color;
       feature.properties.fillOpacity = maxCount / total;
+
       return feature;
     });
 
     setData({ ...originalData, features: newFeatures });
-  }, [originalData, thematicSurveyResponses]);
+  }, [originalData, thematicSurveyResponses, selectedThematicFromLegend]);
 
   useEffect(() => {
     if (!ref.current) return;

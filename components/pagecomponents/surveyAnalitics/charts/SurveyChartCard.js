@@ -32,7 +32,7 @@ export default function SurveyChartCard({ title, children, fitTitleHeight = fals
 
       <div
         style={{
-          maxHeight: "330px",
+          // maxHeight: "330px",
           overflow: "auto",
         }}
       >

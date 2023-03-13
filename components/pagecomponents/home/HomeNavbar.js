@@ -3,6 +3,7 @@ import { useRouter } from "next/router";
 
 import HomeMoreMenuDropdown from "./HomeMoreMenuDropdown";
 import styles from "./homeNavbar.module.css";
+import HomeSocmedMenuDropdown from "./HomeSocmedMenuDropdown";
 
 import MobileNavbarToggler from "../../templates/navbar/MobileNavbarToggler";
 import ProfileDropdown from "../dashboardLayout/ProfileDropdown";
@@ -13,9 +14,7 @@ export default function HomeNavbar({ smallDevice, setActive }) {
   const links = [
     { name: "Manajemen Survei", path: "/surveys" },
     { name: "Analisis Survei", path: "/survey-analysis" },
-    { name: "Analisis Sosial Media", path: "/social-media-analysis" },
-    { name: "Analisis Sentimen", path: "/sentiment-analysis" },
-    { name: "Panel Ads", path: "/panel-ads" },
+    { name: "social-media" },
     { name: "WhatsApp Blast", path: "/whatsapp-blast" },
   ];
 
@@ -31,16 +30,7 @@ export default function HomeNavbar({ smallDevice, setActive }) {
             <MobileNavbarToggler setActive={setActive} />
           ) : (
             <>
-              <div className={styles.links_container}>
-                {links.map((link, i) => (
-                  // <div role="button" key={i} onClick={() => router.push(link.path)}>
-                  //   {link.name}
-                  // </div>
-                  <Button type="text" key={i} onClick={() => router.push(link.path)}>
-                    {link.name}
-                  </Button>
-                ))}
-              </div>
+              <div className={styles.links_container}> {links.map((link, i) => displayMenu(link, i, router))} </div>
               <HomeMoreMenuDropdown />
               <ProfileDropdown />
             </>
@@ -49,4 +39,16 @@ export default function HomeNavbar({ smallDevice, setActive }) {
       </nav>
     </header>
   );
+}
+
+function displayMenu(link, i, router) {
+  if (link.name === "social-media") {
+    return <HomeSocmedMenuDropdown />;
+  } else {
+    return (
+      <Button type="text" key={i} onClick={() => router.push(link.path)}>
+        {link.name}
+      </Button>
+    );
+  }
 }

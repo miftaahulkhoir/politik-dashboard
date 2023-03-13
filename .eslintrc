@@ -18,7 +18,7 @@
     "react/react-in-jsx-scope": "off",
     "react/prop-types": "off",
     "import/order": [
-      "error",
+      "off",
       {
         "groups": ["external", "builtin", "internal", "sibling", "parent", "index"],
         "newlines-between": "always",

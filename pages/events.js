@@ -1,16 +1,29 @@
 import { Space, notification } from "antd";
 import debounce from "lodash.debounce";
 import Head from "next/head";
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 
 import EventDataTable from "../components/pagecomponents/events/EventDataTable";
+import EventDetailDrawer from "../components/pagecomponents/events/EventDetailDrawer";
+import EventFormDrawer from "../components/pagecomponents/events/EventFormDrawer";
 import EventSearchBar from "../components/pagecomponents/events/EventSearchBar";
 import { useFindAllEvents } from "../utils/services/events";
 
 export default function Events() {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
-  const { events } = useFindAllEvents();
+  const { events: fetchEvents } = useFindAllEvents();
+  const [events, setEvents] = useState([]);
+  useEffect(() => {
+    setEvents(fetchEvents);
+  }, [fetchEvents]);
+
+  const [selectedEvent, setSelectedEvent] = useState(null);
+
+  // drawers
+  const [isFormDrawerOpen, setIsFormDrawerOpen] = useState(false);
+  const [isFormDrawerEdit, setIsFormDrawerEdit] = useState(false);
+  const [isEventDetailDrawerOpen, setIsEventDetailDrawerOpen] = useState(false);
 
   // filters
   const [filterSearch, setFilterSearch] = useState("");
@@ -24,7 +37,8 @@ export default function Events() {
             return (
               event?.event_name?.toLowerCase().includes(filterSearch.toLowerCase()) ||
               event?.category?.toLowerCase().includes(filterSearch.toLowerCase()) ||
-              event?.desctiption?.toLowerCase().includes(filterSearch.toLowerCase())
+              event?.desctiption?.toLowerCase().includes(filterSearch.toLowerCase()) ||
+              event?.contact_person?.toLowerCase().includes(filterSearch.toLowerCase())
             );
           });
 
@@ -33,12 +47,12 @@ export default function Events() {
       filterDate === ""
         ? filteredSearch
         : filteredSearch.filter((event) => {
-            const date = new Date(event.created_at);
+            const date = new Date(event.date_start);
 
             return (
               date.getFullYear() === dateInput.getFullYear() &&
               date.getMonth() === dateInput.getMonth() &&
-              date.getDate() === dateInput.getDate()
+              date.getUTCDate() === dateInput.getUTCDate()
             );
           });
 
@@ -63,10 +77,40 @@ export default function Events() {
         <h1>Manajemen Kegiatan</h1>
       </div>
 
-      <Space direction="vertical">
-        <EventSearchBar filterSearchHandler={filterSearchHandler} filterDateHandler={filterDateHandler} />
+      <EventFormDrawer
+        open={isFormDrawerOpen}
+        setOpen={setIsFormDrawerOpen}
+        apiNotification={apiNotification}
+        setEvents={setEvents}
+        selectedEvent={selectedEvent}
+        isEdit={isFormDrawerEdit}
+        setIsEdit={setIsFormDrawerEdit}
+      />
 
-        <EventDataTable data={filteredEvents} apiNotification={apiNotification} />
+      <EventDetailDrawer
+        open={isEventDetailDrawerOpen}
+        setOpen={setIsEventDetailDrawerOpen}
+        apiNotification={apiNotification}
+        selectedEvent={selectedEvent}
+      />
+
+      <Space direction="vertical">
+        <EventSearchBar
+          filterSearchHandler={filterSearchHandler}
+          filterDateHandler={filterDateHandler}
+          addEventHandler={() => setIsFormDrawerOpen(true)}
+        />
+
+        <EventDataTable
+          data={filteredEvents}
+          apiNotification={apiNotification}
+          setSelectedEvent={setSelectedEvent}
+          setDetailDrawerOpen={setIsEventDetailDrawerOpen}
+          setIsFormDrawerOpen={setIsFormDrawerOpen}
+          setIsFormDrawerEdit={setIsFormDrawerEdit}
+          events={events}
+          setEvents={setEvents}
+        />
       </Space>
     </>
   );
