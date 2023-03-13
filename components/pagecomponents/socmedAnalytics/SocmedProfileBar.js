@@ -8,6 +8,8 @@ export default function SocmedProfileBar({ email, editProfileHandler, postSocial
     fontSize: "1.5rem",
     fontWeight: "500",
   };
+  const finalEmail = email.split("@");
+
   return (
     // <div>
     //   <span style={nameStyle}>{name}: </span>
@@ -18,7 +20,7 @@ export default function SocmedProfileBar({ email, editProfileHandler, postSocial
       <Col span={16}>
         <Row gutter={8}>
           <Col>
-            <span style={idStyle}>{email}</span>
+            <span style={idStyle}>{finalEmail[0]}</span>
           </Col>
         </Row>
       </Col>
