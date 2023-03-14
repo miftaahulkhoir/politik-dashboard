@@ -149,10 +149,10 @@ export default function DashboardLayout({ profile, baseURL, children }) {
                 >
                   <ul style={{ paddingLeft: "20px" }}>
                     <li>
-                      <a style={{ padding: "0px" }}>
+                      <span style={{ padding: "0px" }}>
                         <TbAlignLeft size={24} />
                         <span>Manajemen Sentimen</span>
-                      </a>
+                      </span>
                     </li>
                   </ul>
                 </a>

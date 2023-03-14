@@ -31,6 +31,7 @@ export default function SocialTopicDrawer({
   }, [screen]);
 
   const [isActive, setIsActive] = useState(false);
+  const [isTrial, setIsTrial] = useState(true);
 
   // input topic form
   const [topic, setTopic] = useState("");
@@ -48,7 +49,7 @@ export default function SocialTopicDrawer({
       values.forEach((value) => {
         if (value.clause === null) {
           isNull = true;
-        } else if (value.sub.phrase.text === "") {
+        } else if (value.text === "") {
           isNull = true;
         }
       });
@@ -67,8 +68,6 @@ export default function SocialTopicDrawer({
     const platformEmpty = platforms.length === 0;
     const keywordEmpty = checkKeywordEmpty(keywords);
 
-    console.log(keywords);
-
     return topicEmpty || languageEmpty || platformEmpty || locationEmpty || keywordEmpty;
     // return titleEmpty || questionEmpty;
   }, [topic, languages, locations, platforms, keywords]);
@@ -80,7 +79,7 @@ export default function SocialTopicDrawer({
     setLocations([]);
     setPlatforms([]);
     const empty = { ...defaultSentimentKeyword };
-    empty.sub.phrase.text = null;
+    empty.text = null;
     setKeywords([empty]);
   };
 
@@ -113,10 +112,17 @@ export default function SocialTopicDrawer({
       })
       .catch((err) => {
         console.log("error:", err);
-        apiNotification.error({
-          message: "Gagal",
-          description: "Ayrshare API Token tidak valid",
-        });
+        if (isTrial) {
+          apiNotification.error({
+            message: "Gagal",
+            description: "Tidak dapat membuat topik dalam masa trial",
+          });
+        } else {
+          apiNotification.error({
+            message: "Gagal",
+            description: "Gagal membuat topik",
+          });
+        }
       });
   };
 
@@ -185,7 +191,7 @@ export default function SocialTopicDrawer({
         <SentimentFormCard key={index} index={index} keywords={keywords} setKeywords={setKeywords} isSM={isSM} />
       ))}
       <Row justify="space-between" style={{ margin: "24px" }}>
-        <Button onClick={addQuestionHandler}>Tambah Pertanyaan</Button>
+        <Button onClick={addQuestionHandler}>Tambah Query</Button>
         <Tooltip
           placement="topRight"
           title={hasEmpty ? "Nama topik serta semua input dalam form tidak boleh kosong!" : ""}

@@ -50,7 +50,7 @@ export default function EventDataTable({
 
               apiNotification.success({
                 message: "Sukses",
-                description: `Kegiatan ${row?.name} berhasil dihapus`,
+                description: `Kegiatan${row?.event_name ? ` ${row.event_name} ` : " "}berhasil dihapus`,
               });
             })
             .catch((err) => {
