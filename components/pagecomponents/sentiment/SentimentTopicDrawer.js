@@ -49,7 +49,7 @@ export default function SocialTopicDrawer({
       values.forEach((value) => {
         if (value.clause === null) {
           isNull = true;
-        } else if (value.sub.phrase.text === "") {
+        } else if (value.text === "") {
           isNull = true;
         }
       });
@@ -79,7 +79,7 @@ export default function SocialTopicDrawer({
     setLocations([]);
     setPlatforms([]);
     const empty = { ...defaultSentimentKeyword };
-    empty.sub.phrase.text = null;
+    empty.text = null;
     setKeywords([empty]);
   };
 

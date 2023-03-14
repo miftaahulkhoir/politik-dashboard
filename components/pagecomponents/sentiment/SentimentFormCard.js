@@ -14,10 +14,10 @@ export default function SentimentFormCard({ index, keywords, setKeywords, isSM }
           <Typography.Title level={5}>Keyword</Typography.Title>
           <Input.TextArea
             rows={2}
-            value={keywords[index].sub.phrase.text}
+            value={keywords[index].text}
             onChange={(e) => {
               const newKeywords = [...keywords];
-              newKeywords[index].sub.phrase.text = e.target.value;
+              newKeywords[index].text = e.target.value;
               setKeywords([...newKeywords]);
             }}
           />
@@ -64,10 +64,11 @@ export default function SentimentFormCard({ index, keywords, setKeywords, isSM }
                 label: "True",
               },
             ]}
-            value={keywords[index].sub.phrase.case_sensitive}
+            value={keywords[index].case_sensitive}
             onChange={(value) => {
               const newKeywords = [...keywords];
-              newKeywords[index].sub.phrase.case_sensitive = value;
+              newKeywords[index].case_sensitive = value;
+              console.log("query no.", index, newKeywords);
               setKeywords([...newKeywords]);
             }}
           />
