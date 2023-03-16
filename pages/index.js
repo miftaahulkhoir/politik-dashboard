@@ -5,13 +5,10 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import { useEffect, useMemo, useState } from "react";
-import { TbDotsVertical } from "react-icons/tb";
 
 import Card from "../components/elements/card/Card";
 import NameAvatar from "../components/elements/nameAvatar/NameAvatar";
 import SummaryCard from "../components/elements/summaryCard/SummaryCard";
-import BlueCard from "../components/pagecomponents/home/BlueCard";
-import ChartCard from "../components/pagecomponents/home/ChartCard";
 import HomeNavbar from "../components/pagecomponents/home/HomeNavbar";
 import LegendContainer from "../components/pagecomponents/home/legend/LegendContainer";
 import PanelContainer from "../components/pagecomponents/home/panel/PanelContainer";
@@ -19,10 +16,9 @@ import LogisticDetailDrawer from "../components/pagecomponents/logistics/Logisti
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
 import { getRandomColorByKey } from "../utils/helpers/getRandomColor";
-import { nameToShortName } from "../utils/helpers/nameToShortName";
 import { useFindAllLogistics, useTotalLogistics } from "../utils/services/logistics";
 import { useFindAllReports } from "../utils/services/reports";
-import { useTotalPemilih, useTotalPemilihBaru, useTotalRelawan, useUserRankings } from "../utils/services/users";
+import { useTotalPemilih, useTotalRelawan, useUserRankings } from "../utils/services/users";
 
 const Centrifuge = require("centrifuge");
 
@@ -176,43 +172,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [selectedRegionLevel, setSelectedRegionLevel] = useState(1);
   // END PILIH LEVEL REGION ===================================
 
-  const columns = [
-    {
-      name: "No",
-      selector: (row) => row.no,
-      width: "80px",
-      center: true,
-      sortable: true,
-    },
-    {
-      name: "Nama Koordinator",
-      grow: 3,
-      selector: (row) => (
-        <div className="d-flex align-items-center">
-          <NameAvatar longName={row.name} />
-          <div className="ml-12">{row.name}</div>
-        </div>
-      ),
-    },
-    {
-      name: "Relawan",
-      selector: (row) => row.relawan || 0 + " relawan",
-    },
-    {
-      name: "Pemilih",
-      selector: (row) => row.pemilih || 0 + " pemilih",
-    },
-    {
-      name: "",
-      selector: (row) => <span style={{ color: "#016CEE" }}>{row.occupation.name}</span>,
-    },
-    {
-      name: "",
-      selector: (row) => <TbDotsVertical />,
-      width: "45px",
-    },
-  ];
-
   const handleColor = (col) => {
     let color = "";
     switch (col) {
@@ -261,9 +220,36 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const { value: totalRelawan } = useTotalRelawan();
   const { value: totalPemilih } = useTotalPemilih();
   const { value: totalLogistics } = useTotalLogistics();
-  const { totalPemilihBaru, dateString: pemilihBaruDateString } = useTotalPemilihBaru();
+  const { reports: koordinatorReports } = useFindAllReports();
   const { rankings } = useUserRankings({ userLevel: 2 });
-  const starCoordinatorShortNameList = rankings.slice(0, 5).map((v) => nameToShortName(v.name));
+
+  const columns = [
+    {
+      name: "No",
+      selector: (row) => row.no,
+      width: "80px",
+      center: true,
+      sortable: true,
+    },
+    {
+      name: "Nama Koordinator",
+      grow: 3,
+      selector: (row) => (
+        <div className="d-flex align-items-center">
+          <NameAvatar longName={row.name} />
+          <div className="ml-12">{row.name}</div>
+        </div>
+      ),
+    },
+    {
+      name: "Berhasil Merekrut",
+      selector: (row) => row?.recruitment?.progess || 0,
+    },
+    {
+      name: "Target Rekrutmen",
+      selector: (row) => row?.recruitment?.goal || 0,
+    },
+  ];
 
   const koordinatorRankings = useMemo(() => {
     return rankings?.map((v, i) => {
@@ -453,7 +439,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               "col-3": screens.lg,
             })}
           >
-            <SummaryCard title="Total logistik" subtitle="Satuan rupiah" number={totalLogistics} />
+            <SummaryCard title="Total logistik" number={totalLogistics} />
           </div>
           <div
             className={clsx({
@@ -463,27 +449,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               "col-3": screens.lg,
             })}
           >
-            <SummaryCard title="Pemilih baru" subtitle={pemilihBaruDateString} number={totalPemilihBaru} />
-          </div>
-          {/* NOT READY */}
-          {/* <div
-            className={clsx({
-              "mb-24": true,
-              "col-12": screens.xs,
-              "col-6": screens.md,
-            })}
-          >
-            <Card noPadding>
-              <ChartCard dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]} dataY={[140, 232, 101, 264, 90, 340]} />
-            </Card>
-          </div> */}
-          <div
-            className={clsx({
-              "mb-24": true,
-              "col-12": true,
-            })}
-          >
-            <BlueCard numberOfVoters={totalPemilih} starCoordinatorShortNameList={starCoordinatorShortNameList} />
+            <SummaryCard title="Total pengaduan" number={koordinatorReports.length} />
           </div>
           <div className="col-12 mb-24">
             <Card>

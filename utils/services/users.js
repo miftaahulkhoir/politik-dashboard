@@ -1,5 +1,4 @@
 import axios from "axios";
-import dayjs from "dayjs";
 import useSWR from "swr";
 
 import fetcher from "./fetcher";
@@ -81,7 +80,6 @@ export const useTotalPemilihBaru = () => {
 
   return {
     totalPemilihBaru: data?.data ?? 0,
-    dateString: dayjs().format("DD MMM YYYY"),
     error,
     isLoading,
   };
