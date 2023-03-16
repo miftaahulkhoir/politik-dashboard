@@ -18,7 +18,7 @@ import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
 import { getRandomColorByKey } from "../utils/helpers/getRandomColor";
 import { useFindAllLogistics, useTotalLogistics } from "../utils/services/logistics";
 import { useFindAllReports } from "../utils/services/reports";
-import { useTotalPemilih, useTotalRelawan, useUserRankings } from "../utils/services/users";
+import { useFindAllSubordinateUsers, useUserRankings } from "../utils/services/users";
 
 const Centrifuge = require("centrifuge");
 
@@ -217,11 +217,13 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     return data;
   }, [thematicSurveyResponses]);
 
-  const { value: totalRelawan } = useTotalRelawan();
-  const { value: totalPemilih } = useTotalPemilih();
+  const { users: koordinatorSubordinateUsers } = useFindAllSubordinateUsers();
   const { value: totalLogistics } = useTotalLogistics();
   const { reports: koordinatorReports } = useFindAllReports();
   const { rankings } = useUserRankings({ userLevel: 2 });
+
+  const totalRelawan = koordinatorSubordinateUsers.filter((v) => v?.occupation?.level === 3).length;
+  const totalPemilih = koordinatorSubordinateUsers.filter((v) => v?.occupation?.level === 4).length;
 
   const columns = [
     {
