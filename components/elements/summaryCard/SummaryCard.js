@@ -4,6 +4,14 @@ import Card from "../card/Card";
 
 export default function SummaryCard({ title, subtitle, number, stat }) {
   const percentage = useMemo(() => {
+    if (stat === undefined) {
+      return {
+        value: null,
+        text: null,
+        isPositive: null,
+      };
+    }
+
     const value = stat * 100;
     const isPositive = stat >= 0;
     const text = (isPositive ? value.toFixed(1) : value.toFixed(1) * -1) + "%";
@@ -36,16 +44,18 @@ export default function SummaryCard({ title, subtitle, number, stat }) {
         <div className="fw-semibold" style={{ fontSize: "36px", fontWeight: 600 }}>
           {numberSummary}
         </div>
-        <div
-          className="px-3 py-6"
-          style={{
-            borderRadius: "8px",
-            backgroundColor: percentage.isPositive ? "#DCFCE7" : "#FEE2E2",
-            color: percentage.isPositive ? "#2EB263" : "#B12E2E",
-          }}
-        >
-          {percentage.text}
-        </div>
+        {percentage.value !== null && (
+          <div
+            className="px-3 py-6"
+            style={{
+              borderRadius: "8px",
+              backgroundColor: percentage.isPositive ? "#DCFCE7" : "#FEE2E2",
+              color: percentage.isPositive ? "#2EB263" : "#B12E2E",
+            }}
+          >
+            {percentage.text}
+          </div>
+        )}
       </div>
     </Card>
   );

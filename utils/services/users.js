@@ -1,4 +1,5 @@
 import axios from "axios";
+import dayjs from "dayjs";
 import useSWR from "swr";
 
 import fetcher from "./fetcher";
@@ -53,4 +54,45 @@ export const useFindAllOccupations = () => {
   const occupations = data?.data || [];
 
   return { occupations, error, isLoading };
+};
+
+export const useTotalRelawan = () => {
+  const { data, error, isLoading } = useSWR("/api/users/total-relawan", fetcher);
+
+  return {
+    value: data?.data ?? 0,
+    error,
+    isLoading,
+  };
+};
+
+export const useTotalPemilih = () => {
+  const { data, error, isLoading } = useSWR("/api/users/total-pemilih", fetcher);
+
+  return {
+    value: data?.data ?? 0,
+    error,
+    isLoading,
+  };
+};
+
+export const useTotalPemilihBaru = () => {
+  const { data, error, isLoading } = useSWR("/api/users/total-pemilih-baru", fetcher);
+
+  return {
+    totalPemilihBaru: data?.data ?? 0,
+    dateString: dayjs().format("DD MMM YYYY"),
+    error,
+    isLoading,
+  };
+};
+
+export const useUserRankings = ({ userLevel }) => {
+  const { data, error, isLoading } = useSWR(`/api/users/rank/${userLevel}`, fetcher);
+
+  return {
+    rankings: data?.data ?? [],
+    error,
+    isLoading,
+  };
 };

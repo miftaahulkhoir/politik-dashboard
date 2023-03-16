@@ -10,6 +10,12 @@ export const useFindAllLogistics = () => {
   return { logistics, error, isLoading };
 };
 
+export const useTotalLogistics = () => {
+  const { data, error, isLoading } = useSWR("/api/logistics", fetcher);
+
+  return { value: data?.total_all_data ?? 0, error, isLoading };
+};
+
 export const useFindOneLogistic = (id) => {
   const { data, error, isLoading } = useSWR(`/api/logistics/${id}`, fetcher);
   const logistic = data?.data || {};

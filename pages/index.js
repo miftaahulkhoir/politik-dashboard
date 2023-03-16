@@ -19,8 +19,10 @@ import LogisticDetailDrawer from "../components/pagecomponents/logistics/Logisti
 import ReportDetailDrawer from "../components/pagecomponents/reports/ReportDetailDrawer";
 import MobileNavbarBody from "../components/templates/navbar/MobileNavbarBody";
 import { getRandomColorByKey } from "../utils/helpers/getRandomColor";
-import { useFindAllLogistics } from "../utils/services/logistics";
+import { nameToShortName } from "../utils/helpers/nameToShortName";
+import { useFindAllLogistics, useTotalLogistics } from "../utils/services/logistics";
 import { useFindAllReports } from "../utils/services/reports";
+import { useTotalPemilih, useTotalPemilihBaru, useTotalRelawan, useUserRankings } from "../utils/services/users";
 
 const Centrifuge = require("centrifuge");
 
@@ -174,13 +176,6 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
   const [selectedRegionLevel, setSelectedRegionLevel] = useState(1);
   // END PILIH LEVEL REGION ===================================
 
-  const ranks = useMemo(() => {
-    return users?.map((user, i) => {
-      user.no = i + 1;
-      return user;
-    });
-  }, [users]);
-
   const columns = [
     {
       name: "No",
@@ -262,6 +257,20 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
     }));
     return data;
   }, [thematicSurveyResponses]);
+
+  const { value: totalRelawan } = useTotalRelawan();
+  const { value: totalPemilih } = useTotalPemilih();
+  const { value: totalLogistics } = useTotalLogistics();
+  const { totalPemilihBaru, dateString: pemilihBaruDateString } = useTotalPemilihBaru();
+  const { rankings } = useUserRankings({ userLevel: 2 });
+  const starCoordinatorShortNameList = rankings.slice(0, 5).map((v) => nameToShortName(v.name));
+
+  const koordinatorRankings = useMemo(() => {
+    return rankings?.map((v, i) => {
+      v.no = i + 1;
+      return v;
+    });
+  }, [rankings]);
 
   return (
     <>
@@ -424,7 +433,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               "col-3": screens.lg,
             })}
           >
-            <SummaryCard title="Total relawan" number={425} stat={-0.051} />
+            <SummaryCard title="Total relawan" number={totalRelawan} />
           </div>
           <div
             className={clsx({
@@ -434,7 +443,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               "col-3": screens.lg,
             })}
           >
-            <SummaryCard title="Total pemilih" number={6875} stat={0.128} />
+            <SummaryCard title="Total pemilih" number={totalPemilih} />
           </div>
           <div
             className={clsx({
@@ -444,7 +453,7 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               "col-3": screens.lg,
             })}
           >
-            <SummaryCard title="Total logistik" subtitle="satuan rupiah" number={192092251} stat={-0.121} />
+            <SummaryCard title="Total logistik" subtitle="Satuan rupiah" number={totalLogistics} />
           </div>
           <div
             className={clsx({
@@ -454,9 +463,10 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
               "col-3": screens.lg,
             })}
           >
-            <SummaryCard title="Pemilih baru" subtitle="2 Des 2022" number={6875} stat={0.041} />
+            <SummaryCard title="Pemilih baru" subtitle={pemilihBaruDateString} number={totalPemilihBaru} />
           </div>
-          <div
+          {/* NOT READY */}
+          {/* <div
             className={clsx({
               "mb-24": true,
               "col-12": screens.xs,
@@ -466,22 +476,21 @@ export default function Index({ profile, users, koordinator, relawan, pemilih, d
             <Card noPadding>
               <ChartCard dataX={["Jan", "Feb", "Mar", "Apr", "Jun", "Jul"]} dataY={[140, 232, 101, 264, 90, 340]} />
             </Card>
-          </div>
+          </div> */}
           <div
             className={clsx({
               "mb-24": true,
-              "col-12": screens.xs,
-              "col-6": screens.md,
+              "col-12": true,
             })}
           >
-            <BlueCard />
+            <BlueCard numberOfVoters={totalPemilih} starCoordinatorShortNameList={starCoordinatorShortNameList} />
           </div>
           <div className="col-12 mb-24">
             <Card>
               <div className="d-flex justify-content-between mb-12 mt-8">
                 <h2 style={{ fontSize: "16px", fontWeight: 600 }}>Peringkat Koordinator</h2>
               </div>
-              <CustomDataTable columns={columns} data={ranks} />
+              <CustomDataTable columns={columns} data={koordinatorRankings} />
             </Card>
           </div>
         </>

@@ -14,6 +14,7 @@
   display: flex;
   flex-direction: row-reverse;
   justify-content: start;
+  min-height: 48px;
 }
 
 .multi_avatar_container > *:not(:last-child) {
@@ -104,4 +105,3 @@
 .social_chart {
   height: 410px;
 }
-
