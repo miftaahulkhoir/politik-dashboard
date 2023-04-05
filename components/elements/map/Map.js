@@ -4,6 +4,7 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import { useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
+import { GeoJSON } from "react-leaflet";
 
 import styles from "./Map.module.css";
 
@@ -36,7 +37,7 @@ export default function Map({ children, className, cordinate, zoomTo, ...rest })
   return (
     <>
       <MapContainer className={mapClassName} zoomControl={false} {...rest}>
-        {children(ReactLeaflet)}
+        {children({ ...ReactLeaflet, GeoJSON })}
         <Zoom cordinate={cordinate} zoomTo={zoomTo} />
       </MapContainer>
     </>

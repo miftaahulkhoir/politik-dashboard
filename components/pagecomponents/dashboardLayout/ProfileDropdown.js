@@ -1,9 +1,9 @@
-import { Avatar, Dropdown } from "antd";
+import { Dropdown } from "antd";
 import { TbLogout, TbUser } from "react-icons/tb";
 
 import { logoutUser } from "../../../utils/services/auth";
 
-export default function ProfileDropdown() {
+export default function ProfileDropdown({ profile }) {
   const items = [
     // {
     //   key: '1',
@@ -35,8 +35,11 @@ export default function ProfileDropdown() {
       }}
       placement="bottomRight"
     >
-      <div type="button">
-        <Avatar size="large" icon={<TbUser />} />
+      <div className="flex items-center gap-3 cursor-pointer">
+        <div className="font-bold">{profile?.name}</div>
+        <div className="flex w-9 h-9 justify-center items-center rounded-full bg-gray-600">
+          <TbUser color="white" />
+        </div>
       </div>
     </Dropdown>
   );

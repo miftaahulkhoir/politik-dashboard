@@ -4,13 +4,7 @@ import { destroyCookie, parseCookies } from "nookies";
 import React from "react";
 
 import DashboardLayout from "../layouts/DashboardLayout";
-import "../public/css/style.css";
-import "../public/css/vendor/bootstrap.css";
-import "../public/css/vendor/flag-icon/flag-icon.css";
-import "../public/css/vendor/font-awesome.css";
-import "../public/css/vendor/icoicon/icoicon.css";
-import "../public/css/vendor/simplebar.css";
-import "../public/css/vendor/themify-icons.css";
+
 import "../styles/ant-override.css";
 import "../styles/globals.css";
 import { redirectUser } from "../utils/services/auth";
