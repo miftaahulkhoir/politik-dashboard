@@ -2,33 +2,39 @@
 # Copyright (c) 2023 Synapsis.id
 #
 
-stages:          # List of stages for jobs, and their order of execution
-  - build
-  - deploy
+stages: # List of stages for jobs, and their order of execution
+- build
+- deploy
 
-build:       # This job runs in the build stage, which runs first.
+build: # This job runs in the build stage, which runs first.
   stage: build
   tags:
-    - dev
+  - dev
   script:
-    - sudo docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
-    - sudo bash ./build.sh $CI_COMMIT_BRANCH
+  - sudo docker login -u $DOCKERHUB_USER -p $DOCKERHUB_PASS
+  - sudo bash ./build.sh $CI_COMMIT_BRANCH
+  after_script:
+  - find . -name . -o -prune -exec rm -rf -- {} +
 
-deploy-prod:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+deploy-prod: # This job runs in the deploy stage.
+  stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
   environment: production
   only:
-    - master
+  - master
   tags:
-    - production
+  - production
   script:
-    - sudo bash ./run.sh $CI_COMMIT_BRANCH
+  - sudo bash ./run.sh $CI_COMMIT_BRANCH
+  after_script:
+  - find . -name . -o -prune -exec rm -rf -- {} +
 
-deploy-staging:      # This job runs in the deploy stage.
-  stage: deploy  # It only runs when *both* jobs in the test stage complete successfully.
+deploy-staging: # This job runs in the deploy stage.
+  stage: deploy # It only runs when *both* jobs in the test stage complete successfully.
   except:
-    - master
+  - master
   tags:
-    - dev
+  - dev
   script:
-    - sudo bash ./run.sh $CI_COMMIT_BRANCH
+  - sudo bash ./run.sh $CI_COMMIT_BRANCH
+  after_script:
+  - find . -name . -o -prune -exec rm -rf -- {} +

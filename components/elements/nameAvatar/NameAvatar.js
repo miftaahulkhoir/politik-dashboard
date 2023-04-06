@@ -1,14 +1,12 @@
 import { useMemo } from "react";
+import { nameToShortName } from "../../../utils/helpers/nameToShortName";
 
 import styles from "./nameAvatar.module.css";
 
 export default function NameAvatar({ shortName, longName, style }) {
   const name = useMemo(() => {
     if (shortName) return shortName;
-    const words = longName.toUpperCase().split(" ");
-    if (words.length === 0) return "";
-    if (words.length === 1) return words[0][0];
-    return words[0][0] + words[1][0];
+    return nameToShortName(longName);
   }, [longName, shortName]);
 
   return (

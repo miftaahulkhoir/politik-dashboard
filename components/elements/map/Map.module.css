@@ -1,6 +1,7 @@
 .map {
   width: 100%;
   position: relative;
+  background-color: #D7E7FF;
 }
 
 .leaflet-control-attribution .leaflet-control {

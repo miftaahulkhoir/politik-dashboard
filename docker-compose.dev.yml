@@ -1,15 +1,27 @@
 version: '3'
 services:
-  patronpolitik-fe-dev:
-    image: synapsisid/patronpolitik:dev-fe
-    container_name: dev_patronpolitik_fe
+  patronsmonitoring-fe-dev:
+    image: synapsisid/${DOCKER_IMG_NAME}:${DOCKER_IMG_TAG}
+    container_name: dev_patronsmonitoring_fe
     restart: always
     ports:
-      - 5133:${APP_PORT}
+      - 3001:${APP_PORT}
     env_file:
       - .env
+    networks:
+      - traefik_gateway_ingress
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-http.rule=Host(`panel-dev.patronsmonitoring.id`)"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-http.entrypoints=web"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-http.middlewares=redirect-to-https@docker"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-http.service=noop@internal"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.rule=Host(`panel-dev.patronsmonitoring.id`)"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.entrypoints=websecure"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.tls=true"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.service=patronsmonitoring-dev-frontend-svc@docker"
+      - "traefik.http.services.patronsmonitoring-dev-frontend-svc.loadbalancer.server.port=3000"
 
 networks:
-  default:
-    external:
-      name: gateway_proxymanager
+  traefik_gateway_ingress:
+    external: true
