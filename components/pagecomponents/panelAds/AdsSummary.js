@@ -7,7 +7,6 @@ import AdsCard from "./AdsCard";
 import biddingTypeFormatter from "../../../utils/helpers/biddingTypeFormatter";
 import { deleteUser } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
-import styles from "../home/home.module.css";
 
 export default function UserDataTable({
   data,
