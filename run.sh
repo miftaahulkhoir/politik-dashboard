@@ -3,12 +3,12 @@ source release_ver.sh
 
 rm -rf .env
 if [ -z $1 ] || [ $1 != "master" ]; then
-    export DOCKER_IMG_TAG="dev-fe"
+    export DOCKER_IMG_TAG=$( git rev-parse --short HEAD | awk '{tag=$1 "-fe";print tag}' )
     cp -f .env.development .env
     make down-dev
-    make run-dev && find . -name . -o -prune -exec rm -rf -- {} +
+    make run-dev
 else
     cp -f .env.production .env
     make down-prod
-    make run-prod && find . -name . -o -prune -exec rm -rf -- {} +
+    make run-prod
 fi

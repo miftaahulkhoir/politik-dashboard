@@ -13,10 +13,10 @@ run-dev:
 
 build:
 	docker image prune -a -f --filter "until=24h"
-	docker build --no-cache -t synapsisid/patronpolitik:$(DOCKER_IMG_TAG) .
+	docker build --no-cache -t synapsisid/$(DOCKER_IMG_NAME):$(DOCKER_IMG_TAG) .
 
 dev:
 	next dev
 
 push:
-	docker push synapsisid/patronpolitik:$(DOCKER_IMG_TAG)
+	docker push synapsisid/$(DOCKER_IMG_NAME):$(DOCKER_IMG_TAG)
