@@ -1,3 +1,4 @@
+import { resetPassword } from "@/utils/services/auth";
 import { Input, message } from "antd";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -7,13 +8,18 @@ export default function ConfirmPassword() {
   const router = useRouter();
   const [password, setPassword] = useState();
   const [confirmPassword, setconfirmPassword] = useState();
-  const [showErrorMsg, setShowErrorMsg] = useState(false);
-  const [errorMsg, setErrorMsg] = useState("");
 
-  const handleLogin = (event) => {
+  const handleResetPassword = async (event) => {
     event.preventDefault();
     if (confirmPassword !== password) {
       message.error("Pastikan password yang anda masukan sama!");
+    }
+    const res = await resetPassword(router.query, password);
+    if (res.status === 200) {
+      message.success("Reset password berhasil, silahkan login untuk melanjutkan.");
+      router.push("/login");
+    } else {
+      message.error("Something went wrong");
     }
   };
 
@@ -25,12 +31,11 @@ export default function ConfirmPassword() {
       <div className="flex w-screen h-screen">
         <div className="flex flex-[3] items-center justify-center">
           <div className="codex-authbox w-[365px] flex flex-col gap-5">
-            {showErrorMsg && <div className="alert alert-danger">{errorMsg}</div>}
             <div className="flex flex-col gap-1">
               <div className="text-xl font-bold">Permintaan Ganti Password</div>
               <div className="text-sm font-semibold text-gray-300"> Masukkan password baru anda</div>
             </div>
-            <form onSubmit={handleLogin} className="flex flex-col gap-3">
+            <form onSubmit={handleResetPassword} className="flex flex-col gap-3">
               <div className="form-group flex flex-col gap-1">
                 <label className="form-label text text-sm font-semibold">Password</label>
                 <Input.Password
