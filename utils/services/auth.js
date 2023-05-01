@@ -11,6 +11,29 @@ export const loginUser = async (email, password, remember) => {
   return res;
 };
 
+export const forgotPassword = async (email) => {
+  const res = await axios.post(`/api/forget-password`, {
+    email: email,
+  });
+  console.clear();
+  return res;
+};
+
+export const resetPassword = async (params, password) => {
+  const res = await axios.post(
+    `/api/reset-password`,
+    {
+      password,
+      password_confirm: password,
+    },
+    {
+      params,
+    },
+  );
+  console.clear();
+  return res;
+};
+
 export const redirectUser = (ctx, location) => {
   if (ctx.req) {
     ctx.res.writeHead(302, { Location: location });

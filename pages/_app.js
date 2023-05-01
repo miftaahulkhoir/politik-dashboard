@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { destroyCookie, parseCookies } from "nookies";
 import React from "react";
 
-import DashboardLayout from "../layouts/DashboardLayout";
+// import DashboardLayout from "../layouts/DashboardLayout";
 
 import "../styles/ant-override.css";
 import "../styles/globals.css";
@@ -18,10 +18,10 @@ function MyApp({ Component, pageProps }) {
         router.pathname !== "/" &&
         pageProps.profile?.occupation?.level === 1) ||
       (router.pathname !== "/login" && router.pathname !== "/register" && pageProps.profile?.occupation?.level > 1) ? (
-        <DashboardLayout {...pageProps}>
-          <Component {...pageProps} />
-        </DashboardLayout>
+        // <DashboardLayout {...pageProps}>
+        <Component {...pageProps} />
       ) : (
+        // </DashboardLayout>
         <Component {...pageProps} />
       )}
     </>
