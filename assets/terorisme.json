@@ -1,0 +1,312 @@
+[
+  {
+    "wilayah": "Bali",
+    "pelaku": 3,
+    "jumlah_kejadian": 8,
+    "jumlah_org": 3,
+    "korban_tewas": 202,
+    "korban_luka": 209,
+    "kerusakan_bangunan": 47,
+    "id": 15
+  },
+  {
+    "wilayah": "Banten",
+    "pelaku": 50,
+    "jumlah_kejadian": 151,
+    "jumlah_org": 39,
+    "korban_tewas": 202,
+    "korban_luka": 209,
+    "kerusakan_bangunan": 56,
+    "id": 6
+  },
+  {
+    "wilayah": "Bengkulu",
+    "pelaku": 2,
+    "jumlah_kejadian": 3,
+    "jumlah_org": 1,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 28
+  },
+  {
+    "wilayah": "DKI Jakarta",
+    "pelaku": 88,
+    "jumlah_kejadian": 283,
+    "jumlah_org": 62,
+    "korban_tewas": 235,
+    "korban_luka": 296,
+    "kerusakan_bangunan": 47,
+    "id": 11
+  },
+  {
+    "wilayah": "DI Yogyakarta",
+    "pelaku": 21,
+    "jumlah_kejadian": 83,
+    "jumlah_org": 23,
+    "korban_tewas": 1,
+    "korban_luka": 7,
+    "kerusakan_bangunan": 0,
+    "id": 4
+  },
+  {
+    "wilayah": "Jambi",
+    "pelaku": 3,
+    "jumlah_kejadian": 4,
+    "jumlah_org": 6,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 26
+  },
+  {
+    "wilayah": "Jawa Barat",
+    "pelaku": 273,
+    "jumlah_kejadian": 760,
+    "jumlah_org": 160,
+    "korban_tewas": 9,
+    "korban_luka": 25,
+    "kerusakan_bangunan": 4,
+    "id": 12
+  },
+  {
+    "wilayah": "Jawa Tengah",
+    "pelaku": 117,
+    "jumlah_kejadian": 310,
+    "jumlah_org": 89,
+    "korban_tewas": 19,
+    "korban_luka": 47,
+    "kerusakan_bangunan": 6,
+    "id": 5
+  },
+  {
+    "wilayah": "Jawa Timur",
+    "pelaku": 73,
+    "jumlah_kejadian": 228,
+    "jumlah_org": 56,
+    "korban_tewas": 43,
+    "korban_luka": 135,
+    "kerusakan_bangunan": 0,
+    "id": 7
+  },
+  {
+    "wilayah": "Kalimantan Barat",
+    "pelaku": 6,
+    "jumlah_kejadian": 21,
+    "jumlah_org": 8,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 30
+  },
+  {
+    "wilayah": "Kalimantan Selatan",
+    "pelaku": 1,
+    "jumlah_kejadian": 1,
+    "jumlah_org": 1,
+    "korban_tewas": 1,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 32
+  },
+  {
+    "wilayah": "Kalimantan Tengah",
+    "pelaku": 4,
+    "jumlah_kejadian": 8,
+    "jumlah_org": 4,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 31
+  },
+  {
+    "wilayah": "Kalimantan Timur",
+    "pelaku": 25,
+    "jumlah_kejadian": 54,
+    "jumlah_org": 14,
+    "korban_tewas": 15,
+    "korban_luka": 41,
+    "kerusakan_bangunan": 0,
+    "id": 33
+  },
+  {
+    "wilayah": "Kalimantan Utara",
+    "pelaku": 1,
+    "jumlah_kejadian": 2,
+    "jumlah_org": 1,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 34
+  },
+  {
+    "wilayah": "Kepulauan Riau",
+    "pelaku": 1,
+    "jumlah_kejadian": 2,
+    "jumlah_org": 1,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 17
+  },
+  {
+    "wilayah": "Lampung",
+    "pelaku": 16,
+    "jumlah_kejadian": 28,
+    "jumlah_org": 13,
+    "korban_tewas": 1,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 27
+  },
+  {
+    "wilayah": "Maluku",
+    "pelaku": 16,
+    "jumlah_kejadian": 36,
+    "jumlah_org": 15,
+    "korban_tewas": 10,
+    "korban_luka": 4,
+    "kerusakan_bangunan": 0,
+    "id": 9
+  },
+  {
+    "wilayah": "Maluku Utara",
+    "pelaku": 1,
+    "jumlah_kejadian": 3,
+    "jumlah_org": 1,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 8
+  },
+  {
+    "wilayah": "Aceh",
+    "pelaku": 18,
+    "jumlah_kejadian": 34,
+    "jumlah_org": 13,
+    "korban_tewas": 39,
+    "korban_luka": 40,
+    "kerusakan_bangunan": 2,
+    "id": 29
+  },
+  {
+    "wilayah": "Nusa Tenggara Barat",
+    "pelaku": 25,
+    "jumlah_kejadian": 50,
+    "jumlah_org": 18,
+    "korban_tewas": 0,
+    "korban_luka": 5,
+    "kerusakan_bangunan": 0,
+    "id": 1
+  },
+  {
+    "wilayah": "Nusa Tenggara Timur",
+    "pelaku": 1,
+    "jumlah_kejadian": 4,
+    "jumlah_org": 1,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 14
+  },
+  {
+    "wilayah": "Papua",
+    "pelaku": 6,
+    "jumlah_kejadian": 8,
+    "jumlah_org": 5,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 13
+  },
+  {
+    "wilayah": "Papua Tengah",
+    "pelaku": 2,
+    "jumlah_kejadian": 3,
+    "jumlah_org": 1,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 13
+  },
+  {
+    "wilayah": "Riau",
+    "pelaku": 13,
+    "jumlah_kejadian": 29,
+    "jumlah_org": 10,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 16
+  },
+  {
+    "wilayah": "Sulawesi Selatan",
+    "pelaku": 33,
+    "jumlah_kejadian": 66,
+    "jumlah_org": 21,
+    "korban_tewas": 8,
+    "korban_luka": 4,
+    "kerusakan_bangunan": 1,
+    "id": 10
+  },
+  {
+    "wilayah": "Sulawesi Tengah",
+    "pelaku": 52,
+    "jumlah_kejadian": 89,
+    "jumlah_org": 33,
+    "korban_tewas": 90,
+    "korban_luka": 349,
+    "kerusakan_bangunan": 15,
+    "id": 19
+  },
+  {
+    "wilayah": "Sulawesi Tenggara",
+    "pelaku": 1,
+    "jumlah_kejadian": 2,
+    "jumlah_org": 1,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 3
+  },
+  {
+    "wilayah": "Sulawesi Utara",
+    "pelaku": 2,
+    "jumlah_kejadian": 4,
+    "jumlah_org": 3,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 20
+  },
+  {
+    "wilayah": "Sumatera Barat",
+    "pelaku": 7,
+    "jumlah_kejadian": 20,
+    "jumlah_org": 10,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 24
+  },
+  {
+    "wilayah": "Sumatera Selatan",
+    "pelaku": 12,
+    "jumlah_kejadian": 21,
+    "jumlah_org": 11,
+    "korban_tewas": 0,
+    "korban_luka": 0,
+    "kerusakan_bangunan": 0,
+    "id": 25
+  },
+  {
+    "wilayah": "Sumatera Utara",
+    "pelaku": 43,
+    "jumlah_kejadian": 106,
+    "jumlah_org": 33,
+    "korban_tewas": 22,
+    "korban_luka": 73,
+    "kerusakan_bangunan": 468,
+    "id": 22
+  }
+]
