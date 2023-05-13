@@ -39,46 +39,9 @@ export default function HomeNavbar({ profile, setSelectedContent, selectedConten
 
   return (
     <header>
-      <nav className="flex justify-between px-4 py-2 items-center border-b-[2px] border-gray-200 ">
+      <nav className="flex justify-between px-4 py-2 items-center border-b-[2px] border-black bg-new-black">
         <div className="flex gap-[90px] relative">
           <img src="/images/logo-black.svg" alt="Patrons" className="w-[112px] h-[60px]" />
-          <Tab.Group defaultIndex={1}>
-            <Tab.List className="flex gap-4">
-              <Tab as={Fragment}>
-                {({ selected }) => (
-                  /* Use the `selected` state to conditionally style the selected tab. */
-                  <div
-                    className={cx(
-                      selected ? "text-red-primary" : "text-black cursor-pointer ",
-                      "font-semibold px-3 pt-[20px] flex justify-center outline-none relative",
-                    )}
-                  >
-                    Home
-                    <div className={cx(selected && "bg-red-primary", " absolute h-1 w-full -bottom-[10px]")} />
-                  </div>
-                )}
-              </Tab>
-              <Tab as={Fragment}>
-                {({ selected }) => (
-                  /* Use the `selected` state to conditionally style the selected tab. */
-                  <div
-                    className={cx(
-                      selected ? "text-red-primary" : "text-black cursor-pointer ",
-                      "font-semibold px-3 pt-[20px] flex justify-center outline-none relative",
-                    )}
-                  >
-                    Patroli
-                    <div className={cx(selected && "bg-red-primary", " absolute h-1 w-full -bottom-[10px]")} />
-                  </div>
-                )}
-              </Tab>
-
-              {/* ...  */}
-            </Tab.List>
-            {/* <Tab.Panels>
-              <Tab.Panel>Content 1</Tab.Panel>
-            </Tab.Panels> */}
-          </Tab.Group>
         </div>
         <ProfileDropdown profile={profile} />
         {/* <div className={styles.items_container}>

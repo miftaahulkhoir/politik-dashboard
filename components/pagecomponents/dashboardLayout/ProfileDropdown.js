@@ -36,8 +36,8 @@ export default function ProfileDropdown({ profile }) {
       placement="bottomRight"
     >
       <div className="flex items-center gap-3 cursor-pointer">
-        <div className="font-bold">{profile?.name}</div>
-        <div className="flex w-9 h-9 justify-center items-center rounded-full bg-gray-600">
+        <div className="font-bold text-sm text-white">{profile?.name}</div>
+        <div className="flex w-9 h-9 justify-center items-center rounded-full bg-gray-600 border-[1px] border-white">
           <TbUser color="white" />
         </div>
       </div>

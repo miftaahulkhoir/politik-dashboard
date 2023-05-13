@@ -44,7 +44,7 @@ export default function ForgotPasword() {
               </div>
               <div className="text-sm text-gray-400 w-fit mx-auto">
                 Punya akun?{" "}
-                <Link className="text-red-primary inline-block text-sm mt-6" href="/login">
+                <Link className="text-primary inline-block text-sm mt-6" href="/login">
                   Login
                 </Link>
               </div>

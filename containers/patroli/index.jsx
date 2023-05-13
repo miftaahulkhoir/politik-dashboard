@@ -26,7 +26,7 @@ const PatroliPage = ({ profile }) => {
     weight: 2,
     opacity: 1,
     color: "white",
-    fillOpacity: 1,
+    fillOpacity: 0.2,
     fillColor: "#F78A25",
   };
 
@@ -43,6 +43,11 @@ const PatroliPage = ({ profile }) => {
               {({ TileLayer, GeoJSON }) => {
                 return (
                   <>
+                    <TileLayer
+                      className="map"
+                      url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+                      attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
+                    />
                     <GeoJSON ref={GeoJSONEL} attribution="&copy; credits due..." data={geojson} style={style} />
                   </>
                 );

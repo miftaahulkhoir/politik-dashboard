@@ -37,8 +37,8 @@ export default function Login() {
         <title>Login · Patrons</title>
       </Head>
       <div className="flex w-screen h-screen">
-        <div className="flex flex-[2] h-full w-full bg-red-500 relative">
-          <img src="/images/logo-white.svg" alt="" className="bottom-0 absolute top-8 left-8 " />
+        <div className="flex flex-[2] h-full w-full bg-primary relative justify-center">
+          <img src="/images/logo-black.svg" alt="" className="w-[330px] mb-20 " />
           <img src="/images/login.svg" alt="" className="bottom-0 absolute right-0 w-full" />
         </div>
         <div className="flex flex-[3] items-center justify-center">
@@ -76,7 +76,7 @@ export default function Login() {
                 </div>
               </div>
               <div className="form-group flex flex-col gap-1 items-center">
-                <button className="w-full bg-red-500 text-white py-3 rounded-md mt-12" type="submit">
+                <button className="w-full bg-primary text-white py-3 rounded-md mt-12" type="submit">
                   <i className="fa fa-sign-in"></i> Login
                 </button>
                 <Link className="text-gray-500  font-semibold text-sm mt-12" href="/forgot-password">
