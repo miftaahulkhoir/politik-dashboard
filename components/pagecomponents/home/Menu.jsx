@@ -1,4 +1,4 @@
-import React, { Fragment, useState } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 
 import Sidebar from "./Sidebar";
 import TopBar from "./TopBar";
@@ -6,60 +6,36 @@ import { MdOutlineLayers } from "react-icons/md";
 import { BsCaretDownFill, BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import moment from "moment";
 import { Listbox, Transition } from "@headlessui/react";
+import { useFindAllIssues, useFindAllYearsByIssue, useFindAllSubIssues } from "@/utils/services/issue";
 
-const listBencana = [
-  { name: "Abrasi" },
-  { name: "Banjir" },
-  { name: "Gempa Bumi Tsunami" },
-  { name: "Gempa Bumi" },
-  { name: "Gunung Meletus" },
-  { name: "Kebakaran Hutan" },
-  { name: "Kekeringan" },
-  { name: "Puting Beliung" },
-  { name: "Tanah Longsor" },
-];
-
-const listKriminal = [
-  { name: "PerusakanPenghancuran Barang" },
-  { name: "Menggangu Tertib Umum" },
-  { name: "Korupsi" },
-  { name: "Penggelapan" },
-  { name: "Penipuan Perbuatan Curang" },
-  { name: "Narkotika Psikotropika" },
-  { name: "Pembakaran Dengan Sengaja" },
-  { name: "Kejahatan Pembunuhan" },
-  { name: "Penganiayaan Berat" },
-  { name: "Penganiayaan Ringan" },
-  { name: "KDRT" },
-  { name: "Pencurian Dengan Kekerasan" },
-  { name: "Pencurian Senjata Api" },
-  { name: "Pencurian Senjata Tajam" },
-  { name: "Perkosaan" },
-  { name: "Pencabulan" },
-  { name: "Penculikan" },
-  { name: "Mempekerjakan Anak diBawah Umur" },
-  { name: "Pencurian" },
-  { name: "Pencurian Dengan Pemberatan" },
-  { name: "Pencurian Kendaraan Bermotor" },
-  { name: "Penadahan" },
-];
-
-const issue = [
-  { name: "Bencana", list: listBencana },
-  { name: "Kriminalitas", list: listKriminal },
-  { name: "Terorisme" },
-];
 const year = [{ name: "2019" }, { name: "2020" }, { name: "2021" }];
 
 const LayerFilter = () => {
+  const { issues, isLoading } = useFindAllIssues();
   const [isLayerOpen, setIsLayerOpen] = useState(false);
 
-  const [selected, setSelected] = useState(issue[0]);
-  const [selectedYear, setSelectedYear] = useState(year[0]);
+  const [selected, setSelected] = useState(issues[0]);
+  const { years, isLoading: isLoadingYear } = useFindAllYearsByIssue(selected?.id);
+
+  const [selectedYear, setSelectedYear] = useState(years[0]);
+  const { subIssues, isLoading: isLoadingSubIssue } = useFindAllSubIssues(selected?.id, selectedYear?.value);
+
+  useEffect(() => {
+    if (selected || isLoading || !issues?.length) return;
+    setSelected(issues[0]);
+  }, [isLoading]);
+
+  useEffect(() => {
+    if (selectedYear || isLoadingYear || !years.length) return;
+    setSelectedYear(years[years.length - 1]);
+  }, [isLoadingYear]);
+
+  const mappingIssues = (Boolean(issues.length) && Object.fromEntries(issues.map((obj) => [obj.value, obj]))) || [];
+  const mappingYears = (Boolean(years.length) && Object.fromEntries(years.map((obj) => [obj.value, obj]))) || [];
 
   return isLayerOpen ? (
     <div className="absolute left-[62px] top-[calc(78px+56px)]">
-      <div className="flex flex-col justify-between py-6 px-6 w-[360px] h-[calc(100vh-150px)]  bg-new-black-secondary gap-3 cursor-pointer">
+      <div className="flex flex-col justify-between py-6 px-6 w-[360px] h-[calc(100vh-150px)]  bg-new-black-secondary gap-3">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <div className="flex justify-between h-fit items-center w-full">
@@ -75,115 +51,139 @@ const LayerFilter = () => {
               <BsChevronLeft className="text-white" strokeWidth={1.5} size={24} onClick={() => setIsLayerOpen(false)} />
             </div>
             <div className="flex">
-              <Listbox value={selected} onChange={setSelected}>
-                <div className="relative mt-1 w-full">
-                  <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
-                    <span className="block truncate text-white font-bold">{selected.name}</span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <BsCaretDownFill className="h-3 w-3 text-white" aria-hidden="true" />
-                    </span>
-                  </Listbox.Button>
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {issue.map((person, personIdx) => (
-                        <Listbox.Option
-                          key={personIdx}
-                          className={({ active }) =>
-                            `relative cursor-pointer select-none py-2 pl-3 pr-4 text-white ${
-                              active && "font-bold"
-                            } hover:bg-gray-50 hover:text-new-black-secondary`
-                          }
-                          value={person}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
-                                {person.name}
-                              </span>
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
-              <Listbox value={selectedYear} onChange={setSelectedYear}>
-                <div className="relative mt-1 w-[150px]">
-                  <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
-                    <span className="block truncate text-white font-bold">{selectedYear.name}</span>
-                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                      <BsCaretDownFill className="h-3 w-3 text-white" aria-hidden="true" />
-                    </span>
-                  </Listbox.Button>
-                  <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                  >
-                    <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                      {year.map((person, personIdx) => (
-                        <Listbox.Option
-                          key={personIdx}
-                          className={({ active }) =>
-                            `relative cursor-pointer select-none py-2 pl-3 pr-4 text-white ${
-                              active && "font-bold"
-                            } hover:bg-gray-50 hover:text-new-black-secondary`
-                          }
-                          value={person}
-                        >
-                          {({ selected }) => (
-                            <>
-                              <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
-                                {person.name}
-                              </span>
-                            </>
-                          )}
-                        </Listbox.Option>
-                      ))}
-                    </Listbox.Options>
-                  </Transition>
-                </div>
-              </Listbox>
+              {isLoading ? (
+                <Listbox>
+                  <div className="relative mt-1 w-full">
+                    <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
+                      <span className="block truncate text-white font-bold">loading ...</span>
+                    </Listbox.Button>
+                  </div>
+                </Listbox>
+              ) : (
+                <Listbox value={selected} onChange={(value) => setSelected(mappingIssues[value])}>
+                  <div className="relative mt-1 w-full">
+                    <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
+                      <span className="block truncate text-white font-bold">{selected.label}</span>
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <BsCaretDownFill className="h-3 w-3 text-white" aria-hidden="true" />
+                      </span>
+                    </Listbox.Button>
+                    <Transition
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        {Object.values(mappingIssues).map((issue) => (
+                          <Listbox.Option
+                            key={issue.id}
+                            className={({ active }) =>
+                              `relative cursor-pointer select-none py-2 pl-3 pr-4 text-white ${
+                                active && "font-bold"
+                              } hover:bg-gray-50 hover:text-new-black-secondary`
+                            }
+                            value={issue.value}
+                          >
+                            {({ selected }) => (
+                              <>
+                                <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
+                                  {issue.label}
+                                </span>
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </Listbox>
+              )}
+              {isLoadingYear || !selectedYear ? (
+                <Listbox>
+                  <div className="relative mt-1 w-[150px]">
+                    <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
+                      <span className="block truncate text-white font-bold">loading ...</span>
+                    </Listbox.Button>
+                  </div>
+                </Listbox>
+              ) : (
+                <Listbox value={selectedYear} onChange={(value) => setSelectedYear(mappingYears[value])}>
+                  <div className="relative mt-1 w-[150px]">
+                    <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
+                      <span className="block truncate text-white font-bold">{selectedYear.label}</span>
+                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                        <BsCaretDownFill className="h-3 w-3 text-white" aria-hidden="true" />
+                      </span>
+                    </Listbox.Button>
+                    <Transition
+                      as={Fragment}
+                      leave="transition ease-in duration-100"
+                      leaveFrom="opacity-100"
+                      leaveTo="opacity-0"
+                    >
+                      <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                        {Object.values(mappingYears).map((year) => (
+                          <Listbox.Option
+                            key={year.id}
+                            className={({ active }) =>
+                              `relative cursor-pointer select-none py-2 pl-3 pr-4 text-white ${
+                                active && "font-bold"
+                              } hover:bg-gray-50 hover:text-new-black-secondary`
+                            }
+                            value={year.value}
+                          >
+                            {({ selected }) => (
+                              <>
+                                <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
+                                  {year.label}
+                                </span>
+                              </>
+                            )}
+                          </Listbox.Option>
+                        ))}
+                      </Listbox.Options>
+                    </Transition>
+                  </div>
+                </Listbox>
+              )}
             </div>
           </div>
-          <div className="flex flex-col p-3 gap-2">
-            <div class="flex items-center mr-4">
-              <input
-                id="green-checkbox"
-                type="checkbox"
-                class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded"
-              />
-              <label for="green-checkbox" class="ml-2 text-sm  text-white  font-bold">
-                #
-              </label>
-              <label for="green-checkbox" class="ml-2 text-sm  text-white ">
-                Semua Kejahatan
-              </label>
+          {isLoadingSubIssue ? (
+            <span className="ml-2 text-sm text-white">Loading ...</span>
+          ) : (
+            <div className="flex flex-col p-3 gap-2">
+              <div className="flex items-center mr-4">
+                <input
+                  id="green-checkbox"
+                  type="checkbox"
+                  className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
+                />
+                <label for="green-checkbox" className="ml-2 text-sm text-white font-bold">
+                  #
+                </label>
+                <label for="green-checkbox" className="ml-2 text-sm text-white ">
+                  Semua Kejahatan
+                </label>
+              </div>
+              {Boolean(subIssues?.length) &&
+                subIssues.map((subIssue, i) => (
+                  <div className="flex items-center mr-4" key={subIssue.id}>
+                    <input
+                      id={subIssue.value}
+                      type="checkbox"
+                      className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
+                    />
+                    <label for={subIssue.value} className="ml-2 text-sm font-bold text-white ">
+                      {i + 1}
+                    </label>
+                    <label for={subIssue.value} className="ml-2 text-sm text-white">
+                      {subIssue.label}
+                    </label>
+                  </div>
+                ))}
             </div>
-            {selected?.list &&
-              selected.list.map((listData, i) => (
-                <div class="flex items-center mr-4" key={listData.name}>
-                  <input
-                    id={listData.name}
-                    type="checkbox"
-                    class="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded"
-                  />
-                  <label for={listData.name} class="ml-2 text-sm font-bold text-white ">
-                    {i + 1}
-                  </label>
-                  <label for={listData.name} class="ml-2 text-sm text-white ">
-                    {listData.name}
-                  </label>
-                </div>
-              ))}
-          </div>
+          )}
         </div>
         <button className="bg-primary text-white py-3 rounded-lg font-semibold">Terapkan</button>
       </div>
