@@ -230,12 +230,12 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
 
 const LayerData = () => {
   return (
-    <div className="absolute right-0 top-[78px] text-white">
+    <div className="absolute right-0 top-[134px] h-[calc(100vh-134px)] text-white">
       <div className="flex items-center bg-new-black px-[24px] h-[78px]">
         <MdShowChart size={32} />
         <span className="font-semibold text-xl">Analisis</span>
       </div>
-      <div className="flex flex-col justify-between p-8 w-[329px] h-[calc(100vh-150px)] bg-new-black-secondary gap-3">
+      <div className="flex flex-col justify-between p-8 w-[329px] h-[calc(100vh-214px)] bg-new-black-secondary gap-3">
         <div className="flex flex-col gap-3">
           <span className="font-bold text-sm">Provinsi</span>
           <div className="flex flex-col text-sm gap-3">
