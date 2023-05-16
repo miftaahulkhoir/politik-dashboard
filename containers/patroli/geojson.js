@@ -201,10 +201,9 @@ export default {
       },
       id: 52,
       properties: {
-        ID: 1,
+        id: 1,
         kode: 52,
-        Propinsi: "Nusa Tenggara Barat",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Nusa Tenggara Barat",
       },
     },
     {
@@ -300,10 +299,9 @@ export default {
       },
       id: 75,
       properties: {
-        ID: 2,
+        id: 2,
         kode: 75,
-        Propinsi: "Gorontalo",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Gorontalo",
       },
     },
     {
@@ -659,10 +657,9 @@ export default {
       },
       id: 74,
       properties: {
-        ID: 3,
+        id: 3,
         kode: 74,
-        Propinsi: "Sulawesi Tenggara",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sulawesi Tenggara",
       },
     },
     {
@@ -705,10 +702,9 @@ export default {
       },
       id: 34,
       properties: {
-        ID: 4,
+        id: 4,
         kode: 34,
-        Propinsi: "DI Yogyakarta",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "DI Yogyakarta",
       },
     },
     {
@@ -874,10 +870,9 @@ export default {
       },
       id: 33,
       properties: {
-        ID: 5,
+        id: 5,
         kode: 33,
-        Propinsi: "Jawa Tengah",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Jawa Tengah",
       },
     },
     {
@@ -978,10 +973,9 @@ export default {
       },
       id: 36,
       properties: {
-        ID: 6,
+        id: 6,
         kode: 36,
-        Propinsi: "Banten",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Banten",
       },
     },
     {
@@ -1257,10 +1251,9 @@ export default {
       },
       id: 35,
       properties: {
-        ID: 7,
+        id: 7,
         kode: 35,
-        Propinsi: "Jawa Timur",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Jawa Timur",
       },
     },
     {
@@ -1775,10 +1768,9 @@ export default {
       },
       id: 82,
       properties: {
-        ID: 8,
+        id: 8,
         kode: 82,
-        Propinsi: "Maluku Utara",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Maluku Utara",
       },
     },
     {
@@ -2654,10 +2646,9 @@ export default {
       },
       id: 81,
       properties: {
-        ID: 9,
+        id: 9,
         kode: 81,
-        Propinsi: "Maluku",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Maluku",
       },
     },
     {
@@ -3033,10 +3024,9 @@ export default {
       },
       id: 73,
       properties: {
-        ID: 10,
+        id: 10,
         kode: 73,
-        Propinsi: "Sulawesi Selatan",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sulawesi Selatan",
       },
     },
     {
@@ -3065,10 +3055,9 @@ export default {
       },
       id: 31,
       properties: {
-        ID: 11,
+        id: 11,
         kode: 31,
-        Propinsi: "DKI Jakarta",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "DKI Jakarta",
       },
     },
     {
@@ -3192,10 +3181,9 @@ export default {
       },
       id: 32,
       properties: {
-        ID: 12,
+        id: 12,
         kode: 32,
-        Propinsi: "Jawa Barat",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Jawa Barat",
       },
     },
     {
@@ -4855,10 +4843,9 @@ export default {
       },
       id: 91,
       properties: {
-        ID: 13,
+        id: 13,
         kode: 91,
-        Propinsi: "Papua",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Papua",
       },
     },
     {
@@ -5398,10 +5385,9 @@ export default {
       },
       id: 53,
       properties: {
-        ID: 14,
+        id: 14,
         kode: 53,
-        Propinsi: "Nusa Tenggara Timur",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Nusa Tenggara Timur",
       },
     },
     {
@@ -5474,10 +5460,9 @@ export default {
       },
       id: 51,
       properties: {
-        ID: 15,
+        id: 15,
         kode: 51,
-        Propinsi: "Bali",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Bali",
       },
     },
     {
@@ -5939,10 +5924,9 @@ export default {
       },
       id: 14,
       properties: {
-        ID: 16,
+        id: 16,
         kode: 14,
-        Propinsi: "Riau",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Riau",
       },
     },
     {
@@ -7406,10 +7390,9 @@ export default {
       },
       id: 21,
       properties: {
-        ID: 17,
+        id: 17,
         kode: 21,
-        Propinsi: "Kepulauan Riau",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Kepulauan Riau",
       },
     },
     {
@@ -7519,10 +7502,9 @@ export default {
       },
       id: 76,
       properties: {
-        ID: 18,
+        id: 18,
         kode: 76,
-        Propinsi: "Sulawesi Barat",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sulawesi Barat",
       },
     },
     {
@@ -8054,10 +8036,9 @@ export default {
       },
       id: 72,
       properties: {
-        ID: 19,
+        id: 19,
         kode: 72,
-        Propinsi: "Sulawesi Tengah",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sulawesi Tengah",
       },
     },
     {
@@ -8249,10 +8230,9 @@ export default {
       },
       id: 71,
       properties: {
-        ID: 20,
+        id: 20,
         kode: 71,
-        Propinsi: "Sulawesi Utara",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sulawesi Utara",
       },
     },
     {
@@ -10561,10 +10541,9 @@ export default {
       },
       id: 92,
       properties: {
-        ID: 21,
+        id: 21,
         kode: 92,
-        Propinsi: "Papua Barat",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Papua Barat",
       },
     },
     {
@@ -10877,10 +10856,9 @@ export default {
       },
       id: 12,
       properties: {
-        ID: 22,
+        id: 22,
         kode: 12,
-        Propinsi: "Sumatera Utara",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sumatera Utara",
       },
     },
     {
@@ -11054,10 +11032,9 @@ export default {
       },
       id: 19,
       properties: {
-        ID: 23,
+        id: 23,
         kode: 19,
-        Propinsi: "Bangka Belitung",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Bangka Belitung",
       },
     },
     {
@@ -11311,10 +11288,9 @@ export default {
       },
       id: 13,
       properties: {
-        ID: 24,
+        id: 24,
         kode: 13,
-        Propinsi: "Sumatera Barat",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sumatera Barat",
       },
     },
     {
@@ -11548,10 +11524,9 @@ export default {
       },
       id: 16,
       properties: {
-        ID: 25,
+        id: 25,
         kode: 16,
-        Propinsi: "Sumatera Selatan",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Sumatera Selatan",
       },
     },
     {
@@ -11709,10 +11684,9 @@ export default {
       },
       id: 15,
       properties: {
-        ID: 26,
+        id: 26,
         kode: 15,
-        Propinsi: "Jambi",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Jambi",
       },
     },
     {
@@ -11863,10 +11837,9 @@ export default {
       },
       id: 18,
       properties: {
-        ID: 27,
+        id: 27,
         kode: 18,
-        Propinsi: "Lampung",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Lampung",
       },
     },
     {
@@ -12008,10 +11981,9 @@ export default {
       },
       id: 17,
       properties: {
-        ID: 28,
+        id: 28,
         kode: 17,
-        Propinsi: "Bengkulu",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Bengkulu",
       },
     },
     {
@@ -12237,10 +12209,9 @@ export default {
       },
       id: 11,
       properties: {
-        ID: 29,
+        id: 29,
         kode: 11,
-        Propinsi: "Aceh",
-        SUMBER: "Peta Dasar BAKOSURTANAL Skala 1 : 250.000",
+        provinsi: "Aceh",
       },
     },
     {
@@ -13729,10 +13700,9 @@ export default {
       },
       id: 61,
       properties: {
-        ID: 30,
+        id: 30,
         kode: 61,
-        Propinsi: "Kalimantan Barat",
-        SUMBER: "Batas Provinsi Desember 2019 Dukcapil (Skala tidak diketahui)",
+        provinsi: "Kalimantan Barat",
       },
     },
     {
@@ -14515,10 +14485,9 @@ export default {
         ],
       },
       properties: {
-        ID: 31,
+        id: 31,
         kode: 62,
-        Propinsi: "Kalimantan Tengah",
-        SUMBER: "Batas Provinsi Desember 2019 Dukcapil (Skala tidak diketahui)",
+        provinsi: "Kalimantan Tengah",
       },
     },
     {
@@ -15131,10 +15100,9 @@ export default {
       },
       id: 63,
       properties: {
-        ID: 32,
+        id: 32,
         kode: 63,
-        Propinsi: "Kalimantan Selatan",
-        SUMBER: "Batas Provinsi Desember 2019 Dukcapil (Skala tidak diketahui)",
+        provinsi: "Kalimantan Selatan",
       },
     },
     {
@@ -17021,10 +16989,9 @@ export default {
       },
       id: 64,
       properties: {
-        ID: 33,
+        id: 33,
         kode: 64,
-        Propinsi: "Kalimantan Timur",
-        SUMBER: "Batas Provinsi Desember 2019 Dukcapil (Skala tidak diketahui)",
+        provinsi: "Kalimantan Timur",
       },
     },
     {
@@ -18608,10 +18575,9 @@ export default {
       },
       id: 65,
       properties: {
-        ID: 34,
+        id: 34,
         kode: 65,
-        Propinsi: "Kalimantan Utara",
-        SUMBER: "Batas Provinsi Desember 2019 Dukcapil (Skala tidak diketahui)",
+        provinsi: "Kalimantan Utara",
       },
     },
   ],

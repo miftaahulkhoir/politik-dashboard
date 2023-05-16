@@ -1,37 +1,35 @@
 import useSWR from "swr";
 
 import fetcher from "./fetcher";
+import client from "../helpers/client";
+import { useQuery } from "@tanstack/react-query";
 
-export const useFindAllIssues = () => {
-  const { data, error, isLoading } = useSWR(
-    "https://913adbf1-92b8-40e3-b330-62d3753f1f65.mock.pstmn.io/issues",
-    fetcher,
-  );
-  const issues = data || [];
+const findAllIssue = async () => {
+  const { data } = await client.get("https://913adbf1-92b8-40e3-b330-62d3753f1f65.mock.pstmn.io/issues");
 
-  return { issues, error, isLoading };
+  return data || [];
 };
 
-export const useFindAllYearsByIssue = (id) => {
-  const { data, error, isLoading } = useSWR(
-    id ? `https://913adbf1-92b8-40e3-b330-62d3753f1f65.mock.pstmn.io/issues/${id}/years` : null,
-    fetcher,
+const findAllYearByIssue = async (issueId) => {
+  const { data } = await client.get(
+    `https://913adbf1-92b8-40e3-b330-62d3753f1f65.mock.pstmn.io/issues/${issueId}/years`,
   );
 
-  const years = data || [];
-
-  return { years, error, isLoading };
+  return data || [];
 };
 
-export const useFindAllSubIssues = (id, year) => {
-  const { data, error, isLoading } = useSWR(
-    id && year
-      ? `https://913adbf1-92b8-40e3-b330-62d3753f1f65.mock.pstmn.io/issues/${id}/sub_issues?year=${year}`
-      : null,
-    fetcher,
+const findSubIssue = async (payload) => {
+  const { data } = await client.get(
+    `https://913adbf1-92b8-40e3-b330-62d3753f1f65.mock.pstmn.io/issues/${payload.id}/sub_issues?year=${payload.year}`,
   );
 
-  const subIssues = data || [];
-
-  return { subIssues, error, isLoading };
+  return data || [];
 };
+
+export const useFindAllIssues = (extraParams) => useQuery(["issues"], findAllIssue, { ...extraParams });
+
+export const useFindAllYearsByIssue = (issueId, extraParams) =>
+  useQuery(["all-year-issue", issueId], () => findAllYearByIssue(issueId), { ...extraParams });
+
+export const useFindAllSubIssues = (payload, extraParams) =>
+  useQuery(["all-sub-issue", payload.id, payload.year], () => findSubIssue(payload), { ...extraParams });

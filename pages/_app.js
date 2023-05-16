@@ -8,9 +8,19 @@ import React from "react";
 import "../styles/ant-override.css";
 import "../styles/globals.css";
 import { redirectUser } from "../utils/services/auth";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
+
+  const queryClient = new QueryClient({
+    defaultOptions: {
+      queries: {
+        refetchOnWindowFocus: false,
+      },
+    },
+  });
+
   return (
     <>
       {(router.pathname !== "/login" &&
@@ -19,10 +29,14 @@ function MyApp({ Component, pageProps }) {
         pageProps.profile?.occupation?.level === 1) ||
       (router.pathname !== "/login" && router.pathname !== "/register" && pageProps.profile?.occupation?.level > 1) ? (
         // <DashboardLayout {...pageProps}>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       ) : (
         // </DashboardLayout>
-        <Component {...pageProps} />
+        <QueryClientProvider client={queryClient}>
+          <Component {...pageProps} />
+        </QueryClientProvider>
       )}
     </>
   );
