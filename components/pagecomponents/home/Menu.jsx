@@ -3,11 +3,11 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import TopBar from "./TopBar";
 
-const Menu = () => {
+const Menu = ({ topBarConfig }) => {
   return (
     <>
       <Sidebar />
-      <TopBar />
+      <TopBar {...topBarConfig} />
     </>
   );
 };

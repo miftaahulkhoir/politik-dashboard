@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { BsSearch } from "react-icons/bs";
 
-const TopBar = () => {
+const TopBar = ({ isShowSearchRegion }) => {
   return (
     <div className="topbar bg-new-black absolute h-[56px] left-[62px] items-center px-6 w-[calc(100vw-62px)] top-[78px] z-20 flex py-6  border-r-[2px] border-b-[1px] border-black">
       <div className="text-md font-bold text-white">Pemetaan</div>
@@ -16,14 +16,16 @@ const TopBar = () => {
               Analisis
             </div>
           </div>
-          <div className="relative">
-            <BsSearch className="absolute top-2 left-3 text-white" size={15} />
-            <input
-              type="text"
-              className="w-52 rounded-md border-[1px] border-white bg-new-black-secondary placeholder:text-white placeholder:text-xs px-3 pl-10 py-1"
-              placeholder="Indonesia"
-            />
-          </div>
+          {isShowSearchRegion && (
+            <div className="relative">
+              <BsSearch className="absolute top-2 left-3 text-white" size={15} />
+              <input
+                type="text"
+                className="w-52 rounded-md border-[1px] border-white bg-new-black-secondary placeholder:text-white placeholder:text-xs px-3 pl-10 py-1"
+                placeholder="Indonesia"
+              />
+            </div>
+          )}
         </div>
       </div>
     </div>

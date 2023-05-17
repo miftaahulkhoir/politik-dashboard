@@ -3,7 +3,7 @@ import Menu from "@/components/pagecomponents/home/Menu";
 import Head from "next/head";
 import React, { useState } from "react";
 
-const DashboardLayout = ({ children, profile, title }) => {
+const DashboardLayout = ({ children, profile, title, topBarConfig = { isShowSearchRegion: true } }) => {
   const [selectedContent, setSelectedContent] = useState(1);
 
   return (
@@ -14,7 +14,7 @@ const DashboardLayout = ({ children, profile, title }) => {
       <div className="relative h-screen w-screen">
         <HomeNavbar profile={profile} setSelectedContent={setSelectedContent} selectedContent={selectedContent} />
         {children}
-        <Menu />
+        <Menu topBarConfig={topBarConfig} />
       </div>
     </>
   );

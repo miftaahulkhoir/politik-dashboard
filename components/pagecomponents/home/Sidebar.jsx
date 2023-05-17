@@ -1,78 +1,61 @@
-import React, { useState } from "react";
+import React from "react";
 
 import cx from "classnames";
 
-import { RxDashboard } from "react-icons/rx";
 import { ImMap2 } from "react-icons/im";
-import { RiBook2Line, RiSurveyLine } from "react-icons/ri";
-import { TbCalendarEvent, TbSocial } from "react-icons/tb";
-import { BsFillGridFill } from "react-icons/bs";
-import { MdOutlineNotificationAdd } from "react-icons/md";
-import { TfiFlagAlt2 } from "react-icons/tfi";
-import { AiOutlineWhatsApp } from "react-icons/ai";
-import { FiUser, FiUsers } from "react-icons/fi";
+import { RiSurveyLine } from "react-icons/ri";
+import { TbSocial } from "react-icons/tb";
 import { CgLogOff } from "react-icons/cg";
 import { logoutUser } from "@/utils/services/auth";
+import { routes } from "@/constants/route";
+import Link from "next/link";
+import { useRouter } from "next/router";
 
 const sidebarMenu = [
-  // {
-  //   label: "dashboard",
-  //   icon: (props) => <RxDashboard {...props} />,
-  // },
-  { label: "map", icon: (props) => <ImMap2 strokeWidth={1} {...props} /> },
   {
-    label: "dummy",
-    icon: (props) => <TbSocial {...props} />,
+    label: routes.home.name,
+    path: routes.home.path,
+    icon: (props) => <ImMap2 strokeWidth={1} {...props} />,
   },
   {
-    label: "dummy",
+    label: routes.talkwalker.name,
+    icon: (props) => <TbSocial {...props} />,
+    path: routes.talkwalker.path,
+  },
+  {
+    label: routes.survey.name,
+    path: routes.survey.path,
     icon: (props) => <RiSurveyLine {...props} />,
   },
-  // {
-  //   label: "dummy",
-  //   icon: (props) => <BsFillGridFill {...props} />,
-  // },
-  // {
-  //   label: "dummy",
-  //   icon: (props) => <MdOutlineNotificationAdd {...props} />,
-  // },
-  // {
-  //   label: "dummy",
-  //   icon: (props) => <TfiFlagAlt2 {...props} />,
-  // },
-  // {
-  //   label: "dummy",
-  //   icon: (props) => <AiOutlineWhatsApp {...props} />,
-  // },
-  // { label: "users", icon: (props) => <FiUsers {...props} /> },
-  // { label: "dummy", icon: (props) => <FiUser {...props} /> },
 ];
 
 const Sidebar = () => {
-  const [selectedMenu, setSelectedMenu] = useState("map");
+  const router = useRouter();
+  const pathname = router.pathname.replace("/", "");
 
   return (
     <div className="sidebar bg-new-black absolute left-0 h-[calc(100vh-78px)] w-[62px] top-[78px] z-20 flex flex-col justify-between py-6 px-2 border-r-[2px] border-black">
       <div className="flex flex-col gap-2">
-        {sidebarMenu.map(({ label, icon }) => (
-          <div
-            key={label}
-            className={cx(
-              selectedMenu === label && "bg-white",
-              "flex h-[44px] w-[44px] items-center justify-center  rounded-md cursor-pointer",
-              label === "users" && "mt-12",
-            )}
-          >
-            {icon({
-              size: 20,
-              className: selectedMenu === label ? "text-new-black" : "text-white",
-            })}
-          </div>
+        {sidebarMenu.map(({ label, icon, path }) => (
+          <Link href={path} key={label}>
+            <div
+              className={cx(
+                pathname === label && "bg-white",
+                "flex h-[44px] w-[44px] items-center justify-center  rounded-md cursor-pointer",
+                label === "users" && "mt-12",
+              )}
+            >
+              {icon({
+                size: 20,
+                className: pathname === label ? "text-new-black" : "text-white",
+              })}
+            </div>
+          </Link>
         ))}
       </div>
       <div
         className={cx(
-          selectedMenu === "dashboards" && "white",
+          pathname === "dashboards" && "white",
           "flex h-[44px] w-[44px] items-center justify-center  rounded-md cursor-pointer",
         )}
         onClick={async () => await logoutUser()}
