@@ -79,6 +79,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     ctx.pathname === "/reports" ||
     ctx.pathname === "/logistics" ||
     ctx.pathname === "/pemetaan" ||
+    ctx.pathname === "/analysis" ||
     ctx.pathname === "/ongoing";
 
   if (!token) {
@@ -93,7 +94,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     if (Component.getServerSideProps) {
       pageProps = await Component.getServerSideProps(ctx);
     }
-    !protectedRoutes && redirectUser(ctx, "/");
+    // !protectedRoutes && redirectUser(ctx, "/");
   }
   return { pageProps };
 };

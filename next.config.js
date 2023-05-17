@@ -1,4 +1,5 @@
 module.exports = {
+  transpilePackages: ["react-leaflet-cluster"],
   env: {
     APP_HOST: process.env.APP_HOST,
     APP_PORT: process.env.APP_PORT,
