@@ -40,7 +40,7 @@ const PatroliPage = ({ profile }) => {
                 <>
                   <TileLayer
                     className="map"
-                    url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
+                    url="https://maps.geoapify.com/v1/tile/dark-matter-brown/{z}/{x}/{y}.png?apiKey=600dcdfb06b444dcb11b1d40826d5a46"
                     attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
                   />
                   {isShowGeoJSON && (
