@@ -31,7 +31,7 @@ const sidebarMenu = [
 
 const Sidebar = () => {
   const router = useRouter();
-  const pathname = router.pathname.replace("/", "");
+  const pathname = router.pathname.split("/")?.[1];
 
   return (
     <div className="sidebar bg-new-black absolute left-0 h-[calc(100vh-78px)] w-[62px] top-[78px] z-20 flex flex-col justify-between py-6 px-2 border-r-[2px] border-black">
