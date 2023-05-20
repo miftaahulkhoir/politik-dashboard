@@ -3,7 +3,12 @@ import Menu from "@/components/pagecomponents/home/Menu";
 import Head from "next/head";
 import React, { useState } from "react";
 
-const DashboardLayout = ({ children, profile, title, topBarConfig = { isShowSearchRegion: true } }) => {
+const DashboardLayout = ({
+  children,
+  profile,
+  title,
+  topBarConfig = { isShowSearchRegion: true, title: "Pemetaan" },
+}) => {
   const [selectedContent, setSelectedContent] = useState(1);
 
   return (
