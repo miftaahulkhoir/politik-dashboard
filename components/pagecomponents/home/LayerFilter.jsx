@@ -46,7 +46,7 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
   }, [selected, selectedYear, isLayerOpen]);
 
   const mappingIssues = useMemo(
-    () => (!isLoading && Boolean(issues.length) ? Object.fromEntries(issues.map((obj) => [obj.value, obj])) : []),
+    () => (!isLoading && Boolean(issues?.length) ? Object.fromEntries(issues.map((obj) => [obj.value, obj])) : []),
     [issues, isLoading],
   );
   const mappingYears = useMemo(

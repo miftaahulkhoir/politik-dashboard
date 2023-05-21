@@ -7,7 +7,7 @@ const DashboardLayout = ({
   children,
   profile,
   title,
-  topBarConfig = { isShowSearchRegion: true, title: "Pemetaan" },
+  topBarConfig = { isShowSearchRegion: true, title: "Pemetaan", hideMapButton: false },
 }) => {
   const [selectedContent, setSelectedContent] = useState(1);
 

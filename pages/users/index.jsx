@@ -1,16 +1,21 @@
+import DashboardLayout from "@/layouts/DashboardLayout";
+
+// export default function TalkwalkerPage(props) {
+//   return <DashboardLayout></DashboardLayout>;
+// }
+
 import { Space, notification } from "antd";
 import debounce from "lodash.debounce";
-import Head from "next/head";
 import { useEffect, useMemo, useState } from "react";
 
-import UserDataTable from "../components/pagecomponents/users/UserDataTable";
-import UserFormDrawer from "../components/pagecomponents/users/UserFormDrawer";
-import UserRoleSelect from "../components/pagecomponents/users/UserRoleSelect";
-import UserSearchBar from "../components/pagecomponents/users/UserSearchBar";
-import { useFindProfile } from "../utils/services/profiles";
-import { useFindAllSubordinateUsers } from "../utils/services/users";
+import UserDataTable from "../../components/pagecomponents/users/UserDataTable";
+import UserFormDrawer from "../../components/pagecomponents/users/UserFormDrawer";
+import UserRoleSelect from "../../components/pagecomponents/users/UserRoleSelect";
+import UserSearchBar from "../../components/pagecomponents/users/UserSearchBar";
+import { useFindProfile } from "../../utils/services/profiles";
+import { useFindAllSubordinateUsers } from "../../utils/services/users";
 
-export default function Users() {
+export default function UsersPage() {
   const [users, setUsers] = useState([]);
   const { users: fetchUsers } = useFindAllSubordinateUsers();
   useEffect(() => {
@@ -84,50 +89,45 @@ export default function Users() {
   }, [activeRoleLevel, filteredUsers]);
 
   return (
-    <>
-      {contextHolderNotification}
+    <DashboardLayout
+      title="Manajemen Pengguna · Patrons"
+      topBarConfig={{ isShowSearchRegion: true, title: "Manajemen Pengguna", hideMapButton: true }}
+    >
+      <div className="flex flex-col mt-14 ml-[62px] p-10 bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
+        {contextHolderNotification}
 
-      <UserFormDrawer
-        open={isDrawerActive}
-        setOpen={setIsDrawerActive}
-        apiNotification={apiNotification}
-        isEdit={isFormEdit}
-        setIsEdit={setIsFormEdit}
-        selectedUser={selectedUser}
-        setUsers={setUsers}
-        currentUser={currentUser}
-      />
-
-      <Head>
-        <title>Manajemen Pengguna · Patrons</title>
-      </Head>
-
-      <div className="col-12 pdv-3 mb-12">
-        <h1>Manajemen Pengguna</h1>
-      </div>
-
-      <Space direction="vertical" size="middle">
-        <UserRoleSelect currentUser={currentUser} activeLevel={activeRoleLevel} setActiveLevel={setActiveRoleLevel} />
-
-        <UserSearchBar
-          filterSearchHandler={filterSearchHandler}
-          filterDateHandler={filterDateHandler}
-          filterGenderHandler={filterGenderHandler}
-          addUserHandler={() => setIsDrawerActive(true)}
-        />
-
-        <UserDataTable
-          data={filteredRoleUsers}
-          currentUser={currentUser}
-          setSelectedUser={setSelectedUser}
-          setIsFormEdit={setIsFormEdit}
-          setIsDrawerActive={setIsDrawerActive}
+        <UserFormDrawer
+          open={isDrawerActive}
+          setOpen={setIsDrawerActive}
           apiNotification={apiNotification}
-          users={users}
+          isEdit={isFormEdit}
+          setIsEdit={setIsFormEdit}
+          selectedUser={selectedUser}
           setUsers={setUsers}
+          currentUser={currentUser}
         />
-      </Space>
-    </>
+
+        <Space direction="vertical" size="middle">
+          <UserSearchBar
+            filterSearchHandler={filterSearchHandler}
+            filterDateHandler={filterDateHandler}
+            filterGenderHandler={filterGenderHandler}
+            addUserHandler={() => setIsDrawerActive(true)}
+          />
+
+          <UserDataTable
+            data={filteredRoleUsers}
+            currentUser={currentUser}
+            setSelectedUser={setSelectedUser}
+            setIsFormEdit={setIsFormEdit}
+            setIsDrawerActive={setIsDrawerActive}
+            apiNotification={apiNotification}
+            users={users}
+            setUsers={setUsers}
+          />
+        </Space>
+      </div>
+    </DashboardLayout>
   );
 }
 

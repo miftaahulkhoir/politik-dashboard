@@ -170,7 +170,7 @@ export default function UserDataTable({
                 <Button
                   type="text"
                   disabled={!canModify}
-                  icon={<TbPencil size={20} color={canModify ? "#7287A5" : "#cccccc"} />}
+                  icon={<TbPencil size={20} color={canModify ? "#FFFFFF" : "#cccccc"} />}
                   shape="circle"
                   onClick={() => updateUserHandler(row)}
                 ></Button>
@@ -179,7 +179,7 @@ export default function UserDataTable({
                 <Button
                   type="text"
                   disabled={!canBlacklist}
-                  icon={<TbUserOff size={20} color={canBlacklist ? "#111111" : "#cccccc"} />}
+                  icon={<TbUserOff size={20} color={canBlacklist ? "#FFFFFF" : "#cccccc"} />}
                   shape="circle"
                   onClick={() => blacklistUserHandler(row)}
                 ></Button>

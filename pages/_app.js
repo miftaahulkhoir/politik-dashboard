@@ -9,6 +9,7 @@ import "../styles/ant-override.css";
 import "../styles/globals.css";
 import { redirectUser } from "../utils/services/auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ConfigProvider, theme } from "antd";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -22,7 +23,14 @@ function MyApp({ Component, pageProps }) {
   });
 
   return (
-    <>
+    <ConfigProvider
+      theme={{
+        algorithm: theme.darkAlgorithm,
+        token: {
+          colorPrimary: "#4F5FC7",
+        },
+      }}
+    >
       {(router.pathname !== "/login" &&
         router.pathname !== "/register" &&
         router.pathname !== "/" &&
@@ -38,7 +46,7 @@ function MyApp({ Component, pageProps }) {
           <Component {...pageProps} />
         </QueryClientProvider>
       )}
-    </>
+    </ConfigProvider>
   );
 }
 

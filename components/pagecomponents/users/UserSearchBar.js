@@ -40,7 +40,7 @@ export default function UserSearchBar({ filterSearchHandler, filterDateHandler, 
         </Row>
       </Col>
       <Col>
-        <Button icon={<TbPlus />} type="primary" onClick={addUserHandler}>
+        <Button className="btn-primary" icon={<TbPlus />} onClick={addUserHandler}>
           Tambah Pengguna
         </Button>
       </Col>
