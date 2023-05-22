@@ -11,4 +11,12 @@ export const routes = {
     path: "/talkwalker",
     name: "talkwalker",
   },
+  users: {
+    path: "/users",
+    name: "users",
+  },
+  issues: {
+    path: "/issues",
+    name: "issues",
+  },
 };

@@ -39,5 +39,14 @@ export default function UserRoleSelect({ currentUser, activeLevel, setActiveLeve
     setActiveLevel(Number(e?.key));
   };
 
-  return <Menu mode="horizontal" onClick={onClick} items={items} selectedKeys={[String(activeLevel)]} />;
+  return (
+    <Menu
+      theme="dark"
+      className="bg-transparent"
+      mode="horizontal"
+      onClick={onClick}
+      items={items}
+      selectedKeys={[String(activeLevel)]}
+    />
+  );
 }

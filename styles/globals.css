@@ -8,3 +8,9 @@
   font-family: "Manrope", sans-serif;
   box-sizing: border-box;
 }
+
+@layer utilities {
+  .btn-primary {
+    @apply bg-primary h-full cursor-pointer px-8 py-1 text-white rounded-md text-sm font-bold flex items-center justify-center;
+  }
+}
