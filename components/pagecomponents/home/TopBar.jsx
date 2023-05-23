@@ -2,7 +2,15 @@ import cx from "classnames";
 import React from "react";
 import { BsSearch } from "react-icons/bs";
 
-const TopBar = ({ title, isShowSearchRegion, onClickMap, onClickAnalysis, buttonActive = "map", hideMapButton }) => {
+const TopBar = ({
+  title,
+  isShowSearchRegion,
+  onClickMap,
+  onClickAnalysis,
+  buttonActive = "map",
+  hideMapButton,
+  customRender,
+}) => {
   return (
     <div className="topbar bg-new-black absolute h-[56px] left-[62px] items-center px-6 w-[calc(100vw-62px)] top-[78px] z-20 flex py-6  border-r-[2px] border-b-[1px] border-black">
       <div className="text-md font-bold text-white whitespace-nowrap">{title}</div>
@@ -50,6 +58,7 @@ const TopBar = ({ title, isShowSearchRegion, onClickMap, onClickAnalysis, button
             )}
           </div>
         )}
+        {customRender}
       </div>
     </div>
   );
