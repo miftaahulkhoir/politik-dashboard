@@ -1,10 +1,15 @@
 import PatroliPage from "@/containers/patroli";
+import MonitoringProvider from "@/providers/issue-providers";
 import axios from "axios";
 // import dynamic from "next/dynamic";
 import { parseCookies } from "nookies";
 
 export default function Index(props) {
-  return <PatroliPage {...props} />;
+  return (
+    <MonitoringProvider>
+      <PatroliPage {...props} />
+    </MonitoringProvider>
+  );
 }
 
 export async function getServerSideProps(ctx) {

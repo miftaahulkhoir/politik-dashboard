@@ -1,15 +1,14 @@
-import React, { Fragment, useEffect, useMemo, useState } from "react";
+import React, { Fragment, useContext, useEffect, useMemo, useState } from "react";
 
 import { MdOutlineLayers } from "react-icons/md";
 import { BsCaretDownFill, BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import moment from "moment";
 import { Listbox, Transition } from "@headlessui/react";
 import { useFindAllIssues, useFindAllYearsByIssue, useFindAllSubIssues } from "@/utils/services/issue";
+import { MonitoringContext } from "@/providers/issue-providers";
 const LayerFilter = ({ setIsShowGeoJSON }) => {
-  const [isLayerOpen, setIsLayerOpen] = useState(false);
-
-  const [selected, setSelected] = useState([]);
-  const [selectedYear, setSelectedYear] = useState([]);
+  const { isLayerOpen, setIsLayerOpen, selected, setSelected, selectedYear, setSelectedYear } =
+    useContext(MonitoringContext);
 
   const { data: issues, isLoading } = useFindAllIssues({
     onSuccess: (data) => {
@@ -19,40 +18,26 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
 
   const { data: years, isLoading: isLoadingYear } = useFindAllYearsByIssue(selected?.id, {
     onSuccess: (data) => {
-      setSelectedYear(data[0]);
+      setSelectedYear(data[data.length - 1]);
     },
-    enabled: !!selected?.id,
+    enabled: !!selected?.id && selected.id !== "3",
   });
 
-  const { data: subIssues, isLoading: isLoadingSubIssue } = useFindAllSubIssues({
-    id: selected?.id,
-    year: selectedYear?.value,
-  });
-
-  useEffect(() => {
-    if (selected || isLoading || !issues?.length) return;
-    setSelected(issues[0]);
-  }, [isLoading]);
-
-  useEffect(() => {
-    if (selectedYear || isLoadingYear || !years.length) return;
-    setSelectedYear(years[years.length - 1]);
-  }, [isLoadingYear]);
+  const { data: subIssues, isLoading: isLoadingSubIssue } = useFindAllSubIssues(
+    {
+      id: selected?.value,
+      year: selectedYear?.value,
+    },
+    {
+      enabled: !!selectedYear?.value && selected.id !== "3",
+    },
+  );
 
   useEffect(() => {
     if (selected && selectedYear && isLayerOpen) {
       setIsShowGeoJSON(true);
     }
   }, [selected, selectedYear, isLayerOpen]);
-
-  const mappingIssues = useMemo(
-    () => (!isLoading && Boolean(issues?.length) ? Object.fromEntries(issues.map((obj) => [obj.value, obj])) : []),
-    [issues, isLoading],
-  );
-  const mappingYears = useMemo(
-    () => (!isLoadingYear && Boolean(years.length) ? Object.fromEntries(years.map((obj) => [obj.value, obj])) : []),
-    [years, isLoadingYear],
-  );
 
   return isLayerOpen ? (
     <div className="absolute left-[62px] top-[calc(78px+56px)]">
@@ -89,7 +74,13 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                   </div>
                 </Listbox>
               ) : (
-                <Listbox value={selected} onChange={(value) => setSelected(mappingIssues[value])}>
+                <Listbox
+                  value={selected}
+                  onChange={(value) => {
+                    setSelectedYear(null);
+                    setSelected(issues.find((data) => data.value === value));
+                  }}
+                >
                   <div className="relative mt-1 w-full">
                     <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
                       <span className="block truncate text-white font-bold">{selected.label}</span>
@@ -104,7 +95,7 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                       leaveTo="opacity-0"
                     >
                       <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {Object.values(mappingIssues).map((issue) => (
+                        {issues.map((issue) => (
                           <Listbox.Option
                             key={issue.id}
                             className={({ active }) =>
@@ -137,7 +128,10 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                   </div>
                 </Listbox>
               ) : (
-                <Listbox value={selectedYear} onChange={(value) => setSelectedYear(mappingYears[value])}>
+                <Listbox
+                  value={selectedYear}
+                  onChange={(value) => setSelectedYear(years.find((data) => data.value === value))}
+                >
                   <div className="relative mt-1 w-[150px]">
                     <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
                       <span className="block truncate text-white font-bold">{selectedYear.label}</span>
@@ -152,7 +146,7 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                       leaveTo="opacity-0"
                     >
                       <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {Object.values(mappingYears).map((year) => (
+                        {years.map((year) => (
                           <Listbox.Option
                             key={year.id}
                             className={({ active }) =>
@@ -192,11 +186,11 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                   #
                 </label>
                 <label for="green-checkbox" className="ml-2 text-sm text-white ">
-                  Semua Kejahatan
+                  Semua {selected.label}
                 </label>
               </div>
-              {Boolean(subIssues?.length) &&
-                subIssues.map((subIssue, i) => (
+              <div className="h-[400px] overflow-auto">
+                {subIssues.map((subIssue, i) => (
                   <div className="flex items-center mr-4" key={subIssue.id}>
                     <input
                       id={subIssue.value}
@@ -211,6 +205,7 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                     </label>
                   </div>
                 ))}
+              </div>
             </div>
           )}
         </div>

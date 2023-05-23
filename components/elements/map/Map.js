@@ -8,12 +8,7 @@ import { GeoJSON } from "react-leaflet";
 
 import styles from "./Map.module.css";
 
-const { MapContainer, useMap } = ReactLeaflet;
-
-function Zoom({ cordinate, zoomTo }) {
-  const map = useMap();
-  map.flyTo(cordinate, zoomTo);
-}
+const { MapContainer } = ReactLeaflet;
 
 export default function Map({ children, className, cordinate, zoomTo, ...rest }) {
   let mapClassName = styles.map;
