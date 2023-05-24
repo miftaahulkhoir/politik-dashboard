@@ -94,7 +94,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     if (Component.getServerSideProps) {
       pageProps = await Component.getServerSideProps(ctx);
     }
-    // !protectedRoutes && redirectUser(ctx, "/");
+    !protectedRoutes && redirectUser(ctx, "/");
   }
   return { pageProps };
 };
