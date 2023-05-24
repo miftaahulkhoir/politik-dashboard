@@ -1,16 +1,11 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
 
-// export default function TalkwalkerPage(props) {
-//   return <DashboardLayout></DashboardLayout>;
-// }
-
 import { Space, notification } from "antd";
 import debounce from "lodash.debounce";
 import { useEffect, useMemo, useState } from "react";
 
 import UserDataTable from "../../components/pagecomponents/users/UserDataTable";
 import UserFormDrawer from "../../components/pagecomponents/users/UserFormDrawer";
-import UserRoleSelect from "../../components/pagecomponents/users/UserRoleSelect";
 import UserSearchBar from "../../components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "../../utils/services/profiles";
 import { useFindAllSubordinateUsers } from "../../utils/services/users";
@@ -28,7 +23,6 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState({});
 
   const { profile: currentUser } = useFindProfile();
-  const [activeRoleLevel, setActiveRoleLevel] = useState(1);
 
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
@@ -83,10 +77,8 @@ export default function UsersPage() {
   const filterGenderHandler = debounce((value) => setFilterGender(value), 300);
 
   const filteredRoleUsers = useMemo(() => {
-    return filteredUsers
-      .filter((user) => user?.occupation?.level === activeRoleLevel)
-      .map((user, i) => ({ ...user, no: i + 1 }));
-  }, [activeRoleLevel, filteredUsers]);
+    return filteredUsers.map((user, i) => ({ ...user, no: i + 1 }));
+  }, [filteredUsers]);
 
   return (
     <DashboardLayout

@@ -11,6 +11,9 @@
 
 @layer utilities {
   .btn-primary {
-    @apply bg-primary h-full cursor-pointer px-8 py-1 text-white rounded-md text-sm font-bold flex items-center justify-center;
+    @apply bg-primary text-white h-max;
+  }
+  .btn-white {
+    @apply bg-white text-black h-max;
   }
 }

@@ -18,7 +18,7 @@ export const useFindAllSubordinateUsers = () => {
 };
 
 export const useFindOneUser = (id) => {
-  const { data, error, isLoading } = useSWR(`/api/users/${id}`, fetcher);
+  const { data, error, isLoading } = useSWR(id ? `/api/users/${id}` : null, fetcher);
   const user = data?.data || {};
 
   return { user, error, isLoading };

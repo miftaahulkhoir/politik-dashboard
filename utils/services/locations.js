@@ -4,7 +4,7 @@ import useSWR from "swr";
 import fetcher from "./fetcher";
 
 export const useFindAllRegencies = () => {
-  const { data, error, isLoading } = useSWR("/api/regency", fetcher);
+  const { data, error, isLoading } = useSWR("/api/regencies", fetcher);
   const regencies = data?.data || [];
 
   return { regencies, error, isLoading };
@@ -18,7 +18,7 @@ export const useFindAllDistricts = () => {
 };
 
 export const useFindAllDistrictsByRegencyID = (regencyID) => {
-  const { data, error, isLoading } = useSWR(`/api/distric/?regencyid=${regencyID}`, fetcher);
+  const { data, error, isLoading } = useSWR(regencyID ? `/api/distric/?regencyid=${regencyID}` : null, fetcher);
   const districts = data?.data || [];
 
   return { districts, error, isLoading };
