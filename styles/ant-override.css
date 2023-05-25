@@ -5,3 +5,20 @@
 .ant-modal-confirm-content {
   width: 100%;
 }
+
+.ant-card-bordered {
+  border-color: #ffffff;
+}
+
+.ant-collapse-content {
+  background-color: #151922 !important;
+}
+
+.ant-collapse-arrow {
+  color: #ffffff !important;
+}
+
+.ant-radio-checked .ant-radio-inner {
+  border-color: #4f5fc7 !important;
+  background-color: #4f5fc7 !important;
+}

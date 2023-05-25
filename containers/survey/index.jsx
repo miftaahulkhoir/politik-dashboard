@@ -1,40 +1,33 @@
 import dynamic from "next/dynamic";
-import styles from "../../components/elements/map/Home.module.css";
 
 import DashboardLayout from "@/layouts/DashboardLayout";
-import React, { useEffect, useRef, useState } from "react";
-import geojson from "./geojson";
-import { useRouter } from "next/router";
+import React, { useContext, useEffect, useState } from "react";
 
-const Map = dynamic(() => import("../../components/elements/map/Map"), {
+import { useRouter } from "next/router";
+import SurveyMenu from "./components/SurveyMenu";
+import SpreadData from "./components/SpreadData";
+import users from "./data/users";
+import Occupation from "./components/Occupation";
+import Thematic from "./components/Thematic";
+import Region from "./components/Region";
+
+import { SurveyMapContext, SurveyMapProvider } from "./SurveyMapContext";
+
+const SurveyMap = dynamic(() => import("./components/SurveyMap"), {
   ssr: false,
 });
 
-const SurveyContainer = (props) => {
+const SurveyContainerWithProvider = (props) => {
+  const { selectedSurveyMenu } = useContext(SurveyMapContext);
   const router = useRouter();
 
-  // eslint-disable-next-line no-loss-of-precision
-  const [cordinate] = useState([-2.0459326720699523, 122.07302997496033]);
   const [isMounted, setIsMounted] = useState(false);
+  const [selectedQuestions, setSelectedQuestions] = useState([]);
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
 
-  const GeoJSONEL = useRef(null);
-
-  const style = {
-    weight: 2,
-    opacity: 1,
-    color: "white",
-    fillOpacity: 0.2,
-    fillColor: "#F78A25",
-  };
-
-  if (typeof document !== "undefined") {
-    document.cookie =
-      "token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJsZXZlbCI6IjEiLCJleHAiOjE2ODUxNzExNzYsImlzcyI6Ijl5d3lhaXprYmMifQ.n9UVpfo-BC191A0lvKk28DAvp5O-LUEsxeqqcvcf4Do";
-  }
   return (
     <DashboardLayout
       title="Survey · Patrons"
@@ -46,23 +39,32 @@ const SurveyContainer = (props) => {
     >
       {isMounted && (
         <div className="map">
-          <Map className={styles.homeMap} center={cordinate} cordinate={cordinate} zoom={5.4}>
-            {({ TileLayer, GeoJSON }) => {
-              return (
-                <>
-                  <TileLayer
-                    className="map"
-                    url="https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png"
-                    attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
-                  />
-                  <GeoJSON ref={GeoJSONEL} attribution="&copy; credits due..." data={geojson} style={style} />
-                </>
-              );
-            }}
-          </Map>
+          <SurveyMap />
         </div>
       )}
+      <div className="absolute flex gap-2 top-40 left-20">
+        <SurveyMenu />
+        {selectedSurveyMenu?.id === 1 && <SpreadData data={users} />}
+        {selectedSurveyMenu?.id === 2 && <Occupation />}
+        {selectedSurveyMenu?.id === 3 && (
+          <Thematic
+            reportState={{
+              setSelectedQuestions: setSelectedQuestions,
+              selectedQuestions: selectedQuestions,
+            }}
+          />
+        )}
+        {selectedSurveyMenu?.id === 4 && <Region />}
+      </div>
     </DashboardLayout>
+  );
+};
+
+const SurveyContainer = () => {
+  return (
+    <SurveyMapProvider>
+      <SurveyContainerWithProvider />
+    </SurveyMapProvider>
   );
 };
 
