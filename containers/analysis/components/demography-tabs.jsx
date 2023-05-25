@@ -252,7 +252,7 @@ const DemographyTab = () => {
             </div>
           </div>
           <Chart
-            height="186"
+            height="80%"
             options={presencePoliceStationData?.options}
             series={presencePoliceStationData?.series}
             type="donut"
@@ -266,7 +266,7 @@ const DemographyTab = () => {
             </div>
           </div>
           <Chart
-            height="186"
+            height="80%"
             options={easeAccessPoliceStationData?.options}
             series={easeAccessPoliceStationData?.series}
             type="donut"
