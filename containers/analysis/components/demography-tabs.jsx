@@ -226,13 +226,15 @@ const DemographyTab = () => {
               <span className="text-sm font-normal">(dalam jutaan)</span>
             </div>
           </div>
-          <Chart
-            options={populationDistributionData?.options}
-            series={populationDistributionData?.series}
-            type="bar"
-            width="508"
-            height="388"
-          />
+          <div className="w-full">
+            <Chart
+              options={populationDistributionData?.options}
+              series={populationDistributionData?.series}
+              type="bar"
+              width="100%"
+              height="388"
+            />
+          </div>
         </div>
       </div>
 
@@ -293,13 +295,15 @@ const DemographyTab = () => {
               <span className="text-sm font-normal">(dalam jutaan)</span>
             </div>
           </div>
-          <Chart
-            options={policeStationDistributionData?.options}
-            series={policeStationDistributionData?.series}
-            type="bar"
-            width="528"
-            height="388"
-          />
+          <div className="px-8">
+            <Chart
+              options={policeStationDistributionData?.options}
+              series={policeStationDistributionData?.series}
+              type="bar"
+              width="100%"
+              height="388"
+            />
+          </div>
         </CardContent>
       </div>
     </div>

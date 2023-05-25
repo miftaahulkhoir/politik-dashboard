@@ -180,7 +180,7 @@ const CrimeContent = () => {
             options={mostCrimePlace?.options}
             series={mostCrimePlace?.series}
             type="bar"
-            width="500"
+            width="100%"
             height="388"
           />
         </CardContent>
@@ -198,7 +198,7 @@ const CrimeContent = () => {
             options={mostCrimeAction?.options}
             series={mostCrimeAction?.series}
             type="bar"
-            width="986"
+            width="100%"
             height="388"
           />
         </CardContent>
@@ -302,13 +302,15 @@ const DisasterContent = () => {
               <span className="text-sm font-normal">(dalam jutaan)</span>
             </div>
           </div>
-          <Chart
-            options={mostDisasterPlace?.options}
-            series={mostDisasterPlace?.series}
-            type="bar"
-            width="508"
-            height="388"
-          />
+          <div className="px-[36px]">
+            <Chart
+              options={mostDisasterPlace?.options}
+              series={mostDisasterPlace?.series}
+              type="bar"
+              width="100%"
+              height="388"
+            />
+          </div>
         </CardContent>
       </div>
 
@@ -488,13 +490,15 @@ const TerrorismContent = () => {
               <span className="text-sm font-normal">(dalam jutaan)</span>
             </div>
           </div>
-          <Chart
-            options={mostTerrorismPlace?.options}
-            series={mostTerrorismPlace?.series}
-            type="bar"
-            width="508"
-            height="388"
-          />
+          <div className="px-[36px]">
+            <Chart
+              options={mostTerrorismPlace?.options}
+              series={mostTerrorismPlace?.series}
+              type="bar"
+              width="100%"
+              height="388"
+            />
+          </div>
         </div>
       </div>
 
