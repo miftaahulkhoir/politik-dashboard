@@ -59,6 +59,14 @@ const AccessManagement = ({ data }) => {
               <div className="text-xs text-neutral-400">{selectedUser?.gender}</div>
             </div>
             <div className="flex flex-col gap-2 mb-6">
+              <div className="text-white text-sm font-semibold">No Telepon</div>
+              <div className="text-xs text-neutral-400">{selectedUser?.phone}</div>
+            </div>
+            <div className="flex flex-col gap-2 mb-6">
+              <div className="text-white text-sm font-semibold">Jabatan</div>
+              <div className="text-xs text-neutral-400">{selectedUser?.occupation?.name}</div>
+            </div>
+            <div className="flex flex-col gap-2 mb-6">
               <div className="text-white text-sm font-semibold">NIK</div>
               <div className="text-xs text-neutral-400">{selectedUser?.nik}</div>
             </div>
