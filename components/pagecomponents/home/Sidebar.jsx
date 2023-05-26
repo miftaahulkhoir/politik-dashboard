@@ -4,7 +4,7 @@ import cx from "classnames";
 
 import { ImMap2 } from "react-icons/im";
 import { RiSurveyLine } from "react-icons/ri";
-import { TbSocial, TbUsers, TbServer2 } from "react-icons/tb";
+import { TbSocial, TbUsers, TbServer2, TbClipboardData } from "react-icons/tb";
 import { CgLogOff } from "react-icons/cg";
 import { logoutUser } from "@/utils/services/auth";
 import { routes } from "@/constants/route";
@@ -31,14 +31,19 @@ const sidebarMenu = [
 
 const sidebarMenuSecond = [
   {
-    label: routes.issues.name,
-    path: routes.issues.path,
+    label: routes.managementData.name,
+    path: routes.managementData.path,
     icon: (props) => <TbServer2 {...props} />,
   },
   {
     label: routes.users.name,
     path: routes.users.path,
     icon: (props) => <TbUsers {...props} />,
+  },
+  {
+    label: routes.managementIssue.name,
+    path: routes.managementIssue.path,
+    icon: (props) => <TbClipboardData {...props} />,
   },
 ];
 

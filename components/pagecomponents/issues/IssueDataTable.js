@@ -177,18 +177,11 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
     ];
   }, [blacklistUserHandler, currentUser?.occupation?.level, deleteIssueHandler]);
 
-  const rowSelectCritera = (row) => row.fat > 6;
   return (
     <Row justify="end">
       <Col span={24}>
         <Card bodyStyle={{ padding: "0px" }} style={{ overflow: "hidden" }}>
-          <CustomDataTable
-            pagination
-            data={data}
-            columns={columns}
-            selectableRows
-            selectableRowSelected={rowSelectCritera}
-          />
+          <CustomDataTable pagination data={data} columns={columns} />
         </Card>
       </Col>
     </Row>

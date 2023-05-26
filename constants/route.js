@@ -15,8 +15,12 @@ export const routes = {
     path: "/users",
     name: "users",
   },
-  issues: {
-    path: "/issues",
-    name: "issues",
+  managementData: {
+    path: "/management-data",
+    name: "management-data",
+  },
+  managementIssue: {
+    path: "/management-issue",
+    name: "management-issue",
   },
 };

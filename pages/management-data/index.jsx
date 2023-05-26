@@ -2,7 +2,7 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 
 import { Button, DatePicker, Input, Modal, Radio, Select, Space, Typography, Upload, notification } from "antd";
 import debounce from "lodash.debounce";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { TbFileUpload, TbDownload } from "react-icons/tb";
 
 import UserFormDrawer from "../../components/pagecomponents/users/UserFormDrawer";
@@ -25,51 +25,12 @@ export default function UsersPage() {
   const [selectedUser, setSelectedUser] = useState({});
 
   const { profile: currentUser } = useFindProfile();
-  const [activeRoleLevel, setActiveRoleLevel] = useState(1);
-
   const [apiNotification, contextHolderNotification] = notification.useNotification();
 
   // filters
   const [filterSearch, setFilterSearch] = useState("");
   const [filterDate, setFilterDate] = useState("");
   const [filterGender, setFilterGender] = useState("");
-
-  const filteredUsers = useMemo(() => {
-    const filteredSearch =
-      filterSearch === ""
-        ? users
-        : users.filter((user) => {
-            return (
-              user?.name?.toLowerCase().includes(filterSearch.toLowerCase()) ||
-              user?.nik?.toLowerCase().includes(filterSearch.toLowerCase()) ||
-              user?.email?.toLowerCase().includes(filterSearch.toLowerCase())
-            );
-          });
-
-    const dateInput = new Date(filterDate);
-    const filteredDate =
-      filterDate === ""
-        ? filteredSearch
-        : filteredSearch.filter((user) => {
-            const date = new Date(user.created_at);
-
-            return (
-              date.getFullYear() === dateInput.getFullYear() &&
-              date.getMonth() === dateInput.getMonth() &&
-              date.getDate() === dateInput.getDate()
-            );
-          });
-
-    const filteredGender =
-      filterGender === "" ? filteredDate : filteredDate.filter((user) => user?.gender === filterGender);
-
-    const formattedUsers = filteredGender.map((user, index) => {
-      user.no = index + 1;
-      return user;
-    });
-
-    return formattedUsers;
-  }, [users, filterSearch, filterDate, filterGender]);
 
   const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
 
@@ -78,13 +39,6 @@ export default function UsersPage() {
   }, 300);
 
   const filterGenderHandler = debounce((value) => setFilterGender(value), 300);
-
-  const filteredRoleUsers = useMemo(() => {
-    return filteredUsers
-      .filter((user) => user?.occupation?.level === activeRoleLevel)
-      .map((user, i) => ({ ...user, no: i + 1 }));
-  }, [activeRoleLevel, filteredUsers]);
-
   const [showModalUpload, setModalUpload] = useState(false);
 
   const ButtonUpload = () => (
@@ -159,12 +113,12 @@ export default function UsersPage() {
             </div>
 
             <div>
-              <label>Kategori:</label>
+              <label>Isu:</label>
               <Select className="w-full" />
             </div>
 
             <div>
-              <label>Sub Kategori:</label>
+              <label>Sub Isu:</label>
               <Select className="w-full" />
             </div>
 
@@ -189,7 +143,7 @@ export default function UsersPage() {
         </div>
       </Modal>
       <DashboardLayout
-        title="Manajemen Data · Patrons"
+        title="Manajemen Data · Cakra"
         topBarConfig={{
           isShowSearchRegion: true,
           title: "Manajemen Data",

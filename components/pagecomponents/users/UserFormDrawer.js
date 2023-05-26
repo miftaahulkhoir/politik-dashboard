@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Form, Grid, Input, Radio, Row, Select, Typography } from "antd";
+import { Button, Col, Drawer, Form, Grid, Input, Radio, Row, Select, Typography, message } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useFindAllDistrictsByRegencyID, useFindAllRegencies } from "../../../utils/services/locations";
@@ -119,7 +119,10 @@ export default function UserFormDrawer({
 
         onClose();
       })
-      .catch((err) => {});
+      .catch((err) => {
+        const { message: errMessage = "" } = err?.response?.data || {};
+        message.error(errMessage || "Submit failed!");
+      });
   };
 
   const submitHandler = () => {
@@ -145,6 +148,10 @@ export default function UserFormDrawer({
     }
   };
 
+  const onFinishFailed = () => {
+    message.error("Submit failed!");
+  };
+
   return (
     <Drawer
       title={isEdit ? "Edit User" : "Tambah Pengguna"}
@@ -155,13 +162,16 @@ export default function UserFormDrawer({
       width={isSM ? "100%" : "500px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
-      <Form>
+      <Form onFinish={submitHandler} onFinishFailed={onFinishFailed}>
         <Row>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Nama Lengkap</Typography.Title>
             <Form.Item
               name="name"
-              rules={[{ max: 50, message: "Nama maksimal 50 karakter" }]}
+              rules={[
+                { required: true, message: "Masukkan Nama" },
+                { max: 50, message: "Nama maksimal 50 karakter" },
+              ]}
               style={{ marginBottom: 0 }}
             >
               <Input value={name} onChange={(e) => setName(e.target.value)} />
@@ -170,53 +180,75 @@ export default function UserFormDrawer({
 
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Jenis Kelamin</Typography.Title>
-            <Radio.Group
-              disabled={isEdit}
-              value={gender}
-              onChange={(e) => {
-                setGender(e.target.value);
-              }}
-              optionType="button"
-              buttonStyle="solid"
-              options={[
-                { label: "Laki-laki", value: "male" },
-                { label: "Perempuan", value: "female" },
-              ]}
-            ></Radio.Group>
+            <Form.Item name="gender" rules={[{ required: true, message: "Pilih Jenis Kelamin" }]}>
+              <Radio.Group
+                disabled={isEdit}
+                value={gender}
+                onChange={(e) => {
+                  setGender(e.target.value);
+                }}
+                optionType="button"
+                buttonStyle="solid"
+                options={[
+                  { label: "Laki-laki", value: "male" },
+                  { label: "Perempuan", value: "female" },
+                ]}
+              />
+            </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>NIK</Typography.Title>
-            <Input value={nik} disabled={isEdit} onChange={(e) => setNik(e.target.value)} />
+            <Form.Item
+              name="nik"
+              rules={[
+                { required: true, message: "Masukkan NIK" },
+                { type: "number", message: "Nik harus angka" },
+              ]}
+            >
+              <Input value={nik} disabled={isEdit} onChange={(e) => setNik(e.target.value)} />
+            </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
-            <Input value={wa} disabled={isEdit} onChange={(e) => setWa(e.target.value)} />
+            <Form.Item
+              name="phone"
+              rules={[
+                { required: true, message: "Masukkan Nomor WhatsApp" },
+                { type: "number", message: "Nomor WhatsApp harus angka" },
+              ]}
+            >
+              <Input value={wa} disabled={isEdit} onChange={(e) => setWa(e.target.value)} />
+            </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Email</Typography.Title>
-            <Input value={email} disabled={isEdit} onChange={(e) => setEmail(e.target.value)} />
+            <Form.Item name="email" rules={[{ required: true, message: "Masukkan Email" }]}>
+              <Input value={email} disabled={isEdit} onChange={(e) => setEmail(e.target.value)} />
+            </Form.Item>
           </Col>
-          {!isEdit ? (
-            <Col span={24} style={{ marginBottom: "24px" }}>
-              <Typography.Title level={5}>Password</Typography.Title>
-              <Input.Password value={password} disabled={isEdit} onChange={(e) => setPassword(e.target.value)} />
-            </Col>
-          ) : null}
+          <Col span={24} style={{ marginBottom: "24px" }}>
+            <Typography.Title level={5}>Password</Typography.Title>
+            <Form.Item name="password" rules={[{ required: true, message: "Masukkan Password" }]}>
+              <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
+            </Form.Item>
+          </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Jabatan</Typography.Title>
-            <Select
-              showSearch
-              placeholder="Pilih Role"
-              value={occupation || undefined}
-              disabled={isEdit}
-              onChange={(value) => setOccupation(value)}
-              style={{ width: "100%" }}
-              filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
-              options={occupations
-                // .filter((o) => o.level > currentUser?.occupation?.level)
-                .filter((o) => o.level === currentUser?.occupation?.level + 1)
-                .map((o) => ({ label: o.name, value: o.id }))}
-            />
+            <Form.Item name="occupation_id" rules={[{ required: true, message: "Pilih Jabatan" }]}>
+              <Select
+                showSearch
+                placeholder="Pilih Role"
+                value={occupation || undefined}
+                disabled={isEdit}
+                onChange={(value) => setOccupation(value)}
+                style={{ width: "100%" }}
+                filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
+                options={occupations
+                  // .filter((o) => o.level > currentUser?.occupation?.level)
+                  .filter((o) => o.level === currentUser?.occupation?.level + 1)
+                  .map((o) => ({ label: o.name, value: o.id }))}
+              />
+            </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Kabupaten</Typography.Title>
@@ -254,7 +286,12 @@ export default function UserFormDrawer({
           </Col>
 
           <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
-            <Button className="btn-primary" onClick={submitHandler} style={{ fontWeight: 600, letterSpacing: "0.8px" }}>
+            <Button
+              htmlType="submit"
+              type="submit"
+              className="btn-primary"
+              style={{ fontWeight: 600, letterSpacing: "0.8px" }}
+            >
               SIMPAN
             </Button>
           </div>
