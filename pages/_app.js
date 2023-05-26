@@ -80,6 +80,7 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     ctx.pathname === "/logistics" ||
     ctx.pathname === "/pemetaan" ||
     ctx.pathname === "/analysis" ||
+    ctx.pathname === "/management-access" ||
     ctx.pathname === "/ongoing";
 
   if (!token) {
