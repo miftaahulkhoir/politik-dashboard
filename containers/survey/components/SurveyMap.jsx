@@ -2,31 +2,46 @@ import dynamic from "next/dynamic";
 import L from "leaflet";
 
 import styles from "../../../components/elements/map/Home.module.css";
-import React, { useContext, useRef, useState } from "react";
+import React, { useCallback, useContext, useRef, useState } from "react";
 import isEmpty from "lodash/isEmpty";
 import { SurveyMapContext } from "../SurveyMapContext";
 import geojson from "../geojson";
 import users from "../data/users";
 import { Marker } from "react-leaflet";
+import SURVEY_QUESTIONS from "../../survey-analysis/data/survey-detail";
+import { getRandomColorByKey } from "@/utils/helpers/getRandomColor";
 
 const Map = dynamic(() => import("../../../components/elements/map/Map"), {
   ssr: false,
 });
 
+const generateRandom = (maxLimit) => {
+  if (!maxLimit) return;
+  let rand = Math.random() * maxLimit;
+
+  rand = Math.floor(rand); // 99
+
+  return rand;
+};
+
 const SurveyMap = () => {
   // eslint-disable-next-line no-loss-of-precision
   const [cordinate] = useState([-2.0459326720699523, 122.07302997496033]);
-  const { selectedOccupation, selectedSurveyQuestion } = useContext(SurveyMapContext);
+  const { selectedOccupation, selectedSurveyQuestion, selectedSurvey } = useContext(SurveyMapContext);
   const GeoJSONEL = useRef(null);
   const [iconSize, setIconSize] = useState(30);
+  const options = SURVEY_QUESTIONS.find((survey) => survey.id === selectedSurvey?.id)?.questions?.find(
+    (question) => question.id === selectedSurveyQuestion?.question_id,
+  )?.options;
 
-  const style = {
-    weight: 2,
-    opacity: 1,
-    color: "white",
-    fillOpacity: 0.2,
-    fillColor: "#F78A25",
-  };
+  const style = useCallback(
+    (feature) => {
+      const colorIndex = generateRandom(options?.length);
+
+      return { weight: 2, opacity: 1, color: "white", fillOpacity: 1, fillColor: getRandomColorByKey(colorIndex) };
+    },
+    [selectedSurveyQuestion],
+  );
 
   const coordinators = users.filter((user) => user.occupation.level === 2);
   const enumerators = users.filter((user) => user.occupation.level === 3);
