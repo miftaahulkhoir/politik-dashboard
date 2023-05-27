@@ -33,7 +33,7 @@ const ListOccupations = () => {
                 type="checkbox"
                 value={occupation.level}
                 className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
-                checked={selectedOccupation?.[occupation.level]}
+                checked={!!selectedOccupation?.[occupation.level]}
                 onChange={(event) => onChange(event)}
               />
               <span className="ml-2 text-sm text-white cursor-pointer">{occupation.name}</span>

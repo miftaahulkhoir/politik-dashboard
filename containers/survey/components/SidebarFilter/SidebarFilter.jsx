@@ -8,6 +8,7 @@ import cx from "classnames";
 import ListOccupations from "./ListOccupations";
 import ListSurveys from "./ListSurveys";
 import { SurveyMapContext } from "../../SurveyMapContext";
+import { isEmpty } from "lodash";
 
 const SidebarFilter = () => {
   const {
@@ -21,7 +22,7 @@ const SidebarFilter = () => {
     selectedOccupation,
   } = useContext(SurveyMapContext);
   const [selectedFilter, setSelectedFilter] = useState();
-
+  console.log(selectedSurveyQuestion, selectedOccupation);
   return isShowSidebarFilter ? (
     <div className="absolute left-[62px] top-[calc(78px+56px)]">
       <div className="flex flex-col justify-between py-6 px-6 w-[360px] h-[calc(100vh-150px)]  bg-new-black-secondary gap-3">
@@ -120,7 +121,7 @@ const SidebarFilter = () => {
     >
       <div className="relative">
         <MdOutlineLayers size={32} className="text-white" />
-        {(selectedSurveyQuestion || selectedOccupation) && (
+        {(selectedSurveyQuestion || Object.values(selectedOccupation).some((value) => !!value)) && (
           <div className="absolute -bottom-2 left-4 bg-blue-600 rounded-full w-4 h-4" />
         )}
       </div>

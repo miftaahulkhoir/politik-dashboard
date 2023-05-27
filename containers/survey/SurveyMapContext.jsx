@@ -25,7 +25,7 @@ const SurveyMapProvider = ({ children }) => {
   const [tempSelectedSurvey, setTempSelectedSurvey] = useState();
 
   const reset = () => {
-    setSelectedOccupation(undefined);
+    setSelectedOccupation({});
     setSelectedSurveyQuestion(undefined);
     setSelectedSurvey(undefined);
     setTempSelectedSurvey(undefined);
