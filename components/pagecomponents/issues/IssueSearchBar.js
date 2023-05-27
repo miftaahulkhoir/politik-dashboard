@@ -26,7 +26,7 @@ export default function IssueSearchBar({ filterSearchHandler, filterDateHandler,
 
   const categoryOptions = [
     {
-      label: "Semua Kategori",
+      label: "Semua Isu",
       value: "",
     },
     {

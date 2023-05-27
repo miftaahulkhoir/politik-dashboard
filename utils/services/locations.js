@@ -11,14 +11,14 @@ export const useFindAllRegencies = () => {
 };
 
 export const useFindAllDistricts = () => {
-  const { data, error, isLoading } = useSWR("/api/distric", fetcher);
+  const { data, error, isLoading } = useSWR("/api/distrisc", fetcher);
   const districts = data?.data || [];
 
   return { districts, error, isLoading };
 };
 
 export const useFindAllDistrictsByRegencyID = (regencyID) => {
-  const { data, error, isLoading } = useSWR(regencyID ? `/api/distric/?regencyid=${regencyID}` : null, fetcher);
+  const { data, error, isLoading } = useSWR(regencyID ? `/api/districs?regencyid=${regencyID}` : null, fetcher);
   const districts = data?.data || [];
 
   return { districts, error, isLoading };
