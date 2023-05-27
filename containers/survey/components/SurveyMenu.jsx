@@ -2,7 +2,7 @@ import { Space, Tooltip } from "antd";
 import React, { useContext } from "react";
 import cx from "classnames";
 
-import PANEL_MENUS from "../constants/menu";
+import PANEL_MENUS from "../constants/listFilters";
 import { SurveyMapContext } from "../SurveyMapContext";
 
 const SurveyMenu = () => {

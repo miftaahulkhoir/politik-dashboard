@@ -10,15 +10,16 @@ import users from "./data/users";
 import Occupation from "./components/Occupation";
 import Thematic from "./components/Thematic";
 import Region from "./components/Region";
-
 import { SurveyMapContext, SurveyMapProvider } from "./SurveyMapContext";
+import SidebarFilter from "./components/SidebarFilter/SidebarFilter";
+import SidebarInformation from "./components/SidebarInformation/SidebarInformation";
 
 const SurveyMap = dynamic(() => import("./components/SurveyMap"), {
   ssr: false,
 });
 
 const SurveyContainerWithProvider = (props) => {
-  const { selectedSurveyMenu } = useContext(SurveyMapContext);
+  const { selectedSurveyMenu, isShowSidebarFilter } = useContext(SurveyMapContext);
   const router = useRouter();
 
   const [isMounted, setIsMounted] = useState(false);
@@ -56,6 +57,8 @@ const SurveyContainerWithProvider = (props) => {
         )}
         {selectedSurveyMenu?.id === 4 && <Region />}
       </div>
+      <SidebarFilter />
+      {isShowSidebarFilter && <SidebarInformation />}
     </DashboardLayout>
   );
 };

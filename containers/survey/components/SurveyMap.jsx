@@ -8,7 +8,6 @@ import { SurveyMapContext } from "../SurveyMapContext";
 import geojson from "../geojson";
 import users from "../data/users";
 import { Marker } from "react-leaflet";
-import SurveyQuestionLegend from "./SurveyQuestionLegend";
 
 const Map = dynamic(() => import("../../../components/elements/map/Map"), {
   ssr: false,
@@ -46,7 +45,7 @@ const SurveyMap = () => {
                 attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
               />
               {!isEmpty(selectedOccupation) &&
-                selectedOccupation.includes(2) &&
+                selectedOccupation[2] &&
                 coordinators.map((user, index) => (
                   <Marker
                     key={user.id}
@@ -69,7 +68,7 @@ const SurveyMap = () => {
                   />
                 ))}
               {!isEmpty(selectedOccupation) &&
-                selectedOccupation.includes(3) &&
+                selectedOccupation[3] &&
                 enumerators.map((user, index) => (
                   <Marker
                     key={user.id}
@@ -92,7 +91,7 @@ const SurveyMap = () => {
                   />
                 ))}
               {!isEmpty(selectedOccupation) &&
-                selectedOccupation.includes(4) &&
+                selectedOccupation[4] &&
                 respondents.map((user, index) => (
                   <Marker
                     key={user.id}
@@ -115,7 +114,7 @@ const SurveyMap = () => {
                   />
                 ))}
               {!isEmpty(selectedOccupation) &&
-                selectedOccupation.includes(5) &&
+                selectedOccupation[5] &&
                 blackList.map((user, index) => (
                   <Marker
                     key={user.id}
@@ -142,7 +141,6 @@ const SurveyMap = () => {
           );
         }}
       </Map>
-      {selectedSurveyQuestion && <SurveyQuestionLegend />}
     </div>
   );
 };

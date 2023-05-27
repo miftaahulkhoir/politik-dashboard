@@ -38,7 +38,6 @@ export default function Map({ children, className, cordinate, zoomTo, ...rest })
     <>
       <MapContainer className={mapClassName} zoomControl={false} {...rest}>
         {children({ ...ReactLeaflet, GeoJSON })}
-        <Zoom cordinate={cordinate} zoomTo={zoomTo} />
       </MapContainer>
     </>
   );
