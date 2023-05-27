@@ -38,7 +38,13 @@ const SurveyMap = () => {
     (feature) => {
       const colorIndex = generateRandom(options?.length);
 
-      return { weight: 2, opacity: 1, color: "white", fillOpacity: 1, fillColor: getRandomColorByKey(colorIndex) };
+      return {
+        weight: 2,
+        opacity: 1,
+        color: "white",
+        fillOpacity: colorIndex ? 1 : 0.2,
+        fillColor: colorIndex ? getRandomColorByKey(colorIndex) : "#F78A25",
+      };
     },
     [selectedSurveyQuestion],
   );
