@@ -43,20 +43,6 @@ const SurveyContainerWithProvider = (props) => {
           <SurveyMap />
         </div>
       )}
-      <div className="absolute flex gap-2 top-40 left-20">
-        <SurveyMenu />
-        {selectedSurveyMenu?.id === 1 && <SpreadData data={users} />}
-        {selectedSurveyMenu?.id === 2 && <Occupation />}
-        {selectedSurveyMenu?.id === 3 && (
-          <Thematic
-            reportState={{
-              setSelectedQuestions: setSelectedQuestions,
-              selectedQuestions: selectedQuestions,
-            }}
-          />
-        )}
-        {selectedSurveyMenu?.id === 4 && <Region />}
-      </div>
       <SidebarFilter />
       {isShowSidebarFilter && <SidebarInformation />}
     </DashboardLayout>

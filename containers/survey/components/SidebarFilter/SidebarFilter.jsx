@@ -17,6 +17,8 @@ const SidebarFilter = () => {
     setTempSelectedSurvey,
     selectedSurvey,
     tempSelectedSurvey,
+    selectedSurveyQuestion,
+    selectedOccupation,
   } = useContext(SurveyMapContext);
   const [selectedFilter, setSelectedFilter] = useState();
 
@@ -118,7 +120,9 @@ const SidebarFilter = () => {
     >
       <div className="relative">
         <MdOutlineLayers size={32} className="text-white" />
-        <div className="absolute -bottom-2 left-2 bg-blue-600 text-white px-3  text-xs rounded-full">3</div>
+        {(selectedSurveyQuestion || selectedOccupation) && (
+          <div className="absolute -bottom-2 left-4 bg-blue-600 rounded-full w-4 h-4" />
+        )}
       </div>
       <BsChevronRight className="text-white" strokeWidth={1.5} size={24} />
     </div>
