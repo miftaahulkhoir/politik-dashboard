@@ -89,13 +89,6 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
   const columns = useMemo(() => {
     return [
       {
-        name: "",
-        selector: (row) => row.no,
-        width: "80px",
-        center: true,
-        sortable: true,
-      },
-      {
         name: "Nama",
         selector: (row) => (row?.name ? <LimitedText text={row.name} /> : "-"),
         maxWidth: "600px",

@@ -1,20 +1,27 @@
+import IssueManagement from "@/containers/issue-management";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import { TbSearch } from "react-icons/tb";
 
-export default function IssuePage() {
+import { Input, notification } from "antd";
+
+export default function ManagementIssuePage() {
+  const [apiNotification, contextHolderNotification] = notification.useNotification();
+
+  const issueDatas = [];
+
   return (
     <DashboardLayout
-      title="Manajemen Isu · Cakra"
-      topBarConfig={{
-        isShowSearchRegion: true,
-        title: "Manajemen Isu",
-        hideMapButton: true,
-      }}
+      title="Manajemen Isu · Patrons"
+      topBarConfig={{ isShowSearchRegion: true, title: "Manajemen Isu", hideMapButton: true }}
     >
-      <div className="flex flex-col mt-14 ml-[62px] p-10 bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
-        <div className="w-1/3 bg-blue w-full h-full">
-          <h1>Manajemen isu page</h1>
+      <div className="flex flex-col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
+        {contextHolderNotification}
+        <div className="!h-full !flex-1">
+          <div className="px-8">
+            <Input className="w-max" placeholder="Pencarian" prefix={<TbSearch />} />
+          </div>
+          <IssueManagement data={issueDatas} />
         </div>
-        <div className="w-2/3 bg-red"></div>
       </div>
     </DashboardLayout>
   );
