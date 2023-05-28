@@ -22,7 +22,7 @@ const SidebarFilter = () => {
     selectedOccupation,
   } = useContext(SurveyMapContext);
   const [selectedFilter, setSelectedFilter] = useState();
-  console.log(selectedSurveyQuestion, selectedOccupation);
+
   return isShowSidebarFilter ? (
     <div className="absolute left-[62px] top-[calc(78px+56px)]">
       <div className="flex flex-col justify-between py-6 px-6 w-[360px] h-[calc(100vh-150px)]  bg-new-black-secondary gap-3">
