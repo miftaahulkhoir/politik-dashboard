@@ -1,15 +1,10 @@
-import { getRandomColorByKey } from "@/utils/helpers/getRandomColor";
 import { useContext, useState } from "react";
-import surveyDetail from "../../../survey-analysis/data/survey-detail";
 import { SurveyMapContext } from "../../SurveyMapContext";
 
 const SidebarInfromationLegend = () => {
-  const { selectedSurveyQuestion, selectedSurvey } = useContext(SurveyMapContext);
+  const { selectedSurveyQuestion } = useContext(SurveyMapContext);
 
   const [hoverLegendIndex, setHoverLegendIndex] = useState();
-  const options = surveyDetail
-    .find((survey) => survey.id === selectedSurvey.id)
-    .questions.find((question) => question.id === selectedSurveyQuestion.question_id)?.options;
 
   return (
     <div>
@@ -18,22 +13,21 @@ const SidebarInfromationLegend = () => {
       </div>
       <div className="w-full h-px bg-[#7287A5]" />
       <div className="flex flex-col gap-4 mt-4 overflow-auto max-h-[calc(100vh-550px)] w-full max-h p-3">
-        {options?.map((d, i) => {
-          const legendColor = getRandomColorByKey(i);
+        {selectedSurveyQuestion?.options?.map((option, index) => {
           return (
-            <div key={i} className="flex items-center gap-2 justify-between cursor-pointer">
+            <div key={option.id} className="flex items-center gap-2 justify-between cursor-pointer">
               <span
                 className="text-sm"
-                style={{ color: hoverLegendIndex === i ? legendColor : undefined }}
-                onMouseEnter={() => setHoverLegendIndex(i)}
+                style={{ color: hoverLegendIndex === index ? selectedSurveyQuestion.colors[index] : undefined }}
+                onMouseEnter={() => setHoverLegendIndex(index)}
                 onMouseLeave={() => setHoverLegendIndex(undefined)}
               >
-                {d.option_name}
+                {option.option_name}
               </span>
               <div
                 style={{
                   borderRadius: "4px",
-                  background: legendColor,
+                  background: selectedSurveyQuestion.colors[index],
                   minWidth: "30px",
                   width: "30px",
                   height: "20px",

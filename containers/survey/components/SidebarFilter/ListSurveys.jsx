@@ -3,6 +3,7 @@ import SURVEYS from "../../data/surveys";
 import { Listbox, Transition } from "@headlessui/react";
 import { BsCaretDownFill } from "react-icons/bs";
 import { SurveyMapContext } from "../../SurveyMapContext";
+import SURVEY_QUESTION from "../../data/surveyQuestion";
 
 const getLabel = (survey) => {
   if (!survey) return;
@@ -16,6 +17,8 @@ const getLabel = (survey) => {
 
   return `${name} (${date})`;
 };
+
+const inputTypes = ["yes_no_question", "radio_button", "dropdown"];
 
 const ListSurveys = () => {
   const {
@@ -76,25 +79,27 @@ const ListSurveys = () => {
       </Listbox>
       {tempSelectedSurvey && (
         <div className="flex flex-col gap-4 overflow-auto max-h-[calc(100vh-380px)]">
-          {tempSelectedSurvey?.questions?.map((question) => (
-            <label
-              htmlFor={question.question_id}
-              className="flex gap-2 cursor-pointer items-center"
-              key={question.question_id}
-            >
-              <input
-                type="radio"
-                id={question.question_id}
-                name="survey_question"
-                checked={selectedSurveyQuestion?.question_id === question.question_id}
-                onChange={() => {
-                  setSelectedSurvey(tempSelectedSurvey);
-                  setSelectedSurveyQuestion(question);
-                }}
-              />
-              <span>{question.question_name}</span>
-            </label>
-          ))}
+          {tempSelectedSurvey?.questions
+            ?.filter((question) => inputTypes.includes(question.input_type))
+            ?.map((question) => (
+              <label
+                htmlFor={question.question_id}
+                className="flex gap-2 cursor-pointer items-center"
+                key={question.question_id}
+              >
+                <input
+                  type="radio"
+                  id={question.question_id}
+                  name="survey_question"
+                  checked={selectedSurveyQuestion?.id === question.question_id}
+                  onChange={() => {
+                    setSelectedSurvey(tempSelectedSurvey);
+                    setSelectedSurveyQuestion(SURVEY_QUESTION[tempSelectedSurvey.id].questions[question.question_id]);
+                  }}
+                />
+                <span>{question.question_name}</span>
+              </label>
+            ))}
         </div>
       )}
     </div>

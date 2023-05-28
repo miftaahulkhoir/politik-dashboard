@@ -8,8 +8,6 @@ import { SurveyMapContext } from "../SurveyMapContext";
 import geojson from "../geojson";
 import users from "../data/users";
 import { Marker } from "react-leaflet";
-import SURVEY_QUESTIONS from "../../survey-analysis/data/survey-detail";
-import { getRandomColorByKey } from "@/utils/helpers/getRandomColor";
 
 const Map = dynamic(() => import("../../../components/elements/map/Map"), {
   ssr: false,
@@ -27,24 +25,26 @@ const generateRandom = (maxLimit) => {
 const SurveyMap = () => {
   // eslint-disable-next-line no-loss-of-precision
   const [cordinate] = useState([-2.0459326720699523, 122.07302997496033]);
-  const { selectedOccupation, selectedSurveyQuestion, selectedSurvey } = useContext(SurveyMapContext);
+  const { selectedOccupation, selectedSurveyQuestion } = useContext(SurveyMapContext);
   const GeoJSONEL = useRef(null);
   const [iconSize, setIconSize] = useState(30);
-  const options = SURVEY_QUESTIONS.find((survey) => survey.id === selectedSurvey?.id)?.questions?.find(
-    (question) => question.id === selectedSurveyQuestion?.question_id,
-  )?.options;
 
   const style = useCallback(
     (feature) => {
-      const colorIndex = generateRandom(options?.length);
+      const data = selectedSurveyQuestion?.data?.find((item) => item.id === feature.properties.id);
+      let maxCount = null;
+      let colorIndex = undefined;
+      if (data) {
+        maxCount = Math.max(...data.counts);
+        colorIndex = data?.counts?.findIndex((count) => count === maxCount);
+      }
 
-      const hasColorIndex = colorIndex !== undefined;
       return {
         weight: 2,
         opacity: 1,
         color: "white",
-        fillOpacity: hasColorIndex ? 1 : 0.2,
-        fillColor: hasColorIndex ? getRandomColorByKey(colorIndex) : "#F78A25",
+        fillOpacity: colorIndex !== undefined ? 1 : 0.2,
+        fillColor: colorIndex !== undefined ? selectedSurveyQuestion.colors[colorIndex] : "#F78A25",
       };
     },
     [selectedSurveyQuestion],
