@@ -13,19 +13,16 @@ const Map = dynamic(() => import("../../../components/elements/map/Map"), {
   ssr: false,
 });
 
-const generateRandom = (maxLimit) => {
-  if (!maxLimit) return;
-  let rand = Math.random() * maxLimit;
-
-  rand = Math.floor(rand); // 99
-
-  return rand;
-};
-
 const SurveyMap = () => {
   // eslint-disable-next-line no-loss-of-precision
   const [cordinate] = useState([-2.0459326720699523, 122.07302997496033]);
-  const { selectedOccupation, selectedSurveyQuestion } = useContext(SurveyMapContext);
+  const {
+    selectedOccupation,
+    selectedSurveyQuestion,
+    setIsShowDrawer,
+    setSelectedPolygonProperty,
+    isShowSidebarFilter,
+  } = useContext(SurveyMapContext);
   const GeoJSONEL = useRef(null);
   const [iconSize, setIconSize] = useState(30);
 
@@ -36,7 +33,7 @@ const SurveyMap = () => {
       let colorIndex = undefined;
       if (data) {
         maxCount = Math.max(...data.counts);
-        colorIndex = data?.counts?.findIndex((count) => count === maxCount);
+        colorIndex = maxCount ? data?.counts?.findIndex((count) => count === maxCount) : undefined;
       }
 
       return {
@@ -48,6 +45,17 @@ const SurveyMap = () => {
       };
     },
     [selectedSurveyQuestion],
+  );
+  const onEachFeature = useCallback(
+    (feature, layer) => {
+      layer.on({
+        click: (e) => {
+          setSelectedPolygonProperty(feature.properties);
+          setIsShowDrawer(true);
+        },
+      });
+    },
+    [setIsShowDrawer, setSelectedPolygonProperty],
   );
 
   const coordinators = users.filter((user) => user.occupation.level === 2);
@@ -71,14 +79,6 @@ const SurveyMap = () => {
                 coordinators.map((user, index) => (
                   <Marker
                     key={user.id}
-                    eventHandlers={{
-                      click: (e) => {
-                        // setSelectedUser(m);
-                        // handleDetailCordinate(m.id, m.name, "koordinator");
-                        // setTempCenter([m.latitude, m.longitude]);
-                        // setUserLogCordinate(true);
-                      },
-                    }}
                     icon={
                       new L.Icon({
                         iconUrl: "/images/map/markers/user-koordinator.svg",
@@ -94,14 +94,6 @@ const SurveyMap = () => {
                 enumerators.map((user, index) => (
                   <Marker
                     key={user.id}
-                    eventHandlers={{
-                      click: (e) => {
-                        // setSelectedUser(m);
-                        // handleDetailCordinate(m.id, m.name, "koordinator");
-                        // setTempCenter([m.latitude, m.longitude]);
-                        // setUserLogCordinate(true);
-                      },
-                    }}
                     icon={
                       new L.Icon({
                         iconUrl: "/images/map/markers/user-relawan.svg",
@@ -117,14 +109,6 @@ const SurveyMap = () => {
                 respondents.map((user, index) => (
                   <Marker
                     key={user.id}
-                    eventHandlers={{
-                      click: (e) => {
-                        // setSelectedUser(m);
-                        // handleDetailCordinate(m.id, m.name, "koordinator");
-                        // setTempCenter([m.latitude, m.longitude]);
-                        // setUserLogCordinate(true);
-                      },
-                    }}
                     icon={
                       new L.Icon({
                         iconUrl: "/images/map/markers/user-pemilih.svg",
@@ -140,14 +124,6 @@ const SurveyMap = () => {
                 blackList.map((user, index) => (
                   <Marker
                     key={user.id}
-                    eventHandlers={{
-                      click: (e) => {
-                        // setSelectedUser(m);
-                        // handleDetailCordinate(m.id, m.name, "koordinator");
-                        // setTempCenter([m.latitude, m.longitude]);
-                        // setUserLogCordinate(true);
-                      },
-                    }}
                     icon={
                       new L.Icon({
                         iconUrl: "/images/map/markers/user-blacklist.svg",
@@ -158,7 +134,15 @@ const SurveyMap = () => {
                     position={[user.latitude, user.longitude]}
                   />
                 ))}
-              <GeoJSON ref={GeoJSONEL} attribution="&copy; credits due..." data={geojson} style={style} />
+              {isShowSidebarFilter && (
+                <GeoJSON
+                  ref={GeoJSONEL}
+                  attribution="&copy; credits due..."
+                  data={geojson}
+                  style={style}
+                  onEachFeature={onEachFeature}
+                />
+              )}
             </>
           );
         }}

@@ -13,6 +13,12 @@ const SurveyMapContext = createContext({
   setSelectedSurvey: () => {},
   tempSelectedSurvey: undefined,
   setTempSelectedSurvey: () => {},
+  selectedSurveyPolygon: {},
+  setSelectedSurveyPolygon: () => {},
+  isShowDrawer: false,
+  setIsShowDrawer: () => {},
+  selectedPolygonProperty: {},
+  setSelectedPolygonProperty: () => {},
   reset: () => {},
 });
 
@@ -23,12 +29,18 @@ const SurveyMapProvider = ({ children }) => {
   const [isShowSidebarFilter, setIsShowSidebarFilter] = useState(false);
   const [selectedSurvey, setSelectedSurvey] = useState();
   const [tempSelectedSurvey, setTempSelectedSurvey] = useState();
+  const [selectedSurveyPolygon, setSelectedSurveyPolygon] = useState({});
+  const [isShowDrawer, setIsShowDrawer] = useState(false);
+  const [selectedPolygonProperty, setSelectedPolygonProperty] = useState({});
 
   const reset = () => {
     setSelectedOccupation({});
     setSelectedSurveyQuestion(undefined);
     setSelectedSurvey(undefined);
     setTempSelectedSurvey(undefined);
+    setSelectedSurveyPolygon({});
+    setIsShowDrawer(false);
+    setSelectedPolygonProperty({});
   };
 
   const reviewProviderValue = useMemo(
@@ -45,15 +57,24 @@ const SurveyMapProvider = ({ children }) => {
       setSelectedSurvey,
       tempSelectedSurvey,
       setTempSelectedSurvey,
+      selectedSurveyPolygon,
+      setSelectedSurveyPolygon,
+      isShowDrawer,
+      setIsShowDrawer,
+      selectedPolygonProperty,
+      setSelectedPolygonProperty,
       reset,
     }),
     [
+      isShowDrawer,
       isShowSidebarFilter,
       selectedOccupation,
       selectedSurvey,
       selectedSurveyMenu,
+      selectedSurveyPolygon,
       selectedSurveyQuestion,
       tempSelectedSurvey,
+      selectedPolygonProperty,
     ],
   );
 

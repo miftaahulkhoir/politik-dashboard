@@ -18,7 +18,6 @@ const SurveyQuestionLegend = () => {
         <span>Legenda</span>
       </div>
       <div className="w-full h-px bg-[#7287A5]" />
-
       <div className="flex flex-col gap-4 mt-4 overflow-auto max-h-[calc(100vh-350px)] w-full max-h p-3">
         {options?.map((d, i) => {
           const legendColor = getRandomColorByKey(i);

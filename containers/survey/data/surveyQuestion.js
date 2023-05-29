@@ -20115,11 +20115,11 @@ export default {
   },
   fnum0g9b4h: {
     id: "fnum0g9b4h",
-    survey_name: "Survey Pulau Jawa",
+    survey_name: "Survey Nasional",
     status: 1,
     total_respondent: 1701,
-    created_at: "2023-04-04T02:34:24.153Z",
-    updated_at: "2023-04-04T05:35:03.904Z",
+    created_at: "2023-05-04T02:34:24.153Z",
+    updated_at: "2023-05-04T05:35:03.904Z",
     questions: {
       vhamyei0kc: {
         id: "vhamyei0kc",
@@ -20158,7 +20158,7 @@ export default {
             provinsi: "Nusa Tenggara Barat",
             counts: [63, 46],
           },
-          { id: 2, kode: 75, provinsi: "Gorontalo", counts: [20, 7] },
+          { id: 2, kode: 75, provinsi: "Gorontalo", counts: [35, 21] },
           {
             id: 3,
             kode: 74,
