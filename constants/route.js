@@ -19,6 +19,10 @@ export const routes = {
     path: "/management-data",
     name: "management-data",
   },
+  managementAccess: {
+    path: "/management-access",
+    name: "management-access",
+  },
   managementIssue: {
     path: "/management-issue",
     name: "management-issue",

@@ -109,6 +109,15 @@ const AccessManagement = ({ data }) => {
               <Switch className="bg-neutral-500 -mt-5" />
             </div>
           </div>
+
+          <div className="w-full flex justify-end px-8 pb-7">
+            <button
+              type="button"
+              class="text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
+            >
+              Simpan
+            </button>
+          </div>
         </div>
       </div>
     </div>
