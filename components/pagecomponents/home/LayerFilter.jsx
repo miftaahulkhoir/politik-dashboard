@@ -4,11 +4,36 @@ import { MdOutlineLayers } from "react-icons/md";
 import { BsCaretDownFill, BsChevronLeft, BsChevronRight } from "react-icons/bs";
 import moment from "moment";
 import { Listbox, Transition } from "@headlessui/react";
-import { useFindAllIssues, useFindAllYearsByIssue, useFindAllSubIssues } from "@/utils/services/issue";
+import {
+  useFindAllIssues,
+  useFindAllYearsByIssue,
+  useFindAllSubIssues,
+  useGetAllProvinces,
+  useFindKabkot,
+} from "@/utils/services/issue";
 import { MonitoringContext } from "@/providers/issue-providers";
-const LayerFilter = ({ setIsShowGeoJSON }) => {
-  const { isLayerOpen, setIsLayerOpen, selected, setSelected, selectedYear, setSelectedYear } =
-    useContext(MonitoringContext);
+import clsx from "clsx";
+import MarkerTriangle from "@/components/MarkerTriangle";
+import { markerColors } from "@/constants/colors";
+import { AiFillAccountBook } from "react-icons/ai";
+import { reverse } from "lodash";
+const LayerFilter = ({ setIsShowGeoJSON, setKabkotGeom }) => {
+  const {
+    isLayerOpen,
+    setIsLayerOpen,
+    selected,
+    setSelected,
+    selectedYear,
+    setSelectedYear,
+    setSelectedLayer,
+    selectedProvince,
+    selectedLayer,
+    setSelectedProvince,
+    selectedKabkot,
+    setselectedKabkot,
+  } = useContext(MonitoringContext);
+
+  const [activeLayer, setActiveLayer] = useState([]);
 
   const { data: issues, isLoading } = useFindAllIssues({
     onSuccess: (data) => {
@@ -33,11 +58,40 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
     },
   );
 
+  const { data: provinces, isLoading: isProvincesLoading } = useGetAllProvinces();
+  const { data: listKabkot, isLoading: isKabkotLoading } = useFindKabkot(selectedProvince?.id, {
+    enabled: !!selectedProvince?.id,
+  });
+
   useEffect(() => {
     if (selected && selectedYear && isLayerOpen) {
       setIsShowGeoJSON(true);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selected, selectedYear, isLayerOpen]);
+
+  const isTerorisme = useMemo(() => selected.id == 3, [selected]);
+
+  const applyLayer = () => {
+    setSelectedLayer(activeLayer);
+  };
+
+  const onCheckLayer = (index) => {
+    if (activeLayer.includes(index)) {
+      setActiveLayer((prev) => prev.filter((data) => data != index));
+      return;
+    }
+
+    setActiveLayer((prev) => [...prev, index]);
+  };
+
+  const onCheckAllLayer = () => {
+    if (subIssues.length === activeLayer.length) {
+      setActiveLayer([]);
+      return;
+    }
+    setActiveLayer(subIssues.map((data) => data.id));
+  };
 
   return isLayerOpen ? (
     <div className="absolute left-[62px] top-[calc(78px+56px)]">
@@ -79,6 +133,8 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                   onChange={(value) => {
                     setSelectedYear(null);
                     setSelected(issues.find((data) => data.value === value));
+                    setSelectedLayer([]);
+                    setActiveLayer([]);
                   }}
                 >
                   <div className="relative mt-1 w-full">
@@ -119,117 +175,288 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
                   </div>
                 </Listbox>
               )}
-              {isLoadingYear || !selectedYear ? (
-                <Listbox>
-                  <div className="relative mt-1 w-[150px]">
-                    <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
-                      <span className="block truncate text-white font-bold">loading ...</span>
-                    </Listbox.Button>
-                  </div>
-                </Listbox>
-              ) : (
-                <Listbox
-                  value={selectedYear}
-                  onChange={(value) => setSelectedYear(years.find((data) => data.value === value))}
-                >
-                  <div className="relative mt-1 w-[150px]">
-                    <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
-                      <span className="block truncate text-white font-bold">{selectedYear.label}</span>
-                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                        <BsCaretDownFill className="h-3 w-3 text-white" aria-hidden="true" />
-                      </span>
-                    </Listbox.Button>
-                    <Transition
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
+              {!isTerorisme && (
+                <>
+                  {isLoadingYear || !selectedYear ? (
+                    <Listbox>
+                      <div className="relative mt-1 w-[150px]">
+                        <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
+                          <span className="block truncate text-white font-bold">loading ...</span>
+                        </Listbox.Button>
+                      </div>
+                    </Listbox>
+                  ) : (
+                    <Listbox
+                      value={selectedYear}
+                      onChange={(value) => {
+                        setSelectedYear(years.find((data) => data.value === value));
+                        setSelectedLayer([]);
+                        setActiveLayer([]);
+                      }}
                     >
-                      <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                        {years.map((year) => (
-                          <Listbox.Option
-                            key={year.id}
-                            className={({ active }) =>
-                              `relative cursor-pointer select-none py-2 pl-3 pr-4 text-white ${
-                                active && "font-bold"
-                              } hover:bg-gray-50 hover:text-new-black-secondary`
-                            }
-                            value={year.value}
-                          >
-                            {({ selected }) => (
-                              <>
-                                <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
-                                  {year.label}
-                                </span>
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
-                  </div>
-                </Listbox>
+                      <div className="relative mt-1 w-[150px]">
+                        <Listbox.Button className="relative w-full cursor-pointer  bg-new-black-secondary border-[1px] border-white py-2 pl-3 pr-10 text-left shadow-md focus:outline-none focus-visible:border-indigo-500 focus-visible:ring-2  ">
+                          <span className="block truncate text-white font-bold">{selectedYear.label}</span>
+                          <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                            <BsCaretDownFill className="h-3 w-3 text-white" aria-hidden="true" />
+                          </span>
+                        </Listbox.Button>
+                        <Transition
+                          as={Fragment}
+                          leave="transition ease-in duration-100"
+                          leaveFrom="opacity-100"
+                          leaveTo="opacity-0"
+                        >
+                          <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
+                            {years.map((year) => (
+                              <Listbox.Option
+                                key={year.id}
+                                className={({ active }) =>
+                                  `relative cursor-pointer select-none py-2 pl-3 pr-4 text-white ${
+                                    active && "font-bold"
+                                  } hover:bg-gray-50 hover:text-new-black-secondary`
+                                }
+                                value={year.value}
+                              >
+                                {({ selected }) => (
+                                  <>
+                                    <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
+                                      {year.label}
+                                    </span>
+                                  </>
+                                )}
+                              </Listbox.Option>
+                            ))}
+                          </Listbox.Options>
+                        </Transition>
+                      </div>
+                    </Listbox>
+                  )}
+                </>
               )}
             </div>
           </div>
-          {isLoadingSubIssue ? (
-            <span className="ml-2 text-sm text-white">Loading ...</span>
-          ) : (
-            <div className="flex flex-col p-3 gap-2">
-              <div className="flex items-center mr-4">
-                <input
-                  id="green-checkbox"
-                  type="checkbox"
-                  className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
-                />
-                <label for="green-checkbox" className="ml-2 text-sm text-white font-bold">
-                  #
-                </label>
-                <label for="green-checkbox" className="ml-2 text-sm text-white ">
-                  Semua {selected.label}
-                </label>
-              </div>
-              <div className="h-[400px] overflow-auto">
-                {subIssues.map((subIssue, i) => (
-                  <div className="flex items-center mr-4" key={subIssue.id}>
+          {!isTerorisme && (
+            <>
+              {isLoadingSubIssue ? (
+                <span className="ml-2 text-sm text-white">Loading ...</span>
+              ) : (
+                <div className="flex flex-col p-3 gap-2">
+                  <div className="flex items-center mr-4">
                     <input
-                      id={subIssue.value}
+                      id="green-checkbox"
                       type="checkbox"
                       className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
+                      checked={activeLayer.length === subIssues.length}
+                      onChange={onCheckAllLayer}
                     />
-                    <label for={subIssue.value} className="ml-2 text-sm font-bold text-white ">
-                      {i + 1}
+                    <label htmlFor="green-checkbox" className="ml-2 text-sm text-white font-bold">
+                      #
                     </label>
-                    <label for={subIssue.value} className="ml-2 text-sm text-white">
-                      {subIssue.label}
+                    <label htmlFor="green-checkbox" className="ml-2 text-sm text-white ">
+                      Semua {selected.label}
                     </label>
                   </div>
-                ))}
-              </div>
-            </div>
+                  <div className="h-[400px] overflow-auto">
+                    {subIssues.map((subIssue, i) => {
+                      const checked = activeLayer.includes(i + 1);
+
+                      return (
+                        <div className="flex items-center mr-4" key={subIssue.id}>
+                          <input
+                            id={subIssue.value}
+                            type="checkbox"
+                            checked={checked}
+                            className="w-4 h-4 text-green-600 bg-gray-100 border-gray-300 rounded cursor-pointer"
+                            onChange={() => onCheckLayer(i + 1)}
+                          />
+                          <label htmlFor={subIssue.value} className="ml-2 text-sm font-bold text-white ">
+                            {i + 1}
+                          </label>
+                          <label htmlFor={subIssue.value} className="ml-2 text-sm text-white">
+                            {subIssue.label}
+                          </label>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
+              )}
+            </>
           )}
         </div>
-        <button className="bg-primary text-white py-3 rounded-lg font-semibold">Terapkan</button>
+        <button className="bg-primary text-white py-3 rounded-lg font-semibold" onClick={applyLayer}>
+          Terapkan
+        </button>
       </div>
-      <div className="absolute left-[380px] top-[28px] p-6 bg-[#FFFFFF90] rounded-sm flex gap-3">
-        <div className="flex flex-col gap-2 w-[150px]">
-          <div className="text-sm">Negara</div>
-          <div className="text-xs font-bold">Indonesia</div>
-        </div>
-        <div className="w-[1px] bg-black h-[44px]" />
-        <div className="flex flex-col gap-2 w-[150px]">
-          <div className="text-sm">Provinsi</div>
-          <div className="flex justify-between cursor-pointer">
-            <div className="text-xs font-bold">-</div>
-            <BsCaretDownFill className="h-3 w-3 text-black" aria-hidden="true" />
+      <div className="flex flex-col gap-5 absolute top-0 left-[360px]">
+        {selectedLayer.length > 0 && (
+          <div className="absolute w-[calc(100vw-750px)] px-3 py-5 bg-new-black flex gap-4 text-white h-fit items-center">
+            {selectedLayer.map((data) => (
+              <div className="flex gap-2 items-center" key={subIssues[data - 1].id}>
+                <MarkerTriangle fill={markerColors[parseInt(subIssues[data - 1].id)]}>
+                  <AiFillAccountBook
+                    size={12}
+                    className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-white"
+                  />
+                </MarkerTriangle>
+                <div className="flex flex-col">
+                  <div className="text-md font-bold">{`< ${selectedProvince ? 10 : 340}`}</div>
+                  <div className="text-xs">{subIssues[data - 1].label}</div>
+                </div>
+              </div>
+            ))}
           </div>
-        </div>
-        <div className="w-[1px] bg-black h-[44px]" />
-        <div className="flex flex-col gap-2 w-[150px]">
-          <div className="text-sm">Kabupaten</div>
-          <div className="flex justify-between cursor-pointer">
-            <div className="text-xs font-bold">-</div>
-            <BsCaretDownFill className="h-3 w-3 text-black" aria-hidden="true" />
+        )}
+        <div
+          className={clsx(
+            selectedLayer.length > 0 ? "top-[98px]" : "top-[28px]",
+            "absolute left-[20px] p-6 bg-[#FFFFFF90] rounded-sm flex gap-3 ",
+          )}
+        >
+          <div className="flex flex-col gap-2 w-[150px]">
+            <div className="text-sm">Negara</div>
+            <div className="text-xs font-bold">Indonesia</div>
+          </div>
+          <div className="w-[1px] bg-black h-[44px]" />
+          <div className="flex flex-col  w-[150px]">
+            <div className="text-sm">Provinsi</div>
+            {isLoading ? (
+              <Listbox>
+                <div className="relative w-full">
+                  <Listbox.Button className="relative w-full cursor-pointer    ">
+                    <span className="block truncate text-white font-bold">loading ...</span>
+                  </Listbox.Button>
+                </div>
+              </Listbox>
+            ) : (
+              <Listbox
+                value={selectedProvince}
+                onChange={(value) => {
+                  setselectedKabkot(null);
+                  setKabkotGeom(undefined);
+                  setSelectedLayer([]);
+                  setActiveLayer([]);
+                  if (value == "reset") {
+                    setSelectedProvince(null);
+                    return;
+                  }
+                  setSelectedProvince(provinces.find((data) => data.id === value));
+                }}
+              >
+                <div className="relative w-full">
+                  <Listbox.Button className="relative w-full cursor-pointer  text-left   ">
+                    <span className="block truncate  font-bold text-xs">
+                      {selectedProvince ? selectedProvince.name : "-"}
+                    </span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <BsCaretDownFill className="h-3 w-3 " aria-hidden="true" />
+                    </span>
+                  </Listbox.Button>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute  max-h-60 w-full overflow-auto  ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm bg-[#FFFFFF]">
+                      <Listbox.Option
+                        className={({ active }) =>
+                          `relative cursor-pointer select-none py-1 pl-1 pr-4 text-xs ${
+                            active && "font-bold"
+                          } hover:bg-gray-50 hover:text-new-black-secondary`
+                        }
+                        value={"reset"}
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>Reset</span>
+                          </>
+                        )}
+                      </Listbox.Option>
+                      {provinces.map((province) => (
+                        <Listbox.Option
+                          key={province.id}
+                          className={({ active }) =>
+                            `relative cursor-pointer select-none py-1 pl-1 pr-4 text-xs ${
+                              active && "font-bold"
+                            } hover:bg-gray-50 hover:text-new-black-secondary`
+                          }
+                          value={province.id}
+                        >
+                          {({ selected }) => (
+                            <>
+                              <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
+                                {province.name}
+                              </span>
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </Listbox>
+            )}
+          </div>
+          <div className="w-[1px] bg-black h-[44px]" />
+          <div className="flex flex-col  w-[150px]">
+            <div className="text-sm">Kabupaten</div>
+            {isKabkotLoading ? (
+              <Listbox>
+                <div className="relative w-full">
+                  <Listbox.Button className="relative w-full cursor-pointer    ">
+                    <span className="block truncate  font-bold text-xs">-</span>
+                  </Listbox.Button>
+                </div>
+              </Listbox>
+            ) : (
+              <Listbox
+                value={selectedKabkot}
+                onChange={(value) => {
+                  setselectedKabkot(listKabkot.find((data) => data.id_kabkot === value));
+                }}
+              >
+                <div className="relative w-full">
+                  <Listbox.Button className="relative w-full cursor-pointer  text-left   ">
+                    <span className="block truncate  font-bold text-xs">
+                      {selectedKabkot ? selectedKabkot.kabkot : "-"}
+                    </span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <BsCaretDownFill className="h-3 w-3 " aria-hidden="true" />
+                    </span>
+                  </Listbox.Button>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute  max-h-60 w-full overflow-auto  ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm bg-[#FFFFFF]">
+                      {listKabkot.map((kabkot) => (
+                        <Listbox.Option
+                          key={kabkot.id_kabkot}
+                          className={({ active }) =>
+                            `relative cursor-pointer select-none py-1 pl-1 pr-4 text-xs ${
+                              active && "font-bold"
+                            } hover:bg-gray-50 hover:text-new-black-secondary`
+                          }
+                          value={kabkot.id_kabkot}
+                        >
+                          {({ selected }) => (
+                            <>
+                              <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
+                                {kabkot.kabkot}
+                              </span>
+                            </>
+                          )}
+                        </Listbox.Option>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </Listbox>
+            )}
           </div>
         </div>
       </div>
@@ -237,7 +464,9 @@ const LayerFilter = ({ setIsShowGeoJSON }) => {
   ) : (
     <div
       className="flex items-center justify-center w-[112px] h-[88px] absolute left-[62px] top-[calc(78px+56px)] bg-new-black-secondary gap-3 cursor-pointer"
-      onClick={() => setIsLayerOpen(true)}
+      onClick={() => {
+        setIsLayerOpen(true);
+      }}
     >
       <div className="relative">
         <MdOutlineLayers size={32} className="text-white" />

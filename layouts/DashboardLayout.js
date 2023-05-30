@@ -1,7 +1,8 @@
 import HomeNavbar from "@/components/pagecomponents/home/HomeNavbar";
 import Menu from "@/components/pagecomponents/home/Menu";
+import { MonitoringContext } from "@/providers/issue-providers";
 import Head from "next/head";
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 
 const DashboardLayout = ({
   children,

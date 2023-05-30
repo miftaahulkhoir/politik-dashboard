@@ -7,6 +7,12 @@ const MonitoringProvider = ({ children }) => {
 
   const [selected, setSelected] = useState([]);
   const [selectedYear, setSelectedYear] = useState([]);
+  const [isMarkerOpen, setIsMarkerOpen] = useState(false);
+
+  const [selectedLayer, setSelectedLayer] = useState([]);
+
+  const [selectedProvince, setSelectedProvince] = useState();
+  const [selectedKabkot, setselectedKabkot] = useState();
 
   return (
     <MonitoringContext.Provider
@@ -17,6 +23,14 @@ const MonitoringProvider = ({ children }) => {
         setSelected,
         selectedYear,
         setSelectedYear,
+        isMarkerOpen,
+        setIsMarkerOpen,
+        selectedLayer,
+        setSelectedLayer,
+        selectedProvince,
+        setSelectedProvince,
+        selectedKabkot,
+        setselectedKabkot,
       }}
     >
       {children}

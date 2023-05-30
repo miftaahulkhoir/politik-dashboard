@@ -4,9 +4,11 @@ import shadowUrl from "leaflet/dist/images/marker-shadow.png";
 import "leaflet/dist/leaflet.css";
 import { useEffect } from "react";
 import * as ReactLeaflet from "react-leaflet";
-import { GeoJSON } from "react-leaflet";
+import { GeoJSON, Marker, Popup, useMap, useMapEvent } from "react-leaflet";
+import { centroid, polygon, booleanPointInPolygon, point, multiPolygon } from "@turf/turf";
 
 import styles from "./Map.module.css";
+import { JSXMarker } from "@/components/JSXMarker";
 
 const { MapContainer } = ReactLeaflet;
 
@@ -32,7 +34,21 @@ export default function Map({ children, className, cordinate, zoomTo, ...rest })
   return (
     <>
       <MapContainer className={mapClassName} zoomControl={false} {...rest}>
-        {children({ ...ReactLeaflet, GeoJSON })}
+        {children({
+          ...ReactLeaflet,
+          GeoJSON,
+          Marker,
+          Popup,
+          JSXMarker,
+          useMap,
+          useMapEvent,
+          centroid,
+          polygon,
+          booleanPointInPolygon,
+          point,
+          multiPolygon,
+          L,
+        })}
       </MapContainer>
     </>
   );
