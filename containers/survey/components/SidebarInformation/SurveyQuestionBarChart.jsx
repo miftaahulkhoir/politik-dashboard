@@ -6,7 +6,9 @@ import { SurveyMapContext } from "../../SurveyMapContext";
 
 const SurveyQuestionBarChart = () => {
   const { selectedSurveyQuestion, selectedPolygonProperty } = useContext(SurveyMapContext);
-  const data = selectedSurveyQuestion?.data?.find((item) => item.id === selectedPolygonProperty.id);
+  const data = selectedSurveyQuestion?.data?.find(
+    (item) => item.id === (selectedPolygonProperty.id || selectedPolygonProperty.id_prov),
+  );
 
   const option = useMemo(
     () => ({

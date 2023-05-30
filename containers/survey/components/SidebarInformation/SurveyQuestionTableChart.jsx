@@ -5,7 +5,9 @@ import { SurveyMapContext } from "../../SurveyMapContext";
 
 const SurveyQuestionTableChart = () => {
   const { selectedSurveyQuestion, selectedPolygonProperty } = useContext(SurveyMapContext);
-  const data = selectedSurveyQuestion?.data?.find((item) => item.id === selectedPolygonProperty.id);
+  const data = selectedSurveyQuestion?.data?.find(
+    (item) => item.id === (selectedPolygonProperty.id || selectedPolygonProperty.id_prov),
+  );
 
   const dataSource = selectedSurveyQuestion?.options.map((option, index) => ({
     name: option.option_name,

@@ -2,16 +2,27 @@ import dynamic from "next/dynamic";
 import L from "leaflet";
 
 import styles from "../../../components/elements/map/Home.module.css";
-import React, { useCallback, useContext, useRef, useState } from "react";
-import isEmpty from "lodash/isEmpty";
+import React, { useCallback, useContext, useRef, useState, useEffect } from "react";
+import { isEmpty, reverse } from "lodash";
 import { SurveyMapContext } from "../SurveyMapContext";
 import geojson from "../geojson";
 import users from "../data/users";
 import { Marker } from "react-leaflet";
 
+import { useGetKabkotGeom } from "@/utils/services/region";
+
 const Map = dynamic(() => import("../../../components/elements/map/Map"), {
   ssr: false,
 });
+
+const ZoomKabkot = ({ kabkotGeom, useMap, centroid, polygon }) => {
+  const event = useMap();
+  const center = centroid(kabkotGeom.geojson);
+
+  event.setView(reverse(center.geometry.coordinates), 7);
+
+  return null;
+};
 
 const SurveyMap = () => {
   // eslint-disable-next-line no-loss-of-precision
@@ -21,10 +32,22 @@ const SurveyMap = () => {
     selectedSurveyQuestion,
     setIsShowDrawer,
     setSelectedPolygonProperty,
-    isShowSidebarFilter,
+    selectedProvince,
+    setKabkotGeom,
+    kabkotGeom,
   } = useContext(SurveyMapContext);
+
   const GeoJSONEL = useRef(null);
   const [iconSize, setIconSize] = useState(30);
+
+  useGetKabkotGeom(selectedProvince?.id, {
+    enabled: !!selectedProvince?.id,
+    onSuccess: (data) => {
+      setKabkotGeom(data?.[0]);
+    },
+  });
+
+  const [isMounted, setIsMounted] = useState(false);
 
   const style = useCallback(
     (feature) => {
@@ -40,12 +63,34 @@ const SurveyMap = () => {
         weight: 2,
         opacity: 1,
         color: "white",
-        fillOpacity: colorIndex !== undefined ? 1 : 0.2,
+        fillOpacity: 0.6,
+        stroke: 0,
         fillColor: colorIndex !== undefined ? selectedSurveyQuestion.colors[colorIndex] : "#F78A25",
       };
     },
     [selectedSurveyQuestion],
   );
+
+  const styleKabkot = useCallback(
+    (feature) => {
+      const data = selectedSurveyQuestion?.data?.find((item) => item.id === kabkotGeom?.id);
+      let maxCount = null;
+      let colorIndex = undefined;
+      if (data) {
+        maxCount = Math.max(...data.counts);
+        colorIndex = maxCount ? data?.counts?.findIndex((count) => count === maxCount) : undefined;
+      }
+
+      return {
+        weight: 0.5,
+        color: "#ffffff",
+        fillOpacity: 0.6,
+        fillColor: colorIndex !== undefined ? selectedSurveyQuestion.colors[colorIndex] : "#F78A25",
+      };
+    },
+    [kabkotGeom?.id, selectedSurveyQuestion?.colors, selectedSurveyQuestion?.data],
+  );
+
   const onEachFeature = useCallback(
     (feature, layer) => {
       layer.on({
@@ -58,6 +103,9 @@ const SurveyMap = () => {
     [setIsShowDrawer, setSelectedPolygonProperty],
   );
 
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
   const coordinators = users.filter((user) => user.occupation.level === 2);
   const enumerators = users.filter((user) => user.occupation.level === 3);
   const respondents = users.filter((user) => user.occupation.level === 4);
@@ -65,88 +113,102 @@ const SurveyMap = () => {
 
   return (
     <div>
-      <Map className={styles.homeMap} center={cordinate} cordinate={cordinate} zoom={5.4}>
-        {({ TileLayer, GeoJSON }) => {
-          return (
-            <>
-              <TileLayer
-                className="map"
-                url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
-                attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
-              />
-              {!isEmpty(selectedOccupation) &&
-                selectedOccupation[2] &&
-                coordinators.map((user, index) => (
-                  <Marker
-                    key={user.id}
-                    icon={
-                      new L.Icon({
-                        iconUrl: "/images/map/markers/user-koordinator.svg",
-                        iconSize: [iconSize, iconSize],
-                        iconAnchor: [iconSize / 2, iconSize / 2],
-                      })
-                    }
-                    position={[user.latitude, user.longitude]}
-                  />
-                ))}
-              {!isEmpty(selectedOccupation) &&
-                selectedOccupation[3] &&
-                enumerators.map((user, index) => (
-                  <Marker
-                    key={user.id}
-                    icon={
-                      new L.Icon({
-                        iconUrl: "/images/map/markers/user-relawan.svg",
-                        iconSize: [iconSize, iconSize],
-                        iconAnchor: [iconSize / 2, iconSize / 2],
-                      })
-                    }
-                    position={[user.latitude, user.longitude]}
-                  />
-                ))}
-              {!isEmpty(selectedOccupation) &&
-                selectedOccupation[4] &&
-                respondents.map((user, index) => (
-                  <Marker
-                    key={user.id}
-                    icon={
-                      new L.Icon({
-                        iconUrl: "/images/map/markers/user-pemilih.svg",
-                        iconSize: [iconSize, iconSize],
-                        iconAnchor: [iconSize / 2, iconSize / 2],
-                      })
-                    }
-                    position={[user.latitude, user.longitude]}
-                  />
-                ))}
-              {!isEmpty(selectedOccupation) &&
-                selectedOccupation[5] &&
-                blackList.map((user, index) => (
-                  <Marker
-                    key={user.id}
-                    icon={
-                      new L.Icon({
-                        iconUrl: "/images/map/markers/user-blacklist.svg",
-                        iconSize: [iconSize, iconSize],
-                        iconAnchor: [iconSize / 2, iconSize / 2],
-                      })
-                    }
-                    position={[user.latitude, user.longitude]}
-                  />
-                ))}
-              {selectedSurveyQuestion && (
-                <GeoJSON
-                  ref={GeoJSONEL}
-                  attribution="&copy; credits due..."
-                  data={geojson}
-                  style={style}
-                  onEachFeature={onEachFeature}
+      {isMounted && (
+        <Map className={styles.homeMap} center={cordinate} cordinate={cordinate} zoom={5.4}>
+          {({ TileLayer, GeoJSON, useMap, centroid, polygon }) => {
+            return (
+              <>
+                <TileLayer
+                  className="map"
+                  url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
+                  attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
                 />
-              )}
-            </>
-          );
-        }}
-      </Map>
+                {!isEmpty(selectedOccupation) &&
+                  selectedOccupation[2] &&
+                  coordinators.map((user, index) => (
+                    <Marker
+                      key={user.id}
+                      icon={
+                        new L.Icon({
+                          iconUrl: "/images/map/markers/user-koordinator.svg",
+                          iconSize: [iconSize, iconSize],
+                          iconAnchor: [iconSize / 2, iconSize / 2],
+                        })
+                      }
+                      position={[user.latitude, user.longitude]}
+                    />
+                  ))}
+                {!isEmpty(selectedOccupation) &&
+                  selectedOccupation[3] &&
+                  enumerators.map((user, index) => (
+                    <Marker
+                      key={user.id}
+                      icon={
+                        new L.Icon({
+                          iconUrl: "/images/map/markers/user-relawan.svg",
+                          iconSize: [iconSize, iconSize],
+                          iconAnchor: [iconSize / 2, iconSize / 2],
+                        })
+                      }
+                      position={[user.latitude, user.longitude]}
+                    />
+                  ))}
+                {!isEmpty(selectedOccupation) &&
+                  selectedOccupation[4] &&
+                  respondents.map((user, index) => (
+                    <Marker
+                      key={user.id}
+                      icon={
+                        new L.Icon({
+                          iconUrl: "/images/map/markers/user-pemilih.svg",
+                          iconSize: [iconSize, iconSize],
+                          iconAnchor: [iconSize / 2, iconSize / 2],
+                        })
+                      }
+                      position={[user.latitude, user.longitude]}
+                    />
+                  ))}
+                {!isEmpty(selectedOccupation) &&
+                  selectedOccupation[5] &&
+                  blackList.map((user, index) => (
+                    <Marker
+                      key={user.id}
+                      icon={
+                        new L.Icon({
+                          iconUrl: "/images/map/markers/user-blacklist.svg",
+                          iconSize: [iconSize, iconSize],
+                          iconAnchor: [iconSize / 2, iconSize / 2],
+                        })
+                      }
+                      position={[user.latitude, user.longitude]}
+                    />
+                  ))}
+                {selectedSurveyQuestion && isEmpty(kabkotGeom) && (
+                  <GeoJSON
+                    ref={GeoJSONEL}
+                    attribution="&copy; credits due..."
+                    data={geojson}
+                    style={style}
+                    onEachFeature={onEachFeature}
+                  />
+                )}
+                {!isEmpty(kabkotGeom) && (
+                  <>
+                    <GeoJSON
+                      key={Math.random()}
+                      attribution="&copy; credits due..."
+                      data={kabkotGeom.geojson}
+                      style={styleKabkot}
+                      onEachFeature={onEachFeature}
+                    />
+                    <ZoomKabkot kabkotGeom={kabkotGeom} useMap={useMap} centroid={centroid} polygon={polygon} />
+                  </>
+                )}
+              </>
+            );
+          }}
+        </Map>
+      )}
     </div>
   );
 };

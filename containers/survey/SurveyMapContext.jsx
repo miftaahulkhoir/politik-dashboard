@@ -1,4 +1,4 @@
-import React, { createContext, useMemo, useState } from "react";
+import React, { createContext, useEffect, useMemo, useState } from "react";
 
 const SurveyMapContext = createContext({
   selectedOccupation: {},
@@ -19,6 +19,12 @@ const SurveyMapContext = createContext({
   setIsShowDrawer: () => {},
   selectedPolygonProperty: {},
   setSelectedPolygonProperty: () => {},
+  selectedProvince: {},
+  setSelectedProvince: () => {},
+  selectedKabkot: {},
+  setSelectedKabkot: () => {},
+  kabkotGeom: {},
+  setKabkotGeom: () => {},
   reset: () => {},
 });
 
@@ -32,6 +38,9 @@ const SurveyMapProvider = ({ children }) => {
   const [selectedSurveyPolygon, setSelectedSurveyPolygon] = useState({});
   const [isShowDrawer, setIsShowDrawer] = useState(false);
   const [selectedPolygonProperty, setSelectedPolygonProperty] = useState({});
+  const [selectedProvince, setSelectedProvince] = useState({});
+  const [selectedKabkot, setSelectedKabkot] = useState({});
+  const [kabkotGeom, setKabkotGeom] = useState({});
 
   const reset = () => {
     setSelectedOccupation({});
@@ -41,6 +50,9 @@ const SurveyMapProvider = ({ children }) => {
     setSelectedSurveyPolygon({});
     setIsShowDrawer(false);
     setSelectedPolygonProperty({});
+    setSelectedProvince({});
+    setSelectedKabkot({});
+    setKabkotGeom({});
   };
 
   const reviewProviderValue = useMemo(
@@ -63,20 +75,33 @@ const SurveyMapProvider = ({ children }) => {
       setIsShowDrawer,
       selectedPolygonProperty,
       setSelectedPolygonProperty,
+      selectedProvince,
+      setSelectedProvince,
+      selectedKabkot,
+      setSelectedKabkot,
+      kabkotGeom,
+      setKabkotGeom,
       reset,
     }),
     [
-      isShowDrawer,
-      isShowSidebarFilter,
       selectedOccupation,
-      selectedSurvey,
       selectedSurveyMenu,
-      selectedSurveyPolygon,
       selectedSurveyQuestion,
+      isShowSidebarFilter,
+      selectedSurvey,
       tempSelectedSurvey,
+      selectedSurveyPolygon,
+      isShowDrawer,
       selectedPolygonProperty,
+      selectedProvince,
+      selectedKabkot,
+      kabkotGeom,
     ],
   );
+
+  useEffect(() => {
+    setSelectedKabkot({});
+  }, [selectedProvince]);
 
   return <SurveyMapContext.Provider value={reviewProviderValue}>{children}</SurveyMapContext.Provider>;
 };
