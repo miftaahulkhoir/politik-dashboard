@@ -1,3 +1,4 @@
+import { isEmpty } from "lodash";
 import React, { createContext, useEffect, useMemo, useState } from "react";
 
 const SurveyMapContext = createContext({
@@ -25,6 +26,8 @@ const SurveyMapContext = createContext({
   setSelectedKabkot: () => {},
   kabkotGeom: {},
   setKabkotGeom: () => {},
+  countFilter: {},
+  setCountFilter: () => {},
   reset: () => {},
 });
 
@@ -41,6 +44,7 @@ const SurveyMapProvider = ({ children }) => {
   const [selectedProvince, setSelectedProvince] = useState({});
   const [selectedKabkot, setSelectedKabkot] = useState({});
   const [kabkotGeom, setKabkotGeom] = useState({});
+  const [countFilter, setCountFilter] = useState({});
 
   const reset = () => {
     setSelectedOccupation({});
@@ -81,6 +85,8 @@ const SurveyMapProvider = ({ children }) => {
       setSelectedKabkot,
       kabkotGeom,
       setKabkotGeom,
+      countFilter,
+      setCountFilter,
       reset,
     }),
     [
@@ -96,12 +102,28 @@ const SurveyMapProvider = ({ children }) => {
       selectedProvince,
       selectedKabkot,
       kabkotGeom,
+      countFilter,
     ],
   );
 
   useEffect(() => {
     setSelectedKabkot({});
   }, [selectedProvince]);
+
+  useEffect(() => {
+    setCountFilter((prev) => {
+      const clonePrev = { ...prev };
+      const count = Object.values(selectedOccupation).filter((item) => item).length;
+      return { ...clonePrev, persebaran: count };
+    });
+  }, [selectedOccupation]);
+
+  useEffect(() => {
+    setCountFilter((prev) => {
+      const clonePrev = { ...prev };
+      return { ...clonePrev, tematik: isEmpty(selectedSurveyQuestion) ? 0 : 1 };
+    });
+  }, [selectedSurveyQuestion]);
 
   return <SurveyMapContext.Provider value={reviewProviderValue}>{children}</SurveyMapContext.Provider>;
 };

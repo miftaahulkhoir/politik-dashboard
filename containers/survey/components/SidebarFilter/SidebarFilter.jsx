@@ -27,6 +27,7 @@ const SidebarFilter = () => {
     selectedKabkot,
     setSelectedKabkot,
     setKabkotGeom,
+    countFilter,
   } = useContext(SurveyMapContext);
   const [selectedFilter, setSelectedFilter] = useState();
 
@@ -239,9 +240,33 @@ const SidebarFilter = () => {
       }}
     >
       <div className="relative">
-        <MdOutlineLayers size={32} className="text-white" />
-        {(selectedSurveyQuestion || Object.values(selectedOccupation).some((value) => !!value)) && (
-          <div className="absolute -bottom-2 left-4 bg-blue-600 rounded-full w-4 h-4" />
+        {isEmpty(selectedOccupation) && isEmpty(selectedSurveyQuestion) ? (
+          <MdOutlineLayers size={32} className="text-white" />
+        ) : (
+          <div className="flex gap-3">
+            {LIST_FILTERS.map((filter) => (
+              <div
+                title={filter.name}
+                key={filter.id}
+                className={cx(
+                  "h-full cursor-pointer text-white rounded-md text-sm font-bold flex items-center justify-center bg-new-black relative",
+                )}
+                onClick={() => {
+                  setSelectedFilter(filter);
+                  if (!selectedSurvey && tempSelectedSurvey) {
+                    setTempSelectedSurvey(undefined);
+                  }
+                }}
+              >
+                {filter.icon}
+                {Boolean(countFilter[filter.value]) && (
+                  <div className="absolute -bottom-2 left-2 bg-blue-600 rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                    {countFilter[filter.value]}
+                  </div>
+                )}
+              </div>
+            ))}
+          </div>
         )}
       </div>
       <BsChevronRight className="text-white" strokeWidth={1.5} size={24} />

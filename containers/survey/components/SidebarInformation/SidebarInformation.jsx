@@ -6,8 +6,10 @@ import USERS from "../../data/users";
 import { SurveyMapContext } from "../../SurveyMapContext";
 import SidebarInfromationLegend from "./SidebarInformationLegend";
 
+import { isEmpty } from "lodash";
+
 const SidebarInformation = () => {
-  const { selectedSurveyQuestion } = useContext(SurveyMapContext);
+  const { selectedSurveyQuestion, selectedOccupation } = useContext(SurveyMapContext);
   const koordinator = USERS.filter((x) => x.occupation?.level === 2);
   const relawan = USERS.filter((x) => x.occupation?.level === 3);
   const pemilih = USERS.filter((x) => x.occupation?.level === 4);
@@ -35,6 +37,10 @@ const SidebarInformation = () => {
       total: daftarhitam.length,
     },
   ];
+
+  const isShowLegend =
+    Boolean(Object.values(selectedOccupation).filter((item) => item).length) || !isEmpty(selectedSurveyQuestion);
+
   return (
     <div className="absolute right-0 top-[134px] h-[calc(100vh-134px)] text-white">
       <div className="flex items-center bg-new-black px-[24px] h-[78px]">
@@ -55,7 +61,7 @@ const SidebarInformation = () => {
             ))}
           </div>
         </div>
-        {selectedSurveyQuestion && <SidebarInfromationLegend />}
+        {isShowLegend && <SidebarInfromationLegend />}
       </div>
     </div>
   );

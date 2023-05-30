@@ -2,14 +2,17 @@ import L from "leaflet";
 
 import styles from "../../../components/elements/map/Home.module.css";
 import React, { useCallback, useContext, useRef, useState, useEffect } from "react";
-import { isEmpty, reverse } from "lodash";
+import { isEmpty, reverse, groupBy, keyBy } from "lodash";
 import { SurveyMapContext } from "../SurveyMapContext";
 import geojson from "../geojson";
 import users from "../data/users";
 import { Marker } from "react-leaflet";
 
 import { useGetKabkotGeom } from "@/utils/services/region";
+import { useFindLayerPinPoint } from "@/utils/services/issue";
+
 import Map from "../../../components/elements/map/Map";
+import { getRandomColorByKey } from "@/utils/helpers/getRandomColor";
 
 const ZoomKabkot = ({ kabkotGeom, useMap, centroid, polygon }) => {
   const event = useMap();
@@ -42,6 +45,21 @@ const SurveyMap = () => {
       setKabkotGeom(data?.[0]);
     },
   });
+
+  const { data: points, isLoading: isGetPointsLoading } = useFindLayerPinPoint(
+    {
+      ids: Object.keys(selectedOccupation)
+        .filter((item) => !!selectedOccupation[item])
+        .join(),
+      // issue: selected.value,
+      // year: selectedYear?.value,
+    },
+    {
+      enabled: Boolean(Object.values(selectedOccupation).filter((item) => item).length),
+    },
+  );
+
+  const pinPoints = keyBy(points, "id");
 
   const [isMounted, setIsMounted] = useState(false);
 
@@ -81,7 +99,8 @@ const SurveyMap = () => {
         weight: 0.5,
         color: "#ffffff",
         fillOpacity: 0.6,
-        fillColor: colorIndex !== undefined ? selectedSurveyQuestion.colors[colorIndex] : "#F78A25",
+        // fillColor: colorIndex !== undefined ? selectedSurveyQuestion.colors[colorIndex] : "#F78A25",
+        fillColor: colorIndex !== undefined ? getRandomColorByKey() : "#F78A25",
       };
     },
     [kabkotGeom?.id, selectedSurveyQuestion?.colors, selectedSurveyQuestion?.data],
@@ -102,10 +121,10 @@ const SurveyMap = () => {
   useEffect(() => {
     setIsMounted(true);
   }, []);
-  const coordinators = users.filter((user) => user.occupation.level === 2);
-  const enumerators = users.filter((user) => user.occupation.level === 3);
-  const respondents = users.filter((user) => user.occupation.level === 4);
-  const blackList = users.filter((user) => user.occupation.level === 5);
+  // const coordinators = users.filter((user) => user.occupation.level === 2);
+  // const enumerators = users.filter((user) => user.occupation.level === 3);
+  // const respondents = users.filter((user) => user.occupation.level === 4);
+  // const blackList = users.filter((user) => user.occupation.level === 5);
 
   return (
     <div>
@@ -121,9 +140,9 @@ const SurveyMap = () => {
                 />
                 {!isEmpty(selectedOccupation) &&
                   selectedOccupation[2] &&
-                  coordinators.map((user, index) => (
+                  pinPoints[2]?.points?.map((user, index) => (
                     <Marker
-                      key={user.id}
+                      key={`${pinPoints[2].id}-${index}`}
                       icon={
                         new L.Icon({
                           iconUrl: "/images/map/markers/user-koordinator.svg",
@@ -131,14 +150,14 @@ const SurveyMap = () => {
                           iconAnchor: [iconSize / 2, iconSize / 2],
                         })
                       }
-                      position={[user.latitude, user.longitude]}
+                      position={[user[1], user[0]]}
                     />
                   ))}
                 {!isEmpty(selectedOccupation) &&
                   selectedOccupation[3] &&
-                  enumerators.map((user, index) => (
+                  pinPoints[3]?.points?.map((user, index) => (
                     <Marker
-                      key={user.id}
+                      key={`${pinPoints[3].id}-${index}`}
                       icon={
                         new L.Icon({
                           iconUrl: "/images/map/markers/user-relawan.svg",
@@ -146,14 +165,14 @@ const SurveyMap = () => {
                           iconAnchor: [iconSize / 2, iconSize / 2],
                         })
                       }
-                      position={[user.latitude, user.longitude]}
+                      position={[user[1], user[0]]}
                     />
                   ))}
                 {!isEmpty(selectedOccupation) &&
                   selectedOccupation[4] &&
-                  respondents.map((user, index) => (
+                  pinPoints[4]?.points?.map((user, index) => (
                     <Marker
-                      key={user.id}
+                      key={`${pinPoints[4].id}-${index}`}
                       icon={
                         new L.Icon({
                           iconUrl: "/images/map/markers/user-pemilih.svg",
@@ -161,14 +180,14 @@ const SurveyMap = () => {
                           iconAnchor: [iconSize / 2, iconSize / 2],
                         })
                       }
-                      position={[user.latitude, user.longitude]}
+                      position={[user[1], user[0]]}
                     />
                   ))}
                 {!isEmpty(selectedOccupation) &&
                   selectedOccupation[5] &&
-                  blackList.map((user, index) => (
+                  pinPoints[5]?.points?.map((user, index) => (
                     <Marker
-                      key={user.id}
+                      key={`${pinPoints[5].id}-${index}`}
                       icon={
                         new L.Icon({
                           iconUrl: "/images/map/markers/user-blacklist.svg",
@@ -176,7 +195,7 @@ const SurveyMap = () => {
                           iconAnchor: [iconSize / 2, iconSize / 2],
                         })
                       }
-                      position={[user.latitude, user.longitude]}
+                      position={[user[1], user[0]]}
                     />
                   ))}
                 {selectedSurveyQuestion && isEmpty(kabkotGeom) && (

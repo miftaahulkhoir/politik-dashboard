@@ -8,6 +8,7 @@ import { useRouter } from "next/router";
 import { SurveyMapContext, SurveyMapProvider } from "./SurveyMapContext";
 import SidebarFilter from "./components/SidebarFilter/SidebarFilter";
 import SidebarInformation from "./components/SidebarInformation/SidebarInformation";
+import { isEmpty } from "lodash";
 
 const SurveyMap = dynamic(() => import("./components/SurveyMap"), {
   ssr: false,
@@ -16,7 +17,7 @@ const SurveyMap = dynamic(() => import("./components/SurveyMap"), {
 const DrawerChartData = dynamic(() => import("./components/SidebarInformation/DrawerChartData"), { ssr: false });
 
 const SurveyContainerWithProvider = (props) => {
-  const { isShowSidebarFilter, isShowDrawer } = useContext(SurveyMapContext);
+  const { isShowSidebarFilter, isShowDrawer, selectedSurveyQuestion } = useContext(SurveyMapContext);
   const router = useRouter();
 
   return (
@@ -32,7 +33,7 @@ const SurveyContainerWithProvider = (props) => {
         <SurveyMap />
       </div>
       <SidebarFilter />
-      {isShowSidebarFilter && <SidebarInformation />}
+      {(isShowSidebarFilter || !isEmpty(selectedSurveyQuestion)) && <SidebarInformation />}
 
       {isShowDrawer && <DrawerChartData open={isShowDrawer} />}
     </DashboardLayout>

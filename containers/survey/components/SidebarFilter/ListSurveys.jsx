@@ -28,6 +28,9 @@ const ListSurveys = () => {
     setTempSelectedSurvey,
     selectedSurvey,
     setSelectedSurvey,
+    setSelectedProvince,
+    setSelectedKabkot,
+    setKabkotGeom,
   } = useContext(SurveyMapContext);
   const listBoxButtonText =
     tempSelectedSurvey || selectedSurvey ? getLabel(tempSelectedSurvey ?? selectedSurvey) : "Pilih Survey";
@@ -88,11 +91,17 @@ const ListSurveys = () => {
                 key={question.question_id}
               >
                 <input
-                  type="radio"
+                  type="checkbox"
                   id={question.question_id}
                   name="survey_question"
                   checked={selectedSurveyQuestion?.id === question.question_id}
                   onChange={() => {
+                    if (selectedSurveyQuestion?.id === question.question_id) {
+                      setSelectedProvince({});
+                      setSelectedKabkot({});
+                      setKabkotGeom({});
+                      return setSelectedSurveyQuestion(undefined);
+                    }
                     setSelectedSurvey(tempSelectedSurvey);
                     setSelectedSurveyQuestion(SURVEY_QUESTION[tempSelectedSurvey.id].questions[question.question_id]);
                   }}
