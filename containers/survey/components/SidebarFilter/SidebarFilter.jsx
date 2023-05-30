@@ -88,28 +88,30 @@ const SidebarFilter = () => {
           </div>
         </div>
       </div>
-      <div className="absolute left-[380px] top-[28px] p-6 bg-[#FFFFFF90] rounded-sm flex gap-3">
-        <div className="flex flex-col gap-2 w-[150px]">
-          <div className="text-sm">Negara</div>
-          <div className="text-xs font-bold">Indonesia</div>
-        </div>
-        <div className="w-[1px] bg-black h-[44px]" />
-        <div className="flex flex-col gap-2 w-[150px]">
-          <div className="text-sm">Provinsi</div>
-          <div className="flex justify-between cursor-pointer">
-            <div className="text-xs font-bold">-</div>
-            <BsCaretDownFill className="h-3 w-3 text-black" aria-hidden="true" />
+      {selectedSurveyQuestion && (
+        <div className="absolute left-[380px] top-[28px] p-6 bg-[#FFFFFF90] rounded-sm flex gap-3">
+          <div className="flex flex-col gap-2 w-[150px]">
+            <div className="text-sm">Negara</div>
+            <div className="text-xs font-bold">Indonesia</div>
+          </div>
+          <div className="w-[1px] bg-black h-[44px]" />
+          <div className="flex flex-col gap-2 w-[150px]">
+            <div className="text-sm">Provinsi</div>
+            <div className="flex justify-between cursor-pointer">
+              <div className="text-xs font-bold">-</div>
+              <BsCaretDownFill className="h-3 w-3 text-black" aria-hidden="true" />
+            </div>
+          </div>
+          <div className="w-[1px] bg-black h-[44px]" />
+          <div className="flex flex-col gap-2 w-[150px]">
+            <div className="text-sm">Kabupaten</div>
+            <div className="flex justify-between cursor-pointer">
+              <div className="text-xs font-bold">-</div>
+              <BsCaretDownFill className="h-3 w-3 text-black" aria-hidden="true" />
+            </div>
           </div>
         </div>
-        <div className="w-[1px] bg-black h-[44px]" />
-        <div className="flex flex-col gap-2 w-[150px]">
-          <div className="text-sm">Kabupaten</div>
-          <div className="flex justify-between cursor-pointer">
-            <div className="text-xs font-bold">-</div>
-            <BsCaretDownFill className="h-3 w-3 text-black" aria-hidden="true" />
-          </div>
-        </div>
-      </div>
+      )}
     </div>
   ) : (
     <div

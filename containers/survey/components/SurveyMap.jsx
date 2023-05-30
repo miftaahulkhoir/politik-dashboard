@@ -134,7 +134,7 @@ const SurveyMap = () => {
                     position={[user.latitude, user.longitude]}
                   />
                 ))}
-              {isShowSidebarFilter && (
+              {selectedSurveyQuestion && (
                 <GeoJSON
                   ref={GeoJSONEL}
                   attribution="&copy; credits due..."
