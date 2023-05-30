@@ -1,4 +1,3 @@
-import dynamic from "next/dynamic";
 import L from "leaflet";
 
 import styles from "../../../components/elements/map/Home.module.css";
@@ -10,10 +9,7 @@ import users from "../data/users";
 import { Marker } from "react-leaflet";
 
 import { useGetKabkotGeom } from "@/utils/services/region";
-
-const Map = dynamic(() => import("../../../components/elements/map/Map"), {
-  ssr: false,
-});
+import Map from "../../../components/elements/map/Map";
 
 const ZoomKabkot = ({ kabkotGeom, useMap, centroid, polygon }) => {
   const event = useMap();
