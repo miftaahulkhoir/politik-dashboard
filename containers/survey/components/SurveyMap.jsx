@@ -2,10 +2,10 @@ import L from "leaflet";
 
 import styles from "../../../components/elements/map/Home.module.css";
 import React, { useCallback, useContext, useRef, useState, useEffect } from "react";
-import { isEmpty, reverse, groupBy, keyBy } from "lodash";
+import { isEmpty, reverse, keyBy } from "lodash";
 import { SurveyMapContext } from "../SurveyMapContext";
 import geojson from "../geojson";
-import users from "../data/users";
+
 import { Marker } from "react-leaflet";
 
 import { useGetKabkotGeom } from "@/utils/services/region";
@@ -21,6 +21,15 @@ const ZoomKabkot = ({ kabkotGeom, useMap, centroid, polygon }) => {
   event.setView(reverse(center.geometry.coordinates), 7);
 
   return null;
+};
+
+const generateNumberWithMax = (maxLimit) => {
+  if (!maxLimit) return;
+  let rand = Math.random() * maxLimit;
+
+  rand = Math.floor(rand);
+
+  return rand;
 };
 
 const SurveyMap = () => {
@@ -51,8 +60,6 @@ const SurveyMap = () => {
       ids: Object.keys(selectedOccupation)
         .filter((item) => !!selectedOccupation[item])
         .join(),
-      // issue: selected.value,
-      // year: selectedYear?.value,
     },
     {
       enabled: Boolean(Object.values(selectedOccupation).filter((item) => item).length),
@@ -99,11 +106,12 @@ const SurveyMap = () => {
         weight: 0.5,
         color: "#ffffff",
         fillOpacity: 0.6,
-        // fillColor: colorIndex !== undefined ? selectedSurveyQuestion.colors[colorIndex] : "#F78A25",
-        fillColor: colorIndex !== undefined ? getRandomColorByKey() : "#F78A25",
+        fillColor:
+          colorIndex !== undefined &&
+          getRandomColorByKey(generateNumberWithMax(selectedSurveyQuestion?.options?.length)),
       };
     },
-    [kabkotGeom?.id, selectedSurveyQuestion?.colors, selectedSurveyQuestion?.data],
+    [kabkotGeom?.id, selectedSurveyQuestion?.data, selectedSurveyQuestion?.options?.length],
   );
 
   const onEachFeature = useCallback(

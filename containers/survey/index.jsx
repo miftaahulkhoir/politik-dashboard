@@ -17,7 +17,7 @@ const SurveyMap = dynamic(() => import("./components/SurveyMap"), {
 const DrawerChartData = dynamic(() => import("./components/SidebarInformation/DrawerChartData"), { ssr: false });
 
 const SurveyContainerWithProvider = (props) => {
-  const { isShowSidebarFilter, isShowDrawer, selectedSurveyQuestion } = useContext(SurveyMapContext);
+  const { isShowSidebarFilter, isShowDrawer, countFilter } = useContext(SurveyMapContext);
   const router = useRouter();
 
   return (
@@ -33,7 +33,10 @@ const SurveyContainerWithProvider = (props) => {
         <SurveyMap />
       </div>
       <SidebarFilter />
-      {(isShowSidebarFilter || !isEmpty(selectedSurveyQuestion)) && <SidebarInformation />}
+
+      {(isShowSidebarFilter || Boolean(countFilter?.tematik) || Boolean(countFilter?.persebaran)) && (
+        <SidebarInformation />
+      )}
 
       {isShowDrawer && <DrawerChartData open={isShowDrawer} />}
     </DashboardLayout>
