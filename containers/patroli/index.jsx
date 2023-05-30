@@ -63,7 +63,7 @@ const MonitoringPopup = ({ province }) => {
         </div>
       </div>
       <a
-        href="http://localhost:3004/analysis"
+        href={`${process.env.APP_BASEURL_DEFAULT}/analysis`}
         className="flex p-2 w-full bg-primary font-bold rounded-md justify-center items-center mt-2 no-underline "
       >
         <div className="text-white">Lihat detail</div>
