@@ -1,4 +1,4 @@
-import { Button, Col, Drawer, Form, Grid, Input, Radio, Row, Select, Typography, message } from "antd";
+import { Button, Col, Drawer, Form, Grid, Input, InputNumber, Radio, Row, Select, Typography, message } from "antd";
 import React, { useEffect, useMemo, useState } from "react";
 
 import { useFindAllDistrictsByRegencyID, useFindAllRegencies } from "../../../utils/services/locations";
@@ -129,11 +129,11 @@ export default function UserFormDrawer({
     if (!isEdit) {
       const data = {
         occupation_id: occupation,
-        nik: nik,
+        nik: nik.toString(),
         name: name,
         email: email,
         password: password,
-        phone: wa,
+        phone: wa.toString(),
         gender: gender,
         distric_id: district,
         latitude: latitude,
@@ -198,26 +198,28 @@ export default function UserFormDrawer({
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>NIK</Typography.Title>
-            <Form.Item
-              name="nik"
-              rules={[
-                { required: true, message: "Masukkan NIK" },
-                { type: "number", message: "Nik harus angka" },
-              ]}
-            >
-              <Input value={nik} disabled={isEdit} onChange={(e) => setNik(e.target.value)} />
+            <Form.Item name="nik" rules={[{ required: true, message: "Masukkan NIK" }]}>
+              <InputNumber
+                type="number"
+                className="w-full"
+                controls={false}
+                value={nik}
+                disabled={isEdit}
+                onChange={(e) => setNik(e)}
+              />
             </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
-            <Form.Item
-              name="phone"
-              rules={[
-                { required: true, message: "Masukkan Nomor WhatsApp" },
-                { type: "number", message: "Nomor WhatsApp harus angka" },
-              ]}
-            >
-              <Input value={wa} disabled={isEdit} onChange={(e) => setWa(e.target.value)} />
+            <Form.Item name="phone" rules={[{ required: true, message: "Masukkan Nomor WhatsApp" }]}>
+              <InputNumber
+                type="number"
+                className="w-full"
+                controls={false}
+                value={wa}
+                disabled={isEdit}
+                onChange={(e) => setWa(e)}
+              />
             </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>

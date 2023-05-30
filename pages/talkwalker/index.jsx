@@ -35,7 +35,7 @@ export default function TalkwalkerPage(props) {
       <div className="flex flex-row mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white relative ">
         <div className="bg-transparent h-full w-[65px] z-10 pt-[100px] flex-row">
           {talkwalkerData.map((item) => (
-            <div key={item.key} className="p-6 decoration-black cursor-pointer" onClick={() => setSelectedMenu(item)}>
+            <div key={item.key} className="p-5 decoration-black cursor-pointer" onClick={() => setSelectedMenu(item)}>
               {" "}
             </div>
           ))}
