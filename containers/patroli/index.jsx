@@ -18,6 +18,7 @@ import { AiFillAccountBook } from "react-icons/ai";
 import segmentedValue from "@/utils/helpers/segmentedValue";
 import MarkerTriangle from "@/components/MarkerTriangle";
 import { markerColors, polColor } from "@/constants/colors";
+import { useRouter } from "next/router";
 
 const Map = dynamic(() => import("../../components/elements/map/Map"), {
   ssr: false,
@@ -73,6 +74,8 @@ const MonitoringPopup = ({ province }) => {
 
 const PatroliPage = ({ profile }) => {
   const { selectedLayer, selected, selectedYear, selectedProvince } = useContext(MonitoringContext);
+
+  const router = useRouter();
 
   const [isMounted, setIsMounted] = useState(false);
   // eslint-disable-next-line no-loss-of-precision
@@ -200,7 +203,11 @@ const PatroliPage = ({ profile }) => {
   };
 
   return (
-    <DashboardLayout title={"Dashboard · Patrons"} profile={profile}>
+    <DashboardLayout
+      topBarConfig={{ onClickAnalysis: () => window.open("/analysis", "_self") }}
+      title={"Dashboard · Patrons"}
+      profile={profile}
+    >
       {isMounted && (
         <div className="map">
           <Map className={styles.homeMap} center={cordinate} cordinate={cordinate} zoom={5.4}>
@@ -223,7 +230,7 @@ const PatroliPage = ({ profile }) => {
                     attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
                   />
 
-                  {!isGetDesityLoading && !selectedProvince && (
+                  {!isGetDesityLoading && !selectedProvince && isShowGeoJSON && (
                     <GeoJSON
                       ref={GeoJSONEL}
                       attribution="&copy; credits due..."
