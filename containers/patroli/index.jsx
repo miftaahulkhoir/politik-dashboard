@@ -240,7 +240,7 @@ const PatroliPage = ({ profile }) => {
                     />
                   )}
 
-                  {kabkotGeom && (
+                  {kabkotGeom && isShowGeoJSON && (
                     <>
                       <GeoJSON
                         // ref={GeoJSONEL}
