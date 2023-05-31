@@ -1,4 +1,4 @@
-import IssueManagement from "@/containers/issue-management";
+import IssueManagement from "@/containers/management-issue";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { TbPlus, TbSearch } from "react-icons/tb";
 
