@@ -202,7 +202,11 @@ const PatroliPage = ({ profile }) => {
 
   return (
     <DashboardLayout
-      topBarConfig={{ onClickAnalysis: () => window.open("/analysis", "_self"), title: "Dashboard" }}
+      topBarConfig={{
+        isShowSearchRegion: true,
+        onClickAnalysis: () => window.open("/analysis", "_self"),
+        title: "Dashboard",
+      }}
       title={"Dashboard · Patrons"}
       profile={profile}
     >

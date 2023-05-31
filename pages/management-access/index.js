@@ -82,10 +82,7 @@ export default function ManagementAccessPage() {
   }, [filteredUsers]);
 
   return (
-    <DashboardLayout
-      title="Manajemen Akses · Patrons"
-      topBarConfig={{ isShowSearchRegion: true, title: "Manajemen Akses", hideMapButton: true }}
-    >
+    <DashboardLayout title="Manajemen Akses · Patrons" topBarConfig={{ title: "Manajemen Akses", hideMapButton: true }}>
       <div className="flex flex-col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
         {contextHolderNotification}
 

@@ -31,7 +31,7 @@ const SurveyAnalysisContainer = () => {
     <DashboardLayout
       title="Survey · Patrons"
       topBarConfig={{
-        isShowSearchRegion: false,
+        isShowSearchRegion: true,
         title: "Survey",
         onClickMap: () => router.push("/survey"),
         buttonActive: "analysis",

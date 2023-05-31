@@ -85,7 +85,6 @@ export default function UsersPage() {
     <DashboardLayout
       title="Manajemen Pengguna · Patrons"
       topBarConfig={{
-        isShowSearchRegion: true,
         title: "Manajemen Pengguna",
         hideMapButton: true,
         customRender: (

@@ -145,7 +145,6 @@ export default function UsersPage() {
       <DashboardLayout
         title="Manajemen Data · Cakra"
         topBarConfig={{
-          isShowSearchRegion: true,
           title: "Manajemen Data",
           hideMapButton: true,
           customRender: <ButtonUpload />,

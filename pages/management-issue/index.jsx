@@ -16,7 +16,6 @@ export default function ManagementIssuePage() {
     <DashboardLayout
       title="Manajemen Isu · Patrons"
       topBarConfig={{
-        isShowSearchRegion: true,
         title: "Manajemen Isu",
         hideMapButton: true,
         customRender: (
