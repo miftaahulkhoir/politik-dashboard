@@ -12,11 +12,11 @@ services:
       - traefik_gateway_ingress
     labels:
       - "traefik.enable=true"
-      - "traefik.http.routers.patronsmonitoring-dev-frontend-http.rule=Host(`panel-dev.patronsmonitoring.id`)"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-http.rule=Host(`panel-dev.cakradata.com`)"
       - "traefik.http.routers.patronsmonitoring-dev-frontend-http.entrypoints=web"
       - "traefik.http.routers.patronsmonitoring-dev-frontend-http.middlewares=redirect-to-https@docker"
       - "traefik.http.routers.patronsmonitoring-dev-frontend-http.service=noop@internal"
-      - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.rule=Host(`panel-dev.patronsmonitoring.id`)"
+      - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.rule=Host(`panel-dev.cakradata.com`)"
       - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.entrypoints=websecure"
       - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.tls=true"
       - "traefik.http.routers.patronsmonitoring-dev-frontend-tls.service=patronsmonitoring-dev-frontend-svc@docker"
