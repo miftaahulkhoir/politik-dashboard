@@ -11,7 +11,7 @@ import UserSearchBar from "../../components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "../../utils/services/profiles";
 import { useFindAllSubordinateUsers } from "../../utils/services/users";
 
-export default function ManagementAccessPage() {
+export default function ManagementAccessPage({ profile }) {
   const [users, setUsers] = useState([]);
   const { users: fetchUsers } = useFindAllSubordinateUsers();
   useEffect(() => {
@@ -82,7 +82,11 @@ export default function ManagementAccessPage() {
   }, [filteredUsers]);
 
   return (
-    <DashboardLayout title="Manajemen Akses · Patrons" topBarConfig={{ title: "Manajemen Akses", hideMapButton: true }}>
+    <DashboardLayout
+      profile={profile}
+      title="Manajemen Akses · Patrons"
+      topBarConfig={{ title: "Manajemen Akses", hideMapButton: true }}
+    >
       <div className="flex flex-col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
         {contextHolderNotification}
 
