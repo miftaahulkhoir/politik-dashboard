@@ -73,14 +73,12 @@ const MonitoringPopup = ({ province }) => {
 };
 
 const PatroliPage = ({ profile }) => {
-  const { selectedLayer, selected, selectedYear, selectedProvince } = useContext(MonitoringContext);
-
-  const router = useRouter();
+  const { selectedLayer, selected, selectedYear, selectedProvince, isShowGeoJSON, setIsShowGeoJSON } =
+    useContext(MonitoringContext);
 
   const [isMounted, setIsMounted] = useState(false);
   // eslint-disable-next-line no-loss-of-precision
   const [cordinate] = useState([-2.0459326720699523, 122.07302997496033]);
-  const [isShowGeoJSON, setIsShowGeoJSON] = useState(false);
 
   const [kabkotGeom, setKabkotGeom] = useState(undefined);
 
@@ -204,7 +202,7 @@ const PatroliPage = ({ profile }) => {
 
   return (
     <DashboardLayout
-      topBarConfig={{ onClickAnalysis: () => window.open("/analysis", "_self") }}
+      topBarConfig={{ onClickAnalysis: () => window.open("/analysis", "_self"), title: "Dashboard" }}
       title={"Dashboard · Patrons"}
       profile={profile}
     >
@@ -221,6 +219,8 @@ const PatroliPage = ({ profile }) => {
               booleanPointInPolygon,
               point,
               multiPolygon,
+              Marker,
+              L,
             }) => {
               return (
                 <>
@@ -261,17 +261,19 @@ const PatroliPage = ({ profile }) => {
                         const tempData = cloneDeep(data);
 
                         return (
-                          <JSXMarker
+                          <Marker
                             key={`${i}-${i2}`}
                             position={reverse(tempData)}
-                            iconOptions={{
-                              className: "jsx-marker",
-                            }}
-                          >
-                            <MarkerTriangle fill={markerColors[parseInt(eachPoint.id)]}>
-                              <AiFillAccountBook className="absolute top-[50%] left-[50%] translate-x-[-50%] translate-y-[-50%] text-white" />
-                            </MarkerTriangle>
-                          </JSXMarker>
+                            icon={
+                              new L.Icon({
+                                iconUrl: `/images/map/markers/${selected.value}-${eachPoint.id}.${
+                                  selected.value == "bencana" ? "svg" : "png"
+                                }`,
+                                iconSize: [30, 30],
+                                iconAnchor: [30 / 2, 30 / 2],
+                              })
+                            }
+                          />
                         );
                       }),
                     )}

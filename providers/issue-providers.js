@@ -14,6 +14,8 @@ const MonitoringProvider = ({ children }) => {
   const [selectedProvince, setSelectedProvince] = useState();
   const [selectedKabkot, setselectedKabkot] = useState();
 
+  const [isShowGeoJSON, setIsShowGeoJSON] = useState(false);
+
   return (
     <MonitoringContext.Provider
       value={{
@@ -31,6 +33,8 @@ const MonitoringProvider = ({ children }) => {
         setSelectedProvince,
         selectedKabkot,
         setselectedKabkot,
+        isShowGeoJSON,
+        setIsShowGeoJSON,
       }}
     >
       {children}
