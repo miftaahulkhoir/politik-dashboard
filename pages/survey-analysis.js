@@ -17,7 +17,7 @@ export default function SurveyResults() {
   return (
     <>
       <Head>
-        <title>Analisis Survei · Patrons</title>
+        <title>Analisis Survei · Chakra</title>
       </Head>
 
       <div className="col-12 pdv-3 mb-12">

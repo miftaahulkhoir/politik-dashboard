@@ -51,7 +51,7 @@ const TopBar = ({
                 <BsSearch className="absolute top-2 left-3 text-white" size={15} />
                 <input
                   type="text"
-                  className="w-52 rounded-md border-[1px] border-white bg-new-black-secondary placeholder:text-white placeholder:text-xs px-3 pl-10 py-1"
+                  className="text-white text-xs w-52 rounded-md border-[1px] border-white bg-new-black-secondary placeholder:text-white placeholder:text-xs px-3 pl-10 py-1"
                   placeholder="Indonesia"
                 />
               </div>

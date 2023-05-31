@@ -83,7 +83,10 @@ export default function TalkwalkerPage(props) {
   const [selectedMenu, setSelectedMenu] = useState(talkwalkerData[0]);
 
   return (
-    <DashboardLayout topBarConfig={{ isShowSearchRegion: true, title: "Analisis Sosial", hideMapButton: true }}>
+    <DashboardLayout
+      title="Analisis Sosial . Chakra"
+      topBarConfig={{ isShowSearchRegion: true, title: "Analisis Sosial" }}
+    >
       <div className="flex flex-row mt-14 ml-[62px] bg-[#FFFFFFF] h-[calc(100vh-134px)] overflow-auto text-white relative">
         <div className="h-full w-[65px] z-10 flex-row border-r-2">
           {talkwalkerData.map((item, index) => (

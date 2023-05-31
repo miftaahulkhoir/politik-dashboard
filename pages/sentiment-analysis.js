@@ -162,7 +162,7 @@ export default function SocialReports(pageProps) {
       />
 
       <Head>
-        <title>Analisis Sentimen · Patrons</title>
+        <title>Analisis Sentimen · Chakra</title>
       </Head>
 
       <div className="col-12 pdv-3 mb-12">

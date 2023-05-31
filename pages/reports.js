@@ -85,7 +85,7 @@ export default function Reports() {
   return (
     <>
       <Head>
-        <title>Pengaduan · Patrons</title>
+        <title>Pengaduan · Chakra</title>
       </Head>
 
       {contextHolderNotification}

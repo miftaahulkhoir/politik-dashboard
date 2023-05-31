@@ -22,9 +22,9 @@ const SurveyContainerWithProvider = (props) => {
 
   return (
     <DashboardLayout
-      title="Survey · Patrons"
+      title="Survey · Chakra"
       topBarConfig={{
-        isShowSearchRegion: false,
+        isShowSearchRegion: true,
         title: "Survey",
         onClickAnalysis: () => router.push("/survey/analysis"),
       }}

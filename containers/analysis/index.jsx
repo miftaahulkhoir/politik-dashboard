@@ -53,7 +53,7 @@ const DemographyDetail = () => {
   );
 };
 
-const Analysis = () => {
+const Analysis = ({ profile }) => {
   const [selectedIndex, setSelectedIndex] = useState(0);
   const router = useRouter();
   return (
@@ -65,6 +65,8 @@ const Analysis = () => {
           onClickMap: () => router.push("/"),
           buttonActive: "analysis",
         }}
+        title="Analysis . Chakra"
+        profile={profile}
       >
         <div className="max-h-[calc(100vh-110px)] ml-[62px] mt-[57px] relative overflow-y-auto overflow-x-hidden">
           <Filter />

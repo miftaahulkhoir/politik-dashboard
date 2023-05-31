@@ -72,7 +72,7 @@ export default function SocialReports(pageProps) {
         setTable={setCampaigns}
       />
       <Head>
-        <title>Panel Ads · Patrons</title>
+        <title>Panel Ads · Chakra</title>
       </Head>
 
       <div className="col-12 pdv-3 mb-12">

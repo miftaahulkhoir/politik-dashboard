@@ -41,7 +41,7 @@ export default function HomeNavbar({ profile, setSelectedContent, selectedConten
     <header>
       <nav className="flex justify-between px-4 py-2 items-center border-b-[2px] border-black bg-new-black">
         <div className="flex gap-[90px] relative">
-          <img src="/images/logo-black.svg" alt="Patrons" className="w-[112px] h-[60px]" />
+          <img src="/images/logo-black.svg" alt="Chakra" className="w-[112px] h-[60px]" />
         </div>
         <ProfileDropdown profile={profile} />
         {/* <div className={styles.items_container}>

@@ -26,7 +26,7 @@ export default function ReportsChat() {
   return (
     <>
       <Head>
-        <title>Pengaduan · Patrons</title>
+        <title>Pengaduan · Chakra</title>
       </Head>
 
       <ReportDetailDrawer

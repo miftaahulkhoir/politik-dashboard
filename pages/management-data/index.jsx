@@ -143,9 +143,8 @@ export default function UsersPage() {
         </div>
       </Modal>
       <DashboardLayout
-        title="Manajemen Data · Cakra"
+        title="Manajemen Data · Chakra"
         topBarConfig={{
-          isShowSearchRegion: true,
           title: "Manajemen Data",
           hideMapButton: true,
           customRender: <ButtonUpload />,

@@ -127,7 +127,7 @@ export default function SocialMediaAnalysis(pageProps) {
       />
 
       <Head>
-        <title>Analisis Sosial Media · Patrons</title>
+        <title>Analisis Sosial Media · Chakra</title>
       </Head>
 
       <div className="col-12 pdv-3 mb-12">
