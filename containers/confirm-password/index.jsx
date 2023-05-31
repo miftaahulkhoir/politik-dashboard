@@ -26,7 +26,7 @@ export default function ConfirmPassword() {
   return (
     <>
       <Head>
-        <title>Confirm Password · Patrons</title>
+        <title>Confirm Password · Chakra</title>
       </Head>
       <div className="flex w-screen h-screen">
         <div className="flex flex-[3] items-center justify-center">

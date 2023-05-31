@@ -143,7 +143,7 @@ export default function UsersPage() {
         </div>
       </Modal>
       <DashboardLayout
-        title="Manajemen Data · Cakra"
+        title="Manajemen Data · Chakra"
         topBarConfig={{
           title: "Manajemen Data",
           hideMapButton: true,

@@ -25,7 +25,7 @@ export default function AdminLayout(props) {
           textAlign: "center",
         }}
       >
-        Patrons © 2023
+        Chakra © 2023
       </Footer>
     </Layout>
   );

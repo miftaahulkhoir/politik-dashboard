@@ -207,7 +207,7 @@ const PatroliPage = ({ profile }) => {
         onClickAnalysis: () => window.open("/analysis", "_self"),
         title: "Dashboard",
       }}
-      title={"Dashboard · Patrons"}
+      title={"Dashboard · Chakra"}
       profile={profile}
     >
       {isMounted && (

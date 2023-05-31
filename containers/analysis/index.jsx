@@ -65,6 +65,7 @@ const Analysis = ({ profile }) => {
           onClickMap: () => router.push("/"),
           buttonActive: "analysis",
         }}
+        title="Analysis . Chakra"
         profile={profile}
       >
         <div className="max-h-[calc(100vh-110px)] ml-[62px] mt-[57px] relative overflow-y-auto overflow-x-hidden">

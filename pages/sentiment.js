@@ -66,7 +66,7 @@ export default function Surveys({ profile }) {
   return (
     <>
       <Head>
-        <title>Manajemen Sentimen · Patrons</title>
+        <title>Manajemen Sentimen · Chakra</title>
       </Head>
 
       {contextHolderNotification}

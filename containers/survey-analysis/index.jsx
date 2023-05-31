@@ -29,7 +29,7 @@ const SurveyAnalysisContainer = () => {
 
   return (
     <DashboardLayout
-      title="Survey · Patrons"
+      title="Survey · Chakra"
       topBarConfig={{
         isShowSearchRegion: true,
         title: "Survey",

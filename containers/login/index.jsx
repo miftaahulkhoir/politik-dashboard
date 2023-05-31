@@ -34,7 +34,7 @@ export default function Login() {
   return (
     <>
       <Head>
-        <title>Login · Patrons</title>
+        <title>Login · Chakra</title>
       </Head>
       <div className="flex w-screen h-screen">
         <div className="flex flex-[2] h-full w-full bg-primary relative justify-center">

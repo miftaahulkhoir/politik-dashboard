@@ -21,7 +21,7 @@ export default function ForgotPasword() {
   return (
     <>
       <Head>
-        <title>Forgot Password · Patrons</title>
+        <title>Forgot Password · Chakra</title>
       </Head>
       <div className="flex w-screen h-screen">
         <div className="flex flex-[3] items-center justify-center">

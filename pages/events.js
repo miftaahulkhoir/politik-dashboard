@@ -68,7 +68,7 @@ export default function Events() {
   return (
     <>
       <Head>
-        <title>Manajemen Kegiatan · Patrons</title>
+        <title>Manajemen Kegiatan · Chakra</title>
       </Head>
 
       {contextHolderNotification}

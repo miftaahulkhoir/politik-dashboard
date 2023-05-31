@@ -84,7 +84,7 @@ export default function ManagementAccessPage({ profile }) {
   return (
     <DashboardLayout
       profile={profile}
-      title="Manajemen Akses · Patrons"
+      title="Manajemen Akses · Chakra"
       topBarConfig={{ title: "Manajemen Akses", hideMapButton: true }}
     >
       <div className="flex flex-col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">

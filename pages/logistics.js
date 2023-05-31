@@ -71,7 +71,7 @@ export default function Logistics() {
   return (
     <>
       <Head>
-        <title>Logistik · Patrons</title>
+        <title>Logistik · Chakra</title>
       </Head>
 
       {contextHolderNotification}

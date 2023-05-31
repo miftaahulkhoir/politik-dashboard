@@ -14,7 +14,7 @@ export default function ManagementIssuePage() {
 
   return (
     <DashboardLayout
-      title="Manajemen Isu · Patrons"
+      title="Manajemen Isu · Chakra"
       topBarConfig={{
         title: "Manajemen Isu",
         hideMapButton: true,

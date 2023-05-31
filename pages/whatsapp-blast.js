@@ -79,7 +79,7 @@ export default function Blast(pageProps) {
   return (
     <>
       <Head>
-        <title>WhatsApp Blast · Patrons</title>
+        <title>WhatsApp Blast · Chakra</title>
       </Head>
 
       <div className="col-12 pdv-3 mb-12">
