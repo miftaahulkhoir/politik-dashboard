@@ -15,6 +15,7 @@ export default function UserFormDrawer({
   currentUser,
 }) {
   const screen = Grid.useBreakpoint();
+  const [form] = Form.useForm();
 
   const isSM = useMemo(() => {
     return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
@@ -98,6 +99,7 @@ export default function UserFormDrawer({
           description: "Perubahan user telah disimpan",
         });
 
+        form.resetFields();
         onClose();
       })
       .catch((err) => {});
@@ -117,6 +119,7 @@ export default function UserFormDrawer({
           return [...prevUsers, data];
         });
 
+        form.resetFields();
         onClose();
       })
       .catch((err) => {
@@ -162,7 +165,7 @@ export default function UserFormDrawer({
       width={isSM ? "100%" : "500px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
     >
-      <Form onFinish={submitHandler} onFinishFailed={onFinishFailed}>
+      <Form form={form} onFinish={submitHandler} onFinishFailed={onFinishFailed}>
         <Row>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Nama Lengkap</Typography.Title>
@@ -200,7 +203,6 @@ export default function UserFormDrawer({
             <Typography.Title level={5}>NIK</Typography.Title>
             <Form.Item name="nik" rules={[{ required: true, message: "Masukkan NIK" }]}>
               <InputNumber
-                type="number"
                 className="w-full"
                 controls={false}
                 value={nik}
@@ -213,7 +215,6 @@ export default function UserFormDrawer({
             <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
             <Form.Item name="phone" rules={[{ required: true, message: "Masukkan Nomor WhatsApp" }]}>
               <InputNumber
-                type="number"
                 className="w-full"
                 controls={false}
                 value={wa}
@@ -287,7 +288,17 @@ export default function UserFormDrawer({
             <Input value={longitude} disabled={isEdit} onChange={(e) => setLongitude(e.target.value)} />
           </Col>
 
-          <div style={{ display: "flex", justifyContent: "end", width: "100%" }}>
+          <div style={{ display: "flex", justifyContent: "end", width: "100%", gap: "20px" }}>
+            <Button
+              className="btn-white"
+              onClick={() => {
+                form.resetFields();
+                setOpen(false);
+              }}
+              style={{ fontWeight: 600, letterSpacing: "0.8px" }}
+            >
+              BATAL
+            </Button>
             <Button
               htmlType="submit"
               type="submit"

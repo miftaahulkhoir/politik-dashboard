@@ -3,21 +3,38 @@ import cx from "classnames";
 import { Button, Modal, Input, ColorPicker, Upload, Form, Select } from "antd";
 import { TbPlus } from "react-icons/tb";
 
+const dummyIconList = [
+  "/images/map/markers/kriminal-1.png",
+  "/images/map/markers/kriminal-2.png",
+  "/images/map/markers/kriminal-3.png",
+  "/images/map/markers/kriminal-4.png",
+  "/images/map/markers/kriminal-5.png",
+  "/images/map/markers/kriminal-6.png",
+  "/images/map/markers/kriminal-7.png",
+  "/images/map/markers/kriminal-8.png",
+  "/images/map/markers/kriminal-9.png",
+  "/images/map/markers/kriminal-10png",
+];
+const getRandomIcon = (i) => dummyIconList[Math.floor(Math.random() * dummyIconList.length)];
+
 const dummyIssue = [
   {
     id: "toz59tr7hw",
     label: "Bencana",
     value: "bencana",
+    color: "#E75E08",
   },
   {
     id: "iqoo2i5z95",
     label: "Kriminalitas",
     value: "kriminalitas",
+    color: "#E70808",
   },
   {
     id: "2e3fjte8eu",
     label: "Terorisme",
     value: "terorisme",
+    color: "#48E708",
   },
 ];
 
@@ -257,7 +274,7 @@ const subIssue = [
     value: "ini_sub_value_issue",
   },
 ];
-export default function IssueManagement() {
+export default function IssueManagement({ showModalIssue, setModalIssue, showModalSubIssue, setModalSubIssue }) {
   const [issueData, setIssueData] = useState(dummyIssue);
   const [subIssueData, setSubIssueData] = useState(subIssue);
   const [selectedSubIssue, setSelectedSubIssue] = useState([]);
@@ -266,9 +283,6 @@ export default function IssueManagement() {
     label: "Bencana",
     value: "bencana",
   });
-
-  const [showModalIssue, setModalIssue] = useState(false);
-  const [showModalSubIssue, setModalSubIssue] = useState(false);
 
   const handleModalIssue = () => setModalIssue((prev) => !prev);
   const handleModalSubIssue = () => setModalSubIssue((prev) => !prev);
@@ -282,12 +296,13 @@ export default function IssueManagement() {
   const [formSubIssue] = Form.useForm();
 
   const handleSubmitIssue = (data) => {
-    const { issue } = data;
+    const { issue, color } = data;
     setIssueData((prev) =>
       prev.concat({
         id: data.length,
         label: issue,
         value: issue,
+        color,
       }),
     );
     handleModalIssue();
@@ -353,19 +368,17 @@ export default function IssueManagement() {
       </Modal>
       <div className="flex col w-full h-full border-t border-t-neutral-500">
         <div className="w-1/3 overflow-auto flex flex-col border-r border-r-neutral-500">
-          <div className="header flex justify-between items-center bg-new-black py-3 px-8">
-            <div className="text-white text-sm font-semibold">Isu</div>
-            <Button icon={<TbPlus />} className="btn-primary" onClick={handleModalIssue}>
-              Tambah Isu
-            </Button>
-          </div>
           <div key={issueData.length} className="flex flex-col px-4 py-6 cursor-pointer">
             {issueData?.map((data) => (
               <div
-                className={cx("px-2 py-6 rounded", { "!bg-neutral-700 border-l-4": selectedIssue?.id === data?.id })}
+                key={data?.id}
+                className={cx("px-2 py-6 rounded flex justify-between", {
+                  "!bg-neutral-700 border-l-4": selectedIssue?.id === data?.id,
+                })}
                 onClick={() => setSelectedIssue(data)}
               >
                 <h1>{data.label}</h1>
+                <ColorPicker disabled value={data.color} />
               </div>
             ))}
           </div>
@@ -379,9 +392,10 @@ export default function IssueManagement() {
             </Button>
           </div>
           <div key={selectedSubIssue.length} className="w-full h-full px-4 py-6 flex flex-col">
-            {selectedSubIssue?.map((data) => (
-              <div className={cx("p-2 !bg-neutral-700 mb-1 rounded")}>
+            {selectedSubIssue?.map((data, i) => (
+              <div key={data?.id} className={cx("p-2 !bg-neutral-700 mb-1 rounded flex justify-between")}>
                 <h1>{data.label}</h1>
+                <img src={getRandomIcon(i)} alt="" style={{ width: "20px" }} />
               </div>
             ))}
           </div>
