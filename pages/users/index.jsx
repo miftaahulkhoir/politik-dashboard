@@ -1,6 +1,6 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
 
-import { Space, notification } from "antd";
+import { Button, Space, notification } from "antd";
 import debounce from "lodash.debounce";
 import { useEffect, useMemo, useState } from "react";
 
@@ -9,6 +9,7 @@ import UserFormDrawer from "../../components/pagecomponents/users/UserFormDrawer
 import UserSearchBar from "../../components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "../../utils/services/profiles";
 import { useFindAllSubordinateUsers } from "../../utils/services/users";
+import { TbPlus } from "react-icons/tb";
 
 export default function UsersPage() {
   const [users, setUsers] = useState([]);
@@ -83,7 +84,18 @@ export default function UsersPage() {
   return (
     <DashboardLayout
       title="Manajemen Pengguna · Patrons"
-      topBarConfig={{ isShowSearchRegion: true, title: "Manajemen Pengguna", hideMapButton: true }}
+      topBarConfig={{
+        isShowSearchRegion: true,
+        title: "Manajemen Pengguna",
+        hideMapButton: true,
+        customRender: (
+          <div className="flex justify-end w-full">
+            <Button className="btn-primary" icon={<TbPlus />} onClick={() => setIsDrawerActive(true)}>
+              Tambah Pengguna
+            </Button>
+          </div>
+        ),
+      }}
     >
       <div className="flex flex-col mt-14 ml-[62px] p-10 bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
         {contextHolderNotification}
@@ -104,7 +116,6 @@ export default function UsersPage() {
             filterSearchHandler={filterSearchHandler}
             filterDateHandler={filterDateHandler}
             filterGenderHandler={filterGenderHandler}
-            addUserHandler={() => setIsDrawerActive(true)}
           />
 
           <UserDataTable

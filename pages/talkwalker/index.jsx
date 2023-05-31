@@ -1,7 +1,5 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
-import { Divider } from "antd";
 import { useState } from "react";
-import { ImConfused2 } from "react-icons/im";
 import { MdFeaturedVideo } from "react-icons/md";
 export const talkwalkerData = [
   {

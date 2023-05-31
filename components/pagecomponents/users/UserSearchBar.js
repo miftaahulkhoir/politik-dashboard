@@ -2,7 +2,7 @@ import { Button, Col, DatePicker, Grid, Input, Row, Select } from "antd";
 import { useMemo } from "react";
 import { TbPlus, TbSearch } from "react-icons/tb";
 
-export default function UserSearchBar({ filterSearchHandler, filterDateHandler, filterGenderHandler, addUserHandler }) {
+export default function UserSearchBar({ filterSearchHandler, filterDateHandler, filterGenderHandler }) {
   const screen = Grid.useBreakpoint();
 
   const isSM = useMemo(() => {
@@ -38,11 +38,6 @@ export default function UserSearchBar({ filterSearchHandler, filterDateHandler, 
             <Select defaultValue="" style={{ width: "100%" }} options={genderOptions} onChange={filterGenderHandler} />
           </Col>
         </Row>
-      </Col>
-      <Col>
-        <Button className="btn-primary" icon={<TbPlus />} onClick={addUserHandler}>
-          Tambah Pengguna
-        </Button>
       </Col>
     </Row>
   );
