@@ -12,6 +12,7 @@ import AnalysisTab from "./components/analysis-tab";
 import { DEMOGRAPHY_DATA } from "./data/demography";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import Filter from "./components/filter";
+import { useRouter } from "next/router";
 
 const DemographyDetail = () => {
   return (
@@ -54,10 +55,17 @@ const DemographyDetail = () => {
 
 const Analysis = () => {
   const [selectedIndex, setSelectedIndex] = useState(0);
-
+  const router = useRouter();
   return (
     <div className="max-h-screen overflow-hidden">
-      <DashboardLayout>
+      <DashboardLayout
+        topBarConfig={{
+          isShowSearchRegion: false,
+          title: "Pemetaan",
+          onClickMap: () => router.push("/"),
+          buttonActive: "analysis",
+        }}
+      >
         <div className="max-h-[calc(100vh-110px)] ml-[62px] mt-[57px] relative overflow-y-auto overflow-x-hidden">
           <Filter />
 
@@ -66,7 +74,7 @@ const Analysis = () => {
             <div className="content flex-1">
               <div className="pt-12 flex flex-col justify-around">
                 <div className="w-full px-20">
-                  <FaArrowLeft className="!text-white w-5 h-5 mb-6" />
+                  <FaArrowLeft className="!text-white w-5 h-5 mb-6" onClick={() => router?.back()} />
                   <div className="flex flex-col">
                     <p className="font-semibold text-xl text-white">INDONESIA</p>
                     <p className="font-semibold text-[13px] text-[#9A9A9A]">Indonesia</p>
