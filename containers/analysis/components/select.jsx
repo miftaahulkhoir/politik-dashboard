@@ -2,12 +2,12 @@ import { Fragment } from "react";
 import { Listbox, Transition } from "@headlessui/react";
 import { MdArrowDropDown, MdCheck } from "react-icons/md";
 
-const SelectInput = ({ options, selectedOption, setSelectedOption }) => {
+const SelectInput = ({ options, selectedOption, setSelectedOption, disabled }) => {
   return (
-    <Listbox value={selectedOption} onChange={setSelectedOption}>
+    <Listbox value={selectedOption} onChange={setSelectedOption} disabled={disabled}>
       {({ open }) => (
         <>
-          <div className="relative max-w-[300px] mt-0 pt-0 -ml-2">
+          <div className="relative w-[300px] max-w-[300px] mt-0 pt-0 -ml-2">
             <Listbox.Button className="relative w-full rounded-md pl-3 pr-10 py-2 text-left cursor-default sm:text-sm">
               <span className="block truncate max-w-[50px]">{selectedOption.label}</span>
               <span className="absolute inset-y-0 right-0 flex items-center pr-2 pointer-events-none">
