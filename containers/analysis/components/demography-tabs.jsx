@@ -54,7 +54,7 @@ const PopulationDistribution = () => {
     <div className="population-bar-chart  w-full px-20 h-[550px] border border-[#E8E8E8] flex items-center flex-col py-14">
       <div className="flex w-full justify-between">
         <div className="w-full text-xl font-medium text-white flex items-center gap-2 mb-5">
-          Persebaran Penduduk
+          Persebaran Data Penduduk
           <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
         </div>
 
@@ -169,7 +169,7 @@ const DemographyTab = () => {
         <div className="h-[486px] w-[60%] py-[38px] px-[0] border border-[#E8E8E8] flex flex-col">
           <div className="flex w-full justify-between  mb-10">
             <div className="w-full text-xl font-medium text-white flex items-center gap-2 px-[84px] justify-center">
-              Peta Persebaran
+              Daerah Persebaran
               <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
             </div>
           </div>
@@ -278,7 +278,7 @@ const DemographyTab = () => {
         <CardContent className="max-w-[50%] w-[50%] h-[486px] py-[38px] !px-[0]">
           <div className="flex w-full justify-between  mb-10 px-8">
             <div className="w-full text-xl font-medium text-white flex items-center gap-2">
-              Keberadaan Pos Polisi
+              Peta Persebaran Pos Polisi
               <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
             </div>
           </div>

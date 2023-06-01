@@ -4,7 +4,7 @@ import { CRIME_MENU, DISASTER_MENU, TERRORIST_MENU } from "../constant";
 
 const SideMenu = () => {
   return (
-    <div className="min-w-[300px] max-w-[300px] sticky top-0  h-screen overflow-auto bg-[#353536] flex flex-col px-7 py-14 border-r border-r-[#D9D9D9]">
+    <div className="min-w-[300px] max-w-[300px] sticky top-0  h-screen overflow-auto bg-[#353536] flex flex-col px-7 py-14 pb-[300px] border-r border-r-[#D9D9D9]">
       <div className="crime w-full flex flex-col">
         <div className="w-full">
           <p className="font-semibold text-xl text-white">Kejahatan</p>

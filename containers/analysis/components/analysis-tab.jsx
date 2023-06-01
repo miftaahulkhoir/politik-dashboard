@@ -322,13 +322,30 @@ const DisasterContent = () => {
               <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
             </div>
           </div>
-          <Chart
-            options={DISASTER_CRIME_CONNECTION_CHART_DATA?.options}
-            series={DISASTER_CRIME_CONNECTION_CHART_DATA?.series}
-            type="heatmap"
-            width="956"
-            height="388"
-          />
+          <div className="flex w-full h-full">
+            <Chart
+              options={DISASTER_CRIME_CONNECTION_CHART_DATA?.options}
+              series={DISASTER_CRIME_CONNECTION_CHART_DATA?.series}
+              type="heatmap"
+              width="956"
+              height="388"
+            />
+            <div className="flex flex-col gap-2 mt-5">
+              <div className="text-white text-sm">Kepadatan</div>
+              <div className="flex h-full gap-2">
+                <div
+                  className="h-[80%] w-3 rounded-md"
+                  style={{
+                    backgroundImage: "linear-gradient(180deg, rgba(247, 37, 41, 0.5) 0%, #F72529 100%)",
+                  }}
+                />
+                <div className="h-[80%] flex flex-col justify-between">
+                  <div className="text-[#706E6B] text-sm">100</div>
+                  <div className="text-[#706E6B] text-sm">1000k</div>
+                </div>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </div>
 
@@ -472,7 +489,7 @@ const TerrorismContent = () => {
       </div>
 
       <div className="flex">
-        <div className="w-[50%] h-[486px] py-[38px] px-8 border border-[#E8E8E8]  flex flex-col">
+        <div className="w-[50%] h-[486px] py-[38px] px-8  border border-[#E8E8E8]  flex flex-col">
           <div className="flex w-full justify-between  mb-10">
             <div className="w-full text-xl font-medium text-white flex items-center gap-2">
               Peta Persebaran Terrorisme
