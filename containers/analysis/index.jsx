@@ -60,7 +60,6 @@ const Analysis = ({ profile }) => {
     <div className="max-h-screen overflow-hidden">
       <DashboardLayout
         topBarConfig={{
-          isShowSearchRegion: false,
           title: "Pemetaan",
           onClickMap: () => router.push("/"),
           buttonActive: "analysis",

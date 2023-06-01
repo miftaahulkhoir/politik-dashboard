@@ -5,10 +5,10 @@ import { TERRORISM_DATA } from "./data/terrorism";
 import { convertDataToBarChartProp } from "./utils";
 
 export const DISTRIBUTION_TAB_LIST = [
-  { label: "Umur Jenis Kelamin", value: "gender" },
-  { label: "Agama", value: "religion" },
+  { label: "Umur dan Jenis Kelamin", value: "gender" },
   { label: "Etnis", value: "etnis" },
   { label: "Bahasa", value: "language" },
+  { label: "Agama", value: "religion" },
 ];
 
 export const TERRORIST_TAB_LIST = [
@@ -94,7 +94,7 @@ export const CRIME_MENU = [
         title: "Pembakaran dengan Sengaja",
       },
       {
-        title: "Panadaban",
+        title: "Penadahan",
       },
     ],
   },
@@ -113,7 +113,7 @@ export const CRIME_MENU = [
         title: "Penipuan/Perbuatan Curang",
       },
       {
-        title: "Pengelapan",
+        title: "Penggelapan",
       },
       {
         title: "Korupsi",
@@ -478,7 +478,7 @@ export const mappedPresencePoliceStation = {
     DEMOGRAPHY_DATA?.police_station_presence_percentage?.exist,
     DEMOGRAPHY_DATA?.police_station_presence_percentage?.not_exist,
   ],
-  colorLabels: ["#9A9A9A", "#F7292D"],
+  colorLabels: ["#F7292D", "#9A9A9A"],
 };
 
 export const mappedPopulationDistribution = convertDataToBarChartProp(DEMOGRAPHY_DATA.population_distribution);
