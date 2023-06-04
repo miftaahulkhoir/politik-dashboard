@@ -1,8 +1,9 @@
 import L from "leaflet";
+import LIST_OCCUPATIONS from "../data/occupations";
 
 import styles from "../../../components/elements/map/Home.module.css";
 import React, { useCallback, useContext, useRef, useState, useEffect } from "react";
-import { isEmpty, reverse, keyBy } from "lodash";
+import { isEmpty, reverse, keyBy, cloneDeep } from "lodash";
 import { SurveyMapContext } from "../SurveyMapContext";
 import geojson from "../geojson";
 
@@ -105,7 +106,7 @@ const SurveyMap = () => {
       return {
         weight: 0.5,
         color: "#ffffff",
-        fillOpacity: 0.6,
+        fillOpacity: colorIndex === undefined ? 0 : 0.6,
         fillColor:
           colorIndex !== undefined &&
           getRandomColorByKey(generateNumberWithMax(selectedSurveyQuestion?.options?.length)),
@@ -138,7 +139,7 @@ const SurveyMap = () => {
     <div>
       {isMounted && (
         <Map className={styles.homeMap} center={cordinate} cordinate={cordinate} zoom={5.4}>
-          {({ TileLayer, GeoJSON, useMap, centroid, polygon }) => {
+          {({ TileLayer, GeoJSON, useMap, centroid, polygon, multiPolygon, booleanPointInPolygon }) => {
             return (
               <>
                 <TileLayer
@@ -146,7 +147,8 @@ const SurveyMap = () => {
                   url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/dark_all/{z}/{x}/{y}.png"
                   attribution='&copy; <a href="http://osorg/copyright">OpenStreetMap</a> contributors'
                 />
-                {!isEmpty(selectedOccupation) &&
+                {isEmpty(selectedProvince) &&
+                  !isEmpty(selectedOccupation) &&
                   selectedOccupation[2] &&
                   pinPoints[2]?.points?.map((user, index) => (
                     <Marker
@@ -161,7 +163,8 @@ const SurveyMap = () => {
                       position={[user[1], user[0]]}
                     />
                   ))}
-                {!isEmpty(selectedOccupation) &&
+                {isEmpty(selectedProvince) &&
+                  !isEmpty(selectedOccupation) &&
                   selectedOccupation[3] &&
                   pinPoints[3]?.points?.map((user, index) => (
                     <Marker
@@ -176,7 +179,8 @@ const SurveyMap = () => {
                       position={[user[1], user[0]]}
                     />
                   ))}
-                {!isEmpty(selectedOccupation) &&
+                {isEmpty(selectedProvince) &&
+                  !isEmpty(selectedOccupation) &&
                   selectedOccupation[4] &&
                   pinPoints[4]?.points?.map((user, index) => (
                     <Marker
@@ -191,7 +195,8 @@ const SurveyMap = () => {
                       position={[user[1], user[0]]}
                     />
                   ))}
-                {!isEmpty(selectedOccupation) &&
+                {isEmpty(selectedProvince) &&
+                  !isEmpty(selectedOccupation) &&
                   selectedOccupation[5] &&
                   pinPoints[5]?.points?.map((user, index) => (
                     <Marker
@@ -206,6 +211,33 @@ const SurveyMap = () => {
                       position={[user[1], user[0]]}
                     />
                   ))}
+
+                {!isEmpty(selectedProvince) &&
+                  !isEmpty(kabkotGeom) &&
+                  points?.map((eachPoint, i) =>
+                    eachPoint.points.map((data, i2) => {
+                      const pol = multiPolygon(kabkotGeom.geojson.features.map((data) => data.geometry.coordinates));
+
+                      const isInsidePol = booleanPointInPolygon(data, pol);
+                      const occupation = LIST_OCCUPATIONS.find((occupation) => occupation.level === eachPoint.id);
+                      return (
+                        isInsidePol && (
+                          <Marker
+                            key={`${i}-${i2}`}
+                            icon={
+                              new L.Icon({
+                                iconUrl: `/images/map/markers/user-${occupation.label}.svg`,
+                                iconSize: [iconSize, iconSize],
+                                iconAnchor: [iconSize / 2, iconSize / 2],
+                              })
+                            }
+                            position={[data[1] + 0.0001, data[0]]}
+                          />
+                        )
+                      );
+                    }),
+                  )}
+
                 {selectedSurveyQuestion && isEmpty(kabkotGeom) && (
                   <GeoJSON
                     ref={GeoJSONEL}
