@@ -436,12 +436,14 @@ const TerrorismContent = () => {
               <p className="text-sm !text-[#04C600]">12%</p>
             </div>
           </div>
-          <div className="text-white text-sm font-medium mt-4">Pelaku Terrorisme terbanyak Dari Jaringan El Chapo</div>
+          <div className="text-white text-sm font-medium mt-4">
+            Pelaku terrorisme paling banyak dari jaringan El Chappo
+          </div>
         </CardContent>
 
         <CardContent className="mt-6">
           <div className="flex items-center gap-2">
-            <p className="text-white text-base ">Risiko Penduduk Terkena Terrorisme</p>
+            <p className="text-white text-base ">Serangan Aksi</p>
             <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
           </div>
 
@@ -492,7 +494,7 @@ const TerrorismContent = () => {
         <div className="w-[50%] h-[486px] py-[38px] px-8  border border-[#E8E8E8]  flex flex-col">
           <div className="flex w-full justify-between  mb-10">
             <div className="w-full text-xl font-medium text-white flex items-center gap-2">
-              Peta Persebaran Terrorisme
+              Peta Persebaran Basis Terrorisme
               <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
             </div>
           </div>
@@ -502,9 +504,8 @@ const TerrorismContent = () => {
         <div className="w-[50%] h-[486px] py-[34px] px-[0px] border border-[#E8E8E8]  flex flex-col">
           <div className="flex w-full justify-between  mb-2">
             <div className="w-full text-xl font-medium text-white flex items-center gap-2 px-[36px]">
-              Daerah Paling Sering Terrorisme
+              Daerah Paling Terjadi Terrorisme
               <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
-              <span className="text-sm font-normal">(dalam jutaan)</span>
             </div>
           </div>
           <div className="px-[36px]">
@@ -557,7 +558,7 @@ const TerrorismContent = () => {
         <div className="h-[486px] w-full py-[38px] px-[84px] border border-[#E8E8E8] flex flex-col">
           <div className="flex w-full justify-between ">
             <div className="w-full text-xl font-medium text-white flex items-center gap-2">
-              Pertumbuhan Terjadinya Terrorisme
+              Graafik Terjadinya Terrorisme
               <AiOutlineQuestionCircle className="!text-[#9A9A9A]" />
             </div>
           </div>

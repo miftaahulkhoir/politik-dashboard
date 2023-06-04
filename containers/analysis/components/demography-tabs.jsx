@@ -284,7 +284,7 @@ const DemographyTab = () => {
           </div>
 
           <div className="px-8">
-            <MapCluster />
+            <MapCluster withLegend={false} />
           </div>
         </CardContent>
         <CardContent className="max-w-[50%] w-[50%] h-[486px] py-[34px] !px-[0]">

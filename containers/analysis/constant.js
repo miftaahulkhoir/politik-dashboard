@@ -418,7 +418,7 @@ export const DISASTER_CRIME_CONNECTION_CHART_DATA = {
         max: 1000,
       }),
     },
-  ],
+  ].reverse(),
   options: {
     yaxis: {
       labels: {

@@ -7,7 +7,7 @@ import "leaflet/dist/leaflet.css";
 
 import axios from "axios";
 
-const MapCluster = () => {
+const MapCluster = ({ withLegend = true }) => {
   const [data, setData] = useState(null);
 
   useEffect(() => {
@@ -85,21 +85,23 @@ const MapCluster = () => {
 
         <GeoJSON data={data} style={styleFeature} />
       </MapContainer>
-      <div className="flex flex-col gap-2">
-        <div className="text-white text-sm">Kepadatan</div>
-        <div className="flex h-full gap-2">
-          <div
-            className="h-[80%] w-3 rounded-md"
-            style={{
-              backgroundImage: "linear-gradient(180deg, rgba(247, 37, 41, 0.5) 0%, #F72529 100%)",
-            }}
-          />
-          <div className="h-[80%] flex flex-col justify-between">
-            <div className="text-[#706E6B] text-sm">100</div>
-            <div className="text-[#706E6B] text-sm">1000k</div>
+      {withLegend && (
+        <div className="flex flex-col gap-2">
+          <div className="text-white text-sm">Kepadatan</div>
+          <div className="flex h-full gap-2">
+            <div
+              className="h-[80%] w-3 rounded-md"
+              style={{
+                backgroundImage: "linear-gradient(180deg, rgba(247, 37, 41, 0.5) 0%, #F72529 100%)",
+              }}
+            />
+            <div className="h-[80%] flex flex-col justify-between">
+              <div className="text-[#706E6B] text-sm">100</div>
+              <div className="text-[#706E6B] text-sm">1000k</div>
+            </div>
           </div>
         </div>
-      </div>
+      )}
     </div>
   );
 };
