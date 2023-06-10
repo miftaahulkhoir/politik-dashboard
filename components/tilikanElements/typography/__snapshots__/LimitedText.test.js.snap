@@ -1,0 +1,62 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`LimitedText component should not have unexpected changes 1`] = `
+<span
+  aria-label="Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellendus animi, nam autem, delectus similique voluptatibus eum et, perspiciatis provident incidunt aut! Quia asperiores eveniet culpa ullam unde alias dolore corrupti."
+  className="ant-typography ant-typography-ellipsis ant-typography-single-line css-dev-only-do-not-override-1n7nwfa"
+  onMouseEnter={[Function]}
+  onMouseLeave={[Function]}
+  style={
+    {
+      "WebkitLineClamp": undefined,
+      "width": "40ch",
+    }
+  }
+>
+  Lorem, ipsum dolor sit amet consectetur adipisicing elit. Repellendus animi, nam autem, delectus similique voluptatibus eum et, perspiciatis provident incidunt aut! Quia asperiores eveniet culpa ullam unde alias dolore corrupti.
+  <span
+    aria-hidden={true}
+    style={
+      {
+        "display": "block",
+        "fontSize": 0,
+        "left": 0,
+        "pointerEvents": "none",
+        "position": "fixed",
+        "top": 0,
+        "visibility": "hidden",
+        "whiteSpace": "nowrap",
+        "wordBreak": "keep-all",
+        "zIndex": -9999,
+      }
+    }
+  >
+    lg
+  </span>
+  <span
+    aria-hidden={true}
+    style={
+      {
+        "display": "block",
+        "fontSize": 0,
+        "left": 0,
+        "margin": 0,
+        "padding": 0,
+        "pointerEvents": "none",
+        "position": "fixed",
+        "top": 0,
+        "visibility": "hidden",
+        "whiteSpace": "normal",
+        "width": 0,
+        "zIndex": -9999,
+      }
+    }
+  >
+    <span
+      aria-hidden={true}
+    >
+      ...
+    </span>
+  </span>
+</span>
+`;

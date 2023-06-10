@@ -1,0 +1,24 @@
+.container {
+  position: absolute;
+  bottom: 32px;
+  left: 22px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: end;
+  z-index: 99;
+  gap: 8px;
+  pointer-events: all;
+}
+
+.container_small {
+  transform-origin: top right;
+  scale: 0.8;
+}
+
+.contents_container * {
+  pointer-events: all;
+}
+
+.menu_container {
+  flex-direction: column;
+}

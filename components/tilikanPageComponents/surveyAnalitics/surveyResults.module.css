@@ -1,0 +1,18 @@
+.charts_container {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-gap: 16px;
+}
+
+@media only screen and (max-width: 800px) {
+  .charts_container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.answer_text_item {
+  border-radius: 4px;
+  background-color: #f1f1f1;
+  padding: 8px 12px;
+  word-break: break-word;
+}

@@ -1,8 +1,9 @@
+import { useGetSurveyDateCount } from "@/utils/services/survey";
 import SurveyAnalyticLineChart from "./SurveyAnalyticLineChart";
 import SurveyAnalyticPieChart from "./SurveyAnalyticPieChart";
 import SurveyAnalyticTableChart from "./SurveyAnalyticTableChart";
 import SurveyAnalyticTextChart from "./SurveyAnalyticTextChart";
-import surveyCount from "../../data/survey-count";
+// import surveyCount from "../../data/survey-count";
 
 function locationToTableChartOptions(locations) {
   return locations.map((v) => {
@@ -24,9 +25,11 @@ function getFormattedDate(date) {
 }
 
 export default function SurveyAnalyticChart({ survey }) {
-  const respondents = surveyCount.find((item) => item.id === survey?.id)?.data;
-  const dates = respondents.map((item) => getFormattedDate(item.date));
-  const counts = respondents.map((item) => item.count);
+  const { data, isLoading } = useGetSurveyDateCount(survey?.id, { enabled: Boolean(survey?.id) });
+  const dateCount = data?.data?.data;
+
+  const dates = dateCount?.map((item) => getFormattedDate(item.date));
+  const counts = dateCount?.map((item) => item.count);
 
   const chartElements = () => {
     const getPieData = (options) => {
@@ -62,6 +65,8 @@ export default function SurveyAnalyticChart({ survey }) {
     });
     return elements;
   };
+
+  if (isLoading) return null;
 
   return (
     <div className="grid grid-cols-2 gap-4 mt-8">

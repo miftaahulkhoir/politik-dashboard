@@ -1,0 +1,107 @@
+.chart_left {
+  height: 250px;
+}
+
+/* blue chart */
+.blue_card {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: #016cee;
+  color: white;
+}
+
+.multi_avatar_container {
+  display: flex;
+  flex-direction: row-reverse;
+  justify-content: start;
+  min-height: 48px;
+}
+
+.multi_avatar_container > *:not(:last-child) {
+  margin-left: -5px;
+}
+
+.multi_avatar_container > * {
+  background: white;
+  color: black;
+}
+
+.hr {
+  border-top: 1px solid #3e92f8;
+  margin: 24px 0;
+}
+
+.blue_card .title_top_left {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.blue_card .value_top_left {
+  font-size: 48px;
+  font-weight: 600;
+}
+
+.blue_card .title_top_right,
+.blue_card .title_bottom_left,
+.blue_card .title_bottom_right {
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.blue_card .title_top_right {
+  margin-top: 16px;
+  margin-bottom: 12px;
+}
+
+.blue_card .value_bottom_left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.blue_card .value_bottom_left_1 {
+  font-size: 32px;
+  font-weight: 600;
+}
+
+.blue_card .value_bottom_left_2 {
+  font-size: 12px;
+  font-weight: 400;
+  padding: 3px 8px;
+  background: #3e92f8;
+  border-radius: 8px;
+}
+
+.social_summary_card {
+  padding: 16px 20px;
+  border-radius: 12px;
+  background: white;
+  color: black;
+}
+
+.social_summary_card .title_top_left {
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.social_summary_card .subtitle_top_left {
+  font-size: 13px;
+  font-weight: 400;
+}
+
+.social_summary_card .label {
+  padding-left: 10px;
+  font-size: 14px;
+  font-weight: 400;
+  color: #636363;
+}
+
+.social_summary_card .value {
+  padding-left: 10px;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.social_chart {
+  height: 410px;
+}
