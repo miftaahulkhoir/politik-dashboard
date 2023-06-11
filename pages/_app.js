@@ -10,6 +10,7 @@ import "../styles/globals.css";
 import { redirectUser } from "../utils/services/auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider, theme } from "antd";
+import getProfileServerSide from "@/utils/services/get-profile-serverside";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
@@ -88,15 +89,13 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     destroyCookie(ctx, "token");
     protectedRoutes && redirectUser(ctx, "/login");
   } else {
-    const res = await axios.get(`${baseURL}api/profile`, {
-      withCredentials: true,
-      headers: { Cookie: `token=${token}` },
-    });
-    pageProps.profile = await res.data.data;
+    const { profile } = await getProfileServerSide(ctx);
+    pageProps.profile = profile;
+
     if (Component.getServerSideProps) {
       pageProps = await Component.getServerSideProps(ctx);
     }
-    !protectedRoutes && redirectUser(ctx, "/");
+    // !protectedRoutes && redirectUser(ctx, "/");
   }
   return { pageProps };
 };

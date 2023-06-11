@@ -1,5 +1,9 @@
+import { ACCESS_LIST } from "@/constants/access-list";
 import PatroliPage from "@/containers/patroli";
 import MonitoringProvider from "@/providers/issue-providers";
+
+import { handleAccess } from "@/utils/helpers/handle-access-serverside";
+
 import axios from "axios";
 // import dynamic from "next/dynamic";
 import { parseCookies } from "nookies";
@@ -23,6 +27,8 @@ export async function getServerSideProps(ctx) {
   } else {
     baseURL = process.env.APP_BASEURL_LOCAL;
   }
+
+  await handleAccess(ctx, ACCESS_LIST.MONITORING);
 
   let kecamatan = [];
   let koordinator = [];

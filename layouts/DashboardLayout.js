@@ -20,7 +20,7 @@ const DashboardLayout = ({
       <div className="relative h-screen w-screen">
         <HomeNavbar profile={profile} setSelectedContent={setSelectedContent} selectedContent={selectedContent} />
         {children}
-        <Menu topBarConfig={topBarConfig} />
+        <Menu profile={profile} topBarConfig={topBarConfig} />
       </div>
     </>
   );

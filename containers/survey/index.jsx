@@ -23,6 +23,7 @@ const SurveyContainerWithProvider = (props) => {
   return (
     <DashboardLayout
       title="Survey · Chakra"
+      profile={props?.profile}
       topBarConfig={{
         isShowSearchRegion: true,
         title: "Survey",
@@ -43,10 +44,10 @@ const SurveyContainerWithProvider = (props) => {
   );
 };
 
-const SurveyContainer = () => {
+const SurveyContainer = ({ profile }) => {
   return (
     <SurveyMapProvider>
-      <SurveyContainerWithProvider />
+      <SurveyContainerWithProvider profile={profile} />
     </SurveyMapProvider>
   );
 };

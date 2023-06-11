@@ -10,47 +10,8 @@ import { logoutUser } from "@/utils/services/auth";
 import { routes } from "@/constants/route";
 import Link from "next/link";
 import { useRouter } from "next/router";
-
-const sidebarMenu = [
-  {
-    label: routes.home.name,
-    path: routes.home.path,
-    icon: (props) => <ImMap2 strokeWidth={1} {...props} />,
-  },
-  {
-    label: routes.talkwalker.name,
-    icon: (props) => <TbSocial {...props} />,
-    path: routes.talkwalker.path,
-  },
-  {
-    label: routes.survey.name,
-    path: routes.survey.path,
-    icon: (props) => <RiSurveyLine {...props} />,
-  },
-];
-
-const sidebarMenuSecond = [
-  {
-    label: routes.managementData.name,
-    path: routes.managementData.path,
-    icon: (props) => <TbServer2 {...props} />,
-  },
-  {
-    label: routes.users.name,
-    path: routes.users.path,
-    icon: (props) => <TbUsers {...props} />,
-  },
-  {
-    label: routes.managementAccess.name,
-    path: routes.managementAccess.path,
-    icon: (props) => <TbUser {...props} />,
-  },
-  {
-    label: routes.managementIssue.name,
-    path: routes.managementIssue.path,
-    icon: (props) => <TbAccessible {...props} />,
-  },
-];
+import accessChecker from "@/utils/helpers/accessChecker";
+import { ACCESS_LIST } from "@/constants/access-list";
 
 const SidebarMenu = ({ pathname, path, label, icon }) => {
   return (
@@ -70,9 +31,82 @@ const SidebarMenu = ({ pathname, path, label, icon }) => {
   );
 };
 
-const Sidebar = () => {
+const Sidebar = ({ profile }) => {
   const router = useRouter();
   const pathname = router.pathname.split("/")?.[1];
+
+  const [canAccessMonitoring, canAccessManagement, canAccessUserManagement, canAccessDataManagement, canAccessSurvey] =
+    accessChecker(
+      [
+        ACCESS_LIST.MONITORING,
+        ACCESS_LIST.MANAGEMENT_ACCESS,
+        ACCESS_LIST.MANAGEMENT_USER,
+        ACCESS_LIST.MANAGEMENT_DATA,
+        ACCESS_LIST.SURVEY,
+      ],
+      profile?.accesses || [],
+    );
+
+  const sidebarMenu = [
+    ...(canAccessMonitoring
+      ? [
+          {
+            label: routes.home.name,
+            path: routes.home.path,
+            icon: (props) => <ImMap2 strokeWidth={1} {...props} />,
+          },
+        ]
+      : []),
+    {
+      label: routes.talkwalker.name,
+      icon: (props) => <TbSocial {...props} />,
+      path: routes.talkwalker.path,
+    },
+    ...(canAccessSurvey
+      ? [
+          {
+            label: routes.survey.name,
+            path: routes.survey.path,
+            icon: (props) => <RiSurveyLine {...props} />,
+          },
+        ]
+      : []),
+  ];
+
+  const sidebarMenuSecond = [
+    ...(canAccessDataManagement
+      ? [
+          {
+            label: routes.managementData.name,
+            path: routes.managementData.path,
+            icon: (props) => <TbServer2 {...props} />,
+          },
+        ]
+      : []),
+    ...(canAccessUserManagement
+      ? [
+          {
+            label: routes.users.name,
+            path: routes.users.path,
+            icon: (props) => <TbUsers {...props} />,
+          },
+        ]
+      : []),
+    ...(canAccessManagement
+      ? [
+          {
+            label: routes.managementAccess.name,
+            path: routes.managementAccess.path,
+            icon: (props) => <TbUser {...props} />,
+          },
+        ]
+      : []),
+    {
+      label: routes.managementIssue.name,
+      path: routes.managementIssue.path,
+      icon: (props) => <TbAccessible {...props} />,
+    },
+  ];
 
   return (
     <div className="sidebar bg-new-black absolute left-0 h-[calc(100vh-78px)] w-[62px] top-[78px] z-20 flex flex-col justify-between py-6 px-2 border-r-[2px] border-black">
