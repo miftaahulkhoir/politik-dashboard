@@ -4,6 +4,7 @@ import dynamic from "next/dynamic";
 import Head from "next/head";
 import { parseCookies } from "nookies";
 import { useEffect, useMemo, useState } from "react";
+import { handleAccess } from "@/utils/helpers/handle-access-serverside";
 
 import Card from "../../components/tilikanElements/card/Card";
 import NameAvatar from "../../components/tilikanElements/nameAvatar/NameAvatar";
@@ -17,6 +18,7 @@ import { useFindAllSubordinateUsers, useUserRankings } from "../../utils/service
 import { TbDotsVertical } from "react-icons/tb";
 import DashboardLayout from "@/layouts/DashboardLayout";
 import { useRouter } from "next/router";
+import { ACCESS_LIST } from "@/constants/access-list";
 
 const Centrifuge = require("centrifuge");
 
@@ -510,6 +512,8 @@ export async function getServerSideProps(ctx) {
   // } else {
   //   baseURL = process.env.APP_BASEURL_LOCAL;
   // }
+
+  await handleAccess(ctx, ACCESS_LIST.SURVEY);
 
   let kecamatan = [];
   let koordinator = [];

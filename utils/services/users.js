@@ -24,6 +24,13 @@ export const useFindOneUser = (id) => {
   return { user, error, isLoading };
 };
 
+export const useFindOneUserAccess = (id) => {
+  const { data, error, isLoading } = useSWR(id ? `/api/users/${id}/accesses` : null, fetcher);
+  const user = data?.data || {};
+
+  return { user, error, isLoading };
+};
+
 export const createUser = async (user) => {
   return await axios.post("/api/users/create", user);
 };

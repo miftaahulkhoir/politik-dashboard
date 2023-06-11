@@ -3,10 +3,10 @@ import React from "react";
 import Sidebar from "./Sidebar";
 import TopBar from "./TopBar";
 
-const Menu = ({ topBarConfig }) => {
+const Menu = ({ topBarConfig, profile }) => {
   return (
     <>
-      <Sidebar />
+      <Sidebar profile={profile} />
       <TopBar {...topBarConfig} />
     </>
   );

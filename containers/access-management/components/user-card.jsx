@@ -13,11 +13,7 @@ const UserCard = ({ name, email, nik, isSelected, avatar, onClick }) => {
     >
       <div className="flex gap-3 cursor-pointer">
         {!isEmpty(avatar) ? (
-          <img
-            class="w-10 h-10 rounded-full"
-            src="https://flowbite.com/docs/images/people/profile-picture-5.jpg"
-            alt="Rounded avatar"
-          />
+          <img class="w-10 h-10 rounded-full" src={avatar} alt="Rounded avatar" />
         ) : (
           <TbUserCircle className="w-10 h-10" />
         )}

@@ -1,11 +1,13 @@
+import { ACCESS_LIST } from "@/constants/access-list";
 import AccessManagement from "@/containers/access-management";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import { handleAccess } from "@/utils/helpers/handle-access-serverside";
 
-import { Space, notification } from "antd";
+import { notification, Button } from "antd";
 import debounce from "lodash.debounce";
 import { useEffect, useMemo, useState } from "react";
+import { TbPlus } from "react-icons/tb";
 
-import UserDataTable from "../../components/pagecomponents/users/UserDataTable";
 import UserFormDrawer from "../../components/pagecomponents/users/UserFormDrawer";
 import UserSearchBar from "../../components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "../../utils/services/profiles";
@@ -85,7 +87,18 @@ export default function ManagementAccessPage({ profile }) {
     <DashboardLayout
       profile={profile}
       title="Manajemen Akses · Chakra"
-      topBarConfig={{ title: "Manajemen Akses", hideMapButton: true }}
+      topBarConfig={{
+        isShowSearchRegion: true,
+        title: "Manajemen Pengguna",
+        hideMapButton: true,
+        customRender: (
+          <div className="flex justify-end w-full">
+            <Button className="btn-primary" icon={<TbPlus />} onClick={() => setIsDrawerActive(true)}>
+              Tambah Pengguna
+            </Button>
+          </div>
+        ),
+      }}
     >
       <div className="flex flex-col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
         {contextHolderNotification}
@@ -120,5 +133,6 @@ export default function ManagementAccessPage({ profile }) {
 }
 
 export async function getServerSideProps(ctx) {
+  await handleAccess(ctx, ACCESS_LIST.MANAGEMENT_ACCESS);
   return { props: {} };
 }
