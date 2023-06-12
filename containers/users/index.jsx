@@ -11,7 +11,7 @@ import { useFindProfile } from "@/utils/services/profiles";
 import { useFindAllSubordinateUsers } from "@/utils/services/users";
 import { TbPlus } from "react-icons/tb";
 
-export default function UsersContainer() {
+export default function UsersContainer({ profile }) {
   const [users, setUsers] = useState([]);
   const { users: fetchUsers } = useFindAllSubordinateUsers();
   useEffect(() => {
@@ -87,6 +87,7 @@ export default function UsersContainer() {
 
   return (
     <DashboardLayout
+      profile={profile}
       title="Manajemen Pengguna · Patrons"
       topBarConfig={{
         isShowSearchRegion: true,

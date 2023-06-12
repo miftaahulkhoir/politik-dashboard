@@ -12,7 +12,7 @@ import { useFindAllSubordinateUsers } from "@/utils/services/users";
 import { dummyTable } from "@/components/pagecomponents/issues/constant";
 import IssueDataTable from "@/components/pagecomponents/issues/IssueDataTable";
 
-export default function ManagementDataContainer() {
+export default function ManagementDataContainer({ profile }) {
   const [users, setUsers] = useState([]);
   const { users: fetchUsers } = useFindAllSubordinateUsers();
   useEffect(() => {
@@ -143,6 +143,7 @@ export default function ManagementDataContainer() {
         </div>
       </Modal>
       <DashboardLayout
+        profile={profile}
         title="Manajemen Data · Cakra"
         topBarConfig={{
           isShowSearchRegion: true,
