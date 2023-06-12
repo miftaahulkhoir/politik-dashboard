@@ -81,6 +81,10 @@ export default function UsersContainer() {
     return filteredUsers.map((user, i) => ({ ...user, no: i + 1 }));
   }, [filteredUsers]);
 
+  const onClickAddUser = () => {
+    setIsDrawerActive(true);
+  };
+
   return (
     <DashboardLayout
       title="Manajemen Pengguna · Patrons"
@@ -90,7 +94,7 @@ export default function UsersContainer() {
         hideMapButton: true,
         customRender: (
           <div className="flex justify-end w-full">
-            <Button className="btn-primary" icon={<TbPlus />} onClick={() => setIsDrawerActive(true)}>
+            <Button className="btn-primary" icon={<TbPlus />} onClick={onClickAddUser}>
               Tambah Pengguna
             </Button>
           </div>
@@ -121,6 +125,7 @@ export default function UsersContainer() {
           <UserDataTable
             data={filteredRoleUsers}
             currentUser={currentUser}
+            selectedUser={selectedUser}
             setSelectedUser={setSelectedUser}
             setIsFormEdit={setIsFormEdit}
             setIsDrawerActive={setIsDrawerActive}
@@ -132,8 +137,4 @@ export default function UsersContainer() {
       </div>
     </DashboardLayout>
   );
-}
-
-export async function getServerSideProps(ctx) {
-  return { props: {} };
 }

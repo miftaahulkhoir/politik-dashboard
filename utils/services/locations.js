@@ -18,7 +18,7 @@ export const useFindAllDistricts = () => {
 };
 
 export const useFindAllDistrictsByRegencyID = (regencyID) => {
-  const { data, error, isLoading } = useSWR(regencyID ? `/api/districs?regencyid=${regencyID}` : null, fetcher);
+  const { data, error, isLoading } = useSWR(regencyID ? `/api/districts?regencyid=${regencyID}` : null, fetcher);
   const districts = data?.data || [];
 
   return { districts, error, isLoading };

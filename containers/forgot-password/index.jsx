@@ -9,19 +9,22 @@ export default function ForgotPasword() {
 
   const handleResetPassword = async (event) => {
     event.preventDefault();
-    const res = await forgotPassword(email);
-    if (res.status === 200) {
-      message.success("Silahkan periksa email anda!");
-      setEmail("");
-    } else {
-      message.error("Something went wrong");
-    }
+    forgotPassword(email)
+      .then(() => {
+        message.success("Silahkan periksa email anda!");
+        setEmail("");
+      })
+      .catch((err) => {
+        console.log(err);
+        const { message: errMessage = "Something went wrong" } = err?.response?.data;
+        message.error(errMessage);
+      });
   };
 
   return (
     <>
       <Head>
-        <title>Forgot Password · Chakra</title>
+        <title>Lupa Password · Chakra</title>
       </Head>
       <div className="flex w-screen h-screen">
         <div className="flex flex-[3] items-center justify-center">

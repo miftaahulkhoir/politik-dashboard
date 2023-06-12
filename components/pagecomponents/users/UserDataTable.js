@@ -1,9 +1,15 @@
-import { Button, Card, Col, Modal, Row, Tooltip } from "antd";
-import { useCallback, useMemo } from "react";
-import { TbPencil, TbTrashX, TbUserOff } from "react-icons/tb";
+import { Button, Card, Form, Col, Input, Modal, Row, Tooltip, Typography } from "antd";
+import { useCallback, useMemo, useState } from "react";
+import { TbPencil, TbTrashX } from "react-icons/tb";
+import { RiLockPasswordLine } from "react-icons/ri";
 
 import formateDateTime from "../../../utils/helpers/formatDateTime";
-import { deleteUser, updateUserOccupation, useFindAllOccupations } from "../../../utils/services/users";
+import {
+  deleteUser,
+  updateUserOccupation,
+  updateUserPassword,
+  useFindAllOccupations,
+} from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 import LimitedText from "../../elements/typography/LimitedText";
 
@@ -11,6 +17,7 @@ export default function UserDataTable({
   data,
   currentUser,
   setSelectedUser,
+  selectedUser,
   setIsFormEdit,
   setIsDrawerActive,
   apiNotification,
@@ -18,6 +25,14 @@ export default function UserDataTable({
   setUsers,
 }) {
   const { occupations } = useFindAllOccupations();
+  const [openModal, setOpenModal] = useState(false);
+  const [form] = Form.useForm();
+
+  const handleOpenModal = () => {
+    setOpenModal((prev) => !prev);
+    form.resetFields();
+  };
+
   const blacklistOccupation = useMemo(() => {
     if (occupations?.length === 0) return "";
     return occupations[occupations.length - 1];
@@ -103,6 +118,17 @@ export default function UserDataTable({
     [setIsDrawerActive, setIsFormEdit, setSelectedUser],
   );
 
+  const handleUpdatePass = (data) => {
+    const pass = form.getFieldValue("password");
+    updateUserPassword(selectedUser?.id, pass).then(() => {
+      apiNotification.success({
+        message: "Sukses",
+        description: `Password berhasil diubah`,
+      });
+      handleOpenModal();
+    });
+  };
+
   const columns = useMemo(() => {
     return [
       {
@@ -163,32 +189,33 @@ export default function UserDataTable({
         name: "Aksi",
         selector: (row) => {
           const canModify = currentUser?.occupation?.level + 1 === row?.occupation?.level;
-          const canBlacklist = canModify && row?.occupation?.level !== 5;
           return (
             <div className="d-flex gap-2">
               <Tooltip title="Edit pengguna">
                 <Button
                   type="text"
                   disabled={!canModify}
-                  icon={<TbPencil size={20} color={canModify ? "#FFFFFF" : "#cccccc"} />}
+                  icon={<TbPencil size={18} color={canModify ? "#FFFFFF" : "#cccccc"} />}
                   shape="circle"
                   onClick={() => updateUserHandler(row)}
                 ></Button>
               </Tooltip>
-              <Tooltip title="Masukkan ke daftar hitam">
+              <Tooltip title="Update Password">
                 <Button
+                  onClick={() => {
+                    handleOpenModal();
+                    setSelectedUser(row);
+                  }}
                   type="text"
-                  disabled={!canBlacklist}
-                  icon={<TbUserOff size={20} color={canBlacklist ? "#FFFFFF" : "#cccccc"} />}
+                  icon={<RiLockPasswordLine size={18} color={canModify ? "#FFFFFF" : "#cccccc"} />}
                   shape="circle"
-                  onClick={() => blacklistUserHandler(row)}
                 ></Button>
               </Tooltip>
               <Tooltip title="Hapus pengguna">
                 <Button
                   type="text"
                   disabled={!canModify}
-                  icon={<TbTrashX size={20} color={canModify ? "#B12E2E" : "#cccccc"} />}
+                  icon={<TbTrashX size={18} color={canModify ? "#B12E2E" : "#cccccc"} />}
                   shape="circle"
                   onClick={() => deleteUserHandler(row)}
                 ></Button>
@@ -204,6 +231,54 @@ export default function UserDataTable({
 
   return (
     <Row justify="end">
+      <Modal
+        title={`Update Password ${selectedUser?.name}`}
+        open={openModal}
+        cancelText="Batal"
+        okText="Simpan"
+        onCancel={handleOpenModal}
+        onOk={handleUpdatePass}
+      >
+        <Form form={form}>
+          <Typography.Title className="mt-4" level={5}>
+            Password Baru
+          </Typography.Title>
+          <Form.Item
+            name="password"
+            hasFeedback
+            rules={[
+              {
+                required: true,
+                message: "Masukkan password baru!",
+              },
+            ]}
+          >
+            <Input.Password placeholder="Masukkan password baru" />
+          </Form.Item>
+          <Typography.Title level={5}>Konfirmasi Password</Typography.Title>
+          <Form.Item
+            name="password_confirm"
+            hasFeedback
+            dependencies={["password"]}
+            rules={[
+              {
+                required: true,
+                message: "masukkan konfirmasi password!",
+              },
+              ({ getFieldValue }) => ({
+                validator(_, value) {
+                  if (!value || getFieldValue("password") === value) {
+                    return Promise.resolve();
+                  }
+                  return Promise.reject(new Error("Konfirmasi password tidak sesuai"));
+                },
+              }),
+            ]}
+          >
+            <Input.Password placeholder="Konfirmasi password baru " />
+          </Form.Item>
+        </Form>
+      </Modal>
       <Col span={24}>
         <Card bodyStyle={{ padding: "0px" }} style={{ overflow: "hidden" }}>
           <CustomDataTable columns={columns} data={data} pagination />

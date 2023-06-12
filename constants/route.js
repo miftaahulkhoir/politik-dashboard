@@ -12,8 +12,8 @@ export const routes = {
     name: "talkwalker",
   },
   users: {
-    path: "/users",
-    name: "users",
+    path: "/management-users",
+    name: "management-users",
   },
   managementData: {
     path: "/management-data",
