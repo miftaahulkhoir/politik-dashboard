@@ -50,6 +50,12 @@ export const updateUserOccupation = async (userID, occupationID) => {
   });
 };
 
+export const updateUserPassword = async (userID, password) => {
+  return await axios.put(`/api/users/update-password/${userID}`, {
+    password,
+  });
+};
+
 // role occupation
 export const findAllOccupations = async () => {
   return await axios.get("/api/occupations");

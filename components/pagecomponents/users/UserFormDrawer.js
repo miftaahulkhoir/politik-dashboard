@@ -1,5 +1,5 @@
 import { Button, Col, Drawer, Form, Grid, Input, InputNumber, Radio, Row, Select, Typography, message } from "antd";
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 
 import { useFindAllDistrictsByRegencyID, useFindAllRegencies } from "../../../utils/services/locations";
 import { createUser, updateUser, useFindAllOccupations, useFindOneUser } from "../../../utils/services/users";
@@ -21,72 +21,24 @@ export default function UserFormDrawer({
     return !screen.md && !screen.lg && !screen.xl && !screen.xxl;
   }, [screen]);
 
-  // input form states
-  const [name, setName] = useState("");
-  const [gender, setGender] = useState("");
-  const [nik, setNik] = useState("");
-  const [wa, setWa] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [occupation, setOccupation] = useState("");
-  const [regency, setRegency] = useState("");
-  const [district, setDistrict] = useState("");
-  const [latitude, setLatitude] = useState("");
-  const [longitude, setLongitude] = useState("");
-
-  // forms selects
   const { occupations } = useFindAllOccupations();
   const { regencies } = useFindAllRegencies();
-  const { districts } = useFindAllDistrictsByRegencyID(regency);
+  const { districts } = useFindAllDistrictsByRegencyID();
 
-  // fill form if edit
   const { user: userComplete } = useFindOneUser(selectedUser?.id);
-  useEffect(() => {
-    if (!isEdit) return;
-    // swr not auto update if hit multipe time with same id
-    setName(selectedUser?.name);
-
-    setOccupation(userComplete?.occupation_id);
-    setNik(userComplete?.nik);
-    setEmail(userComplete?.nik);
-    setPassword("********");
-    setWa(userComplete?.phone);
-    setGender(userComplete?.gender);
-    setRegency(userComplete?.distric_id?.substring(0, 4));
-    setDistrict(userComplete?.distric_id);
-    setLatitude(userComplete?.latitude);
-    setLongitude(userComplete?.longitude);
-  }, [isEdit, userComplete, selectedUser]);
-
-  const clearForm = () => {
-    setOccupation("");
-    setName("");
-    setNik("");
-    setEmail("");
-    setPassword("");
-    setWa("");
-    setGender("");
-    setRegency("");
-    setDistrict("");
-    setLatitude("");
-    setLongitude("");
-  };
 
   const onClose = () => {
     setOpen(false);
-    setTimeout(() => {
-      setIsEdit(false);
-      clearForm();
-    }, 500);
+    setIsEdit(false);
+    form.resetFields();
   };
 
-  // handler
   const updateUserHandler = (data) => {
-    updateUser(selectedUser?.id, data)
-      .then((res) => {
+    updateUser(userComplete?.id, data)
+      .then(() => {
         setUsers((prevUsers) => {
           const newUsers = prevUsers.map((user) => {
-            if (user?.id === selectedUser?.id) {
+            if (user?.id === userComplete?.id) {
               return { ...user, ...data };
             }
             return user;
@@ -96,7 +48,7 @@ export default function UserFormDrawer({
 
         apiNotification.success({
           message: "Berhasil",
-          description: "Perubahan user telah disimpan",
+          description: "Perubahan Pengguna telah disimpan",
         });
 
         form.resetFields();
@@ -110,7 +62,7 @@ export default function UserFormDrawer({
       .then((res) => {
         apiNotification.success({
           message: "Berhasil",
-          description: "User baru ditambahkan",
+          description: "Pengguna baru ditambahkan",
         });
 
         setUsers((prevUsers) => {
@@ -124,40 +76,63 @@ export default function UserFormDrawer({
       })
       .catch((err) => {
         const { message: errMessage = "" } = err?.response?.data || {};
-        message.error(errMessage || "Submit failed!");
+        message.error(errMessage || "Proses Gagal!");
       });
   };
 
-  const submitHandler = () => {
-    if (!isEdit) {
-      const data = {
-        occupation_id: occupation,
-        nik: nik.toString(),
-        name: name,
-        email: email,
-        password: password,
-        phone: wa.toString(),
-        gender: gender,
-        distric_id: district,
-        latitude: latitude,
-        longitude: longitude,
-      };
-      addUserHandler(data);
-    } else {
-      const data = {
-        name: name,
-      };
-      updateUserHandler(data);
-    }
+  const submitHandler = (data) => {
+    const {
+      occupation_id: occupationId,
+      nik,
+      name,
+      email,
+      password,
+      phone,
+      gender,
+      district_id: districtId,
+      latitude,
+      longitude,
+    } = data || {};
+    const bodyData = {
+      occupation_id: occupationId,
+      nik: nik.toString(),
+      name,
+      email,
+      password,
+      phone: phone.toString(),
+      gender,
+      district_id: districtId,
+      latitude,
+      longitude,
+    };
+
+    if (!isEdit) return addUserHandler(bodyData);
+    return updateUserHandler({ name });
   };
 
   const onFinishFailed = () => {
-    message.error("Submit failed!");
+    message.error("Proses Gagal!");
   };
+
+  useEffect(() => {
+    if (open && !isEdit) return form.resetFields();
+    return form.setFieldsValue({
+      name: userComplete.name,
+      nik: userComplete.nik?.toString(),
+      email: userComplete.email,
+      password: userComplete.password,
+      phone: userComplete.phone,
+      gender: userComplete.gender,
+      district_id: userComplete.district,
+      occupation_id: userComplete.occupation_id,
+      latitude: userComplete.latitude,
+      longitude: userComplete.longitude,
+    });
+  }, [userComplete, open, isEdit]);
 
   return (
     <Drawer
-      title={isEdit ? "Edit User" : "Tambah Pengguna"}
+      title={isEdit ? "Edit Pengguna" : "Tambah Pengguna"}
       placement="right"
       onClose={onClose}
       open={open}
@@ -177,7 +152,7 @@ export default function UserFormDrawer({
               ]}
               style={{ marginBottom: 0 }}
             >
-              <Input value={name} onChange={(e) => setName(e.target.value)} />
+              <Input />
             </Form.Item>
           </Col>
 
@@ -186,10 +161,6 @@ export default function UserFormDrawer({
             <Form.Item name="gender" rules={[{ required: true, message: "Pilih Jenis Kelamin" }]}>
               <Radio.Group
                 disabled={isEdit}
-                value={gender}
-                onChange={(e) => {
-                  setGender(e.target.value);
-                }}
                 optionType="button"
                 buttonStyle="solid"
                 options={[
@@ -202,52 +173,40 @@ export default function UserFormDrawer({
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>NIK</Typography.Title>
             <Form.Item name="nik" rules={[{ required: true, message: "Masukkan NIK" }]}>
-              <InputNumber
-                className="w-full"
-                controls={false}
-                value={nik}
-                disabled={isEdit}
-                onChange={(e) => setNik(e)}
-              />
+              <InputNumber className="w-full" controls={false} disabled={isEdit} />
             </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Nomor WhatsApp</Typography.Title>
             <Form.Item name="phone" rules={[{ required: true, message: "Masukkan Nomor WhatsApp" }]}>
-              <InputNumber
-                className="w-full"
-                controls={false}
-                value={wa}
-                disabled={isEdit}
-                onChange={(e) => setWa(e)}
-              />
+              <InputNumber className="w-full" controls={false} disabled={isEdit} />
             </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Email</Typography.Title>
             <Form.Item name="email" rules={[{ required: true, message: "Masukkan Email" }]}>
-              <Input value={email} disabled={isEdit} onChange={(e) => setEmail(e.target.value)} />
+              <Input disabled={isEdit} />
             </Form.Item>
           </Col>
-          <Col span={24} style={{ marginBottom: "24px" }}>
-            <Typography.Title level={5}>Password</Typography.Title>
-            <Form.Item name="password" rules={[{ required: true, message: "Masukkan Password" }]}>
-              <Input.Password value={password} onChange={(e) => setPassword(e.target.value)} />
-            </Form.Item>
-          </Col>
+          {!isEdit && (
+            <Col span={24} style={{ marginBottom: "24px" }}>
+              <Typography.Title level={5}>Password</Typography.Title>
+              <Form.Item name="password" rules={[{ required: true, message: "Masukkan Password" }]}>
+                <Input.Password />
+              </Form.Item>
+            </Col>
+          )}
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Jabatan</Typography.Title>
             <Form.Item name="occupation_id" rules={[{ required: true, message: "Pilih Jabatan" }]}>
               <Select
                 showSearch
                 placeholder="Pilih Role"
-                value={occupation || undefined}
                 disabled={isEdit}
-                onChange={(value) => setOccupation(value)}
                 style={{ width: "100%" }}
                 filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
                 options={occupations
-                  // .filter((o) => o.level > currentUser?.occupation?.level)
+                  .filter((o) => o.level > currentUser?.occupation?.level)
                   .filter((o) => o.level === currentUser?.occupation?.level + 1)
                   .map((o) => ({ label: o.name, value: o.id }))}
               />
@@ -258,9 +217,7 @@ export default function UserFormDrawer({
             <Select
               showSearch
               placeholder="Pilih Kota/Kabupaten"
-              value={regency || undefined}
               disabled={isEdit}
-              onChange={(value) => setRegency(value)}
               style={{ width: "100%" }}
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               options={regencies.map((r) => ({ label: r.name, value: r.id }))}
@@ -271,9 +228,7 @@ export default function UserFormDrawer({
             <Select
               showSearch
               placeholder="Pilih Kecamatan"
-              value={district || undefined}
-              disabled={isEdit || !regency}
-              onChange={(value) => setDistrict(value)}
+              disabled={isEdit || !form.getFieldValue("regency")}
               style={{ width: "100%" }}
               filterOption={(input, option) => (option?.label ?? "").toLowerCase().includes(input.toLowerCase())}
               options={districts.map((d) => ({ label: d.name, value: d.id }))}
@@ -281,11 +236,11 @@ export default function UserFormDrawer({
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Lokasi (Latitude)</Typography.Title>
-            <Input value={latitude} disabled={isEdit} onChange={(e) => setLatitude(e.target.value)} />
+            <Input disabled={isEdit} />
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Lokasi (Longitude)</Typography.Title>
-            <Input value={longitude} disabled={isEdit} onChange={(e) => setLongitude(e.target.value)} />
+            <Input disabled={isEdit} />
           </Col>
 
           <div style={{ display: "flex", justifyContent: "end", width: "100%", gap: "20px" }}>
