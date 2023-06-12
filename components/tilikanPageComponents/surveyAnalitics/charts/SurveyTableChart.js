@@ -30,6 +30,12 @@ export default function SurveyTableChart({ title, options }) {
             style: {
               padding: "8px 0",
               fontSize: "14px",
+              color: "white",
+              backgroundColor: "#151922",
+            },
+            stripedStyle: {
+              color: "white",
+              backgroundColor: "#222222",
             },
           },
         }}

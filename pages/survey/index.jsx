@@ -295,9 +295,9 @@ export default function Index({
       <DashboardLayout
         title="Survey · Chakra"
         topBarConfig={{
-          isShowSearchRegion: true,
+          isShowSearchRegion: false,
           title: "Survey",
-          onClickAnalysis: () => router.push("/survey/analysis"),
+          onClickAnalysis: () => window.open("/survey/analysis", "_self"),
         }}
         profile={profile}
       >

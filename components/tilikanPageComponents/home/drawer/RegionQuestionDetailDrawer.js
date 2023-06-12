@@ -93,10 +93,11 @@ export default function RegionQuestionDetailDrawer({ open, setOpen, selectedRegi
       closable={true}
       width={isSM ? "100%" : "600px"}
       headerStyle={{ border: "none", fontSize: "32px" }}
+      style={{ background: "#151922" }}
     >
       <Space direction="vertical" size="small" key={selectedRegion?.village_id}>
         {selectedRegion?.question_responses?.length == 0 || !selectedRegion?.question_responses ? (
-          <div>Tidak ada data yang tersedia di daerah ini</div>
+          <div className="text-white">Tidak ada data yang tersedia di daerah ini</div>
         ) : (
           selectedRegion?.question_responses?.map((response) => {
             return (

@@ -83,7 +83,8 @@ MyApp.getInitialProps = async ({ Component, ctx }) => {
     ctx.pathname === "/analysis" ||
     ctx.pathname === "/management-access" ||
     ctx.pathname === "/ongoing" ||
-    ctx.pathname === "/survey";
+    ctx.pathname === "/survey" ||
+    ctx.pathname === "/survey/survey-analysis";
 
   if (!token) {
     destroyCookie(ctx, "token");

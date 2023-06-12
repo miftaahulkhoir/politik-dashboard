@@ -25,6 +25,7 @@ export default function SurveyChartCard({ title, children, fitTitleHeight = fals
           top: "0px",
           padding: "16px 0",
           zIndex: 9,
+          backgroundColor: "#151922",
         }}
       >
         {title}
