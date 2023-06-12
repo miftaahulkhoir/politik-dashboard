@@ -5,7 +5,7 @@ import { TbPlus, TbSearch } from "react-icons/tb";
 import { Button, Input, notification } from "antd";
 import { useState } from "react";
 
-export default function ManagementIssuePage() {
+export default function ManagementIssuePage({ profile }) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
   const [showModalIssue, setModalIssue] = useState(false);
   const [showModalSubIssue, setModalSubIssue] = useState(false);
@@ -14,6 +14,7 @@ export default function ManagementIssuePage() {
 
   return (
     <DashboardLayout
+      profile={profile}
       title="Manajemen Isu · Chakra"
       topBarConfig={{
         title: "Manajemen Isu",
@@ -44,4 +45,8 @@ export default function ManagementIssuePage() {
       </div>
     </DashboardLayout>
   );
+}
+
+export async function getServerSideProps(ctx) {
+  return { props: {} };
 }
