@@ -299,6 +299,7 @@ export default function Index({
           title: "Survey",
           onClickAnalysis: () => router.push("/survey/analysis"),
         }}
+        profile={profile}
       >
         <div className="relative ml-[60px] h-[calc(100vh-78px)]">
           {contextHolderNotification}
