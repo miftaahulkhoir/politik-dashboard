@@ -10,6 +10,10 @@
   border-color: #ffffff;
 }
 
+.ant-card .ant-card-body {
+  background-color: #151922 !important;
+}
+
 .ant-collapse-content {
   background-color: #151922 !important;
 }

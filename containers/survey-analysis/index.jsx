@@ -24,7 +24,7 @@ function getLabel(survey) {
   return `${name} (${date})`;
 }
 
-const SurveyAnalysisContainer = () => {
+const SurveyAnalysisContainer = ({ profile }) => {
   const router = useRouter();
 
   const [selected, setSelected] = useState();
@@ -55,6 +55,7 @@ const SurveyAnalysisContainer = () => {
         onClickMap: () => router.push("/survey"),
         buttonActive: "analysis",
       }}
+      profile={profile}
     >
       <div className="flex flex-col mt-14 ml-[62px] p-10 bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
         <span className="text-4xl font-semibold">Analisis Survei</span>
