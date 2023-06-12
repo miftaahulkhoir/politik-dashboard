@@ -14,7 +14,7 @@ export default function SurveyAnalyticChartCard({ title, children, fitTitleHeigh
         {title}
       </div>
 
-      <div className="overflow-auto">{children}</div>
+      <div>{children}</div>
     </div>
   );
 }

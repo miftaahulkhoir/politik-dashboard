@@ -41,7 +41,7 @@ function FilterPopup({ showUsers, occupationState, occupations }) {
     <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", width: "200px" }}>
       <Card
         style={{ background: "#151922" }}
-        bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)" }}
+        bodyStyle={{ overflow: "scroll", maxHeight: "calc(100vh - 200px)", background: "#151922" }}
         title={<span className="text-white">Persebaran</span>}
         size="small"
       >

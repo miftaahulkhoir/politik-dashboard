@@ -98,7 +98,7 @@ function FilterThematic({
     <div style={{ display: "flex", flexDirection: "column", rowGap: "8px", minWidth: "380px" }}>
       <Card
         style={{ background: "#151922" }}
-        bodyStyle={{ maxHeight: "calc(100vh - 150px)" }}
+        bodyStyle={{ maxHeight: "calc(100vh - 150px)", background: "#151922" }}
         title="Tematik"
         size="small"
       >
