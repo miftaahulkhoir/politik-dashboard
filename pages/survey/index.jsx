@@ -316,170 +316,170 @@ export default function Index({
             selectedRegionLevel={selectedRegionLevel}
           />
 
-          {profile?.occupation?.level === 1 ? (
-            <>
-              {isMounted && (
-                // {/* {false && ( */}
-                <div className="map" data-testid="index-admin-map">
-                  <HomeMap
-                    occupations={occupations}
-                    showKoordinator={showKoordinator}
-                    dataKoordinator={dataKoordinator}
-                    showRelawan={showRelawan}
-                    dataRelawan={dataRelawan}
-                    showPemilih={showPemilih}
-                    dataPemilih={dataPemilih}
-                    showBlackList={showBlackList}
-                    dataBlackList={daftarhitam}
-                    tempCenter={tempCenter}
-                    setTempCenter={setTempCenter}
-                    center={center}
-                    setCenter={setCenter}
-                    userLogCordinate={isLogCoordinateDrawerOpen}
-                    setUserLogCordinate={setIsLogCoordinateDrawerOpen}
-                    recenter={recenter}
-                    setRecenter={setRecenter}
-                    logCordinate={logCordinate}
-                    setLogCordinate={setLogCordinate}
-                    handleColor={handleColor}
-                    reports={filteredReports}
-                    indexShownReportCategories={indexShownReportCategories}
-                    setSelectedReport={setSelectedReport}
-                    logistics={filteredLogistics}
-                    setSelectedLogistic={setSelectedLogistic}
-                    setIsLogisticDetailDrawerOpen={setIsLogisticDetailDrawerOpen}
-                    setSelectedUser={setSelectedUser}
-                    setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
-                    thematicSurveyResponses={thematicSurveyResponses}
-                    setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
-                    setSelectedRegion={setSelectedRegion}
-                    selectedRegionLevel={selectedRegionLevel}
-                    selectedThematicFromLegend={selectedThematicFromLegend}
-                    originalDataState={{
-                      originalData: originalData,
-                      setOriginalData: setOriginalData,
-                    }}
-                    dataState={{
-                      data: data,
-                      setData: setData,
-                    }}
-                    resetState={{
-                      isReset: isReset,
-                      setIsReset: setIsReset,
-                    }}
-                    detailedState={{
-                      isDetailed: isDetailed,
-                      setIsDetailed: setIsDetailed,
-                    }}
-                    regencyState={{
-                      selectedRegency: selectedRegency,
-                      setSelectedRegency: setSelectedRegency,
-                    }}
-                    districtState={{
-                      includedDistricts: includedDistricts,
-                      setIncludedDistricts: setIncludedDistricts,
-                    }}
-                  />
-                </div>
-              )}
+          {/* {profile?.occupation?.level === 1 ? ( */}
+          <>
+            {isMounted && (
+              // {/* {false && ( */}
+              <div className="map" data-testid="index-admin-map">
+                <HomeMap
+                  occupations={occupations}
+                  showKoordinator={showKoordinator}
+                  dataKoordinator={dataKoordinator}
+                  showRelawan={showRelawan}
+                  dataRelawan={dataRelawan}
+                  showPemilih={showPemilih}
+                  dataPemilih={dataPemilih}
+                  showBlackList={showBlackList}
+                  dataBlackList={daftarhitam}
+                  tempCenter={tempCenter}
+                  setTempCenter={setTempCenter}
+                  center={center}
+                  setCenter={setCenter}
+                  userLogCordinate={isLogCoordinateDrawerOpen}
+                  setUserLogCordinate={setIsLogCoordinateDrawerOpen}
+                  recenter={recenter}
+                  setRecenter={setRecenter}
+                  logCordinate={logCordinate}
+                  setLogCordinate={setLogCordinate}
+                  handleColor={handleColor}
+                  reports={filteredReports}
+                  indexShownReportCategories={indexShownReportCategories}
+                  setSelectedReport={setSelectedReport}
+                  logistics={filteredLogistics}
+                  setSelectedLogistic={setSelectedLogistic}
+                  setIsLogisticDetailDrawerOpen={setIsLogisticDetailDrawerOpen}
+                  setSelectedUser={setSelectedUser}
+                  setIsReportDetailDrawerOpen={setIsReportDetailDrawerOpen}
+                  thematicSurveyResponses={thematicSurveyResponses}
+                  setIsRegionQuestionDetailDrawerOpen={setIsRegionQuestionDetailDrawerOpen}
+                  setSelectedRegion={setSelectedRegion}
+                  selectedRegionLevel={selectedRegionLevel}
+                  selectedThematicFromLegend={selectedThematicFromLegend}
+                  originalDataState={{
+                    originalData: originalData,
+                    setOriginalData: setOriginalData,
+                  }}
+                  dataState={{
+                    data: data,
+                    setData: setData,
+                  }}
+                  resetState={{
+                    isReset: isReset,
+                    setIsReset: setIsReset,
+                  }}
+                  detailedState={{
+                    isDetailed: isDetailed,
+                    setIsDetailed: setIsDetailed,
+                  }}
+                  regencyState={{
+                    selectedRegency: selectedRegency,
+                    setSelectedRegency: setSelectedRegency,
+                  }}
+                  districtState={{
+                    includedDistricts: includedDistricts,
+                    setIncludedDistricts: setIncludedDistricts,
+                  }}
+                />
+              </div>
+            )}
 
-              <PanelContainer
-                spreadData={[
-                  {
-                    name: "Total koordinator",
-                    total: koordinator.length,
-                  },
-                  {
-                    name: "Total relawan",
-                    total: relawan.length,
-                  },
-                  {
-                    name: "Total kecamatan",
-                    total: kecamatan.length,
-                  },
-                  {
-                    name: "Total pemilih",
-                    total: pemilih.length,
-                  },
-                  {
-                    name: "Total daftar hitam",
-                    total: daftarhitam.length,
-                  },
-                ]}
-                thematicSurveyResponses={thematicSurveyResponses}
-                setThematicSurveyResponses={setThematicSurveyResponses}
-                showUsers={{
-                  setShowKoordinator: setShowKoordinator,
-                  setShowRelawan: setShowRelawan,
-                  setShowPemilih: setShowPemilih,
-                  setShowBlackList: setShowBlackList,
-                }}
-                occupationState={{
-                  selectedOccupations: selectedOccupations,
-                  setSelectedOccupations: setSelectedOccupations,
-                }}
-                reportState={{
-                  selectedReportCategories: indexShownReportCategories,
-                  setSelectedReportCategories: setIndexShownReportCategories,
-                }}
-                logisticState={{
-                  selectedLogisticCategories: indexShownLogisticCategories,
-                  setSelectedLogisticCategories: setIndexShownLogisticCategories,
-                }}
-                surveyState={{
-                  selectedQuestions: selectedQuestions,
-                  setSelectedQuestions: setSelectedQuestions,
-                }}
-                kpuState={{
-                  selectedKPUYears: selectedKPUYears,
-                  setSelectedKPUYears: setSelectedKPUYears,
-                }}
-                regionState={{
-                  selectedRegionLevel: selectedRegionLevel,
-                  setSelectedRegionLevel: setSelectedRegionLevel,
-                }}
-                regencyState={{
-                  selectedRegency: selectedRegency,
-                  setSelectedRegency: setSelectedRegency,
-                }}
-                districtState={{
-                  includedDistricts: includedDistricts,
-                  setIncludedDistricts: setIncludedDistricts,
-                }}
-                occupations={occupations}
-                surveys={surveys}
-              />
+            <PanelContainer
+              spreadData={[
+                {
+                  name: "Total koordinator",
+                  total: koordinator.length,
+                },
+                {
+                  name: "Total relawan",
+                  total: relawan.length,
+                },
+                {
+                  name: "Total kecamatan",
+                  total: kecamatan.length,
+                },
+                {
+                  name: "Total pemilih",
+                  total: pemilih.length,
+                },
+                {
+                  name: "Total daftar hitam",
+                  total: daftarhitam.length,
+                },
+              ]}
+              thematicSurveyResponses={thematicSurveyResponses}
+              setThematicSurveyResponses={setThematicSurveyResponses}
+              showUsers={{
+                setShowKoordinator: setShowKoordinator,
+                setShowRelawan: setShowRelawan,
+                setShowPemilih: setShowPemilih,
+                setShowBlackList: setShowBlackList,
+              }}
+              occupationState={{
+                selectedOccupations: selectedOccupations,
+                setSelectedOccupations: setSelectedOccupations,
+              }}
+              reportState={{
+                selectedReportCategories: indexShownReportCategories,
+                setSelectedReportCategories: setIndexShownReportCategories,
+              }}
+              logisticState={{
+                selectedLogisticCategories: indexShownLogisticCategories,
+                setSelectedLogisticCategories: setIndexShownLogisticCategories,
+              }}
+              surveyState={{
+                selectedQuestions: selectedQuestions,
+                setSelectedQuestions: setSelectedQuestions,
+              }}
+              kpuState={{
+                selectedKPUYears: selectedKPUYears,
+                setSelectedKPUYears: setSelectedKPUYears,
+              }}
+              regionState={{
+                selectedRegionLevel: selectedRegionLevel,
+                setSelectedRegionLevel: setSelectedRegionLevel,
+              }}
+              regencyState={{
+                selectedRegency: selectedRegency,
+                setSelectedRegency: setSelectedRegency,
+              }}
+              districtState={{
+                includedDistricts: includedDistricts,
+                setIncludedDistricts: setIncludedDistricts,
+              }}
+              occupations={occupations}
+              surveys={surveys}
+            />
 
-              <LegendContainer
-                data={legendData}
-                selectedItem={selectedThematicFromLegend}
-                selectedThematicFromLegend={selectedThematicFromLegend}
-                onClickItem={(itemIndex) => setSelectedThematicFromLegend(itemIndex)}
-                onClickResetSelectedItem={() => setSelectedThematicFromLegend(null)}
-              />
+            <LegendContainer
+              data={legendData}
+              selectedItem={selectedThematicFromLegend}
+              selectedThematicFromLegend={selectedThematicFromLegend}
+              onClickItem={(itemIndex) => setSelectedThematicFromLegend(itemIndex)}
+              onClickResetSelectedItem={() => setSelectedThematicFromLegend(null)}
+            />
 
-              <ResetContainer
-                selectedItem={selectedThematicFromLegend}
-                selectedThematicFromLegend={selectedThematicFromLegend}
-                onClickItem={(itemIndex) => setSelectedThematicFromLegend(itemIndex)}
-                originalDataState={{
-                  originalData: originalData,
-                  setOriginalData: setOriginalData,
-                }}
-                dataState={{
-                  data: data,
-                  setData: setData,
-                }}
-                resetState={{
-                  isReset: isReset,
-                  setIsReset: setIsReset,
-                }}
-                setThematicSurveyResponses={setThematicSurveyResponses}
-                setSelectedKPUYears={setSelectedKPUYears}
-                setSelectedRegency={setSelectedRegency}
-              />
-            </>
-          ) : (
+            <ResetContainer
+              selectedItem={selectedThematicFromLegend}
+              selectedThematicFromLegend={selectedThematicFromLegend}
+              onClickItem={(itemIndex) => setSelectedThematicFromLegend(itemIndex)}
+              originalDataState={{
+                originalData: originalData,
+                setOriginalData: setOriginalData,
+              }}
+              dataState={{
+                data: data,
+                setData: setData,
+              }}
+              resetState={{
+                isReset: isReset,
+                setIsReset: setIsReset,
+              }}
+              setThematicSurveyResponses={setThematicSurveyResponses}
+              setSelectedKPUYears={setSelectedKPUYears}
+              setSelectedRegency={setSelectedRegency}
+            />
+          </>
+          {/* ) : (
             <>
               <div className="col-12 pdv-3 mb-12">
                 <h1>Dashboard</h1>
@@ -497,7 +497,7 @@ export default function Index({
                 </Space>
               </div>
             </>
-          )}
+          )} */}
         </div>
       </DashboardLayout>
     </>
