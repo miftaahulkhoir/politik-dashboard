@@ -11,11 +11,11 @@ import { TbPlus } from "react-icons/tb";
 import UserFormDrawer from "../../components/pagecomponents/users/UserFormDrawer";
 import UserSearchBar from "../../components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "../../utils/services/profiles";
-import { useFindAllSubordinateUsers } from "../../utils/services/users";
+import { useFindAllUsers } from "../../utils/services/users";
 
 export default function ManagementAccessPage({ profile }) {
   const [users, setUsers] = useState([]);
-  const { users: fetchUsers } = useFindAllSubordinateUsers();
+  const { users: fetchUsers } = useFindAllUsers();
   useEffect(() => {
     if (!fetchUsers?.length) return;
     setUsers(fetchUsers);
