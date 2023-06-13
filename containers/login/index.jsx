@@ -2,11 +2,9 @@ import { loginUser, logoutUser } from "@/utils/services/auth";
 import { Input } from "antd";
 import Head from "next/head";
 import Link from "next/link";
-import { useRouter } from "next/router";
 import { useState } from "react";
 
 export default function Login() {
-  const router = useRouter();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [showErrorMsg, setShowErrorMsg] = useState(false);
@@ -21,7 +19,7 @@ export default function Login() {
           setErrorMsg("Untuk sementara, hanya bisa diakses oleh admin dan koordinator");
           setShowErrorMsg(true);
         } else {
-          router.push("/");
+          window.location.replace("/");
         }
       })
       .catch((err) => {
