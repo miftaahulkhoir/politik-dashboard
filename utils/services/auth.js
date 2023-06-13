@@ -47,11 +47,11 @@ export const logoutUser = async () => {
   try {
     await axios.post(`/api/logout`).then((res) => {
       if (res.data.status) {
-        Router.push("/login");
+        window.location.replace("/login");
       }
     });
     destroyCookie(null, "token");
-    Router.push("/login");
+    window.location.replace("/login");
   } catch (error) {
     console.error(error);
   }

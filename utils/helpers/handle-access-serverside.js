@@ -10,6 +10,6 @@ export async function handleAccess(ctx, tag) {
   if (!canAccessManagement) {
     const accessPath = ACCESS_LIST_WITH_PATH?.find((access) => profile?.accesses?.includes(access?.accessTag));
 
-    redirectUser(ctx, accessPath?.path || "/404");
+    redirectUser(ctx, accessPath?.path || "/403");
   }
 }

@@ -4,6 +4,8 @@ import { TbPlus, TbSearch } from "react-icons/tb";
 
 import { Button, Input, notification } from "antd";
 import { useState } from "react";
+import { handleAccess } from "@/utils/helpers/handle-access-serverside";
+import { ACCESS_LIST } from "@/constants/access-list";
 
 export default function ManagementIssuePage({ profile }) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -48,5 +50,6 @@ export default function ManagementIssuePage({ profile }) {
 }
 
 export async function getServerSideProps(ctx) {
+  await handleAccess(ctx, ACCESS_LIST?.MANAGEMENT_ISSUE);
   return { props: {} };
 }

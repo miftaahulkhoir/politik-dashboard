@@ -89,7 +89,7 @@ export default function ManagementAccessPage({ profile }) {
       title="Manajemen Akses · Chakra"
       topBarConfig={{
         isShowSearchRegion: true,
-        title: "Manajemen Pengguna",
+        title: "Manajemen Akses",
         hideMapButton: true,
         customRender: (
           <div className="flex justify-end w-full">
@@ -125,7 +125,7 @@ export default function ManagementAccessPage({ profile }) {
             />
           </div>
 
-          <AccessManagement data={filteredRoleUsers} />
+          <AccessManagement data={filteredRoleUsers} apiNotification={apiNotification} />
         </div>
       </div>
     </DashboardLayout>

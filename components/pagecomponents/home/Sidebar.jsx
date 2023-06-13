@@ -35,17 +35,26 @@ const Sidebar = ({ profile }) => {
   const router = useRouter();
   const pathname = router.pathname.split("/")?.[1];
 
-  const [canAccessMonitoring, canAccessManagement, canAccessUserManagement, canAccessDataManagement, canAccessSurvey] =
-    accessChecker(
-      [
-        ACCESS_LIST.MONITORING,
-        ACCESS_LIST.MANAGEMENT_ACCESS,
-        ACCESS_LIST.MANAGEMENT_USER,
-        ACCESS_LIST.MANAGEMENT_DATA,
-        ACCESS_LIST.SURVEY,
-      ],
-      profile?.accesses || [],
-    );
+  const [
+    canAccessMonitoring,
+    canAccessManagement,
+    canAccessUserManagement,
+    canAccessDataManagement,
+    canAccessSurvey,
+    canAccessTalkWalker,
+    canAccessManagementIssue,
+  ] = accessChecker(
+    [
+      ACCESS_LIST.MONITORING,
+      ACCESS_LIST.MANAGEMENT_ACCESS,
+      ACCESS_LIST.MANAGEMENT_USER,
+      ACCESS_LIST.MANAGEMENT_DATA,
+      ACCESS_LIST.SURVEY,
+      ACCESS_LIST.TALKWALKER,
+      ACCESS_LIST.MANAGEMENT_ISSUE,
+    ],
+    profile?.accesses || [],
+  );
 
   const sidebarMenu = [
     ...(canAccessMonitoring
@@ -57,11 +66,15 @@ const Sidebar = ({ profile }) => {
           },
         ]
       : []),
-    {
-      label: routes.talkwalker.name,
-      icon: (props) => <TbSocial {...props} />,
-      path: routes.talkwalker.path,
-    },
+    ...(canAccessTalkWalker
+      ? [
+          {
+            label: routes.talkwalker.name,
+            icon: (props) => <TbSocial {...props} />,
+            path: routes.talkwalker.path,
+          },
+        ]
+      : []),
     ...(canAccessSurvey
       ? [
           {
@@ -101,11 +114,15 @@ const Sidebar = ({ profile }) => {
           },
         ]
       : []),
-    {
-      label: routes.managementIssue.name,
-      path: routes.managementIssue.path,
-      icon: (props) => <TbAccessible {...props} />,
-    },
+    ...(canAccessManagementIssue
+      ? [
+          {
+            label: routes.managementIssue.name,
+            path: routes.managementIssue.path,
+            icon: (props) => <TbAccessible {...props} />,
+          },
+        ]
+      : []),
   ];
 
   return (
