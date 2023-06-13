@@ -8,13 +8,13 @@ import { TbFileUpload, TbDownload } from "react-icons/tb";
 import UserFormDrawer from "@/components/pagecomponents/users/UserFormDrawer";
 import IssueSearchBar from "@/components/pagecomponents/issues/IssueSearchBar";
 import { useFindProfile } from "@/utils/services/profiles";
-import { useFindAllSubordinateUsers } from "@/utils/services/users";
+import { useFindAllUsers } from "@/utils/services/users";
 import { dummyTable } from "@/components/pagecomponents/issues/constant";
 import IssueDataTable from "@/components/pagecomponents/issues/IssueDataTable";
 
 export default function ManagementDataContainer({ profile }) {
   const [users, setUsers] = useState([]);
-  const { users: fetchUsers } = useFindAllSubordinateUsers();
+  const { users: fetchUsers } = useFindAllUsers();
   useEffect(() => {
     if (!fetchUsers?.length) return;
     setUsers(fetchUsers);
