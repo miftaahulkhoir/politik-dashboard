@@ -41,6 +41,7 @@ export default function SurveyPieChart({ title, data }) {
             },
             label: {
               formatter: "{b}: {c} ({d}%)",
+              color: "white",
             },
           },
         ],
