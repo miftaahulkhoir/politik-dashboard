@@ -75,8 +75,30 @@ export default function UserFormDrawer({
         onClose();
       })
       .catch((err) => {
-        const { message: errMessage = "" } = err?.response?.data || {};
-        message.error(errMessage || "Proses Gagal!");
+        const { message: errMessage } = err?.response?.data || {};
+        let maskedMessage;
+        switch (errMessage) {
+          case "nik should 16 digit":
+            maskedMessage = "Nik harus 16 digit";
+            break;
+          case "phone has been registered":
+            maskedMessage = "Nomor WhatsApps sudah terdaftar";
+            break;
+          case "email has been registered":
+            maskedMessage = "Email sudah terdaftar";
+            break;
+          case "nik has been registered":
+            maskedMessage = "Nik sudah terdaftar";
+            break;
+          case "phone should 10-13 digit":
+            maskedMessage = "Nomor WhatsApp harus 10-13 digit";
+            break;
+          default:
+            maskedMessage;
+            break;
+        }
+
+        message.error(maskedMessage || "Proses Gagal!");
       });
   };
 
@@ -173,7 +195,7 @@ export default function UserFormDrawer({
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>NIK</Typography.Title>
             <Form.Item name="nik" rules={[{ required: true, message: "Masukkan NIK" }]}>
-              <InputNumber className="w-full" controls={false} disabled={isEdit} />
+              <InputNumber stringMode className="w-full" controls={false} disabled={isEdit} />
             </Form.Item>
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
@@ -184,8 +206,14 @@ export default function UserFormDrawer({
           </Col>
           <Col span={24} style={{ marginBottom: "24px" }}>
             <Typography.Title level={5}>Email</Typography.Title>
-            <Form.Item name="email" rules={[{ required: true, message: "Masukkan Email" }]}>
-              <Input disabled={isEdit} />
+            <Form.Item
+              name="email"
+              rules={[
+                { required: true, message: "Masukkan Email" },
+                { pattern: "[a-z0-9]+@[a-z]+.[a-z]{2,3}", message: "Format email tidak sesuai" },
+              ]}
+            >
+              <Input type="email" disabled={isEdit} />
             </Form.Item>
           </Col>
           {!isEdit && (
