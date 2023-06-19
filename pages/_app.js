@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useRouter } from "next/router";
 import { destroyCookie, parseCookies } from "nookies";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 // import DashboardLayout from "../layouts/DashboardLayout";
 
@@ -11,12 +11,14 @@ import { redirectUser } from "../utils/services/auth";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ConfigProvider, theme } from "antd";
 import getProfileServerSide from "@/utils/services/get-profile-serverside";
+import { Spin } from "antd";
 
 import "@react-pdf-viewer/core/lib/styles/index.css";
 import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 
 function MyApp({ Component, pageProps }) {
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
   const queryClient = new QueryClient({
     defaultOptions: {
@@ -25,6 +27,17 @@ function MyApp({ Component, pageProps }) {
       },
     },
   });
+
+  useEffect(() => {
+    router.events.on("routeChangeStart", () => setIsLoading(true));
+    router.events.on("routeChangeComplete", () => setIsLoading(false));
+    router.events.on("routeChangeError", () => setIsLoading(false));
+    return () => {
+      router.events.off("routeChangeStart", () => setIsLoading(true));
+      router.events.off("routeChangeComplete", () => setIsLoading(false));
+      router.events.off("routeChangeError", () => setIsLoading(false));
+    };
+  }, [router]);
 
   return (
     <ConfigProvider
@@ -35,21 +48,25 @@ function MyApp({ Component, pageProps }) {
         },
       }}
     >
-      {(router.pathname !== "/login" &&
-        router.pathname !== "/register" &&
-        router.pathname !== "/" &&
-        pageProps.profile?.occupation?.level === 1) ||
-      (router.pathname !== "/login" && router.pathname !== "/register" && pageProps.profile?.occupation?.level > 1) ? (
-        // <DashboardLayout {...pageProps}>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      ) : (
-        // </DashboardLayout>
-        <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
-        </QueryClientProvider>
-      )}
+      <Spin spinning={isLoading} size="large">
+        {(router.pathname !== "/login" &&
+          router.pathname !== "/register" &&
+          router.pathname !== "/" &&
+          pageProps.profile?.occupation?.level === 1) ||
+        (router.pathname !== "/login" &&
+          router.pathname !== "/register" &&
+          pageProps.profile?.occupation?.level > 1) ? (
+          // <DashboardLayout {...pageProps}>
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
+        ) : (
+          // </DashboardLayout>
+          <QueryClientProvider client={queryClient}>
+            <Component {...pageProps} />
+          </QueryClientProvider>
+        )}
+      </Spin>
     </ConfigProvider>
   );
 }

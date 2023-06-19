@@ -26,3 +26,7 @@
   border-color: #4f5fc7 !important;
   background-color: #4f5fc7 !important;
 }
+
+.ant-spin-spinning {
+  max-height: none !important;
+}
