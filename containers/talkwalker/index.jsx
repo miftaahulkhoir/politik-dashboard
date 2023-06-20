@@ -137,7 +137,7 @@ export default function TalkwalkerContainer({ profile }) {
         profile={profile}
         topBarConfig={{
           isShowSearchRegion: true,
-          title: "Analisis Sosial",
+          title: "Analisis Media Sosial",
           hideMapButton: true,
           customRender: <ButtonAdd />,
         }}
