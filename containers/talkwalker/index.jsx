@@ -97,7 +97,7 @@ export default function TalkwalkerContainer({ profile }) {
                   onClick={() => setSelectedFile(row)}
                 />
               </Tooltip>
-              <Tooltip title="Unggah">
+              <Tooltip title="Unduh">
                 <Button
                   type="text"
                   icon={<TbDownload size={20} color="#7287A5" />}
