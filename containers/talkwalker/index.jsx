@@ -146,7 +146,7 @@ export default function TalkwalkerContainer({ profile }) {
           <div className="w-1/3">
             <CustomDataTable columns={columns} data={dataTable} pagination theme="dark" />
           </div>
-          <div className="w-2/3 overflow-auto ">
+          <div className="w-2/3 overflow-auto bg-[#1A1A1A] ">
             <FilePreview selectedFile={selectedFile} />
           </div>
         </div>

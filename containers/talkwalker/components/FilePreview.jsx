@@ -22,7 +22,6 @@ export default function FilePreview({ selectedFile }) {
         <div
           className="rpv-core__viewer"
           style={{
-            border: "1px solid #222222",
             display: "flex",
             flexDirection: "column",
             height: "100%",
