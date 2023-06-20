@@ -142,11 +142,11 @@ export default function TalkwalkerContainer({ profile }) {
           customRender: <ButtonAdd />,
         }}
       >
-        <div className="flex col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)] overflow-auto ">
+        <div className="flex col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)]">
           <div className="w-1/3">
             <CustomDataTable columns={columns} data={dataTable} pagination theme="dark" />
           </div>
-          <div className="w-2/3">
+          <div className="w-2/3 overflow-auto ">
             <FilePreview selectedFile={selectedFile} />
           </div>
         </div>
