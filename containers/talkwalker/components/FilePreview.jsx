@@ -36,6 +36,9 @@ export default function FilePreview({ selectedFile }) {
               display: "flex",
               justifyContent: "center",
               padding: "8px",
+              position: "sticky",
+              top: 0,
+              zIndex: 1,
             }}
           >
             <RotateForwardButton />
