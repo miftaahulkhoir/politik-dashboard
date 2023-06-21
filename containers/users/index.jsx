@@ -10,6 +10,8 @@ import UserSearchBar from "@/components/pagecomponents/users/UserSearchBar";
 import { useFindProfile } from "@/utils/services/profiles";
 import { useFindAllUsers } from "@/utils/services/users";
 import { TbPlus } from "react-icons/tb";
+import accessChecker from "@/utils/helpers/accessChecker";
+import { ACCESS_LIST } from "@/constants/access-list";
 
 export default function UsersContainer({ profile }) {
   const [users, setUsers] = useState([]);
@@ -85,6 +87,8 @@ export default function UsersContainer({ profile }) {
     setIsDrawerActive(true);
   };
 
+  const [canAddUser] = accessChecker([ACCESS_LIST?.ADD_USER], profile?.accesses || []);
+
   return (
     <DashboardLayout
       profile={profile}
@@ -93,7 +97,7 @@ export default function UsersContainer({ profile }) {
         isShowSearchRegion: true,
         title: "Manajemen Pengguna",
         hideMapButton: true,
-        customRender: (
+        customRender: canAddUser && (
           <div className="flex justify-end w-full">
             <Button className="btn-primary" icon={<TbPlus />} onClick={onClickAddUser}>
               Tambah Pengguna
@@ -133,6 +137,7 @@ export default function UsersContainer({ profile }) {
             apiNotification={apiNotification}
             users={users}
             setUsers={setUsers}
+            profile={profile}
           />
         </Space>
       </div>

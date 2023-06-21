@@ -1,6 +1,7 @@
 import { ACCESS_LIST } from "@/constants/access-list";
 import AccessManagement from "@/containers/access-management";
 import DashboardLayout from "@/layouts/DashboardLayout";
+import accessChecker from "@/utils/helpers/accessChecker";
 import { handleAccess } from "@/utils/helpers/handle-access-serverside";
 
 import { notification, Button } from "antd";
@@ -83,6 +84,8 @@ export default function ManagementAccessPage({ profile }) {
     return filteredUsers.map((user, i) => ({ ...user, no: i + 1 }));
   }, [filteredUsers]);
 
+  const [canAddUser] = accessChecker([ACCESS_LIST?.ADD_USER], profile?.accesses || []);
+
   return (
     <DashboardLayout
       profile={profile}
@@ -91,7 +94,7 @@ export default function ManagementAccessPage({ profile }) {
         isShowSearchRegion: true,
         title: "Manajemen Akses",
         hideMapButton: true,
-        customRender: (
+        customRender: canAddUser && (
           <div className="flex justify-end w-full">
             <Button className="btn-primary" icon={<TbPlus />} onClick={() => setIsDrawerActive(true)}>
               Tambah Pengguna

@@ -135,11 +135,57 @@ const AccessManagement = ({ data, apiNotification }) => {
             </div>
             <div className="w-full flex justify-between items-center">
               <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Manajemen User</div>
+                <div className="text-white text-sm font-semibold">Manajemen Pengguna</div>
               </div>
               <Switch
                 onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_USER)}
                 checked={access.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Tambah Pengguna</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.ADD_USER)}
+                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                checked={access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.ADD_USER)}
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Ubah Pengguna</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.EDIT_USER)}
+                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                checked={access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.EDIT_USER)}
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Hapus Pengguna</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.REMOVE_USER)}
+                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                checked={access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.REMOVE_USER)}
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Ubah Password Pengguna</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.CHANGE_PASSWORD_USER)}
+                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                checked={
+                  access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.CHANGE_PASSWORD_USER)
+                }
                 className="bg-neutral-500 -mt-5"
               />
             </div>
@@ -153,6 +199,47 @@ const AccessManagement = ({ data, apiNotification }) => {
                 className="bg-neutral-500 -mt-5"
               />
             </div>
+
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Download Data</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DOWNLOAD_DATA)}
+                checked={
+                  access.includes(ACCESS_LIST?.MANAGEMENT_DATA) &&
+                  access.includes(ACCESS_LIST?.MANAGEMENT_DOWNLOAD_DATA)
+                }
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Upload Data</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA)}
+                checked={
+                  access.includes(ACCESS_LIST?.MANAGEMENT_DATA) && access.includes(ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA)
+                }
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Hapus Data</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DELETE_DATA)}
+                checked={
+                  access.includes(ACCESS_LIST?.MANAGEMENT_DATA) && access.includes(ACCESS_LIST?.MANAGEMENT_DELETE_DATA)
+                }
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+
             <div className="w-full flex justify-between items-center">
               <div className="flex flex-col justify-center gap-2 mb-6">
                 <div className="text-white text-sm font-semibold">Manajemen Isu</div>
@@ -163,6 +250,36 @@ const AccessManagement = ({ data, apiNotification }) => {
                 className="bg-neutral-500 -mt-5"
               />
             </div>
+
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Tambah Isu</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ADD_ISSUE)}
+                disabled={!access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
+                checked={
+                  access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE) && access.includes(ACCESS_LIST?.MANAGEMENT_ADD_ISSUE)
+                }
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+
+            <div className="w-full flex justify-between items-center">
+              <div className="flex flex-col justify-center gap-2 mb-6">
+                <div className="text-white text-sm font-semibold">Tambah Sub Isu</div>
+              </div>
+              <Switch
+                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ADD_SUB_ISSUE)}
+                disabled={!access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
+                checked={
+                  access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE) &&
+                  access.includes(ACCESS_LIST?.MANAGEMENT_ADD_SUB_ISSUE)
+                }
+                className="bg-neutral-500 -mt-5"
+              />
+            </div>
+
             <div className="w-full flex justify-between items-center">
               <div className="flex flex-col justify-center gap-2 mb-6">
                 <div className="text-white text-sm font-semibold">Talkwalker</div>
@@ -175,7 +292,7 @@ const AccessManagement = ({ data, apiNotification }) => {
             </div>
           </div>
 
-          <div className="w-full flex justify-end px-8 pb-7">
+          <div className="w-full flex justify-end px-8 pb-7 mt-64">
             <button
               disabled={isLoading}
               type="button"

@@ -11,6 +11,8 @@ import { useFindProfile } from "@/utils/services/profiles";
 import { useFindAllUsers } from "@/utils/services/users";
 import { dummyTable } from "@/components/pagecomponents/issues/constant";
 import IssueDataTable from "@/components/pagecomponents/issues/IssueDataTable";
+import accessChecker from "@/utils/helpers/accessChecker";
+import { ACCESS_LIST } from "@/constants/access-list";
 
 export default function ManagementDataContainer({ profile }) {
   const [users, setUsers] = useState([]);
@@ -58,6 +60,7 @@ export default function ManagementDataContainer({ profile }) {
     setMode(e.target.value);
   };
 
+  const [canUploadData] = accessChecker([ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA], profile?.accesses || []);
   return (
     <>
       <Modal
@@ -149,7 +152,7 @@ export default function ManagementDataContainer({ profile }) {
           isShowSearchRegion: true,
           title: "Manajemen Data",
           hideMapButton: true,
-          customRender: <ButtonUpload />,
+          customRender: canUploadData && <ButtonUpload />,
         }}
       >
         <div className="flex flex-col mt-14 ml-[62px] p-10 bg-[#222222] h-[calc(100vh-134px)] overflow-auto text-white">
@@ -183,6 +186,7 @@ export default function ManagementDataContainer({ profile }) {
               apiNotification={apiNotification}
               users={users}
               setUsers={setUsers}
+              profile={profile}
             />
           </Space>
         </div>
