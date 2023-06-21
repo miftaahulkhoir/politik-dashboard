@@ -6,6 +6,7 @@ import { Button, Input, notification } from "antd";
 import { useState } from "react";
 import { handleAccess } from "@/utils/helpers/handle-access-serverside";
 import { ACCESS_LIST } from "@/constants/access-list";
+import accessChecker from "@/utils/helpers/accessChecker";
 
 export default function ManagementIssuePage({ profile }) {
   const [apiNotification, contextHolderNotification] = notification.useNotification();
@@ -14,6 +15,8 @@ export default function ManagementIssuePage({ profile }) {
 
   const issueDatas = [];
 
+  const [canAddIssue] = accessChecker([ACCESS_LIST?.MANAGEMENT_ADD_ISSUE], profile?.accesses || []);
+
   return (
     <DashboardLayout
       profile={profile}
@@ -21,7 +24,7 @@ export default function ManagementIssuePage({ profile }) {
       topBarConfig={{
         title: "Manajemen Isu",
         hideMapButton: true,
-        customRender: (
+        customRender: canAddIssue && (
           <div className="flex justify-end w-full">
             <Button className="btn-primary" icon={<TbPlus />} onClick={() => setModalIssue(true)}>
               Tambah Isu
@@ -37,6 +40,7 @@ export default function ManagementIssuePage({ profile }) {
             <Input className="w-max" placeholder="Pencarian" prefix={<TbSearch />} />
           </div>
           <IssueManagement
+            profile={profile}
             showModalIssue={showModalIssue}
             setModalIssue={setModalIssue}
             showModalSubIssue={showModalSubIssue}

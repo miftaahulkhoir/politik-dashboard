@@ -1,3 +1,5 @@
+import { ACCESS_LIST } from "@/constants/access-list";
+import accessChecker from "@/utils/helpers/accessChecker";
 import { Button, Card, Col, Modal, Row, Tooltip } from "antd";
 import { useCallback, useMemo } from "react";
 import { TbTrashX, TbDotsVertical, TbDownload } from "react-icons/tb";
@@ -6,8 +8,13 @@ import { deleteUser, updateUserOccupation, useFindAllOccupations } from "../../.
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 import LimitedText from "../../elements/typography/LimitedText";
 
-export default function IssueDataTable({ data, currentUser, apiNotification, users, setUsers }) {
+export default function IssueDataTable({ data, currentUser, apiNotification, users, setUsers, profile }) {
   const { occupations } = useFindAllOccupations();
+
+  const [canDownloadData, canDeleteData] = accessChecker(
+    [ACCESS_LIST?.MANAGEMENT_DOWNLOAD_DATA, ACCESS_LIST?.MANAGEMENT_DELETE_DATA],
+    profile?.accesses || [],
+  );
 
   const blacklistOccupation = useMemo(() => {
     if (occupations?.length === 0) return "";
@@ -143,24 +150,28 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
           const canModify = false;
           return (
             <div className="d-flex gap-2">
-              <Tooltip title="Download">
-                <Button
-                  type="text"
-                  disabled={canModify}
-                  icon={<TbDownload size={20} color={canModify ? "#FFFFFF" : "#cccccc"} />}
-                  shape="circle"
-                  onClick={() => downloadIssueHandler(row)}
-                ></Button>
-              </Tooltip>
-              <Tooltip title="Hapus">
-                <Button
-                  type="text"
-                  disabled={canModify}
-                  icon={<TbTrashX size={20} color={canModify ? "#B12E2E" : "#cccccc"} />}
-                  shape="circle"
-                  onClick={() => deleteIssueHandler(row)}
-                ></Button>
-              </Tooltip>
+              {canDownloadData && (
+                <Tooltip title="Download">
+                  <Button
+                    type="text"
+                    disabled={canModify}
+                    icon={<TbDownload size={20} color={canModify ? "#FFFFFF" : "#cccccc"} />}
+                    shape="circle"
+                    onClick={() => downloadIssueHandler(row)}
+                  ></Button>
+                </Tooltip>
+              )}
+              {canDeleteData && (
+                <Tooltip title="Hapus">
+                  <Button
+                    type="text"
+                    disabled={canModify}
+                    icon={<TbTrashX size={20} color={canModify ? "#B12E2E" : "#cccccc"} />}
+                    shape="circle"
+                    onClick={() => deleteIssueHandler(row)}
+                  ></Button>
+                </Tooltip>
+              )}
             </div>
           );
         },
@@ -168,7 +179,7 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
         center: true,
       },
     ];
-  }, [blacklistUserHandler, currentUser?.occupation?.level, deleteIssueHandler]);
+  }, [blacklistUserHandler, currentUser?.occupation?.level, deleteIssueHandler, canDeleteData, canDownloadData]);
 
   return (
     <Row justify="end">

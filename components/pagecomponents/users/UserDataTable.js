@@ -12,6 +12,8 @@ import {
 } from "../../../utils/services/users";
 import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 import LimitedText from "../../elements/typography/LimitedText";
+import accessChecker from "@/utils/helpers/accessChecker";
+import { ACCESS_LIST } from "@/constants/access-list";
 
 export default function UserDataTable({
   data,
@@ -23,10 +25,16 @@ export default function UserDataTable({
   apiNotification,
   users,
   setUsers,
+  profile,
 }) {
   const { occupations } = useFindAllOccupations();
   const [openModal, setOpenModal] = useState(false);
   const [form] = Form.useForm();
+
+  const [canRemoveUser, canEditUser, canChangeUserPassword] = accessChecker(
+    [ACCESS_LIST?.REMOVE_USER, ACCESS_LIST?.EDIT_USER, ACCESS_LIST.CHANGE_PASSWORD_USER],
+    profile?.accesses || [],
+  );
 
   const handleOpenModal = () => {
     setOpenModal((prev) => !prev);
@@ -191,35 +199,41 @@ export default function UserDataTable({
           const canModify = currentUser?.occupation?.level + 1 === row?.occupation?.level;
           return (
             <div className="d-flex gap-2">
-              <Tooltip title="Edit pengguna">
-                <Button
-                  type="text"
-                  disabled={!canModify}
-                  icon={<TbPencil size={18} color={canModify ? "#FFFFFF" : "#cccccc"} />}
-                  shape="circle"
-                  onClick={() => updateUserHandler(row)}
-                ></Button>
-              </Tooltip>
-              <Tooltip title="Update Password">
-                <Button
-                  onClick={() => {
-                    handleOpenModal();
-                    setSelectedUser(row);
-                  }}
-                  type="text"
-                  icon={<RiLockPasswordLine size={18} color={canModify ? "#FFFFFF" : "#cccccc"} />}
-                  shape="circle"
-                ></Button>
-              </Tooltip>
-              <Tooltip title="Hapus pengguna">
-                <Button
-                  type="text"
-                  disabled={!canModify}
-                  icon={<TbTrashX size={18} color={canModify ? "#B12E2E" : "#cccccc"} />}
-                  shape="circle"
-                  onClick={() => deleteUserHandler(row)}
-                ></Button>
-              </Tooltip>
+              {canEditUser && (
+                <Tooltip title="Edit pengguna">
+                  <Button
+                    type="text"
+                    disabled={!canModify}
+                    icon={<TbPencil size={18} color={canModify ? "#FFFFFF" : "#cccccc"} />}
+                    shape="circle"
+                    onClick={() => updateUserHandler(row)}
+                  ></Button>
+                </Tooltip>
+              )}
+              {canChangeUserPassword && (
+                <Tooltip title="Update Password">
+                  <Button
+                    onClick={() => {
+                      handleOpenModal();
+                      setSelectedUser(row);
+                    }}
+                    type="text"
+                    icon={<RiLockPasswordLine size={18} color={canModify ? "#FFFFFF" : "#cccccc"} />}
+                    shape="circle"
+                  ></Button>
+                </Tooltip>
+              )}
+              {canRemoveUser && (
+                <Tooltip title="Hapus pengguna">
+                  <Button
+                    type="text"
+                    disabled={!canModify}
+                    icon={<TbTrashX size={18} color={canModify ? "#B12E2E" : "#cccccc"} />}
+                    shape="circle"
+                    onClick={() => deleteUserHandler(row)}
+                  ></Button>
+                </Tooltip>
+              )}
             </div>
           );
         },

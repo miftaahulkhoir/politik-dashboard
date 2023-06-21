@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import cx from "classnames";
 import { Button, Modal, Input, ColorPicker, Upload, Form, Select } from "antd";
 import { TbPlus } from "react-icons/tb";
+import accessChecker from "@/utils/helpers/accessChecker";
+import { ACCESS_LIST } from "@/constants/access-list";
 
 const dummyIconList = [
   "/images/map/markers/kriminal-1.png",
@@ -274,7 +276,13 @@ const subIssue = [
     value: "ini_sub_value_issue",
   },
 ];
-export default function IssueManagement({ showModalIssue, setModalIssue, showModalSubIssue, setModalSubIssue }) {
+export default function IssueManagement({
+  showModalIssue,
+  setModalIssue,
+  showModalSubIssue,
+  setModalSubIssue,
+  profile,
+}) {
   const [issueData, setIssueData] = useState(dummyIssue);
   const [subIssueData, setSubIssueData] = useState(subIssue);
   const [selectedSubIssue, setSelectedSubIssue] = useState([]);
@@ -307,6 +315,8 @@ export default function IssueManagement({ showModalIssue, setModalIssue, showMod
     );
     handleModalIssue();
   };
+
+  const [canAddSubIssue] = accessChecker([ACCESS_LIST?.MANAGEMENT_ADD_SUB_ISSUE], profile?.accesses || []);
 
   const handleSubmitSubIssue = (data) => {
     const { sub_issue, issue_id } = data;
@@ -385,12 +395,14 @@ export default function IssueManagement({ showModalIssue, setModalIssue, showMod
         </div>
 
         <div className="w-2/3 overflow-auto flex flex-col border-r border-r-neutral-500">
-          <div className="header flex justify-between items-center bg-new-black py-3 px-8">
-            <div className="text-white text-sm font-semibold">Sub Isu</div>
-            <Button icon={<TbPlus />} className="btn-primary" onClick={handleModalSubIssue}>
-              Tambah Sub Isu
-            </Button>
-          </div>
+          {canAddSubIssue && (
+            <div className="header flex justify-between items-center bg-new-black py-3 px-8">
+              <div className="text-white text-sm font-semibold">Sub Isu</div>
+              <Button icon={<TbPlus />} className="btn-primary" onClick={handleModalSubIssue}>
+                Tambah Sub Isu
+              </Button>
+            </div>
+          )}
           <div key={selectedSubIssue.length} className="w-full h-full px-4 py-6 flex flex-col">
             {selectedSubIssue?.map((data, i) => (
               <div key={data?.id} className={cx("p-2 !bg-neutral-700 mb-1 rounded flex justify-between")}>

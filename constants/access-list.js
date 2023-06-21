@@ -3,8 +3,17 @@ export const ACCESS_LIST = {
   SURVEY: "survey",
   MANAGEMENT_ACCESS: "access-management",
   MANAGEMENT_USER: "user-management",
+  ADD_USER: "user-add",
+  EDIT_USER: "user-edit",
+  REMOVE_USER: "user-remove",
+  CHANGE_PASSWORD_USER: "user-change-password",
   MANAGEMENT_DATA: "data-management",
+  MANAGEMENT_UPLOAD_DATA: "upload-data-management",
+  MANAGEMENT_DOWNLOAD_DATA: "download-data-management",
+  MANAGEMENT_DELETE_DATA: "delete-data-management",
   MANAGEMENT_ISSUE: "issue-management",
+  MANAGEMENT_ADD_ISSUE: "add-issue",
+  MANAGEMENT_ADD_SUB_ISSUE: "add-sub-issue",
   TALKWALKER: "talkwalker",
 };
 
