@@ -1,7 +1,7 @@
 export const routes = {
   home: {
     path: "/",
-    name: "",
+    name: "monitoring",
   },
   survey: {
     path: "/survey",

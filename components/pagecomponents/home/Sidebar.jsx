@@ -12,22 +12,25 @@ import Link from "next/link";
 import { useRouter } from "next/router";
 import accessChecker from "@/utils/helpers/accessChecker";
 import { ACCESS_LIST } from "@/constants/access-list";
+import { Tooltip } from "antd";
 
 const SidebarMenu = ({ pathname, path, label, icon }) => {
   return (
-    <Link href={path} key={label}>
-      <div
-        className={cx(
-          pathname === label && "bg-white",
-          "flex h-[44px] w-[44px] items-center justify-center  rounded-md cursor-pointer",
-        )}
-      >
-        {icon({
-          size: 20,
-          className: pathname === label ? "text-new-black" : "text-white",
-        })}
-      </div>
-    </Link>
+    <Tooltip title={label} placement="right">
+      <Link href={path} key={label}>
+        <div
+          className={cx(
+            pathname === label && "bg-white",
+            "flex h-[44px] w-[44px] items-center justify-center  rounded-md cursor-pointer",
+          )}
+        >
+          {icon({
+            size: 20,
+            className: pathname === label ? "text-new-black" : "text-white",
+          })}
+        </div>
+      </Link>
+    </Tooltip>
   );
 };
 
@@ -138,15 +141,17 @@ const Sidebar = ({ profile }) => {
           <SidebarMenu key={label} pathname={pathname} path={path} label={label} icon={icon} />
         ))}
       </div>
-      <div
-        className={cx(
-          pathname === "dashboards" && "white",
-          "flex h-[44px] w-[44px] items-center justify-center  rounded-md cursor-pointer",
-        )}
-        onClick={async () => await logoutUser()}
-      >
-        <CgLogOff size={20} className={"text-white"} />
-      </div>
+      <Tooltip title="logout" placement="right">
+        <div
+          className={cx(
+            pathname === "dashboards" && "white",
+            "flex h-[44px] w-[44px] items-center justify-center  rounded-md cursor-pointer",
+          )}
+          onClick={async () => await logoutUser()}
+        >
+          <CgLogOff size={20} className={"text-white"} />
+        </div>
+      </Tooltip>
     </div>
   );
 };
