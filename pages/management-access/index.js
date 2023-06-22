@@ -128,7 +128,7 @@ export default function ManagementAccessPage({ profile }) {
             />
           </div>
 
-          <AccessManagement data={filteredRoleUsers} apiNotification={apiNotification} />
+          <AccessManagement data={filteredRoleUsers} apiNotification={apiNotification} profile={profile} />
         </div>
       </div>
     </DashboardLayout>

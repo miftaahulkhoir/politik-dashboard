@@ -1,13 +1,15 @@
 import { ACCESS_LIST } from "@/constants/access-list";
 import { useUpdateUserAccess } from "@/utils/services/update-user-access";
 import { useFindOneUserAccess } from "@/utils/services/users";
-import { Switch } from "antd";
+import { Button, Collapse, Switch } from "antd";
 import isEmpty from "lodash/isEmpty";
 import React, { useEffect, useState } from "react";
 import { TbUserCircle } from "react-icons/tb";
 import UserCard from "./components/user-card";
+import _ from "lodash";
+import accessChecker from "@/utils/helpers/accessChecker";
 
-const AccessManagement = ({ data, apiNotification }) => {
+const AccessManagement = ({ data, apiNotification, profile }) => {
   const [selectedUser, setSelectedUser] = useState();
   const [access, setAccess] = useState([]);
 
@@ -29,6 +31,8 @@ const AccessManagement = ({ data, apiNotification }) => {
       return newArray;
     });
   };
+
+  const [canChangeAccess] = accessChecker([ACCESS_LIST?.MANAGEMENT_CHANGE_ACCESS], profile?.accesses || []);
 
   const { mutate, isLoading } = useUpdateUserAccess();
 
@@ -103,216 +107,272 @@ const AccessManagement = ({ data, apiNotification }) => {
             <div className="text-white text-sm font-semibold ">Hak Akses Pengguna</div>
           </div>
           <div className="w-full h-full p-8 flex flex-col gap-3 items-center">
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Monitoring</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MONITORING)}
-                checked={access.includes(ACCESS_LIST?.MONITORING)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Survei</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.SURVEY)}
-                checked={access.includes(ACCESS_LIST?.SURVEY)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Manajemen Akses</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ACCESS)}
-                checked={access.includes(ACCESS_LIST?.MANAGEMENT_ACCESS)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Manajemen Pengguna</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_USER)}
-                checked={access.includes(ACCESS_LIST?.MANAGEMENT_USER)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Tambah Pengguna</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.ADD_USER)}
-                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
-                checked={access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.ADD_USER)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Ubah Pengguna</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.EDIT_USER)}
-                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
-                checked={access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.EDIT_USER)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Hapus Pengguna</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.REMOVE_USER)}
-                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
-                checked={access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.REMOVE_USER)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Ubah Password Pengguna</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.CHANGE_PASSWORD_USER)}
-                disabled={!access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
-                checked={
-                  access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.CHANGE_PASSWORD_USER)
-                }
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Manajemen Data</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DATA)}
-                checked={access.includes(ACCESS_LIST?.MANAGEMENT_DATA)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
+            <Collapse className="!w-full" defaultActiveKey={["1", "2", "3", "4", "5", "6", "7"]}>
+              <Collapse.Panel header="Monitoring" key="1">
+                <div className="w-full h-full flex justify-between items-center">
+                  <div className="flex flex-col justify-center gap-2 mb-6">
+                    <div className="text-white text-sm font-semibold">Lihat Monitoring</div>
+                  </div>
+                  <Switch
+                    disabled={!canChangeAccess}
+                    onChange={() => handleSwitch(ACCESS_LIST?.MONITORING)}
+                    checked={access.includes(ACCESS_LIST?.MONITORING)}
+                    className="bg-neutral-500 -mt-5"
+                  />
+                </div>
+              </Collapse.Panel>
 
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Download Data</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DOWNLOAD_DATA)}
-                checked={
-                  access.includes(ACCESS_LIST?.MANAGEMENT_DATA) &&
-                  access.includes(ACCESS_LIST?.MANAGEMENT_DOWNLOAD_DATA)
-                }
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
+              <Collapse.Panel header="Talkwalker" key="2">
+                <div className="full h-full flex flex-col gap-2 items-center">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Lihat Talkwalker</div>
+                    </div>
+                    <Switch
+                      disabled={!canChangeAccess}
+                      onChange={() => handleSwitch(ACCESS_LIST?.TALKWALKER)}
+                      checked={access.includes(ACCESS_LIST?.TALKWALKER)}
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                </div>
+              </Collapse.Panel>
 
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Upload Data</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA)}
-                checked={
-                  access.includes(ACCESS_LIST?.MANAGEMENT_DATA) && access.includes(ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA)
-                }
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
+              <Collapse.Panel header="Survey" key="3">
+                <div className="w-full flex justify-between items-center">
+                  <div className="flex flex-col justify-center gap-2 mb-6">
+                    <div className="text-white text-sm font-semibold">Lihat Survei</div>
+                  </div>
+                  <Switch
+                    disabled={!canChangeAccess}
+                    onChange={() => handleSwitch(ACCESS_LIST?.SURVEY)}
+                    checked={access.includes(ACCESS_LIST?.SURVEY)}
+                    className="bg-neutral-500 -mt-5"
+                  />
+                </div>
+              </Collapse.Panel>
 
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Hapus Data</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DELETE_DATA)}
-                checked={
-                  access.includes(ACCESS_LIST?.MANAGEMENT_DATA) && access.includes(ACCESS_LIST?.MANAGEMENT_DELETE_DATA)
-                }
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
+              <Collapse.Panel header="Manajemen Data" key="4">
+                <div className="full h-full flex flex-col gap-2 items-center">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Lihat Manajemen Data</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DATA)}
+                      disabled={!canChangeAccess}
+                      checked={access.includes(ACCESS_LIST?.MANAGEMENT_DATA)}
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Download Data</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DOWNLOAD_DATA)}
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.MANAGEMENT_DATA)}
+                      checked={
+                        access.includes(ACCESS_LIST?.MANAGEMENT_DATA) &&
+                        access.includes(ACCESS_LIST?.MANAGEMENT_DOWNLOAD_DATA)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Upload Data</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA)}
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.MANAGEMENT_DATA)}
+                      checked={
+                        access.includes(ACCESS_LIST?.MANAGEMENT_DATA) &&
+                        access.includes(ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Hapus Data</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_DELETE_DATA)}
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.MANAGEMENT_DATA)}
+                      checked={
+                        access.includes(ACCESS_LIST?.MANAGEMENT_DATA) &&
+                        access.includes(ACCESS_LIST?.MANAGEMENT_DELETE_DATA)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                </div>
+              </Collapse.Panel>
 
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Manajemen Isu</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ISSUE)}
-                checked={access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
+              <Collapse.Panel header="Manajemen Pengguna" key="5">
+                <div className="full h-full flex flex-col gap-2 items-center">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Lihat Pengguna</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_USER)}
+                      disabled={!canChangeAccess}
+                      checked={access.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Tambah Pengguna</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.ADD_USER)}
+                      disabled={!canChangeAccess || !access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                      checked={access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.ADD_USER)}
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Ubah Pengguna</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.EDIT_USER)}
+                      disabled={!canChangeAccess || !access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                      checked={
+                        access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.EDIT_USER)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Hapus Pengguna</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.REMOVE_USER)}
+                      disabled={!canChangeAccess || !access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                      checked={
+                        access?.includes(ACCESS_LIST?.MANAGEMENT_USER) && access.includes(ACCESS_LIST?.REMOVE_USER)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Ubah Password Pengguna</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.CHANGE_PASSWORD_USER)}
+                      disabled={!canChangeAccess || !access?.includes(ACCESS_LIST?.MANAGEMENT_USER)}
+                      checked={
+                        access?.includes(ACCESS_LIST?.MANAGEMENT_USER) &&
+                        access.includes(ACCESS_LIST?.CHANGE_PASSWORD_USER)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                </div>
+              </Collapse.Panel>
 
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Tambah Isu</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ADD_ISSUE)}
-                disabled={!access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
-                checked={
-                  access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE) && access.includes(ACCESS_LIST?.MANAGEMENT_ADD_ISSUE)
-                }
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
+              <Collapse.Panel header="Majemen Hak Akses" key="6">
+                <div className="w-full h-full flex gap-3 flex-col items-center">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Lihat Akses</div>
+                    </div>
+                    <Switch
+                      disabled={!canChangeAccess}
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ACCESS)}
+                      checked={access.includes(ACCESS_LIST?.MANAGEMENT_ACCESS)}
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Ubah Akses</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_CHANGE_ACCESS)}
+                      checked={
+                        access.includes(ACCESS_LIST?.MANAGEMENT_ACCESS) &&
+                        access.includes(ACCESS_LIST?.MANAGEMENT_CHANGE_ACCESS)
+                      }
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.MANAGEMENT_ACCESS)}
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                </div>
+              </Collapse.Panel>
 
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Tambah Sub Isu</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ADD_SUB_ISSUE)}
-                disabled={!access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
-                checked={
-                  access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE) &&
-                  access.includes(ACCESS_LIST?.MANAGEMENT_ADD_SUB_ISSUE)
-                }
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
+              <Collapse.Panel header="Manajemen Isu" key="7">
+                <div className="full h-full flex flex-col gap-2 items-center">
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Lihat Manajemen Isu</div>
+                    </div>
+                    <Switch
+                      disabled={!canChangeAccess}
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ISSUE)}
+                      checked={access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Tambah Isu</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ADD_ISSUE)}
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
+                      checked={
+                        access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE) &&
+                        access.includes(ACCESS_LIST?.MANAGEMENT_ADD_ISSUE)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Tambah Sub Isu</div>
+                    </div>
+                    <Switch
+                      onChange={() => handleSwitch(ACCESS_LIST?.MANAGEMENT_ADD_SUB_ISSUE)}
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE)}
+                      checked={
+                        access.includes(ACCESS_LIST?.MANAGEMENT_ISSUE) &&
+                        access.includes(ACCESS_LIST?.MANAGEMENT_ADD_SUB_ISSUE)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                </div>
+              </Collapse.Panel>
+            </Collapse>
 
-            <div className="w-full flex justify-between items-center">
-              <div className="flex flex-col justify-center gap-2 mb-6">
-                <div className="text-white text-sm font-semibold">Talkwalker</div>
-              </div>
-              <Switch
-                onChange={() => handleSwitch(ACCESS_LIST?.TALKWALKER)}
-                checked={access.includes(ACCESS_LIST?.TALKWALKER)}
-                className="bg-neutral-500 -mt-5"
-              />
-            </div>
-          </div>
-
-          <div className="w-full flex justify-end px-8 pb-7 mt-64">
-            <button
-              disabled={isLoading}
-              type="button"
-              class="text-white bg-primary hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded text-sm px-5 py-2.5 mr-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none dark:focus:ring-blue-800"
-              onClick={() =>
-                mutate(
-                  { id: selectedUser?.id, payload: access },
-                  {
-                    onSuccess: () => {
-                      apiNotification.success({
-                        message: "Berhasil",
-                        description: "Berhasil mengubah akses",
-                      });
+            <div className="w-full flex justify-end h-[100px] mt-5 pb-7">
+              <Button
+                disabled={isLoading || _.isEmpty(_.xor(user?.accesses, access))}
+                className="btn-primary"
+                onClick={() =>
+                  mutate(
+                    { id: selectedUser?.id, payload: access },
+                    {
+                      onSuccess: () => {
+                        apiNotification.success({
+                          message: "Berhasil",
+                          description: "Berhasil mengubah akses",
+                        });
+                      },
                     },
-                  },
-                )
-              }
-            >
-              Simpan
-            </button>
+                  )
+                }
+              >
+                Simpan
+              </Button>
+            </div>
           </div>
         </div>
       </div>

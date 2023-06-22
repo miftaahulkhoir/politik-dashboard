@@ -2,6 +2,7 @@ export const ACCESS_LIST = {
   MONITORING: "monitoring",
   SURVEY: "survey",
   MANAGEMENT_ACCESS: "access-management",
+  MANAGEMENT_CHANGE_ACCESS: "change-access-management",
   MANAGEMENT_USER: "user-management",
   ADD_USER: "user-add",
   EDIT_USER: "user-edit",
