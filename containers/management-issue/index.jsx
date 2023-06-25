@@ -395,14 +395,15 @@ export default function IssueManagement({
         </div>
 
         <div className="w-2/3 overflow-auto flex flex-col border-r border-r-neutral-500">
-          {canAddSubIssue && (
-            <div className="header flex justify-between items-center bg-new-black py-3 px-8">
-              <div className="text-white text-sm font-semibold">Sub Isu</div>
+          <div className="header flex justify-between items-center bg-new-black py-3 px-8">
+            <div className="text-white text-sm font-semibold">Sub Isu</div>
+            {canAddSubIssue && (
               <Button icon={<TbPlus />} className="btn-primary" onClick={handleModalSubIssue}>
                 Tambah Sub Isu
               </Button>
-            </div>
-          )}
+            )}
+          </div>
+
           <div key={selectedSubIssue.length} className="w-full h-full px-4 py-6 flex flex-col">
             {selectedSubIssue?.map((data, i) => (
               <div key={data?.id} className={cx("p-2 !bg-neutral-700 mb-1 rounded flex justify-between")}>
