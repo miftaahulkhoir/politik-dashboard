@@ -135,6 +135,46 @@ const AccessManagement = ({ data, apiNotification, profile }) => {
                       className="bg-neutral-500 -mt-5"
                     />
                   </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Upload data</div>
+                    </div>
+                    <Switch
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.TALKWALKER)}
+                      onChange={() => handleSwitch(ACCESS_LIST?.TALKWALKER_UPLOAD_DATA)}
+                      checked={
+                        access.includes(ACCESS_LIST?.TALKWALKER) && access.includes(ACCESS_LIST?.TALKWALKER_UPLOAD_DATA)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Hapus data</div>
+                    </div>
+                    <Switch
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.TALKWALKER)}
+                      onChange={() => handleSwitch(ACCESS_LIST?.TALKWALKER_DELETE_DATA)}
+                      checked={
+                        access.includes(ACCESS_LIST?.TALKWALKER) && access.includes(ACCESS_LIST?.TALKWALKER_DELETE_DATA)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
+                  <div className="w-full flex justify-between items-center">
+                    <div className="flex flex-col justify-center gap-2 mb-6">
+                      <div className="text-white text-sm font-semibold">Download data</div>
+                    </div>
+                    <Switch
+                      disabled={!canChangeAccess || !access.includes(ACCESS_LIST?.TALKWALKER)}
+                      onChange={() => handleSwitch(ACCESS_LIST?.TALKWALKER_DOWNLOAD_DATA)}
+                      checked={
+                        access.includes(ACCESS_LIST?.TALKWALKER) &&
+                        access.includes(ACCESS_LIST?.TALKWALKER_DOWNLOAD_DATA)
+                      }
+                      className="bg-neutral-500 -mt-5"
+                    />
+                  </div>
                 </div>
               </Collapse.Panel>
 

@@ -7,6 +7,8 @@ import DashboardLayout from "@/layouts/DashboardLayout";
 
 import FormAddFile from "./components/FormAdd";
 import FilePreview from "./components/FilePreview";
+import { ACCESS_LIST } from "@/constants/access-list";
+import accessChecker from "@/utils/helpers/accessChecker";
 
 const CustomDataTable = dynamic(() => import("@/components/elements/customDataTable/CustomDataTable"), {
   ssr: false,
@@ -33,6 +35,11 @@ export default function TalkwalkerContainer({ profile }) {
   const [openDrawer, setOpenDrawer] = useState(false);
   const [dataTable, setDataTable] = useState(dummyData);
   const [selectedFile, setSelectedFile] = useState(dataTable[0]);
+
+  const [canUploadData, canDownloadData, canDeleteData] = accessChecker(
+    [ACCESS_LIST?.TALKWALKER_UPLOAD_DATA, ACCESS_LIST?.TALKWALKER_DOWNLOAD_DATA, ACCESS_LIST?.TALKWALKER_DELETE_DATA],
+    profile?.accesses || [],
+  );
 
   const handleDownload = (url) => {
     window.open(url, "_blank");
@@ -97,22 +104,26 @@ export default function TalkwalkerContainer({ profile }) {
                   onClick={() => setSelectedFile(row)}
                 />
               </Tooltip>
-              <Tooltip title="Unduh">
-                <Button
-                  type="text"
-                  icon={<TbDownload size={20} color="#7287A5" />}
-                  shape="circle"
-                  onClick={() => handleDownload(row?.file)}
-                />
-              </Tooltip>
-              <Tooltip title="Hapus File">
-                <Button
-                  type="text"
-                  icon={<TbTrashX size={20} color="#7287A5" />}
-                  shape="circle"
-                  onClick={() => handleRemove(row?.id)}
-                />
-              </Tooltip>
+              {canDownloadData && (
+                <Tooltip title="Unduh">
+                  <Button
+                    type="text"
+                    icon={<TbDownload size={20} color="#7287A5" />}
+                    shape="circle"
+                    onClick={() => handleDownload(row?.file)}
+                  />
+                </Tooltip>
+              )}
+              {canDeleteData && (
+                <Tooltip title="Hapus File">
+                  <Button
+                    type="text"
+                    icon={<TbTrashX size={20} color="#7287A5" />}
+                    shape="circle"
+                    onClick={() => handleRemove(row?.id)}
+                  />
+                </Tooltip>
+              )}
             </div>
           );
         },
@@ -139,7 +150,7 @@ export default function TalkwalkerContainer({ profile }) {
           isShowSearchRegion: true,
           title: "Analisis Media Sosial",
           hideMapButton: true,
-          customRender: <ButtonAdd />,
+          customRender: canUploadData && <ButtonAdd />,
         }}
       >
         <div className="flex col mt-14 ml-[62px] bg-[#222222] h-[calc(100vh-134px)]">

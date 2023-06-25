@@ -16,6 +16,9 @@ export const ACCESS_LIST = {
   MANAGEMENT_ADD_ISSUE: "add-issue",
   MANAGEMENT_ADD_SUB_ISSUE: "add-sub-issue",
   TALKWALKER: "talkwalker",
+  TALKWALKER_UPLOAD_DATA: "talkwalker-upload-data",
+  TALKWALKER_DOWNLOAD_DATA: "talkwalker-download-data",
+  TALKWALKER_DELETE_DATA: "talkwalker-delete-data",
 };
 
 export const ACCESS_LIST_WITH_PATH = [
