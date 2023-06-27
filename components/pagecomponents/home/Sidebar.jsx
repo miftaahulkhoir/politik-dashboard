@@ -63,7 +63,7 @@ const Sidebar = ({ profile }) => {
     ...(canAccessMonitoring
       ? [
           {
-            label: routes.home.name,
+            label: routes.home.label,
             path: routes.home.path,
             icon: (props) => <ImMap2 strokeWidth={1} {...props} />,
           },
@@ -72,7 +72,7 @@ const Sidebar = ({ profile }) => {
     ...(canAccessTalkWalker
       ? [
           {
-            label: routes.talkwalker.name,
+            label: routes.talkwalker.label,
             icon: (props) => <TbSocial {...props} />,
             path: routes.talkwalker.path,
           },
@@ -81,7 +81,7 @@ const Sidebar = ({ profile }) => {
     ...(canAccessSurvey
       ? [
           {
-            label: routes.survey.name,
+            label: routes.survey.label,
             path: routes.survey.path,
             icon: (props) => <RiSurveyLine {...props} />,
           },
@@ -93,7 +93,7 @@ const Sidebar = ({ profile }) => {
     ...(canAccessDataManagement
       ? [
           {
-            label: routes.managementData.name,
+            label: routes.managementData.label,
             path: routes.managementData.path,
             icon: (props) => <TbServer2 {...props} />,
           },
@@ -102,7 +102,7 @@ const Sidebar = ({ profile }) => {
     ...(canAccessUserManagement
       ? [
           {
-            label: routes.users.name,
+            label: routes.users.label,
             path: routes.users.path,
             icon: (props) => <TbUsers {...props} />,
           },
@@ -111,7 +111,7 @@ const Sidebar = ({ profile }) => {
     ...(canAccessManagement
       ? [
           {
-            label: routes.managementAccess.name,
+            label: routes.managementAccess.label,
             path: routes.managementAccess.path,
             icon: (props) => <TbUser {...props} />,
           },
@@ -120,7 +120,7 @@ const Sidebar = ({ profile }) => {
     ...(canAccessManagementIssue
       ? [
           {
-            label: routes.managementIssue.name,
+            label: routes.managementIssue.label,
             path: routes.managementIssue.path,
             icon: (props) => <TbAccessible {...props} />,
           },
