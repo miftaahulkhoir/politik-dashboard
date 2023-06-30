@@ -525,7 +525,7 @@ export async function getServerSideProps(ctx) {
   let occupations = [];
   let surveys = [];
   await axios
-    .get(`${process.env.API_BASEURL_TILIKAN_V1}/users`, {
+    .get(`${process.env.API_BASEURL_TILIKAN_V1}users`, {
       withCredentials: true,
       headers: { Cookie: `token=${process.env.API_SECRET_KEY_TILIKAN}` },
     })
@@ -538,7 +538,7 @@ export async function getServerSideProps(ctx) {
     })
     .catch((err) => {});
   await axios
-    .get(`${process.env.API_BASEURL_TILIKAN_V1}/distric`, {
+    .get(`${process.env.API_BASEURL_TILIKAN_V1}distric`, {
       withCredentials: true,
       headers: { Cookie: `token=${process.env.API_SECRET_KEY_TILIKAN}` },
     })
@@ -548,7 +548,7 @@ export async function getServerSideProps(ctx) {
     .catch((err) => {});
 
   await axios
-    .get(`${process.env.API_BASEURL_TILIKAN_V1}/occupations`, {
+    .get(`${process.env.API_BASEURL_TILIKAN_V1}occupations`, {
       withCredentials: true,
       headers: { Cookie: `token=${process.env.API_SECRET_KEY_TILIKAN}` },
     })
@@ -557,7 +557,7 @@ export async function getServerSideProps(ctx) {
     })
     .catch((err) => {});
   await axios
-    .get(`${process.env.API_BASEURL_TILIKAN_V1}/survey`, {
+    .get(`${process.env.API_BASEURL_TILIKAN_V1}survey`, {
       withCredentials: true,
       headers: { Cookie: `token=${process.env.API_SECRET_KEY_TILIKAN}` },
     })
