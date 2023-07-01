@@ -1,6 +1,6 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
 
-import { Button, DatePicker, Input, Modal, Radio, Select, Space, Typography, Upload, notification } from "antd";
+import { Button, DatePicker, Form, Modal, Select, Space, Typography, Upload, notification } from "antd";
 import debounce from "lodash.debounce";
 import { useEffect, useState } from "react";
 import { TbFileUpload, TbDownload } from "react-icons/tb";
@@ -13,6 +13,9 @@ import { dummyTable } from "@/components/pagecomponents/issues/constant";
 import IssueDataTable from "@/components/pagecomponents/issues/IssueDataTable";
 import accessChecker from "@/utils/helpers/accessChecker";
 import { ACCESS_LIST } from "@/constants/access-list";
+import Link from "next/link";
+import moment from "moment";
+import { importIssues, useFindAllIssues, useFindAllSubIssues } from "@/utils/services/issue";
 
 export default function ManagementDataContainer({ profile }) {
   const [users, setUsers] = useState([]);
@@ -55,10 +58,50 @@ export default function ManagementDataContainer({ profile }) {
     </div>
   );
 
-  const [mode, setMode] = useState("pinpoint");
-  const handleModeChange = (e) => {
-    setMode(e.target.value);
+  // const [mode, setMode] = useState("pinpoint");
+  const [form] = Form.useForm();
+  const [selectedIssue, setSelectedIssue] = useState({});
+
+  // const handleModeChange = (e) => {
+  //   setMode(e.target.value);
+  // };
+
+  const submitHandler = async (data) => {
+    const formData = new FormData();
+    formData.append("file", data?.file?.file?.originFileObj);
+    formData.append("year", moment(data?.year).format("YYYY"));
+    formData.append("issue", data?.issue);
+
+    await importIssues(formData)
+      .then(() => {
+        apiNotification.success({
+          message: "Berhasil",
+          description: `Data berhasil ditambahkan`,
+        });
+        setModalUpload(false);
+        form.resetFields();
+      })
+      .catch((error) => {
+        console.error(error);
+        apiNotification.error({
+          message: "Gagal",
+          description: "Terjadi kesalahan saat menambahkan data",
+        });
+        setModalUpload(false);
+        form.resetFields();
+      });
   };
+
+  const { data: issues = [] } = useFindAllIssues({
+    onSuccess: (data) => {
+      setSelectedIssue(data[0]);
+    },
+  });
+
+  const { data: subIssue = [], isLoading } = useFindAllSubIssues(
+    { id: selectedIssue?.id },
+    { enable: selectedIssue?.id },
+  );
 
   const [canUploadData] = accessChecker([ACCESS_LIST?.MANAGEMENT_UPLOAD_DATA], profile?.accesses || []);
   return (
@@ -80,23 +123,16 @@ export default function ManagementDataContainer({ profile }) {
               Pastikan file excel yang diunggah sesuai dengan template yang diberikan. Seperti dibawah
             </Typography>
             <Typography.Text>Unduh layout excel</Typography.Text>
-            <ul className="ml-6">
-              <li className="list-disc">
-                Layout data <strong>pinpoint</strong>
-              </li>
-              <Button className="btn-white" icon={<TbDownload />}>
-                Induh layout pinpoint
-              </Button>
-              <li className="list-disc">
-                Layout data <strong>tematik</strong>
-              </li>
-              <Button className="btn-white" icon={<TbDownload />}>
-                Unduh layout tematik
-              </Button>
-            </ul>
+            <div>
+              <Link target="_blank" href="/template_manajemen_data.xlsx">
+                <Button className="btn-white" icon={<TbDownload />}>
+                  Unduh layout
+                </Button>
+              </Link>
+            </div>
           </div>
           <div className="pl-10 leading-7">
-            <div>
+            {/* <div>
               <label>Tipe Pemetaan:</label>
               <Radio.Group
                 className="flex"
@@ -113,35 +149,58 @@ export default function ManagementDataContainer({ profile }) {
             <div>
               <label>Nama:</label>
               <Input className="w-full" />
-            </div>
+            </div> */}
+            <Form form={form} onFinish={(formValues) => submitHandler(formValues)}>
+              <div>
+                <label>Isu:</label>
+                <Form.Item name="issue" rules={[{ required: true, message: "Isu harus di isi" }]}>
+                  <Select
+                    onChange={(value) => {
+                      const issue = issues?.find((item) => item.value === value);
+                      setSelectedIssue(issue);
+                    }}
+                    options={issues?.map((item) => ({
+                      label: item.label,
+                      value: item.value,
+                    }))}
+                    className="w-full"
+                  />
+                </Form.Item>
+              </div>
+              <div>
+                <label>Sub Isu:</label>
+                <Form.Item name="sub_issue">
+                  <Select
+                    options={subIssue?.map((item) => ({
+                      label: item.label,
+                      value: item.value,
+                    }))}
+                    className="w-full"
+                    loading={isLoading}
+                  />
+                </Form.Item>
+              </div>
+              <div>
+                <label>Tahun:</label>
+                <Form.Item name="year">
+                  <DatePicker format="YYYY" className="w-full" picker="year" />
+                  <span className="text-[12px]">Tahun data diambil</span>
+                </Form.Item>
+              </div>
+              <div>
+                <label>File Excel:</label>
+                <Form.Item name="file" rules={[{ required: true, message: "File harus di isi" }]}>
+                  <Upload name="file" type="file" className=" flex w-full">
+                    <Button className="w-full">Choose file...</Button>
+                  </Upload>
+                </Form.Item>
+                <span className="text-[12px]">{`minimum file < 3mb`}</span>
+              </div>
 
-            <div>
-              <label>Isu:</label>
-              <Select className="w-full" />
-            </div>
-
-            <div>
-              <label>Sub Isu:</label>
-              <Select className="w-full" />
-            </div>
-
-            <div>
-              <label>Bulan/Tahun:</label>
-              <DatePicker className="w-full" />
-              <span className="text-[12px]">Bulan dan tahun data diambil</span>
-            </div>
-
-            <div>
-              <label>File Excel:</label>
-              <Upload className=" flex w-full">
-                <Button className="w-full">Choose file...</Button>
-              </Upload>
-              <span className="text-[12px]">{`minimum file < 3mb`}</span>
-            </div>
-
-            <Button className="btn-primary w-full mt-10" onClick={() => setModalUpload(false)}>
-              Upload Sekarang
-            </Button>
+              <Button htmlType="submit" className="btn-primary w-full mt-10">
+                Upload Sekarang
+              </Button>
+            </Form>
           </div>
         </div>
       </Modal>
