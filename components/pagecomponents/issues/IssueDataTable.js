@@ -5,8 +5,12 @@ import { useCallback, useMemo } from "react";
 import { TbTrashX, TbDotsVertical, TbDownload } from "react-icons/tb";
 
 import { deleteUser, updateUserOccupation, useFindAllOccupations } from "../../../utils/services/users";
-import CustomDataTable from "../../elements/customDataTable/CustomDataTable";
 import LimitedText from "../../elements/typography/LimitedText";
+import dynamic from "next/dynamic";
+
+const CustomDataTable = dynamic(() => import("@/components/elements/customDataTable/CustomDataTable"), {
+  ssr: false,
+});
 
 export default function IssueDataTable({ data, currentUser, apiNotification, users, setUsers, profile }) {
   const { occupations } = useFindAllOccupations();

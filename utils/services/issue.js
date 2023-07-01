@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
 import mockClient from "../helpers/mock-client";
+import axios from "axios";
 
 const findAllIssue = async () => {
-  const { data } = await mockClient.get("/issues");
+  const { data } = await axios.get("/api/issues");
 
   return data.data || [];
 };
@@ -30,14 +31,13 @@ const findAllYearByIssue = async (issueId) => {
 };
 
 const findSubIssue = async (payload) => {
-  const { data } = await mockClient.get(`/sub-issues`, {
+  const { data } = await axios.get(`/api/sub-issues`, {
     params: {
-      issue: payload.id,
-      year: payload.year,
+      issue_id: payload.id,
     },
   });
 
-  return data.data[0]["sub-issues"].flat() || [];
+  return data.data;
 };
 
 const findProvinceDensity = async (payload) => {
@@ -79,6 +79,11 @@ const findKabkotGeom = async (id) => {
     },
   });
 
+  return data.data;
+};
+
+export const importIssues = async (payload) => {
+  const { data } = await axios.post("/api/issues/import", payload);
   return data.data;
 };
 
