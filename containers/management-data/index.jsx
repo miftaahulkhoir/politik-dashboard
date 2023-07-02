@@ -1,7 +1,9 @@
 import DashboardLayout from "@/layouts/DashboardLayout";
+import "moment/locale/id";
 
 import { Button, DatePicker, Form, Modal, Select, Space, Typography, Upload, notification } from "antd";
 import debounce from "lodash.debounce";
+import { uniqBy } from "lodash";
 import { useEffect, useState } from "react";
 import { TbFileUpload, TbDownload } from "react-icons/tb";
 
@@ -9,17 +11,20 @@ import UserFormDrawer from "@/components/pagecomponents/users/UserFormDrawer";
 import IssueSearchBar from "@/components/pagecomponents/issues/IssueSearchBar";
 import { useFindProfile } from "@/utils/services/profiles";
 import { useFindAllUsers } from "@/utils/services/users";
-import { dummyTable } from "@/components/pagecomponents/issues/constant";
 import IssueDataTable from "@/components/pagecomponents/issues/IssueDataTable";
 import accessChecker from "@/utils/helpers/accessChecker";
 import { ACCESS_LIST } from "@/constants/access-list";
 import Link from "next/link";
 import moment from "moment";
 import { importIssues, useFindAllIssues, useFindAllSubIssues } from "@/utils/services/issue";
+import { useFindAllData } from "@/utils/services/data";
+import { useMemo } from "react";
 
 export default function ManagementDataContainer({ profile }) {
   const [users, setUsers] = useState([]);
   const { users: fetchUsers } = useFindAllUsers();
+  const { allData, mutate: refetchAllData } = useFindAllData();
+
   useEffect(() => {
     if (!fetchUsers?.length) return;
     setUsers(fetchUsers);
@@ -35,7 +40,7 @@ export default function ManagementDataContainer({ profile }) {
   // filters
   const [filterSearch, setFilterSearch] = useState("");
   const [filterDate, setFilterDate] = useState("");
-  const [filterGender, setFilterGender] = useState("");
+  const [filterIssue, setFilterIssue] = useState("");
 
   const filterSearchHandler = debounce((e) => setFilterSearch(e.target.value), 300);
 
@@ -43,8 +48,39 @@ export default function ManagementDataContainer({ profile }) {
     setFilterDate(valueString);
   }, 300);
 
-  const filterGenderHandler = debounce((value) => setFilterGender(value), 300);
+  const filterIssueHandler = debounce((value) => setFilterIssue(value), 300);
   const [showModalUpload, setModalUpload] = useState(false);
+
+  const issueOption = useMemo(
+    () => [
+      { label: "Semua isue", value: "" },
+      ...uniqBy(
+        allData?.map?.((data) => ({
+          label: data?.issue_type,
+          value: data?.issue_type,
+        })),
+        "value",
+      ),
+    ],
+    [allData],
+  );
+
+  const mappedData = useMemo(() => {
+    return allData
+      ?.map((data) => ({
+        name: data?.name,
+        category_name: data?.issue_type,
+        sub_category: data?.sub_issue,
+        type: "",
+        file_url: data?.file_url,
+        month: moment(data?.created_at)?.locale("id")?.format("MMMM"),
+        year: moment(data?.created_at)?.locale("id")?.format("YYYY"),
+        upload_date: moment(data?.created_at)?.locale("id")?.format("DD MMM YYYY"),
+      }))
+      ?.filter?.((data) => data?.name?.toLowerCase().includes(filterSearch?.toLowerCase()))
+      ?.filter?.((data) => data?.category_name?.includes(filterIssue))
+      ?.filter?.((data) => moment(data?.created_at)?.locale("id")?.format("YYYY").includes(filterDate));
+  }, [allData, filterDate, filterIssue, filterSearch]);
 
   const ButtonUpload = () => (
     <div className="flex justify-end w-full">
@@ -74,6 +110,7 @@ export default function ManagementDataContainer({ profile }) {
 
     await importIssues(formData)
       .then(() => {
+        refetchAllData?.();
         apiNotification.success({
           message: "Berhasil",
           description: `Data berhasil ditambahkan`,
@@ -232,12 +269,13 @@ export default function ManagementDataContainer({ profile }) {
             <IssueSearchBar
               filterSearchHandler={filterSearchHandler}
               filterDateHandler={filterDateHandler}
-              filterGenderHandler={filterGenderHandler}
+              filterIssueHandler={filterIssueHandler}
+              issueOptions={issueOption}
               addUserHandler={() => setIsDrawerActive(true)}
             />
 
             <IssueDataTable
-              data={dummyTable.data}
+              data={mappedData}
               currentUser={currentUser}
               setSelectedUser={setSelectedUser}
               setIsFormEdit={setIsFormEdit}

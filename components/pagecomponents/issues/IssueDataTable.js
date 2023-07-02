@@ -1,6 +1,7 @@
 import { ACCESS_LIST } from "@/constants/access-list";
 import accessChecker from "@/utils/helpers/accessChecker";
-import { Button, Card, Col, Modal, Row, Tooltip } from "antd";
+
+import { Card, Col, Modal, Row, Tooltip } from "antd";
 import { useCallback, useMemo } from "react";
 import { TbTrashX, TbDotsVertical, TbDownload } from "react-icons/tb";
 
@@ -95,8 +96,6 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
     [apiNotification, setUsers, blacklistOccupation],
   );
 
-  const downloadIssueHandler = (row) => {};
-
   const columns = useMemo(() => {
     return [
       {
@@ -116,13 +115,6 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
       {
         name: "Sub Kategori",
         selector: (row) => row?.sub_category,
-        maxWidth: "600px",
-        grow: 1000,
-        sortable: true,
-      },
-      {
-        name: "Tipe",
-        selector: (row) => row?.type,
         maxWidth: "600px",
         grow: 1000,
         sortable: true,
@@ -156,16 +148,12 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
             <div className="d-flex gap-2">
               {canDownloadData && (
                 <Tooltip title="Download">
-                  <Button
-                    type="text"
-                    disabled={canModify}
-                    icon={<TbDownload size={20} color={canModify ? "#FFFFFF" : "#cccccc"} />}
-                    shape="circle"
-                    onClick={() => downloadIssueHandler(row)}
-                  ></Button>
+                  <a download href={row?.file_url}>
+                    <TbDownload size={20} color={canModify ? "#FFFFFF" : "#cccccc"} />
+                  </a>
                 </Tooltip>
               )}
-              {canDeleteData && (
+              {/* {canDeleteData && (
                 <Tooltip title="Hapus">
                   <Button
                     type="text"
@@ -175,7 +163,7 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
                     onClick={() => deleteIssueHandler(row)}
                   ></Button>
                 </Tooltip>
-              )}
+              )} */}
             </div>
           );
         },
@@ -189,7 +177,7 @@ export default function IssueDataTable({ data, currentUser, apiNotification, use
     <Row justify="end">
       <Col span={24}>
         <Card bodyStyle={{ padding: "0px" }} style={{ overflow: "hidden" }}>
-          <CustomDataTable pagination data={data} columns={columns} />
+          <CustomDataTable data={data} columns={columns} />
         </Card>
       </Col>
     </Row>
