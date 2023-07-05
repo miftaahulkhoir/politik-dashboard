@@ -105,7 +105,6 @@ const SurveyAnalysisContainer = ({ profile }) => {
             </Transition>
           </div>
         </Listbox>
-
         {selected?.id && !isFetchingDataSurveyResult ? (
           <>
             <SurveyAnalyticHeader survey={selected} />
@@ -114,7 +113,9 @@ const SurveyAnalysisContainer = ({ profile }) => {
         ) : (
           <div className="flex flex-col justify-center items-center flex-1">
             {isFetchingDataSurveyResult ? (
-              <div className="mt-4">Sedang mengunduh data, harap menunggu ...</div>
+              <div>
+                <div className="loader"></div>
+              </div>
             ) : (
               <>
                 <img className="w-[30%] max-h-72" src="/images/people_with_up.svg" alt="select" />

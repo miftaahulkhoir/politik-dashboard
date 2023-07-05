@@ -1,3 +1,4 @@
+import "../public/css/style.css";
 import axios from "axios";
 import { useRouter } from "next/router";
 import { destroyCookie, parseCookies } from "nookies";
