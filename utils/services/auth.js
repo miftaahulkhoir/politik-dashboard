@@ -1,13 +1,11 @@
 import axios from "axios";
 import Router from "next/router";
-import { destroyCookie } from "nookies";
 
 export const loginUser = async (email, password, remember) => {
   const res = await axios.post(`/api/login`, {
     email: email,
     password: password,
   });
-  console.clear();
   return res;
 };
 
@@ -15,7 +13,6 @@ export const forgotPassword = async (email) => {
   const res = await axios.post(`/api/forget-password`, {
     email: email,
   });
-  console.clear();
   return res;
 };
 
@@ -30,7 +27,6 @@ export const resetPassword = async (params, password) => {
       params,
     },
   );
-  console.clear();
   return res;
 };
 
@@ -45,15 +41,14 @@ export const redirectUser = (ctx, location) => {
 
 export const logoutUser = async () => {
   try {
-    await axios.post(`/api/logout`).then((res) => {
-      if (res.data.status) {
-        window.location.replace("/login");
-      }
-    });
-    destroyCookie(null, "token");
+    // Remove token from localStorage
+    localStorage.removeItem("auth_token");
+
+    // Redirect to login page
     window.location.replace("/login");
   } catch (error) {
-    console.error(error);
+    console.error("Logout error:", error);
+    // Even if there's an error, still try to redirect
+    window.location.replace("/login");
   }
-  console.clear();
 };

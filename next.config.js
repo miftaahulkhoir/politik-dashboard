@@ -18,12 +18,12 @@ module.exports = {
     WEBSOCKET_CREDENTIALS_HOST_TILIKAN: process.env.WEBSOCKET_CREDENTIALS_HOST_TILIKAN,
     API_BASEURL_TILIKAN_V1: process.env.API_BASEURL_TILIKAN_V1,
   },
-  async rewrites() {
-    return [
-      {
-        source: "/api/:path*",
-        destination: `${process.env.API_SOURCE}:path*`,
-      },
-    ];
-  },
+  // async rewrites() {
+  //   return [
+  //     {
+  //       source: "/api/:path*",
+  //       destination: `${process.env.API_SOURCE}/:path*`,
+  //     },
+  //   ];
+  // },
 };

@@ -82,52 +82,52 @@ export default function Index({
     setIsMounted(true);
   }, []);
 
-  useEffect(() => {
-    centrifuge.connect();
-    centrifuge.on("connect", function (ctx) {
-      console.log("connected", ctx);
-    });
-    if (showKoordinator === true) {
-      koordinator.forEach((element) => {
-        centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          const newarr = [...koordinator];
-          const id = newarr.findIndex((x) => x.id === element.id);
-          newarr[id].latitude = ctx.data.latitude;
-          newarr[id].longitude = ctx.data.longitude;
-          setKoordinator(newarr);
-        });
-      });
-    }
-    // if (showKoordinator === true) {
-    //   dataKoordinator.forEach((element) => {
-    //     centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-    //       const newarr = [...dataKoordinator];
-    //       const id = newarr.findIndex((x) => x.id === element.id);
-    //       newarr[id].latitude = ctx.data.latitude;
-    //       newarr[id].longitude = ctx.data.longitude;
-    //       setKoordinator(newarr);
-    //     });
-    //   });
-    // }
-  }, [showKoordinator]);
+  // useEffect(() => {
+  //   centrifuge.connect();
+  //   centrifuge.on("connect", function (ctx) {
+  //     console.log("connected", ctx);
+  //   });
+  //   if (showKoordinator === true) {
+  //     koordinator.forEach((element) => {
+  //       centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
+  //         const newarr = [...koordinator];
+  //         const id = newarr.findIndex((x) => x.id === element.id);
+  //         newarr[id].latitude = ctx.data.latitude;
+  //         newarr[id].longitude = ctx.data.longitude;
+  //         setKoordinator(newarr);
+  //       });
+  //     });
+  //   }
+  //   // if (showKoordinator === true) {
+  //   //   dataKoordinator.forEach((element) => {
+  //   //     centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
+  //   //       const newarr = [...dataKoordinator];
+  //   //       const id = newarr.findIndex((x) => x.id === element.id);
+  //   //       newarr[id].latitude = ctx.data.latitude;
+  //   //       newarr[id].longitude = ctx.data.longitude;
+  //   //       setKoordinator(newarr);
+  //   //     });
+  //   //   });
+  //   // }
+  // }, [showKoordinator]);
 
-  useEffect(() => {
-    centrifuge.connect();
-    centrifuge.on("connect", function (ctx) {
-      console.log("connected", ctx);
-    });
-    if (showRelawan === true) {
-      relawan.forEach((element) => {
-        centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
-          const newarr = [...relawan];
-          const id = newarr.findIndex((x) => x.id === element.id);
-          newarr[id].latitude = ctx.data.latitude;
-          newarr[id].longitude = ctx.data.longitude;
-          setRelawan(newarr);
-        });
-      });
-    }
-  }, [showRelawan]);
+  // useEffect(() => {
+  //   centrifuge.connect();
+  //   centrifuge.on("connect", function (ctx) {
+  //     console.log("connected", ctx);
+  //   });
+  //   if (showRelawan === true) {
+  //     relawan.forEach((element) => {
+  //       centrifuge.subscribe(`ws/data/${element.id}/location`, function (ctx) {
+  //         const newarr = [...relawan];
+  //         const id = newarr.findIndex((x) => x.id === element.id);
+  //         newarr[id].latitude = ctx.data.latitude;
+  //         newarr[id].longitude = ctx.data.longitude;
+  //         setRelawan(newarr);
+  //       });
+  //     });
+  //   }
+  // }, [showRelawan]);
 
   const [selectedUser, setSelectedUser] = useState({});
 
@@ -237,11 +237,11 @@ export default function Index({
     return data;
   }, [thematicSurveyResponses]);
 
-  const { users: koordinatorSubordinateUsers } = useFindAllSubordinateUsers();
-  const { rankings } = useUserRankings({ userLevel: 2 });
+  // const { users: koordinatorSubordinateUsers } = useFindAllSubordinateUsers();
+  // const { rankings } = useUserRankings({ userLevel: 2 });
 
-  const totalRelawan = koordinatorSubordinateUsers.filter((v) => v?.occupation?.level === 3).length;
-  const pemilihKoor = koordinatorSubordinateUsers.filter((v) => v?.occupation?.level === 4);
+  // const totalRelawan = koordinatorSubordinateUsers.filter((v) => v?.occupation?.level === 3).length;
+  // const pemilihKoor = koordinatorSubordinateUsers.filter((v) => v?.occupation?.level === 4);
 
   const columns = [
     {
@@ -280,12 +280,12 @@ export default function Index({
     },
   ];
 
-  const koordinatorRankings = useMemo(() => {
-    return rankings?.map((v, i) => {
-      v.no = i + 1;
-      return v;
-    });
-  }, [rankings]);
+  // const koordinatorRankings = useMemo(() => {
+  //   return rankings?.map((v, i) => {
+  //     v.no = i + 1;
+  //     return v;
+  //   });
+  // }, [rankings]);
 
   return (
     <>
@@ -321,7 +321,7 @@ export default function Index({
             {isMounted && (
               // {/* {false && ( */}
               <div className="map" data-testid="index-admin-map">
-                <HomeMap
+                {/* <HomeMap
                   occupations={occupations}
                   showKoordinator={showKoordinator}
                   dataKoordinator={dataKoordinator}
@@ -379,7 +379,7 @@ export default function Index({
                     includedDistricts: includedDistricts,
                     setIncludedDistricts: setIncludedDistricts,
                   }}
-                />
+                /> */}
               </div>
             )}
 

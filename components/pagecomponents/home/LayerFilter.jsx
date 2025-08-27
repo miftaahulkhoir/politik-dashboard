@@ -58,9 +58,22 @@ const LayerFilter = ({ setKabkotGeom }) => {
     },
   );
 
-  const { data: provinces, isLoading: isProvincesLoading } = useGetAllProvinces();
+  const { data: provinces, isLoading: isProvincesLoading } = useGetAllProvinces({
+    onSuccess: (data) => {
+      // Set default "Semua" jika belum ada selectedProvince
+      if (!selectedProvince && data && data.length > 0) {
+        setSelectedProvince(data[0]); // data[0] adalah "Semua"
+      }
+    },
+  });
   const { data: listKabkot, isLoading: isKabkotLoading } = useFindKabkot(selectedProvince?.id, {
-    enabled: !!selectedProvince?.id,
+    enabled: !!selectedProvince?.id && selectedProvince?.id !== 0, // Disable jika provinsi "Semua" atau tidak ada
+    onSuccess: (data) => {
+      // Set default "Semua" untuk kabupaten jika belum ada selectedKabkot
+      if (!selectedKabkot && data && data.length > 0) {
+        setselectedKabkot(data[0]); // data[0] adalah "Semua"
+      }
+    },
   });
 
   useEffect(() => {
@@ -95,7 +108,7 @@ const LayerFilter = ({ setKabkotGeom }) => {
 
   return (
     <div className="absolute left-[62px] top-[calc(78px+56px)]">
-      {isLayerOpen ? (
+      {/* {isLayerOpen ? (
         <div>
           <div className="flex flex-col justify-between py-6 px-6 w-[360px] h-[calc(100vh-150px)]  bg-new-black-secondary gap-3">
             <div className="flex flex-col gap-6">
@@ -152,7 +165,7 @@ const LayerFilter = ({ setKabkotGeom }) => {
                           leaveTo="opacity-0"
                         >
                           <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                            {issues.map((issue) => (
+                            {issues?.map((issue) => (
                               <Listbox.Option
                                 key={issue.id}
                                 className={({ active }) =>
@@ -209,7 +222,7 @@ const LayerFilter = ({ setKabkotGeom }) => {
                               leaveTo="opacity-0"
                             >
                               <Listbox.Options className="absolute mt-1 max-h-60 w-full overflow-auto  bg-new-black-secondary border-[1px] border-white text-white py-1 text-base shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm">
-                                {years.map((year) => (
+                                {years?.map((year) => (
                                   <Listbox.Option
                                     key={year.id}
                                     className={({ active }) =>
@@ -351,8 +364,8 @@ const LayerFilter = ({ setKabkotGeom }) => {
           </div>
           <BsChevronRight className="text-white" strokeWidth={1.5} size={24} />
         </div>
-      )}
-      <div className={clsx("flex flex-col gap-5 absolute top-0 ", isLayerOpen ? "left-[360px]" : "left-[112px]")}>
+      )} */}
+      <div className={""}>
         {selectedLayer.length > 0 && (
           <div
             className={clsx(
@@ -376,21 +389,21 @@ const LayerFilter = ({ setKabkotGeom }) => {
             ))}
           </div>
         )}
-        {isLayerOpen && (
+        {(isLayerOpen || true) && (
           <div
             className={clsx(
               selectedLayer.length > 0 ? "top-[98px]" : "top-[28px]",
               "absolute left-[20px] p-6 bg-[#FFFFFF90] rounded-sm flex gap-3 ",
             )}
           >
-            <div className="flex flex-col gap-2 w-[150px]">
+            {/* <div className="flex flex-col gap-2 w-[150px]">
               <div className="text-sm">Negara</div>
               <div className="text-xs font-bold">Indonesia</div>
-            </div>
-            <div className="w-[1px] bg-black h-[44px]" />
+            </div> */}
+            {/* <div className="w-[1px] bg-black h-[44px]" /> */}
             <div className="flex flex-col  w-[150px]">
               <div className="text-sm">Provinsi</div>
-              {isLoading ? (
+              {/* {isLoading ? (
                 <Listbox>
                   <div className="relative w-full">
                     <Listbox.Button className="relative w-full cursor-pointer    ">
@@ -399,99 +412,105 @@ const LayerFilter = ({ setKabkotGeom }) => {
                   </div>
                 </Listbox>
               ) : (
-                <Listbox
-                  value={selectedProvince}
-                  onChange={(value) => {
-                    setselectedKabkot(null);
-                    setKabkotGeom(undefined);
-                    setSelectedLayer([]);
-                    setActiveLayer([]);
-                    if (value == "reset") {
-                      setSelectedProvince(null);
-                      return;
-                    }
-                    setSelectedProvince(provinces.find((data) => data.id === value));
-                  }}
-                >
-                  <div className="relative w-full">
-                    <Listbox.Button className="relative w-full cursor-pointer  text-left   ">
-                      <span className="block truncate  font-bold text-xs">
-                        {selectedProvince ? selectedProvince.name : "-"}
-                      </span>
-                      <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
-                        <BsCaretDownFill className="h-3 w-3 " aria-hidden="true" />
-                      </span>
-                    </Listbox.Button>
-                    <Transition
-                      as={Fragment}
-                      leave="transition ease-in duration-100"
-                      leaveFrom="opacity-100"
-                      leaveTo="opacity-0"
-                    >
-                      <Listbox.Options className="absolute  max-h-60 w-full overflow-auto  ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm bg-[#FFFFFF]">
+              )} */}
+              <Listbox
+                value={selectedProvince?.id}
+                onChange={(value) => {
+                  setselectedKabkot(null);
+                  setKabkotGeom(undefined);
+                  setSelectedLayer([]);
+                  setActiveLayer([]);
+                  // if (value == "reset") {
+                  //   setSelectedProvince(provinces?.[0] || null); // Reset ke "Semua"
+                  //   return;
+                  // }
+                  setSelectedProvince(provinces.find((data) => data.id === value));
+                }}
+              >
+                <div className="relative w-full">
+                  <Listbox.Button className="relative w-full cursor-pointer  text-left   ">
+                    <span className="block truncate  font-bold text-xs">
+                      {selectedProvince ? selectedProvince.name : "-"}
+                    </span>
+                    <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
+                      <BsCaretDownFill className="h-3 w-3 " aria-hidden="true" />
+                    </span>
+                  </Listbox.Button>
+                  <Transition
+                    as={Fragment}
+                    leave="transition ease-in duration-100"
+                    leaveFrom="opacity-100"
+                    leaveTo="opacity-0"
+                  >
+                    <Listbox.Options className="absolute  max-h-60 w-full overflow-auto  ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm bg-[#FFFFFF]">
+                      {/* <Listbox.Option
+                        className={({ active }) =>
+                          `relative cursor-pointer select-none py-1 pl-1 pr-4 text-xs ${
+                            active && "font-bold"
+                          } hover:bg-gray-50 hover:text-new-black-secondary`
+                        }
+                        value={"reset"}
+                      >
+                        {({ selected }) => (
+                          <>
+                            <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>Reset</span>
+                          </>
+                        )}
+                      </Listbox.Option> */}
+                      {provinces?.map((province) => (
                         <Listbox.Option
+                          key={province.id}
                           className={({ active }) =>
                             `relative cursor-pointer select-none py-1 pl-1 pr-4 text-xs ${
                               active && "font-bold"
                             } hover:bg-gray-50 hover:text-new-black-secondary`
                           }
-                          value={"reset"}
+                          value={province.id}
                         >
                           {({ selected }) => (
                             <>
                               <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
-                                Reset
+                                {province.name}
                               </span>
                             </>
                           )}
                         </Listbox.Option>
-                        {provinces.map((province) => (
-                          <Listbox.Option
-                            key={province.id}
-                            className={({ active }) =>
-                              `relative cursor-pointer select-none py-1 pl-1 pr-4 text-xs ${
-                                active && "font-bold"
-                              } hover:bg-gray-50 hover:text-new-black-secondary`
-                            }
-                            value={province.id}
-                          >
-                            {({ selected }) => (
-                              <>
-                                <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
-                                  {province.name}
-                                </span>
-                              </>
-                            )}
-                          </Listbox.Option>
-                        ))}
-                      </Listbox.Options>
-                    </Transition>
+                      ))}
+                    </Listbox.Options>
+                  </Transition>
+                </div>
+              </Listbox>
+            </div>
+            {/* <div className="w-[1px] bg-black h-[44px]" /> */}
+            {/* <div className="flex flex-col  w-[150px]">
+              <div className="text-sm">Kabupaten</div>
+              {!selectedProvince || selectedProvince.id === 0 ? (
+                <Listbox disabled>
+                  <div className="relative w-full">
+                    <Listbox.Button className="relative w-full cursor-not-allowed opacity-50">
+                      <span className="block truncate font-bold text-xs">Pilih Provinsi Dulu</span>
+                    </Listbox.Button>
                   </div>
                 </Listbox>
-              )}
-            </div>
-            <div className="w-[1px] bg-black h-[44px]" />
-            <div className="flex flex-col  w-[150px]">
-              <div className="text-sm">Kabupaten</div>
-              {isKabkotLoading ? (
+              ) : isKabkotLoading ? (
                 <Listbox>
                   <div className="relative w-full">
                     <Listbox.Button className="relative w-full cursor-pointer    ">
-                      <span className="block truncate  font-bold text-xs">-</span>
+                      <span className="block truncate  font-bold text-xs">Loading...</span>
                     </Listbox.Button>
                   </div>
                 </Listbox>
               ) : (
                 <Listbox
-                  value={selectedKabkot}
+                  value={selectedKabkot?.id}
                   onChange={(value) => {
-                    setselectedKabkot(listKabkot.find((data) => data.id_kabkot === value));
+                    setselectedKabkot(listKabkot.find((data) => data.id === value));
                   }}
                 >
                   <div className="relative w-full">
                     <Listbox.Button className="relative w-full cursor-pointer  text-left   ">
                       <span className="block truncate  font-bold text-xs">
-                        {selectedKabkot ? selectedKabkot.kabkot : "-"}
+                        {selectedKabkot ? selectedKabkot.name : "-"}
                       </span>
                       <span className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-2">
                         <BsCaretDownFill className="h-3 w-3 " aria-hidden="true" />
@@ -504,20 +523,20 @@ const LayerFilter = ({ setKabkotGeom }) => {
                       leaveTo="opacity-0"
                     >
                       <Listbox.Options className="absolute  max-h-60 w-full overflow-auto  ring-1 ring-black ring-opacity-5 focus:outline-none sm:text-sm bg-[#FFFFFF]">
-                        {listKabkot.map((kabkot) => (
+                        {listKabkot?.map((kabkot) => (
                           <Listbox.Option
-                            key={kabkot.id_kabkot}
+                            key={kabkot.id}
                             className={({ active }) =>
                               `relative cursor-pointer select-none py-1 pl-1 pr-4 text-xs ${
                                 active && "font-bold"
                               } hover:bg-gray-50 hover:text-new-black-secondary`
                             }
-                            value={kabkot.id_kabkot}
+                            value={kabkot.id}
                           >
                             {({ selected }) => (
                               <>
                                 <span className={`block truncate ${selected ? "font-medium" : "font-normal"}`}>
-                                  {kabkot.kabkot}
+                                  {kabkot.name}
                                 </span>
                               </>
                             )}
@@ -528,7 +547,7 @@ const LayerFilter = ({ setKabkotGeom }) => {
                   </div>
                 </Listbox>
               )}
-            </div>
+            </div> */}
           </div>
         )}
       </div>
